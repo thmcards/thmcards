@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>THMcards</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="Daniel Knapp, Jan Kammer" />
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" />
+    <link href="/stylesheets/overrides.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div id="wrap">
+      <div class="container">
+        <div class="navbar" id="nav" style="margin-top:20px">
+          <div class="navbar-inner">
+            <a href="/" class="brand">THMcards</a>
+            <div class="container">
+              <ul class="nav">
+                <li class="active"><a href="#">Karten</a></li>
+                <li class="divider-vertical"></li>
+                <li><a href="#">Importieren</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="main" class="row">
+          <!-- AREA BETWEEN NAVIGATION AND FOOTER -->
+        </div>
+      </div>
+      <div id="push"></div>
+    </div>
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2013 THMcards</p>
+      </div>
+    </div>
+
+    <!-- LIST LAYOUTS -->
+    <script type="text/template" id="set-list-layout">
+      <div class="span9 offset3">
+        <h3 style="margin-bottom:20px">Meine Kartensätze</h3>
+      </div>
+      <div class="span3" id="set-list-sideBar-region"></div>
+      <div class="span9" id="set-list-region"></div>
+    </script>
+
+    <script type="text/template" id="set-details-layout">
+      <div class="span9 offset3">
+        <h3 style="margin-bottom:20px">Details</h3>
+      </div>
+      <div class="span3" id="set-details-sideBar-region"></div>
+      <div class="span9" id="set-details-region"></div>
+    </script>
+
+    <script type="text/template" id="set-details-item">
+      <div class="box">
+        <div class="block"><div class="centered"><%= question %></div></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="set-details-collection">
+      <div id="cardCarousel" class="carousel slide">
+      <div class="carousel-inner"></div>
+      <ol class="carousel-indicators"></ol>
+      <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+      </div>
+    </script>
+
+    <script type="text/template" id="set-list-item">
+      <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= id %>/"><%= name %></a></td>
+      <td><%= count %></td>
+      <td><%= new Date(created).toLocaleString() %></td>
+      <td>
+        <button class="btn btn-mini">Karten</button>
+        <button class="btn btn-mini">Tags</button>
+        <button class="btn btn-mini">Drucken</button>
+        <button class="btn btn-mini btn-success">Lernen</button>
+      </td>
+    </script>
+
+    <script type="text/template" id="set-list-sideBar">  
+      <div class="form-inline">
+        <input class="input-medium" type="text" placeholder="Neuer Kartensatz" /> <a class="btn saveSet" href="#">Save</a>
+      </div>
+      <hr />
+      <ul class="nav nav-list">
+        <li class="nav-header">Kategorie</li>
+        <li class="active"><a href="#">Alle</a></li>
+        <li><a href="#">ARSnova</a></li>
+        <li><a href="#">Nicht Gelernt</a></li>
+        <li><a href="#">Favorit</a></li>
+      </ul>
+      <div id="newSetModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Neuen Kartensatz anlegen</h3>
+          </div>
+          <div class="modal-body">
+            <div class="form-horizontal">
+              <div class="control-group">
+                <label class="control-label" for="newSetName">Name</label>
+                <div class="controls">
+                  <input type="text" id="newSetName" placeholder="Name">
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="newSetDescription">Beschreibung</label>
+                <div class="controls">
+                  <textarea rows="3" id="newSetDescription" placeholder="Beschreibung"></textarea>
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="newSetDescription">Sichtbar für</label>
+                <div class="controls">
+                  <div class="btn-group" data-toggle="buttons-radio">
+                    <button type="button" class="btn active" value="mich">mich</button>
+                    <button type="button" class="btn">alle</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
+            <button class="btn btn-primary" data-loading-text="Speichere Deck...">Kartensatz anlegen</button>
+          </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="set-list">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Karten</th>
+          <th>Zuletzt gelernt</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </script>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.1-bundled/backbone.marionette.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/javascripts/Cards.js"></script>
+    
+    <script type="text/javascript" src="/javascripts/entities/Set.js"></script>
+    <script type="text/javascript" src="/javascripts/entities/Card.js"></script>
+
+    <script type="text/javascript" src="/javascripts/modules/Set.List.ListView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.List.SideBar.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.Controller.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.List.Layout.js"></script>
+
+    <script type="text/javascript" src="/javascripts/modules/Set.Details.Layout.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.Details.DetailsView.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        Cards.start();
+      })
+    </script>
+  </body>
+</html>
