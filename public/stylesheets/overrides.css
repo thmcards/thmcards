@@ -1,7 +1,7 @@
 html,
 body {
   height: 100%;
-  background-image: url('/img/fabric_of_squares_white.png');
+  background-image: url('/img/light_wool.png');
 }
 
 @media only screen and (min--moz-device-pixel-ratio: 2),
@@ -9,7 +9,7 @@ body {
   only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (min-device-pixel-ratio: 2) {
       body {
-          background: url('/img/fabric_of_squares_white@2X.png') no-repeat;
+          background: url('/img/light_wool@2X.png') no-repeat;
           background-size: 410px 410px;
       }
 }
