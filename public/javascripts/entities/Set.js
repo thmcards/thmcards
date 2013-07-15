@@ -1,7 +1,8 @@
 Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Set = Backbone.Model.extend({
-		urlRoot: "/set"
+		url: "/set/",
+		idAttribute: "_id"
 	});
 
 	Entities.SetCollection = Backbone.Collection.extend({
