@@ -183,3 +183,12 @@ code {
   width: 300px;
   font-size: 2em
 }
+
+.navbar .brand {
+  padding: 5px 20px;
+}
+
+.navbar .brand img {
+  width: 142px;
+  height: 30px;
+}

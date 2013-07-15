@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>THMcards</title>
+    <title>THMcards2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="Daniel Knapp, Jan Kammer" />
@@ -15,7 +15,7 @@
       <div class="container">
         <div class="navbar" id="nav" style="margin-top:20px">
           <div class="navbar-inner">
-            <a href="/" class="brand">THMcards</a>
+            <a href="/" class="brand"><img src="/img/cards_logo.png" alt="THMcards Logo" /></a>
             <div class="container">
               <ul class="nav">
                 <li class="active"><a href="#">Karten</a></li>
@@ -56,7 +56,7 @@
 
     <script type="text/template" id="set-details-item">
       <div class="box">
-        <div class="block"><div class="centered"><%= question %></div></div>
+        <div class="block"><div class="centered"><%= front %></div></div>
       </div>
     </script>
 
@@ -70,13 +70,9 @@
     </script>
 
     <script type="text/template" id="set-list-item">
-      <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= id %>/"><%= name %></a></td>
-      <td><%= count %></td>
-      <td><%= new Date(created).toLocaleString() %></td>
+      <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= _id %>/"><%= name %></a></td>
+      <td>5</td>
       <td>
-        <button class="btn btn-mini">Karten</button>
-        <button class="btn btn-mini">Tags</button>
-        <button class="btn btn-mini">Drucken</button>
         <button class="btn btn-mini btn-success">Lernen</button>
       </td>
     </script>
@@ -116,8 +112,8 @@
                 <label class="control-label" for="newSetDescription">Sichtbar für</label>
                 <div class="controls">
                   <div class="btn-group" data-toggle="buttons-radio">
-                    <button type="button" class="btn active" value="mich">mich</button>
-                    <button type="button" class="btn">alle</button>
+                    <button type="button" class="btn active" value="private">mich</button>
+                    <button type="button" class="btn" value="public">alle</button>
                   </div>
                 </div>
               </div>
@@ -135,7 +131,6 @@
         <tr>
           <th>Name</th>
           <th>Karten</th>
-          <th>Zuletzt gelernt</th>
           <th></th>
         </tr>
       </thead>

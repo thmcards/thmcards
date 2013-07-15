@@ -21,9 +21,6 @@ Cards.module('Set', function(Set, App){
 					var detailsLayout = new Cards.Set.Details.Layout();
 					Cards.mainRegion.show(detailsLayout);
 
-					
-
-
 					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
 					
 					cardCollection.fetch({

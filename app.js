@@ -8,7 +8,10 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , fs = require('fs');
+  , fs = require('fs')
+  , nano = require('nano')('http://localhost:5984')
+  , db = nano.use('thmcards')
+  , _ = require('underscore');
 
 var app = express();
 
@@ -41,10 +44,15 @@ app.get('/', function(req, res){
 });
 
 app.get('/set/:id/card', function(req, res){
-  fs.readFile(__dirname + '/public/testdata/set.json', 'utf8', function(err, text){
-        res.header("Content-Type", "text/json");
-        res.send(text);
-    });   
+  db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
+    
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value});
+      res.send(docs);
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
 });
 
 app.get('/set/:id', function(req, res){
@@ -60,19 +68,47 @@ app.get('/set/:id', function(req, res){
     });   
 });
 
-app.get('/set', function(req, res){
-  fs.readFile(__dirname + '/public/testdata/sets.json', 'utf8', function(err, text){
-        res.header("Content-Type", "text/json");
-        res.send(text);
-    });   
+app.get('/couchdb', function(req, res){
+  
+
 });
 
+app.get('/set', function(req, res){
+  db.view('sets', 'by_name', function(err, body) {
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value});
+      console.log(docs);
+      res.send(docs);
+    } else {
+      console.log("[db.sets/by_name]", err.message);
+    }
+  });
 
-app.post('/set', function(req, res){
-  req.body.id = Math.round(Math.random()*50000);
-  req.body.created = new Date().getTime();
-  req.body.count = Math.round(Math.random()*50);
-  res.send(req.body);   
+});
+
+app.post('/set/', function(req, res){
+  var time = new Date().getTime();
+
+  db.insert(
+    { 
+      "created": time,
+      "owner": req.body.owner || "asd",
+      "name": req.body.name,
+      "description": req.body.description,
+      "visibility": req.body.visibility,
+      "type": "set"
+    }, 
+    function(err, body, header){
+      if(err) {
+        console.log('[db.insert] ', err.message);
+        return;
+      }
+      db.get(body.id, { revs_info: false }, function(err, body) {
+        if (!err)
+          console.log(body);
+          res.send(body);
+      });
+  });  
 });
 
 http.createServer(app).listen(app.get('port'), function(){

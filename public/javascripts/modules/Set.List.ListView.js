@@ -10,7 +10,7 @@ Cards.module('Set.List', function(List, App) {
 			ev.stopPropagation();
 			console.log("link");
 			
-			App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
+			App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
 		}
 	});
 
