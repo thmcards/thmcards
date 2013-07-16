@@ -1,5 +1,4 @@
 {
-	"url": "http://localhost/",
 	"couchdb": "http://localhost:5984/",
 	"twitter_callback": "http://localhost:3000/auth/twitter/callback",
 	"facebook_callback": "http://localhost:3000/auth/facebook/callback",

@@ -1,0 +1,11 @@
+{
+	"couchdb": "https://thmcards.iriscouch.com",
+	"twitter_callback": "http://thmcards.nodejitsu.com/auth/twitter/callback",
+	"facebook_callback": "http://thmcards.nodejitsu.com/auth/facebook/callback",
+	"google_callback": "http://thmcards.nodejitsu.com/auth/google/callback",
+	"google_realm": "http://thmcards.nodejitsu.com",
+	"facebook_clientid": "479179358837571",
+	"facebook_clientsecret": "9af20c0ab66f8c5ba6f8d714b339be23",
+	"twitter_key": "1Icj0eY0NYmUoMSiGA",
+	"twitter_secret": "wsgFgVlT2p1R41rr1EYeUm6PqBwfqA3DIgtgC0h6c"
+}

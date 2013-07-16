@@ -2,13 +2,15 @@
 /**
  * Module dependencies.
  */
+if(!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
+
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , nconf = require('nconf').file('settings.json').env()
+  , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
   , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
   , _ = require('underscore')
@@ -18,6 +20,7 @@ var express = require('express')
   , GoogleStrategy = require('passport-google').Strategy;
   ;
 
+console.log("COUCHDB", nconf.get('couchdb'));
 
 var app = express();
 
