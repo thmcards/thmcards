@@ -2,8 +2,12 @@ Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Set = Backbone.Model.extend({
 		url: function() { 
-			console.log("THIS", this);
-			return "/set/" + this.get("id") },
+			if(this.get("id")) {
+				return "/set/" + this.get("id")
+			} else {
+				return "/set/";
+			}
+		},
 		idAttribute: "_id"
 	});
 
