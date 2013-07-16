@@ -221,7 +221,7 @@ app.get('/set/:id', function(req, res){
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
-  db.view('sets', 'by_name', function(err, body) {
+  db.view('sets', 'by_owner', { key: new Array(req.session["passport"]["user"][0].username) }, function(err, body) {
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value});
       res.send(docs);
