@@ -204,7 +204,7 @@ code {
 }
 
 .clicktoflip {
-  color:#666;
+  color:#666; 
   position: absolute; 
   right: 10px; 
   top: 13px; 
