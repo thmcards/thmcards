@@ -245,13 +245,13 @@ app.get('/set', ensureAuthenticated, function(req, res){
 
 });
 
-app.post('/set/', function(req, res){
+app.post('/set/', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
 
   db.insert(
     { 
       "created": time,
-      "owner": req.body.owner || "asd",
+      "owner": req.session["passport"]["user"][0].username,
       "name": req.body.name,
       "description": req.body.description,
       "visibility": req.body.visibility,

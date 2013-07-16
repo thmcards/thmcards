@@ -40,7 +40,7 @@ Cards.addInitializer(function(){
 	new Cards.Router({ controller: API });
 });
 
-Cards.on("initialize:after", function(){
+Cards.on("initialize:after", function() {
 	if(Backbone.history) {
 		Backbone.history.start();
 
