@@ -93,7 +93,11 @@
       <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= _id %>/"><%= name %></a></td>
       <td>5</td>
       <td>
-        <button class="btn btn-mini btn-success">Lernen</button>
+        <div class="progress" style="margin:10px 5px">
+          <div class="bar bar-success" style="width: 50%;"></div>
+          <div class="bar bar-warning" style="width: 20%;"></div>
+          <div class="bar bar-danger" style="width: 30%;"></div>
+        </div>
       </td>
     </script>
 
@@ -164,7 +168,7 @@
         <tr>
           <th>Name</th>
           <th>Karten</th>
-          <th></th>
+          <th>Fortschritt</th>
         </tr>
       </thead>
       <tbody></tbody>
