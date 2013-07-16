@@ -3,9 +3,19 @@ Cards.module('Set.Details', function(Details, App) {
 		template: "#set-details-item",
 		className: "item",
 		events: {
-			"click a": "linkClicked"
+			"click a": "linkClicked",
+			"click div.box": "cardClicked"
 		},
-		linkClicked: function(ev){
+		cardClicked: function(ev) {
+			ev.preventDefault();
+
+			var front = $(ev.currentTarget).find('div.front');
+			var back = $(ev.currentTarget).find('div.back');
+
+			front.toggle();
+			back.toggle();
+		},
+		linkClicked: function(ev) {
 			ev.preventDefault();
 			console.log("link");
 			

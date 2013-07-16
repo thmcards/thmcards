@@ -218,12 +218,15 @@ app.get('/set/:id/card', function(req, res){
 });
 
 app.get('/set/:id', function(req, res){
-  fs.readFile(__dirname + '/public/testdata/sets.json', 'utf8', function(err, text){
-        var array = JSON.parse(text);
-
-        res.header("Content-Type", "text/json");
-        res.send(array[req.params.id-1]);
-    });   
+  db.view('sets', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value});
+      console.log(docs);
+      res.send(docs[0]);
+    } else {
+      console.log("[db.sets/by_id]", err.message);
+    }
+  });
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){

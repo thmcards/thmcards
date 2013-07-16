@@ -6,7 +6,12 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 
 		},
 		events: {
+			"click a": "linkClicked"
+		},
+		linkClicked : function(ev) {
+			ev.preventDefault();
 
+			console.log(this.model);
 		}
 	});
 });

@@ -20,7 +20,7 @@
             <a href="/" class="brand"><img src="/img/cards_logo.png" alt="THMcards Logo" /></a>
             <div class="container">
               <ul class="nav">
-                <li class="active"><a href="/">Karten</a></li>
+                <li class="active"><a href="/#set/list">Karten</a></li>
                 <li class="divider-vertical"></li>
                 <li><a href="#">Importieren</a></li>
                 
@@ -56,7 +56,7 @@
 
     <script type="text/template" id="set-details-layout">
       <div class="span9 offset3">
-        <h3 style="margin-bottom:20px">Details</h3>
+        <h3 style="margin-bottom:20px">&nbsp;</h3>
       </div>
       <div class="span3" id="set-details-sideBar-region"></div>
       <div class="span9" id="set-details-region"></div>
@@ -64,17 +64,29 @@
 
     <script type="text/template" id="set-details-item">
       <div class="box">
-        <div class="block"><div class="centered"><%= front %></div></div>
+        <span class="clicktoflip">Click to flip</span>
+        <div class="block"><div class="centered front"><%= front %></div><div class="centered back" style="display:none"><%= back %></div>
       </div>
     </script>
 
     <script type="text/template" id="set-details-collection">
       <div id="cardCarousel" class="carousel slide">
-      <div class="carousel-inner"></div>
-      <ol class="carousel-indicators"></ol>
-      <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+
+        <div class="carousel-inner"></div>
+        <ol class="carousel-indicators"></ol>
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
       </div>
+      <table class="table table-bordered" style="width:300px; margin:0 auto">
+        <thead>
+          <th>Lernen</th>
+          <th>Spielen</th>
+        </thead>
+        <tbody>
+          <tr><td><button class="btn" style="width:100%">Abfrage</button></td><td><button class="btn" style="width:100%">game 1</button></td></tr>
+          <tr><td><button class="btn" style="width:100%">Test</button></td><td><button class="btn" style="width:100%">game 2</button></td></tr>
+        </tbody>
+      </table>
     </script>
 
     <script type="text/template" id="set-list-item">
@@ -86,7 +98,16 @@
     </script>
 
     <script type="text/template" id="set-details-sideBar"> 
-      asdasd
+      <h4><%= name %></h4>
+      <hr />
+      <span style="font-family:'Georgia'; font-style:italic"><%= description %></span>
+      <hr />
+      <span class="nav-header" style="padding-left:0">Erstellt von</span>
+      <span style="font-family:'Georgia'"><a href="/#user/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
+      <hr />
+      <button class="btn btn-success" style="width:100%">Neue Karte erstellen</button>
+      <button class="btn" style="width:100%; margin-top:10px">Kartensatz editieren</button>
+      <button class="btn btn-danger" style="width:100%; margin-top:10px">Kartensatz löschen</button>
     </script>
 
     <script type="text/template" id="set-list-sideBar">  
@@ -154,6 +175,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.1-bundled/backbone.marionette.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
     <script type="text/javascript" src="/javascripts/Cards.js"></script>
     
@@ -169,6 +191,10 @@
     <script type="text/javascript" src="/javascripts/modules/Set.Details.SideBar.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Details.DetailsView.js"></script>
 
+    <script type="text/javascript" src="/javascripts/Date.format.min.js"></script>
+
+
+    
     <script type="text/javascript">
       $(function(){
         Cards.start();

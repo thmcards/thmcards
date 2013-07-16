@@ -105,12 +105,14 @@ code {
 
 .box
 {
+  font-family:'Georgia', serif;
   position: relative;
-  width: 400px;
+  width: 550px;
   height: 270px;
   padding: 50px;
   margin: 0 auto;
   background-color: #fff;
+  background-image: url('/img/card_background.png');
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
@@ -191,4 +193,20 @@ code {
 .navbar .brand img {
   width: 142px;
   height: 30px;
+}
+
+.front {
+  font-size:3em;
+}
+
+.back, .front {
+  line-height: 1.4em;
+}
+
+.clicktoflip {
+  color:#666;
+  position: absolute; 
+  right: 10px; 
+  top: 13px; 
+  font-style: italic;
 }
