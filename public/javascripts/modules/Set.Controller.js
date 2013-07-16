@@ -42,9 +42,25 @@ Cards.module('Set', function(Set, App){
 					console.log("error");
 				}
 			});
-			
+		},
+		showDetailsNewCardLayout: function(name, id){
+			var set = new Cards.Entities.Set({id: id});
 
-			
+			set.fetch({
+				success: function(){
+					console.log(set.get("id"));
+
+					var newCardLayout = new Cards.Set.Details.NewCardLayout();
+					Cards.mainRegion.show(newCardLayout);
+
+					var newCardView = new Cards.Set.Details.NewCardView({ model: set });
+					newCardLayout.detailsRegion.show(newCardView);
+
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
 		}
 	}
 });

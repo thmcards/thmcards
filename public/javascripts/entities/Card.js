@@ -1,9 +1,15 @@
 Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Card = Backbone.Model.extend({
-		urlRoot: function() {
-			return "/set/" + this.id + "/card";
-		}
+		urlRoot: "/card",
+		validate: function (attrs) {
+	        if (!attrs.front) {
+	            return 'Please fill front field.';
+	        }
+	        if (!attrs.back) {
+	            return 'Please fill back field.';
+	        }
+	    }
 	});
 
 	Entities.CardCollection = Backbone.Collection.extend({

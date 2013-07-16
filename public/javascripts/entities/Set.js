@@ -5,7 +5,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 			if(this.get("id")) {
 				return "/set/" + this.get("id")
 			} else {
-				return "/set/";
+				return "/set";
 			}
 		},
 		idAttribute: "_id"

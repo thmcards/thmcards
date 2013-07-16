@@ -15,6 +15,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" />
+    <link href="/stylesheets/bootstrap-wysihtml5.css" rel="stylesheet" />
     <link href="/stylesheets/overrides.css" rel="stylesheet" />
   </head>
 
@@ -68,6 +69,13 @@
       <div class="span9" id="set-details-region"></div>
     </script>
 
+    <script type="text/template" id="set-details-newcard-layout">
+      <div class="span12">
+        <h3 style="margin-bottom:20px">Neue Karte</h3>
+      </div>
+      <div class="span12" id="set-newcard-region"></div>
+    </script>    
+
     <script type="text/template" id="set-details-item">
       <div class="box">
         <span class="clicktoflip">Click to flip</span>
@@ -105,6 +113,23 @@
           <div class="bar bar-danger" style="width: 30%;"></div>
         </div>
       </td>
+    </script>
+
+    <script type="text/template" id="set-details-newcard"> 
+      <!--div class="span5">
+      asd
+      </div>
+      <div class="span5">
+      asd
+      </div-->    
+      <div class="span5">
+        <textarea id="front-textarea" placeholder="Vorderseite" style="width:100%; height:200px; margin-top:10px"></textarea>
+          
+      </div>
+      <div class="span5 offset1">
+        <textarea id="back-textarea" placeholder="Rückseite" style="width:100%; height:200px; margin-top:10px"></textarea>
+      </div>
+      <span class="span11" style="text-align:center"><button class="btn btn-large">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-success btn-large">Karte speichern</button></span>
     </script>
 
     <script type="text/template" id="set-details-sideBar"> 
@@ -199,8 +224,12 @@
     <script type="text/javascript" src="/javascripts/modules/Set.Details.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Details.SideBar.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Details.DetailsView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.Details.NewCardView.js"></script>
 
     <script type="text/javascript" src="/javascripts/Date.format.min.js"></script>
+
+    <script type="text/javascript" src="/javascripts/wysihtml5-0.3.0.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap-wysihtml5.js"></script>
 
     <script type="text/javascript">
       $(function(){

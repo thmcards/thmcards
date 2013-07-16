@@ -232,7 +232,7 @@ app.get('/set', ensureAuthenticated, function(req, res){
 
 });
 
-app.post('/set/', ensureAuthenticated, function(req, res){
+app.post('/set', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
 
   db.insert(
@@ -243,6 +243,30 @@ app.post('/set/', ensureAuthenticated, function(req, res){
       "description": req.body.description,
       "visibility": req.body.visibility,
       "type": "set"
+    }, 
+    function(err, body, header){
+      if(err) {
+        console.log('[db.insert] ', err.message);
+        return;
+      }
+      db.get(body.id, { revs_info: false }, function(err, body) {
+        if (!err)
+          res.send(body);
+      });
+  });  
+});
+
+app.post('/card', ensureAuthenticated, function(req, res){
+  var time = new Date().getTime();
+
+  db.insert(
+    { 
+      "created": time,
+      "owner": req.session["passport"]["user"][0].username,
+      "setId": req.body.setId,
+      "front": req.body.front,
+      "back": req.body.back,
+      "type": "card"
     }, 
     function(err, body, header){
       if(err) {

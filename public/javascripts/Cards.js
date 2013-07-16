@@ -9,8 +9,8 @@ Cards.addRegions({
 Cards.Router = Backbone.Marionette.AppRouter.extend({
 	appRoutes : {
 		"set/list": "listSet",
-		"set/new": "newSet",
 		"set/details/:setName/:setId": "showSet",
+		"set/details/:setName/:setId/new": "newCard",
 		"_=_": "facebookCallback"
 	}		
 });
@@ -19,8 +19,8 @@ var API = {
 	listSet: function(){
 		Cards.Set.Controller.showListLayout();
 	},
-	newSet: function(){
-		//Cards.Set.Controller.showDetailsLayout();
+	newCard: function(name, id){
+		Cards.Set.Controller.showDetailsNewCardLayout(name, id);
 	},
 	showSet: function(name, id) {
 		Cards.Set.Controller.showDetailsLayout(name, id);
@@ -73,6 +73,11 @@ Cards.on("set:list", function(){
 Cards.on("set:details", function(name, id){
 	Cards.navigate("set/details/"+name+"/"+id);
 	API.showSet(name, id);
+})
+
+Cards.on("set:details:new", function(name, id){
+	Cards.navigate("set/details/"+name+"/"+id+"/new");
+	API.newCard(name, id);
 })
 
 
