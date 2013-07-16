@@ -3,13 +3,18 @@
  * Module dependencies.
  */
 
+var COUCHDB_URL = "http://localhost:5984";
+if(process.env.NODE_ENV == 'production') {
+  COUCHDB_URL = "https://thmcards.iriscouch.com";
+}
+
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , nano = require('nano')('http://localhost:5984')
+  , nano = require('nano')(COUCHDB_URL)
   , db = nano.use('thmcards')
   , _ = require('underscore')
   , passport = require('passport')
@@ -39,6 +44,8 @@ app.configure(function(){
 app.configure('development', function() {
   app.set("GOOGLE_AUTH_RETURNURL", "http://localhost:" + (process.env.PORT || 3000) + "/auth/google/callback");
   app.set("GOOGLE_AUTH_REALM", "http://localhost:" + (process.env.PORT || 3000) + "/");
+
+  app.set('COUCHDB_URL', "http://localhost:5983");
   app.use(express.errorHandler());
 });
 
@@ -46,8 +53,7 @@ app.configure('production', function() {
   app.set("GOOGLE_AUTH_RETURNURL", "http://thmcards.nodejitsu.com/auth/google/callback");
   app.set("GOOGLE_AUTH_REALM", "http://thmcards.nodejitsu.com/");
 
-
-  var GOOGLE_AUTH_REALM = "http://thmcards.nodejitsu.com";
+  app.set('COUCHDB_URL', "https://thmcards.iriscouch.com");
   /*app.use(function(req, res, next) {
       if(!req.secure && process.env.NODE_ENV == 'production') {
         return res.redirect('https://' + req.get('Host') + req.url);
@@ -84,7 +90,8 @@ var User = {};
 User.findOrCreate = function(profile, done) {
   console.log("PROFILE", profile);
   db.view('users', 'by_provider_and_username', { key: new Array(profile.provider, profile.username) }, function(err, body) {
-      
+      console.log(body);
+      console.log(err);
       if(body.rows.length > 0) {
         var user = _.map(body.rows, function(doc) { return doc.value});
         return done(err, user);
@@ -94,7 +101,7 @@ User.findOrCreate = function(profile, done) {
             "provider": profile.provider,
             "username": profile.username || null,
             "name": profile.displayName || null,
-            "email": profile.emails[0].value || null,
+            "email": _.first(profile.emails) || null,
             "type": "user"
           }, 
           function(err, body, header){
