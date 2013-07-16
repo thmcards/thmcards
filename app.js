@@ -20,8 +20,6 @@ var express = require('express')
   , GoogleStrategy = require('passport-google').Strategy;
   ;
 
-console.log("COUCHDB", nconf.get('couchdb'));
-
 var app = express();
 
 app.configure(function(){
@@ -57,7 +55,6 @@ app.configure('production', function() {
 //-----------------------       LOGIN & AUTH       -----------------------------------
 //------------------------------------------------------------------------------------
 passport.serializeUser(function(user, done) {
-  console.log("user", user);
   done(null, user);
 });
 
@@ -79,10 +76,7 @@ function ensureAuthenticated(req, res, next) {
 
 var User = {};
 User.findOrCreate = function(profile, done) {
-  console.log("PROFILE", profile);
   db.view('users', 'by_provider_and_username', { key: new Array(profile.provider, profile.username) }, function(err, body) {
-      console.log(body);
-      console.log(err);
       if(body.rows.length > 0) {
         var user = _.map(body.rows, function(doc) { return doc.value});
         return done(err, user);
@@ -219,7 +213,6 @@ app.get('/set/:id', function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value});
-      console.log(docs);
       res.send(docs[0]);
     } else {
       console.log("[db.sets/by_id]", err.message);
@@ -228,16 +221,9 @@ app.get('/set/:id', function(req, res){
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
-
-  console.log("twitter", req.session["twitter"]);
-  console.log("passport", req.session["passport"]["user"]);
-  console.log("session", req.session);
-
-
   db.view('sets', 'by_name', function(err, body) {
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value});
-      console.log(docs);
       res.send(docs);
     } else {
       console.log("[db.sets/by_name]", err.message);
@@ -265,7 +251,6 @@ app.post('/set/', ensureAuthenticated, function(req, res){
       }
       db.get(body.id, { revs_info: false }, function(err, body) {
         if (!err)
-          //console.log(body);
           res.send(body);
       });
   });  
