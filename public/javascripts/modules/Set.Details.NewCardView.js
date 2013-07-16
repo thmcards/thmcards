@@ -2,10 +2,18 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.NewCardView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-newcard",
 		events: {
-			"click .btn-success": "saveCard"
+			"click .btn-success": "saveCard",
+			"click .btn.cancel": "cancel"
+		},
+		ui: {
+			"saveBtn": ".btn-success",
+			"cancelBtn": ".btn.cancel"
+		},
+		cancel: function(ev) {
+			history.back();
 		},
 		saveCard: function(ev) {
-			console.log("asd");
+			this.ui.saveBtn.button('loading');
 
 			var setId = this.model.get('id');
 			var setName = this.model.get('name');
@@ -16,16 +24,20 @@ Cards.module('Set.Details', function(Details, App) {
 				setId: setId
 			});
 
-
-			card.save({}, {
-				success: function(model, response) {
-					alert("karte angelegt");
-					Cards.trigger("set:details", setName.replace(/[^a-zA-Z0-9-_]/g, '_'), setId);
-				},
-				error: function(model, error) {
-					alert("something went wrong");
-				}
-			});
+			if(card.isValid()) {
+				card.save({}, {
+					success: function(model, response) {
+						Cards.trigger("set:details", setName.replace(/[^a-zA-Z0-9-_]/g, '_'), setId);
+					},
+					error: function(model, error) {
+						this.ui.saveBtn.button('reset');
+						alert("something went wrong");
+					}
+				});
+			} else {
+				alert('not valid');
+				this.ui.saveBtn.button('reset');
+			}
 		},
 		onShow: function() {
 			var editorConfig = {
