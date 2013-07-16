@@ -2,19 +2,14 @@
 /**
  * Module dependencies.
  */
-
-var COUCHDB_URL = "http://localhost:5984";
-if(process.env.NODE_ENV == 'production') {
-  COUCHDB_URL = "https://thmcards.iriscouch.com";
-}
-
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , nano = require('nano')(COUCHDB_URL)
+  , nconf = require('nconf').file('settings.json').env()
+  , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
   , _ = require('underscore')
   , passport = require('passport')
@@ -22,6 +17,7 @@ var express = require('express')
   , TwitterStrategy = require('passport-twitter').Strategy
   , GoogleStrategy = require('passport-google').Strategy;
   ;
+
 
 var app = express();
 
@@ -42,18 +38,10 @@ app.configure(function(){
 });
 
 app.configure('development', function() {
-  app.set("GOOGLE_AUTH_RETURNURL", "http://localhost:" + (process.env.PORT || 3000) + "/auth/google/callback");
-  app.set("GOOGLE_AUTH_REALM", "http://localhost:" + (process.env.PORT || 3000) + "/");
-
-  app.set('COUCHDB_URL', "http://localhost:5983");
   app.use(express.errorHandler());
 });
 
 app.configure('production', function() {
-  app.set("GOOGLE_AUTH_RETURNURL", "http://thmcards.nodejitsu.com/auth/google/callback");
-  app.set("GOOGLE_AUTH_REALM", "http://thmcards.nodejitsu.com/");
-
-  app.set('COUCHDB_URL', "https://thmcards.iriscouch.com");
   /*app.use(function(req, res, next) {
       if(!req.secure && process.env.NODE_ENV == 'production') {
         return res.redirect('https://' + req.get('Host') + req.url);
@@ -123,9 +111,9 @@ User.findOrCreate = function(profile, done) {
 };
 
 passport.use(new FacebookStrategy({
-    clientID: "479179358837571",
-    clientSecret: "9af20c0ab66f8c5ba6f8d714b339be23",
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
+    clientID: nconf.get("facebook_clientid"),
+    clientSecret: nconf.get("facebook_clientsecret"),
+    callbackURL: nconf.get('facebook_callback')
   },
   function(accessToken, refreshToken, profile, done) {
     return User.findOrCreate(profile, done);
@@ -133,17 +121,17 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use(new TwitterStrategy({
-  consumerKey: "1Icj0eY0NYmUoMSiGA",
-  consumerSecret: "wsgFgVlT2p1R41rr1EYeUm6PqBwfqA3DIgtgC0h6c",
-  callbackURL: "http://localhost:3000/auth/twitter/callback"
+  consumerKey: nconf.get("twitter_key"),
+  consumerSecret: nconf.get("twitter_secret"),
+  callbackURL: nconf.get('twitter_callback')
 },
 function(token, tokenSecret, profile, done) {
   return User.findOrCreate(profile, done);
 }));
 
 passport.use(new GoogleStrategy({
-    returnURL: app.get("GOOGLE_AUTH_RETURNURL"),
-    realm: app.get("GOOGLE_AUTH_REALM")
+    returnURL: nconf.get("google_callback"),
+    realm: nconf.get("google_realm")
   },
   function(identifier, profile, done) {
     profile.openID = identifier;

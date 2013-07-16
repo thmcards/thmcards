@@ -1,0 +1,13 @@
+{
+	"url": "http://localhost/",
+	"couchdb": "http://localhost:5984/",
+	"twitter_callback": "http://localhost:3000/auth/twitter/callback",
+	"facebook_callback": "http://localhost:3000/auth/facebook/callback",
+	"google_callback": "http://localhost:3000/auth/google/callback",
+	"google_realm": "http://localhost:3000/",
+	"facebook_clientid": "479179358837571",
+	"facebook_clientsecret": "9af20c0ab66f8c5ba6f8d714b339be23",
+	"twitter_key": "1Icj0eY0NYmUoMSiGA",
+	"twitter_secret": "wsgFgVlT2p1R41rr1EYeUm6PqBwfqA3DIgtgC0h6c"
+
+}
