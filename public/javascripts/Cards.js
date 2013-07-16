@@ -41,6 +41,14 @@ Cards.addInitializer(function(){
 });
 
 Cards.on("initialize:after", function() {
+	$.ajaxSetup({
+	    statusCode: {
+	        401: function(){
+	            window.location.replace('/login');
+	        }
+	    }
+	});
+
 	if(Backbone.history) {
 		Backbone.history.start();
 
