@@ -149,9 +149,8 @@ code {
 }
 
 #cardCarousel ol.carousel-indicators {
-  right: 0;
-  top: 0;
-  background-color: #f5f5f5;
+  left: 120px;
+  top: 15px;
 }
 
 #cardCarousel ol.carousel-indicators li.active {
