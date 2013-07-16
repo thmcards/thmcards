@@ -74,7 +74,7 @@ function ensureAuthenticated(req, res, next) {
   }
 
   if(req.url != '/') {
-    res.send(401, "Unauthorized");
+    res.send(401);
   } else {
     res.redirect('/login');
   }
