@@ -14,7 +14,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		},
 		events: {
 			"click a": "linkClicked",
-			"click .btn-success": "newCardClicked"
+			"click .btn-primary": "newCardClicked"
 		},
 		newCardClicked: function(ev) {
 			App.trigger("set:details:new", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
