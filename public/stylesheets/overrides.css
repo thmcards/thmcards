@@ -107,7 +107,6 @@ code {
 {
   font-family:'Georgia', serif;
   position: relative;
-  width: 550px;
   height: 270px;
   padding: 50px;
   margin: 0 auto;
@@ -208,4 +207,34 @@ code {
   right: 10px; 
   top: 13px; 
   font-style: italic;
+}
+
+.carousel-control {
+    margin-top: -20px;
+    top: 50%;
+    z-index: 5;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    opacity: 0.3;
+}
+
+.carousel-inner {
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+}
+
+.carousel-control:hover {
+  opacity: 0.5;
+}
+
+.carousel-itemcnt {
+  bottom: 0; 
+  height: 20px; 
+  position: absolute; 
+  color: #000; 
+  font-family: 'Georgia', serif; 
+  text-align: center; 
+  width: 100%; 
+  z-index: 1;
 }

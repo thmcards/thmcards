@@ -65,7 +65,10 @@
       <div class="span9 offset3">
         <h3 style="margin-bottom:20px">&nbsp;</h3>
       </div>
-      <div class="span3" id="set-details-sideBar-region"></div>
+      <div class="span3">
+        <div id="set-details-sideBar-region"></div>
+        <div id="set-details-controls-region"></div>
+      </div>
       <div class="span9" id="set-details-region"></div>
     </script>
 
@@ -86,19 +89,78 @@
     <script type="text/template" id="set-details-collection">
       <div id="cardCarousel" class="carousel slide">
 
-        <div class="carousel-inner"></div>
-        <ol class="carousel-indicators"></ol>
+        <div class="carousel-inner">
         <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
         <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+        <span class="carousel-itemcnt"></span>
+        </div>
+        
+        
       </div>
-      <table class="table table-bordered" style="width:300px; margin:0 auto">
+
+    <tr>
+        <td colspan="2"></td>
+        <td colspan="2"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td rowspan="2"></td>
+        <td rowspan="2"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+
+
+      <table class="table table-bordered" style="margin:0 auto">
         <thead>
           <th>Lernen</th>
-          <th>Spielen</th>
+          <th colspan="2">Spielen</th>
         </thead>
         <tbody>
-          <tr><td><button class="btn" style="width:100%">Abfrage</button></td><td><button class="btn" style="width:100%">game 1</button></td></tr>
-          <tr><td><button class="btn" style="width:100%">Test</button></td><td><button class="btn" style="width:100%">game 2</button></td></tr>
+          <tr>
+              <td width="33%">
+                <div class="well" style="height:260px;">
+                  <h4>Leitner</h4>
+                  <hr />
+                    <div class="progress" style="margin:10px 5px 74px;">
+                      <div class="bar bar-success" style="width: 50%;">5</div>
+                      <div class="bar bar-warning" style="width: 20%;">2</div>
+                      <div class="bar bar-danger" style="width: 30%;">3</div>
+                    </div>
+                  <hr />
+                  <button class="btn" style="width:100%">Lernen</button>
+                  <button class="btn" style="margin-top:10px; width:100%">2. Button?</button>
+                </div>
+              </td>
+              <td>
+                <div class="well" style="height:260px;">
+                  <h4>Meteor</h4>
+                  <hr />
+                  <div><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32x32/cup_gold.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">3.548 Punkte</span></div>
+                  <div style="margin:10px 0"><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32/award_star_gold_3.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">1 / 10 Badges </span></div>
+                  <hr />
+                  
+                  <button class="btn" style="width:100%">Üben</button>
+                  
+                  <button class="btn" style="margin-top:10px; width:100%">60-Sek Chellange</button>
+                </div>
+              </td>
+              <td>
+                <div class="well" style="height:260px;">
+                  <h4>Jeopardy</h4>
+                  <hr />
+                  <div><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32x32/cup_gold.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">3.548 Punkte</span></div>
+                  <div style="margin:10px 0"><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32/award_star_gold_3.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">1 / 10 Badges </span></div>
+                  <hr />
+                  <button class="btn" style="width:100%">Üben</button>
+                  
+                  <button class="btn" style="margin-top:10px; width:100%">60-Sek Chellange</button>
+                </div>
+              </td>
+          </tr>
         </tbody>
       </table>
     </script>
@@ -139,10 +201,11 @@
       <hr />
       <span class="nav-header" style="padding-left:0">Erstellt von</span>
       <span style="font-family:'Georgia'"><a href="/#user/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
-      <hr />
-      <button class="btn btn-success" style="width:100%">Neue Karte erstellen</button>
+    </script>
+
+    <script type="text/template" id="set-details-controls">
+      <button class="btn btn-primary" style="width:100%">Neue Karte erstellen</button>
       <button class="btn" style="width:100%; margin-top:10px">Kartensatz editieren</button>
-      <button class="btn btn-danger" style="width:100%; margin-top:10px">Kartensatz löschen</button>
     </script>
 
     <script type="text/template" id="set-list-sideBar">  

@@ -34,9 +34,12 @@ Cards.module('Set', function(Set, App){
 						}
 					});
 
-					console.log(set);
+					
 					var sideBarView = new Cards.Set.Details.SideBar.SideBarView({ model: set});
 					detailsLayout.sideBarRegion.show(sideBarView);
+
+					var constrolsView = new Cards.Set.Details.SideBar.ControlsView();
+					detailsLayout.controlsRegion.show(constrolsView);
 				},
 				error: function(){
 					console.log("error");

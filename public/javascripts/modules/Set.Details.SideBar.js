@@ -4,6 +4,13 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		className: "well sidebar-nav",
 		ui: {
 
+		}
+	}),
+	SideBar.ControlsView = Backbone.Marionette.ItemView.extend({
+		template: "#set-details-controls",
+		className: "well sidebar-nav",
+		ui: {
+
 		},
 		events: {
 			"click a": "linkClicked",
