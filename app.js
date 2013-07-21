@@ -63,23 +63,20 @@ passport.deserializeUser(function(obj, done) {
 });
 
 function ensureAuthenticated(req, res, next) {
+  console.log();
   if (req.isAuthenticated()) {
     var cookie = req.cookies.usr;
     if (cookie === undefined)
     {
       var usr = JSON.stringify({
-        id: req.session["passport"]["user"][0]["_id"],
-        name: req.session["passport"]["user"][0]["name"],
-        username: req.session["passport"]["user"][0]["username"],
-        email: req.session["passport"]["user"][0]["email"],
-        provider: req.session["passport"]["user"][0]["provider"]
+        id: req.session.passport.user._id,
+        name: req.session.passport.user.name,
+        username: req.session.passport.user.username,
+        email: req.session.passport.user.email,
+        provider: req.session.passport.user.provider
       });
       res.cookie('usr', usr, { expires: new Date(Date.now() + (3600000 * 24 * 30)), httpOnly: false });
       console.log('cookie have created successfully');
-    } 
-    else
-    {
-      console.log('cookie exists', cookie);
     }
 
     return next(null); 
@@ -200,9 +197,9 @@ app.get('/logout', function(req, res){
 
 app.get('/whoami', ensureAuthenticated, function(req, res) {
   var user = {
-    "username": req.session["passport"]["user"][0].username,
-    "email":  req.session["passport"]["user"][0].email,
-    "name": req.session["passport"]["user"][0].name
+    "username": req.session.passport.user.username,
+    "email":  req.session.passport.user.email,
+    "name": req.session.passport.user.username
   }
   res.set('Content-Type', 'text/json');
   res.send(JSON.stringify(user));
