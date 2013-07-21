@@ -31,7 +31,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({ secret: 'thissecretrocks' }));
+  app.use(express.session({ secret: "averysecretsecret", maxAge: Date.now() + (30 * 86400 * 1000) }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -63,7 +63,25 @@ passport.deserializeUser(function(obj, done) {
 });
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { 
+  if (req.isAuthenticated()) {
+    var cookie = req.cookies.usr;
+    if (cookie === undefined)
+    {
+      var usr = JSON.stringify({
+        id: req.session["passport"]["user"][0]["_id"],
+        name: req.session["passport"]["user"][0]["name"],
+        username: req.session["passport"]["user"][0]["username"],
+        email: req.session["passport"]["user"][0]["email"],
+        provider: req.session["passport"]["user"][0]["provider"]
+      });
+      res.cookie('usr', usr, { expires: new Date(Date.now() + (3600000 * 24 * 30)), httpOnly: false });
+      console.log('cookie have created successfully');
+    } 
+    else
+    {
+      console.log('cookie exists', cookie);
+    }
+
     return next(null); 
   }
 
@@ -176,6 +194,7 @@ app.get('/auth/google/callback',
 
 app.get('/logout', function(req, res){
   req.logout();
+  res.clearCookie('usr');
   res.redirect('/');
 });
 

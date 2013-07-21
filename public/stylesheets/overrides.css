@@ -15,6 +15,7 @@ body {
 }
 
 #main {
+  margin-top: 50px;
   margin-bottom: 10px;
 }
 
@@ -62,8 +63,8 @@ code {
 .navbar .divider-vertical {
     background-color: #D3D6DD;
     border-right: 1px solid rgba(255, 255, 255, 0.9);
-    height: 16px;
-    margin: 14px 2px 0;
+    height: 40px;
+    margin: 0 20px;
     overflow: hidden;
     width: 1px;
 }
