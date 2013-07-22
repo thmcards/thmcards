@@ -63,18 +63,21 @@ passport.deserializeUser(function(obj, done) {
 });
 
 function ensureAuthenticated(req, res, next) {
-  console.log();
+  
   if (req.isAuthenticated()) {
+    var user = _.first(req.session.passport.user);
+
     var cookie = req.cookies.usr;
     if (cookie === undefined)
     {
       var usr = JSON.stringify({
-        id: req.session.passport.user._id,
-        name: req.session.passport.user.name,
-        username: req.session.passport.user.username,
-        email: req.session.passport.user.email,
-        provider: req.session.passport.user.provider
+        "id": user._id,
+        "name": user.name,
+        "username": user.username,
+        "email": user.email,
+        "provider": user.provider
       });
+      console.log(usr);
       res.cookie('usr', usr, { expires: new Date(Date.now() + (3600000 * 24 * 30)), httpOnly: false });
       console.log('cookie have created successfully');
     }

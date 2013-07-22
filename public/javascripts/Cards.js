@@ -10,8 +10,7 @@ Cards.Router = Backbone.Marionette.AppRouter.extend({
 	appRoutes : {
 		"set/list": "listSet",
 		"set/details/:setName/:setId": "showSet",
-		"set/details/:setName/:setId/new": "newCard",
-		"_=_": "facebookCallback"
+		"set/details/:setName/:setId/new": "newCard"
 	}		
 });
 
@@ -24,9 +23,6 @@ var API = {
 	},
 	showSet: function(name, id) {
 		Cards.Set.Controller.showDetailsLayout(name, id);
-	},
-	facebookCallback: function(){
-		Cards.trigger("set:list");
 	}
 };
 
