@@ -24,13 +24,7 @@ Cards.module('Set.Details', function(Details, App) {
 	});	
 	Details.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item-empty",
-		className: "empty-item",
-		events: {
-			"click .btn-primary": "newCard",
-		},
-		newCard: function() {
-			$("#set-details-controls-btn-newCard").click();
-		}
+		className: "empty-item"
 	});		
 	Details.DetailsView = Backbone.Marionette.CompositeView.extend({
 		emptyView: Details.EmptyView,
@@ -48,6 +42,8 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		onRender: function() {
+			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
+			
 			this.$el.find("div.item").first().addClass("active");
 
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
@@ -59,6 +55,7 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 
 			this.$el.carousel({ interval: false });
+
 		}
 	});
 });
