@@ -213,6 +213,23 @@ app.get('/', ensureAuthenticated, function(req, res){
     });
 });
 
+app.get('/test', function(req, res){
+  db.view('sets', 'by_owner_with_cards', function(err, body) {
+
+    var sets = _.filter(body.rows, function(row){ return row.key[1] == 0; })
+
+    _.each(sets, function(set){      
+      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
+      set.value.cardCnt = cardCnt.length;
+    }, this);
+    sets = _.pluck(sets, "value");
+
+    res.json(sets);
+  });
+
+});
+
+
 app.get('/set/:id/card', function(req, res){
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
@@ -237,15 +254,17 @@ app.get('/set/:id', function(req, res){
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
-  db.view('sets', 'by_owner', { key: new Array(req.session["passport"]["user"][0].username) }, function(err, body) {
-    if (!err) {
-      var docs = _.map(body.rows, function(doc) { return doc.value});
-      res.send(docs);
-    } else {
-      console.log("[db.sets/by_name]", err.message);
-    }
-  });
+  db.view('sets', 'by_id_with_cards', function(err, body) {
+    var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
 
+    _.each(sets, function(set){      
+      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
+      set.value.cardCnt = cardCnt.length;
+    }, this);
+    sets = _.pluck(sets, "value");
+
+    res.send(_.sortBy(sets, function(set){ return set.name }));
+  });
 });
 
 app.post('/set', ensureAuthenticated, function(req, res){
