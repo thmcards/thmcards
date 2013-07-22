@@ -235,7 +235,7 @@ app.get('/set/:id/card', function(req, res){
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value});
-      res.send(docs);
+      res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
     }
@@ -246,7 +246,7 @@ app.get('/set/:id', function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value});
-      res.send(docs[0]);
+      res.json(docs[0]);
     } else {
       console.log("[db.sets/by_id]", err.message);
     }
@@ -263,7 +263,7 @@ app.get('/set', ensureAuthenticated, function(req, res){
     }, this);
     sets = _.pluck(sets, "value");
 
-    res.send(_.sortBy(sets, function(set){ return set.name }));
+    res.json(_.sortBy(sets, function(set){ return set.name }));
   });
 });
 
@@ -286,7 +286,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
       }
       db.get(body.id, { revs_info: false }, function(err, body) {
         if (!err)
-          res.send(body);
+          res.json(body);
       });
   });  
 });
@@ -310,7 +310,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
       }
       db.get(body.id, { revs_info: false }, function(err, body) {
         if (!err)
-          res.send(body);
+          res.json(body);
       });
   });  
 });
