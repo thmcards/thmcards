@@ -22,7 +22,18 @@ Cards.module('Set.Details', function(Details, App) {
 			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
 		}
 	});	
+	Details.EmptyView = Backbone.Marionette.ItemView.extend({
+		template: "#set-details-item-empty",
+		className: "empty-item",
+		events: {
+			"click .btn-primary": "newCard",
+		},
+		newCard: function() {
+			$("#set-details-controls-btn-newCard").click();
+		}
+	});		
 	Details.DetailsView = Backbone.Marionette.CompositeView.extend({
+		emptyView: Details.EmptyView,
 		itemView: Details.ItemView,
 		itemViewContainer: "div.carousel-inner",
 		template: "#set-details-collection",

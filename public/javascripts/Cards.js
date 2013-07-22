@@ -48,18 +48,11 @@ Cards.on("initialize:after", function() {
 	        }
 	    }
 	});
-
-	// THIS HAS TO BE MOVED!
 	
 	$.cookie.json = true;
 	var usr = $.cookie('usr');
 	$("#usr-profile").text(usr.username);
 	$("#usr-profile").attr("href", "profile/"+encodeURI(usr.username)+"/"+usr.id);
-
-
-	console.log("cookie", usr);
-	
-
 
 	if(Backbone.history) {
 		Backbone.history.start();

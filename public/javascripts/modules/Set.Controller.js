@@ -16,8 +16,6 @@ Cards.module('Set', function(Set, App){
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
-					console.log(set.get("id"));
-
 					var detailsLayout = new Cards.Set.Details.Layout();
 					Cards.mainRegion.show(detailsLayout);
 
@@ -25,7 +23,6 @@ Cards.module('Set', function(Set, App){
 					
 					cardCollection.fetch({
 						success: function(){
-							console.log(cardCollection);
 							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection });
 							detailsLayout.detailsRegion.show(detailsView);
 						},
