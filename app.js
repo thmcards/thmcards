@@ -78,7 +78,7 @@ function ensureAuthenticated(req, res, next) {
         "provider": user.provider
       });
       console.log(usr);
-      res.cookie('usr', usr, { expires: new Date(Date.now() + (3600000 * 24 * 30)), httpOnly: false });
+      res.cookie('usr', usr, { httpOnly: false });
       console.log('cookie have created successfully');
     }
 
