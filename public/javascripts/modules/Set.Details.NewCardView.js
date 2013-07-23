@@ -5,7 +5,8 @@ Cards.module('Set.Details', function(Details, App) {
 			"click .btn-success": "saveCard",
 			"click .btn.cancel": "cancel",
 			"click .btn-pictureSearch": "pictureSearch",
-			"keyup input": "blurInput"
+			"keyup input": "keyupInput",
+			"focus input": "focusInput"
 		},
 		ui: {
 			saveBtn: ".btn-success",
@@ -23,8 +24,16 @@ Cards.module('Set.Details', function(Details, App) {
 			var setName = this.model.get('name');
 
 			var card = new Cards.Entities.Card({
-				front: $("#front-textarea").val(),
-				back: $("#back-textarea").val(),
+				front: {
+					text: $("#front-textarea").val(),
+					picture: $("#set-details-newcard-input-pic-front-search").val() || null,
+					video: null
+				},
+				back: {
+					text: $("#back-textarea").val(),
+					picture: $("#set-details-newcard-input-pic-back-search").val() || null,
+					video: null
+				},
 				setId: setId
 			});
 
@@ -53,12 +62,12 @@ Cards.module('Set.Details', function(Details, App) {
 			console.log("searching for", searchString);
 
 			
-			var loadSearch = function() {
+			/*var loadSearch = function() {
 				console.log("search loaded");
 			}
 			
 			google.load('search', '1', {callback: loadSearch });
-
+*/
 			setTimeout(function(){
 				var imageSearch = new google.search.ImageSearch();
 				imageSearch.setResultSetSize(8);
@@ -67,21 +76,9 @@ Cards.module('Set.Details', function(Details, App) {
 				  google.search.Search.RESTRICT_SAFESEARCH,
 				  google.search.Search.SAFESEARCH_STRICT
 				);
-				imageSearch.setRestriction(
-				  google.search.ImageSearch.RESTRICT_IMAGESIZE,
-				  google.search.ImageSearch.IMAGESIZE_MEDIUM
-				);
-				imageSearch.setRestriction(
-					google.search.ImageSearch.RESTRICT_RIGHTS,
-                    google.search.ImageSearch.RIGHTS_REUSE
-                );
-                imageSearch.setRestriction(
-				  google.search.ImageSearch.RESTRICT_FILETYPE,
-				  google.search.ImageSearch.FILETYPE_JPG
-				);
 
 				imageSearch.setSearchCompleteCallback(this, function(){
-
+					console.log("results", imageSearch.results);
 					if (imageSearch.results && imageSearch.results.length > 0) {
 
 						var results = imageSearch.results;
@@ -108,14 +105,14 @@ Cards.module('Set.Details', function(Details, App) {
 							imgElem.attr('src', result.tbUrl);
 							imgElem.attr('height', result.tbHeight*1.5);
 							imgElem.attr('width', result.tbWidth*1.5);
-							imgElem.attr('title', result.url);
-							imgElem.attr('alt', result.title);
+							imgElem.attr('title', result.title);
+							imgElem.attr('alt', result.url);
 							imgElem.addClass('img-polaroid');
 
 							imgElem.bind('click', function(ev){
-								searchInput.val($(ev.target).attr('title'));
+								searchInput.val($(ev.target).attr('alt'));
 								that.ui.pictureSearchModal.modal('hide');
-								$("pictureSearchModal-body").empty();
+								$("#pictureSearchModal-body").empty();
 							});
 							td.append(imgElem);
 							console.log(imgElem);
@@ -125,6 +122,9 @@ Cards.module('Set.Details', function(Details, App) {
 								tbody.append(tr);
 							}
 						}
+					} else {
+						alert("no results");
+						this.ui.pictureSearchModal.modal('hide');
 					}
 		        }, null);
 
@@ -132,16 +132,16 @@ Cards.module('Set.Details', function(Details, App) {
 		        $("#pictureSearchModal-footer").empty();
 		        $("#pictureSearchModal-footer").append(google.search.Search.getBranding());
 
-			}, 300);
+			}, 100);
 		        
-
+			$("#pictureSearchModal-body").scrollTop();
 			this.ui.pictureSearchModal.modal('show');
 
-			this.ui.pictureSearchModal.on('hidden', function() {
-				$("pictureSearchModal-body").empty();
+			this.ui.pictureSearchModal.on('hide', function() {
+				$("#pictureSearchModal-body").empty();
 			})
 		},
-		blurInput: function(ev) {
+		keyupInput: function(ev) {
 			var value = $(ev.target).val();
 		    var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
     		if (urlregex.test(value)) {
@@ -149,6 +149,13 @@ Cards.module('Set.Details', function(Details, App) {
     		} else {
     			$(ev.target).next().removeAttr('disabled');
     		}
+		},
+		focusInput: function(ev) {
+			var loadSearch = function() {
+				console.log("search loaded");
+			}
+			
+			google.load('search', '1', {callback: loadSearch });
 		},
 		onShow: function() {
 			var editorConfig = {

@@ -55,7 +55,6 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 
 			this.$el.carousel({ interval: false });
-
 		}
 	});
 });
