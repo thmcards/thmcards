@@ -243,3 +243,29 @@ code {
   width: 100%; 
   z-index: 1;
 }
+
+#google-imagesearch-result {
+  width: 770px;
+  text-align: center;
+  margin-left:10px;
+}
+
+#google-imagesearch-result img {
+  margin: 5px;
+  cursor: pointer;
+}
+
+div.img-tb-container {
+  width: 350px;
+  height: 260px;
+  float:left;
+}
+
+#set-details-newcard-input-pic-front-search, #set-details-newcard-input-pic-back-search {
+  /*width:300px;*/
+}
+
+body .pictureSearchModal {
+  width: 800px;
+  margin-left: -400px;
+}

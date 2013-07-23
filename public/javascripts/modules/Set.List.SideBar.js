@@ -64,8 +64,6 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 								visibility: visibility
 							 });
 
-			//newSet.save();
-
 			this.collection.create(newSet, {
 			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
 
