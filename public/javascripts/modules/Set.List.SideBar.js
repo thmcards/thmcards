@@ -61,7 +61,8 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			var newSet = new Cards.Entities.Set({ 
 								name: name, 
 								description: description,
-								visibility: visibility
+								visibility: visibility,
+								cardCnt: 0
 							 });
 
 			this.collection.create(newSet, {
