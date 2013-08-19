@@ -10,7 +10,8 @@ Cards.Router = Backbone.Marionette.AppRouter.extend({
 	appRoutes : {
 		"set/list": "listSet",
 		"set/details/:setName/:setId": "showSet",
-		"set/details/:setName/:setId/new": "newCard"
+		"set/details/:setName/:setId/new": "newCard",
+		"profile/:id": "showProfile"
 	}		
 });
 
@@ -23,6 +24,9 @@ var API = {
 	},
 	showSet: function(name, id) {
 		Cards.Set.Controller.showDetailsLayout(name, id);
+	},
+	showProfile: function(id) {
+		Cards.Profile.Controller.showLayout(id);
 	}
 };
 
@@ -52,7 +56,7 @@ Cards.on("initialize:after", function() {
 	$.cookie.json = true;
 	var usr = $.cookie('usr');
 	$("#usr-profile").text(usr.username);
-	$("#usr-profile").attr("href", "profile/"+encodeURI(usr.username)+"/"+usr.id);
+	$("#usr-profile").attr("href", "/#profile/"+usr.id);
 
 	if(Backbone.history) {
 		Backbone.history.start();
@@ -81,4 +85,8 @@ Cards.on("set:details:new", function(name, id){
 	API.newCard(name, id);
 })
 
+Cards.on("profile", function(id){
+	Cards.navigate("profile/"+id);
+	API.showProfile(id);
+})
 

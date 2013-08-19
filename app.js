@@ -5,6 +5,7 @@
 if(!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 
 var express = require('express')
+  , crypto = require('crypto')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
@@ -214,19 +215,19 @@ app.get('/', ensureAuthenticated, function(req, res){
 });
 
 app.get('/test', function(req, res){
-  db.view('sets', 'by_owner_with_cards', function(err, body) {
-
-    var sets = _.filter(body.rows, function(row){ return row.key[1] == 0; })
+  db.view('cards', 'personal_card', function(err, body) {
+    var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
 
     _.each(sets, function(set){      
-      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
-      set.value.cardCnt = cardCnt.length;
+      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.cardId == set.value._id)); });
+      set.value.cardCnt = cardCnt;
     }, this);
     sets = _.pluck(sets, "value");
 
-    res.json(sets);
-  });
+    console.log(sets);
 
+    res.json(_.sortBy(sets, function(set){ return set.name }));
+  });
 });
 
 
@@ -264,6 +265,19 @@ app.get('/set', ensureAuthenticated, function(req, res){
     sets = _.pluck(sets, "value");
 
     res.json(_.sortBy(sets, function(set){ return set.name }));
+  });
+});
+
+app.get('/user/:id', ensureAuthenticated, function(req, res){
+  db.view('users', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+    var userInfo = body.rows[0].value;
+
+    var emailHash = crypto.createHash('md5').update(userInfo.email.value.toLowerCase()).digest("hex")
+    
+    var gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + "?s=40";
+    userInfo.gravatarUrl = gravatarUrl;
+
+    res.json(userInfo);
   });
 });
 
