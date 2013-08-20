@@ -10,7 +10,8 @@ Cards.Router = Backbone.Marionette.AppRouter.extend({
 	appRoutes : {
 		"set/list": "listSet",
 		"set/details/:setName/:setId": "showSet",
-		"set/details/:setName/:setId/new": "newCard"
+		"set/details/:setName/:setId/new": "newCard",
+		"set/learn/:setName/:setId": "learnSet",
 	}		
 });
 
@@ -23,6 +24,9 @@ var API = {
 	},
 	showSet: function(name, id) {
 		Cards.Set.Controller.showDetailsLayout(name, id);
+	},
+	learnSet: function(name, id) {
+		Cards.Set.Controller.showLearnLayout(name, id);
 	}
 };
 
@@ -79,6 +83,11 @@ Cards.on("set:details", function(name, id){
 Cards.on("set:details:new", function(name, id){
 	Cards.navigate("set/details/"+name+"/"+id+"/new");
 	API.newCard(name, id);
+})
+
+Cards.on("set:learn", function(name, id){
+	Cards.navigate("set/learn/"+name+"/"+id);
+	API.learnSet(name, id);
 })
 
 

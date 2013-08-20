@@ -1,6 +1,6 @@
-Cards.module('Set.Details', function(Details, App) {
-	Details.ItemView = Backbone.Marionette.ItemView.extend({
-		template: "#set-details-item",
+Cards.module('Set.Learn', function(Learn, App) {
+	Learn.ItemView = Backbone.Marionette.ItemView.extend({
+		template: "#set-learn-item",
 		className: "item",
 		events: {
 			"click a": "linkClicked",
@@ -22,18 +22,17 @@ Cards.module('Set.Details', function(Details, App) {
 			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
 		}
 	});	
-	Details.EmptyView = Backbone.Marionette.ItemView.extend({
-		template: "#set-details-item-empty",
+	Learn.EmptyView = Backbone.Marionette.ItemView.extend({
+		template: "#set-learn-item-empty",
 		className: "empty-item"
 	});		
-	Details.DetailsView = Backbone.Marionette.CompositeView.extend({
-		emptyView: Details.EmptyView,
-		itemView: Details.ItemView,
+	Learn.DetailsView = Backbone.Marionette.CompositeView.extend({
+		emptyView: Learn.EmptyView,
+		itemView: Learn.ItemView,
 		itemViewContainer: "div.carousel-inner",
-		template: "#set-details-collection",
+		template: "#set-learn-collection",
 		events: {
-			"click a.carousel-control": "cycleCarousel",
-			"click button.learn": "learnClicked"
+			"click a.carousel-control": "cycleCarousel"
 		},
 		cycleCarousel: function(ev) {
 			if($(ev.target).hasClass("left")) {
@@ -41,9 +40,6 @@ Cards.module('Set.Details', function(Details, App) {
 			} else if($(ev.target).hasClass("right")) {
 				this.$el.carousel("next");
 			}
-		},
-		learnClicked: function(ev) {
-			App.trigger("set:learn", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
 		},
 		onRender: function() {
 			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
