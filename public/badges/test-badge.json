@@ -1,10 +1,10 @@
 {
   "name": "Awesome Test Badge",
   "description": "For doing awesome things with robots that people think is pretty great.",
-  "image": "https://example.org/robotics-badge.png",
-  "criteria": "https://example.org/robotics-badge.html",
+  "image": "http://thmcards.jit.su/badges/robotics-badge.png",
+  "criteria": "http://thmcards.jit.su/badges/robotics-badge.html",
   "tags": ["robots", "awesome"],
-  "issuer": "https://example.org/organization.json",
+  "issuer": "http://thmcards.jit.su/badges/organization.json",
   "alignment": [
     { "name": "CCSS.ELA-Literacy.RST.11-12.3",
       "url": "http://www.corestandards.org/ELA-Literacy/RST/11-12/3",

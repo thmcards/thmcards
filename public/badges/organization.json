@@ -1,7 +1,7 @@
 { 
   "name": "THMcards",
-  "image": "https://example.org/logo.png",
-  "url": "https://example.org",
-  "email": "steved@example.org",
-  "revocationList": "https://example.org/revoked.json"
+  "image": "http://thmcards.jit.su/img/card_logo_welcome.png",
+  "url": "http://thmcards.jit.su",
+  "email": "dan.knapp@web.de",
+  "revocationList": "http://thmcards.jit.su/badges/revoked.json"
 }

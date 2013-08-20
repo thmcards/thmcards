@@ -6,6 +6,7 @@ if(!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 
 var express = require('express')
   , crypto = require('crypto')
+  , jws = require('jws')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
@@ -327,6 +328,34 @@ app.post('/card', ensureAuthenticated, function(req, res){
           res.json(body);
       });
   });  
+});
+
+app.get('/badge', function(req, res) {
+  var data = { 
+  "uid": "f2c20",
+  "recipient": {
+    "type": "email",
+    "hashed": false,
+    "identity": "dan.knapp@web.de"
+  },
+  "image": "http://thmcards.jit.su/badges/test-badge.png",
+  "evidence": "http://thmcards.jit.su/badges/beths-robot-work.html",
+  "issuedOn": 1359217910,
+  "badge": "http://thmcards.jit.su/badges/test-badge.json",
+  "verify": {
+    "type": "signed",
+    "url": "http://thmcards.jit.su/public.pem"
+  }
+};
+
+  var signature = jws.sign({
+    header: { alg: 'hs256'},
+    payload: data,
+    secret: fs.readFileSync('private.pem')
+  });
+
+  console.log(signature);
+
 });
 
 http.createServer(app).listen(app.get('port'), function(){
