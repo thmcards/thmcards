@@ -1,6 +1,6 @@
 {
   "name": "thmcards",
-  "version": "0.0.3-14",
+  "version": "0.0.3-17",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -20,6 +20,6 @@
   },
   "subdomain": "thmcards",
   "engines": {
-    "node": "0.8.16"
+    "node": "0.10.x"
   }
 }
