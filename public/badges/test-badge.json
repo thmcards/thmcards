@@ -1,8 +1,8 @@
 {
   "name": "Awesome Test Badge",
   "description": "For doing awesome things with robots that people think is pretty great.",
-  "image": "http://thmcards.jit.su/badges/robotics-badge.png",
-  "criteria": "http://thmcards.jit.su/badges/robotics-badge.html",
+  "image": "http://thmcards.jit.su/badges/test-badge.png",
+  "criteria": "http://thmcards.jit.su/badges/test-badge.html",
   "tags": ["robots", "awesome"],
   "issuer": "http://thmcards.jit.su/badges/organization.json",
   "alignment": [

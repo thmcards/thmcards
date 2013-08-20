@@ -37,6 +37,7 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  //app.use(express.logger());
 });
 
 app.configure('development', function() {
@@ -231,6 +232,21 @@ app.get('/test', function(req, res){
   });
 });
 
+app.get('/pcard', function(req, res){
+  db.view('cards', 'personal_card', { startkey: new Array("knappoleon88"), endkey: new Array("knappoleon88", {}) }, function(err, body) {
+    
+    if (!err) {
+      console.log(body.rows);
+
+    var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) ); });
+    console.log(cards);
+
+
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
+});
 
 app.get('/set/:id/card', function(req, res){
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
@@ -271,9 +287,10 @@ app.get('/set', ensureAuthenticated, function(req, res){
 
 app.get('/user/:id', ensureAuthenticated, function(req, res){
   db.view('users', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+    console.log(body.rows);
     var userInfo = body.rows[0].value;
 
-    var emailHash = crypto.createHash('md5').update(userInfo.email.value.toLowerCase()).digest("hex")
+    var emailHash = crypto.createHash('md5').update(userInfo.email.toLowerCase()).digest("hex")
     
     var gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + "?s=40";
     userInfo.gravatarUrl = gravatarUrl;
@@ -344,17 +361,18 @@ app.get('/badge', function(req, res) {
   "badge": "http://thmcards.jit.su/badges/test-badge.json",
   "verify": {
     "type": "signed",
-    "url": "http://thmcards.jit.su/public.pem"
+    "url": "http://thmcards.jit.su/badges/public.pem"
   }
 };
 
   var signature = jws.sign({
-    header: { alg: 'hs256'},
+    header: { alg: 'rs256'},
     payload: data,
     secret: fs.readFileSync('private.pem')
   });
-
-  console.log(signature);
+  
+  res.set('Content-Type', 'text/plain');
+  res.send(signature);
 
 });
 
