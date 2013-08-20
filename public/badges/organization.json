@@ -1,0 +1,7 @@
+{ 
+  "name": "THMcards",
+  "image": "https://example.org/logo.png",
+  "url": "https://example.org",
+  "email": "steved@example.org",
+  "revocationList": "https://example.org/revoked.json"
+}

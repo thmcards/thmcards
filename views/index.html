@@ -301,7 +301,6 @@
       <tbody></tbody>
     </script>
 
-
     <!--Learn -->
     <script type="text/template" id="set-learn-layout">
       <div class="span9 offset3">
@@ -358,7 +357,26 @@
       </div>
     </script>   
 
+    <script type="text/template" id="profile-layout">
+      <div class="span12">
+        <h3 style="margin-bottom:20px">Profil</h3>
+      </div>
+      <div class="span12" id="profile-info-region"></div>
+      <div class="span12" id="profile-set-region"></div>
+      <div class="span12" id="profile-badge-region"></div>
+      <div class="span12" id="profile-score-region"></div>
+    </script>
 
+    <script type="text/template" id="profile-info-item">
+
+      <div>
+        <img src="<%= gravatarUrl %>" width="40" height="40" /> <%= username %>
+      </div>
+    </script>
+
+    <script type="text/template" id="profile-badge-list">
+
+    </script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>    
@@ -370,6 +388,7 @@
     
     <script type="text/javascript" src="/javascripts/entities/Set.js"></script>
     <script type="text/javascript" src="/javascripts/entities/Card.js"></script>
+    <script type="text/javascript" src="/javascripts/entities/User.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Set.List.ListView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.List.SideBar.js"></script>
@@ -384,6 +403,10 @@
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.SideBar.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.DetailsView.js"></script>
+
+    <script type="text/javascript" src="/javascripts/modules/Profile.Layout.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Profile.Controller.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Profile.InfoView.js"></script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="/javascripts/Date.format.min.js"></script>
