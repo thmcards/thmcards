@@ -24,7 +24,7 @@ body {
   height: auto !important;
   height: 100%;
   /* Negative indent footer by it's height */
-  margin: 0 auto -60px;
+  margin: 0 auto -30px;
 }
 
 /* Set the fixed height of the footer here */
@@ -293,4 +293,14 @@ div.img-tb-container {
 body .pictureSearchModal {
   width: 800px;
   margin-left: -400px;
+}
+
+div.meteor-playcard {
+  color: #000; 
+  font-family: 'Georgia', serif; 
+  text-align: center; 
+  background-color: #fff;
+  border: 1px solid #ff0000;
+  position: absolute;
+  padding: 5px;
 }

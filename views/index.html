@@ -191,7 +191,7 @@
                 <div style="margin:10px 0"><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32/award_star_gold_3.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">1 / 10 Badges </span></div>
                 <hr />
                 
-                <button class="btn btn-default" style="width:100%">Üben</button>
+                <button class="btn btn-primary play-meteor" style="width:100%">Spielen</button>
                 
                 <button class="btn btn-default" style="margin-top:10px; width:100%">60-Sek Challenge</button>
               </div>
@@ -361,6 +361,46 @@
       <tbody></tbody>
     </script>
 
+    <script type="text/template" id="game-meteor-layout">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="game-meteor-pitch-region"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="game-meteor-sideBar-region"></div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="game-meteor-sideBar">
+      <div class="row">
+        <div class="col-md-12">
+          <span id="meteor-points">0</span> Punkte
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <span id="meteor-lives">0</span> Leben
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="game-meteor-pitch">
+      <div id="meteor-pitch" style="width: 100%; height: 500px; background-color: #fff">
+
+      </div>
+      <div style="margin:20px 0">
+        <input type="input" class="form-control meteor-answer" placeholder="Lösung eingeben" />
+      </div>
+      <div class="playcardcontainer" style="display: none"></div><a href="#" class="pull-right">asd</a>
+    </script>
+
+    <script type="text/template" id="game-meteor-playcard">
+      <span data-answer="<%= back.text %>"><%= front.text %></span>
+    </script>
+
     <!--Learn -->
     <script type="text/template" id="set-learn-layout">
       <div class="span9 offset3">
@@ -470,6 +510,11 @@
     <script type="text/javascript" src="/javascripts/modules/Profile.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.Controller.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.InfoView.js"></script>
+
+    <script type="text/javascript" src="/javascripts/modules/Game.Meteor.Layout.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Game.Controller.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Game.Meteor.SideBar.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Game.Meteor.PitchView.js"></script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="/javascripts/Date.format.min.js"></script>

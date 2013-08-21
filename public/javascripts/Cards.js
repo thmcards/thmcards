@@ -12,7 +12,8 @@ Cards.Router = Backbone.Marionette.AppRouter.extend({
 		"set/details/:setName/:setId": "showSet",
 		"set/details/:setName/:setId/new": "newCard",
 		"set/learn/:setName/:setId": "learnSet",
-		"profile/:id": "showProfile"
+		"profile/:id": "showProfile",
+		"play/meteor/:id": "playMeteor"
 	}		
 });
 
@@ -31,6 +32,9 @@ var API = {
 	},
 	showProfile: function(id) {
 		Cards.Profile.Controller.showLayout(id);
+	},
+	playMeteor: function(id) {
+		Cards.Game.Controller.showMeteorLayout(id);
 	}
 };
 
@@ -97,5 +101,10 @@ Cards.on("set:learn", function(name, id){
 Cards.on("profile", function(id){
 	Cards.navigate("profile/"+id);
 	API.showProfile(id);
+})
+
+Cards.on("play:meteor", function(id){
+	Cards.navigate("play/meteor/"+id);
+	API.playMeteor(id);
 })
 

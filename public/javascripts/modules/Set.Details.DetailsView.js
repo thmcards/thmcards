@@ -22,10 +22,12 @@ Cards.module('Set.Details', function(Details, App) {
 			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
 		}
 	});	
+
 	Details.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item-empty",
 		className: "empty-item"
-	});		
+	});	
+
 	Details.DetailsView = Backbone.Marionette.CompositeView.extend({
 		emptyView: Details.EmptyView,
 		itemView: Details.ItemView,
@@ -33,7 +35,11 @@ Cards.module('Set.Details', function(Details, App) {
 		template: "#set-details-collection",
 		events: {
 			"click a.carousel-control": "cycleCarousel",
-			"click button.learn": "learnClicked"
+			"click button.learn": "learnClicked",
+			"click button.play-meteor": "playMeteor"
+		},
+		playMeteor: function(ev) {
+			App.trigger("play:meteor", this.model.get("id"));
 		},
 		cycleCarousel: function(ev) {
 			ev.preventDefault();
