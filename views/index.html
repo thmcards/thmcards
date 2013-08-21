@@ -403,14 +403,15 @@
 
     <!--Learn -->
     <script type="text/template" id="set-learn-layout">
-      <div class="span9 offset3">
-        <h3 style="margin-bottom:20px">&nbsp;</h3>
+      <div class="row">
+        <div class="col-md-3">
+          <div id="set-learn-sideBar-region"></div>
+          <div id="set-learn-controls-region"></div>
+        </div>
+        <div class="col-md-9">
+          <div id="set-learn-region"></div>
+        </div>
       </div>
-      <div class="span3">
-        <div id="set-learn-sideBar-region"></div>
-        <div id="set-learn-controls-region"></div>
-      </div>
-      <div class="span9" id="set-learn-region"></div>
     </script>
 
     <script type="text/template" id="set-learn-sideBar"> 
@@ -423,11 +424,11 @@
     </script>
 
     <script type="text/template" id="set-learn-controls">
-      <button class="btn learn-box" id="1" style="width:100%">Fach 1</button>
-      <button class="btn learn-box" id="2" style="width:100%; margin-top:10px">Fach 2</button>
-      <button class="btn learn-box" id="3" style="width:100%; margin-top:10px">Fach 3</button>
-      <button class="btn learn-box" id="4" style="width:100%; margin-top:10px">Fach 4</button>
-      <button class="btn learn-box" id="5" style="width:100%; margin-top:10px">Fach 5</button>
+      <button class="btn btn-default learn-box" id="1" style="width:100%">Fach 1</button>
+      <button class="btn btn-default learn-box" id="2" style="width:100%; margin-top:10px">Fach 2</button>
+      <button class="btn btn-default learn-box" id="3" style="width:100%; margin-top:10px">Fach 3</button>
+      <button class="btn btn-default learn-box" id="4" style="width:100%; margin-top:10px">Fach 4</button>
+      <button class="btn btn-default learn-box" id="5" style="width:100%; margin-top:10px">Fach 5</button>
     </script>
 
 
@@ -443,7 +444,7 @@
 
       <div id="learn-navigation">
             <button class="btn btn-primary" id="card-success" style="width:100%">Gewusst</button>
-            <button class="btn" id="card-fail" style="width:100%; margin-top:10px">Nicht gewusst</button>
+            <button class="btn btn-default" id="card-fail" style="width:100%; margin-top:10px">Nicht gewusst</button>
       </div>
     </script>
 
@@ -461,13 +462,26 @@
     </script>   
 
     <script type="text/template" id="profile-layout">
-      <div class="span12">
-        <h3 style="margin-bottom:20px">Profil</h3>
+      <div class="row">
+        <div class="col-md-12">
+          <h3 style="margin-bottom:20px">Profil</h3>
+        </div>
       </div>
-      <div class="span12" id="profile-info-region"></div>
-      <div class="span12" id="profile-set-region"></div>
-      <div class="span12" id="profile-badge-region"></div>
-      <div class="span12" id="profile-score-region"></div>
+      <div class="row">
+        <div class="col-md-12" id="profile-info-region"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" id="profile-set-region"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" id="profile-badge-region"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" id="profile-score-region"></div>
+      </div>
     </script>
 
     <script type="text/template" id="profile-info-item">
