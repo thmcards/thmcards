@@ -26,7 +26,41 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			if(ev.which === ENTER_KEY) {
 				var answer = $(ev.target).val();
 				console.log(answer);
+
+				this.checkResult(answer);
 				$(ev.target).val('');
+			}
+		},
+		checkResult: function(answer) {
+			if(this.cardsOnPitch.length > 0) {
+				var filtered = _.chain(this.cardsOnPitch)
+					.filter(function(card) {
+						return $(card).find(':first-child').attr('data-answer') == answer;
+				}).first().value();
+
+				filtered.stop();
+
+				var top = filtered.css('top');
+
+				var position = $(this.pitch).height()-(top.substring(0, top.length-2)-filtered.height());
+
+
+				var perc = Math.floor((position / Math.floor($(this.pitch).height()))*100);
+
+				var points = Math.floor(perc / 10);
+
+				var pointVal = $("#meteor-points").text();
+				pointVal = parseInt(pointVal)+points;
+				$("#meteor-points").text(pointVal);
+
+
+				console.log("points", points);
+
+
+				filtered.toggle("explode").remove();
+
+				this.cardsOnPitch = _.without(this.cardsOnPitch, filtered);
+
 			}
 		},
 		addCardToPitch: function(card) {
@@ -46,11 +80,13 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			c.animate({ 
 					top: "+="+x
 				}, 
-				5000, 
+				15000, 
 				function() {
-					console.log("complete");
+					alert("das war nix!");
 				}
 			);
+
+			console.log("onPitch:" , this.cardsOnPitch);
 		},
 		startGame: function(ev) {
 			ev.preventDefault();
@@ -58,7 +94,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			var playcards = this.$el.find("div.playcardcontainer").children();
 
 
-			var card = $(playcards[1]);
+			var card = $(playcards[2]);
 
 
 			var pitchWidth = $(this.pitch).width();
