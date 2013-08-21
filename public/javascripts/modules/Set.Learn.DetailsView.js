@@ -25,7 +25,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 	Learn.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-learn-item-empty",
 		className: "empty-item"
-	});		
+	});
+
 	Learn.DetailsView = Backbone.Marionette.CompositeView.extend({
 		emptyView: Learn.EmptyView,
 		itemView: Learn.ItemView,
@@ -41,6 +42,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				this.$el.carousel("next");
 			}
 		},
+
 		onRender: function() {
 			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
 			

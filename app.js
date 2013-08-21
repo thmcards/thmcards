@@ -216,19 +216,21 @@ app.get('/', ensureAuthenticated, function(req, res){
     });
 });
 
-app.get('/test', function(req, res){
-  db.view('cards', 'personal_card', function(err, body) {
-    var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
+app.get('/set/:id/personalcard', function(req, res){
+  var username = req.session["passport"]["user"][0].username;
 
-    _.each(sets, function(set){      
-      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.cardId == set.value._id)); });
-      set.value.cardCnt = cardCnt;
+  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+
+    var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
+    _.each(cards, function(card){      
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+      card.value.persCard = persCard;
     }, this);
-    sets = _.pluck(sets, "value");
+    cards = _.pluck(cards, "value");
 
-    console.log(sets);
+    console.log(cards);
 
-    res.json(_.sortBy(sets, function(set){ return set.name }));
+    res.json(_.sortBy(cards, function(card){ return card.created }));
   });
 });
 
@@ -347,6 +349,28 @@ app.post('/card', ensureAuthenticated, function(req, res){
   });  
 });
 
+app.post('/personalcard', ensureAuthenticated, function(req, res){
+  var time = new Date().getTime();
+
+  db.insert(
+    { 
+      "created": time,
+      "owner": req.session["passport"]["user"][0].username,
+      "cardId": req.body.cardId,
+      "box": req.body.box,
+      "type": "personal_card"
+    }, 
+    function(err, body, header){
+      if(err) {
+        console.log('[db.insert] ', err.message);
+        return;
+      }
+      db.get(body.id, { revs_info: false }, function(err, body) {
+        if (!err)
+          res.json(body);
+      });
+  });  
+
 app.get('/badge', function(req, res) {
   var data = { 
   "uid": "f2c20",
@@ -373,7 +397,6 @@ app.get('/badge', function(req, res) {
   
   res.set('Content-Type', 'text/plain');
   res.send(signature);
-
 });
 
 http.createServer(app).listen(app.get('port'), function(){
