@@ -394,11 +394,13 @@
       <div style="margin:20px 0">
         <input type="input" class="form-control meteor-answer" placeholder="Lösung eingeben" />
       </div>
-      <div class="playcardcontainer" style="display: none"></div><a href="#" class="pull-right">Frage</a>
+      <div class="playcardcontainer" style="display: none"></div>
+      <a href="#" class="btn btn-default pull-right">Start</a>
+      <a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
     </script>
 
     <script type="text/template" id="game-meteor-playcard">
-      <span data-answer="<%= back.text %>"><%= front.text %></span>
+      <span data-answer="<%= back.text_plain %>"><%= front.text_plain %></span>
     </script>
 
     <!--Learn -->

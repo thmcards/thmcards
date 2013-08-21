@@ -12,13 +12,15 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		template: "#game-meteor-pitch",
 		className: "well well-sm sidebar-nav",
 		events: {
-			"click a": "startGame",
+			"click a.btn-default": "startGame",
+			"click a.btn-danger": "stopGame",
 			"keyup input.meteor-answer": "onKeypress"
 		},
 		initialize: function() {
 			this.cardsOnPitch = new Array();
 			this.pitch = '#meteor-pitch';
-			this.test = "asd123";
+			
+			this.runGame = true;
 		},
 		onKeypress: function(ev) {
 			var ENTER_KEY = 13;
@@ -38,29 +40,31 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 						return $(card).find(':first-child').attr('data-answer') == answer;
 				}).first().value();
 
-				filtered.stop();
+				if(filtered) {
+					filtered.stop();
 
-				var top = filtered.css('top');
+					var top = filtered.css('top');
+					
+					// position der unterkante der karte auf spielfeld
+					var position = $(this.pitch).height()-(top.substring(0, top.length-2)-filtered.height());
 
-				var position = $(this.pitch).height()-(top.substring(0, top.length-2)-filtered.height());
+					// prozentuale position auf spielfeld
+					var perc = Math.floor((position / Math.floor($(this.pitch).height()))*100);
 
+					var points = Math.floor(perc / 10);
 
-				var perc = Math.floor((position / Math.floor($(this.pitch).height()))*100);
-
-				var points = Math.floor(perc / 10);
-
-				var pointVal = $("#meteor-points").text();
-				pointVal = parseInt(pointVal)+points;
-				$("#meteor-points").text(pointVal);
-
-
-				console.log("points", points);
+					var pointVal = $("#meteor-points").text();
+					pointVal = parseInt(pointVal)+points;
+					$("#meteor-points").text(pointVal);
 
 
-				filtered.toggle("explode").remove();
+					console.log("points", points);
 
-				this.cardsOnPitch = _.without(this.cardsOnPitch, filtered);
 
+					filtered.toggle("explode").remove();
+
+					this.cardsOnPitch = _.without(this.cardsOnPitch, filtered);
+				}
 			}
 		},
 		addCardToPitch: function(card) {
@@ -82,7 +86,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				}, 
 				15000, 
 				function() {
-					alert("das war nix!");
+					console.log("das war nix!");
 				}
 			);
 
@@ -92,32 +96,26 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			ev.preventDefault();
 
 			var playcards = this.$el.find("div.playcardcontainer").children();
-
-
-			var card = $(playcards[2]);
-
-
-			var pitchWidth = $(this.pitch).width();
-			var pitchHeight = $(this.pitch).height();
-
-			console.log("pitchWidth", pitchWidth, "pitchHeight", pitchHeight);
-
-			var cardWidth = card.width();
-			var cardHeight = card.height();
-
-			console.log("cardWidth", cardWidth, "cardHeight", cardHeight);
-
 			
+			//while(this.runGame) {
+
+				var that = this;
+				setInterval(function() {
+					var random = Math.floor((Math.random()*playcards.length));
+					var card = $(playcards[random]);
+					that.addCardToPitch(card)
+				}, 3000);
+			//}
 			
 
-			this.addCardToPitch(card);
+			
 /*
 			*/
 
 			console.log(playcards);
-
-
-
+		},
+		stopGame: function(ev) {
+			this.runGame = false;
 		}
 	});
 
