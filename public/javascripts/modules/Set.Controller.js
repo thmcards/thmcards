@@ -13,6 +13,7 @@ Cards.module('Set', function(Set, App){
 
 		},
 		showDetailsLayout: function(name, id){
+
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
@@ -44,17 +45,27 @@ Cards.module('Set', function(Set, App){
 			});
 		},
 		showLearnLayout: function(name, id){
+/**
+			var personalcard = new Cards.Entities.Personalcard({ 
+								cardId: id, //durch id von karte ersetzen
+								box: "66"
+							 });
+			personalcard.save();
+**/
+
+
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
 					var learnLayout = new Cards.Set.Learn.Layout();
 					Cards.mainRegion.show(learnLayout);
 
-					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
+					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id") });
 					
-					cardCollection.fetch({
+					personalCollection.fetch({
 						success: function(){
-							var learnView = new Cards.Set.Learn.DetailsView({ collection: cardCollection });
+							console.log(personalCollection);
+							var learnView = new Cards.Set.Learn.DetailsView({ collection: personalCollection });
 							learnLayout.learnRegion.show(learnView);
 						},
 						error: function(){
