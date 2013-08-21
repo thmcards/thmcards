@@ -16,10 +16,22 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 			"click a": "linkClicked",
 			"click .learn-box": "boxChoosen"
 		},
+		initialize: function() {
+			console.log(this.collection);
+		},
 		boxChoosen: function(ev) {
 			console.log(ev.target.id); //id aus event ziehen
 			//enstprechende karten in learn-region laden
-			//App.trigger("set:details:new", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+
+			var bla = ev.target.id;
+
+			if(bla == 1) {
+				// HIER MAL WAS VERNÜNFTIGES REIN WONACH GEFILTERT WIRD
+				App.trigger("filter:box", { test: "666"});
+			} else {
+				// ANSONSTEN ZEIGE WIEDER ALLE
+				App.trigger("filter:box", null);
+			}
 		},
 		linkClicked : function(ev) {
 			ev.preventDefault();

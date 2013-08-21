@@ -52,8 +52,6 @@ Cards.module('Set', function(Set, App){
 							 });
 			personalcard.save();
 **/
-
-
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
@@ -64,21 +62,23 @@ Cards.module('Set', function(Set, App){
 					
 					personalCollection.fetch({
 						success: function(){
-							console.log(personalCollection);
-							var learnView = new Cards.Set.Learn.DetailsView({ collection: personalCollection });
+							// copy mit filterfunktion der original liste, die wird angezeigt
+							var filteredCollection = FilteredCollection(personalCollection, { setId: set.get("id") });
+							
+							var learnView = new Cards.Set.Learn.DetailsView({ collection: filteredCollection });
 							learnLayout.learnRegion.show(learnView);
+
+
+							var controlsView = new Cards.Set.Learn.SideBar.ControlsView({ collection: personalCollection });
+							learnLayout.controlsRegion.show(controlsView);
+
+							var sideBarView = new Cards.Set.Learn.SideBar.SideBarView({ model: set});
+							learnLayout.sideBarRegion.show(sideBarView);
 						},
 						error: function(){
 
 						}
 					});
-
-					
-					var sideBarView = new Cards.Set.Learn.SideBar.SideBarView({ model: set});
-					learnLayout.sideBarRegion.show(sideBarView);
-
-					var controlsView = new Cards.Set.Learn.SideBar.ControlsView({ model: set});
-					learnLayout.controlsRegion.show(controlsView);
 				},
 				error: function(){
 					console.log("error");
@@ -106,3 +106,26 @@ Cards.module('Set', function(Set, App){
 		}
 	}
 });
+
+function FilteredCollection(collection, options){
+    var filtered = new collection.constructor(collection.models, options);
+        
+    filtered.filter = function(criteria){
+        var items;
+        if (criteria){
+            items = collection.where(criteria);
+        } else {
+            items = collection.models;
+        }
+        filtered.reset(items);
+    };
+    collection.on("change", function(model){
+    	console.log("change");
+        filtered.reset(collection.models);
+    });
+    collection.on("reset", function(){
+        filtered.reset(collection.models);
+    });          
+        
+    return filtered;
+}
