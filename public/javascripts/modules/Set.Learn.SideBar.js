@@ -1,14 +1,14 @@
 Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 	SideBar.SideBarView = Backbone.Marionette.ItemView.extend({
 		template: "#set-learn-sideBar",
-		className: "well sidebar-nav",
+		className: "well well-sm sidebar-nav",
 		ui: {
 
 		}
 	}),
 	SideBar.ControlsView = Backbone.Marionette.ItemView.extend({
 		template: "#set-learn-controls",
-		className: "well sidebar-nav",
+		className: "well well-sm sidebar-nav",
 		ui: {
 
 		},
