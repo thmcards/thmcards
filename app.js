@@ -349,6 +349,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
   });  
 });
 
+
 app.post('/personalcard', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
 
@@ -370,6 +371,7 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
           res.json(body);
       });
   });  
+});
 
 app.get('/badge', function(req, res) {
   var data = { 
@@ -402,3 +404,4 @@ app.get('/badge', function(req, res) {
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
