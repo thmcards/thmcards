@@ -36,10 +36,12 @@ Cards.module('Set.Details', function(Details, App) {
 			"click button.learn": "learnClicked"
 		},
 		cycleCarousel: function(ev) {
-			if($(ev.target).hasClass("left")) {
-				this.$el.carousel("prev");
-			} else if($(ev.target).hasClass("right")) {
-				this.$el.carousel("next");
+			ev.preventDefault();
+
+			if($(ev.currentTarget).hasClass("left")) {
+				this.$el.find(":first-child").carousel("prev");
+			} else if($(ev.currentTarget).hasClass("right")) {
+				this.$el.find(":first-child").carousel("next");
 			}
 		},
 		learnClicked: function(ev) {
@@ -58,7 +60,7 @@ Cards.module('Set.Details', function(Details, App) {
 				pickerContainer.append(indicatorElem);
 			}
 
-			this.$el.carousel({ interval: false });
+			this.$el.find(':first-child').carousel({ interval: 5000 });
 		}
 	});
 });

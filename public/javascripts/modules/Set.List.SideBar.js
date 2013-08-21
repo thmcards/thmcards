@@ -1,15 +1,14 @@
 Cards.module("Set.List.SideBar", function(SideBar, App) {
 	SideBar.SideBarView = Backbone.Marionette.ItemView.extend({
 		template: "#set-list-sideBar",
-		className: "well sidebar-nav",
+		className: "well well-sm sidebar-nav",
 		ui: {
 			btnAdd: "a.saveSet", 
 			inputSetName: "input[type=text]",
 			modalView: "#newSetModal",
 			modalBtnSave: "#newSetModal button.btn-primary",
 			modalInputName: "#newSetName",
-			modalInputDescription: "#newSetDescription",
-			modalBtnVisibility: "#newSetModal .btn-group > button.active"
+			modalInputDescription: "#newSetDescription"
 		},
 		events: {
 			"click a.saveSet": "showSetModal",
@@ -32,17 +31,17 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			console.log(newSet);
 
 			
-			this.ui.modalView.on('show', function () {
+			this.ui.modalView.on('show.bs.modal', function () {
     			that.ui.modalInputName.val(newSetName);
 			});
-			this.ui.modalView.on('shown', function () {
+			this.ui.modalView.on('shown.bs.modal', function () {
 				if(newSetName == "") {
 					that.ui.modalInputName.focus();
 				} else {
 					that.ui.modalInputDescription.focus();
 				}
 			});
-			this.ui.modalView.on('hidden', function() {
+			this.ui.modalView.on('hidden.bs.modal', function() {
 				that.ui.modalBtnSave.button('reset');
 				that.ui.modalInputName.val('');
 				that.ui.modalInputDescription.val('');
@@ -56,7 +55,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 
 			var name = this.ui.modalInputName.val();
 			var description = this.ui.modalInputDescription.val();
-			var visibility = this.ui.modalBtnVisibility.val();
+			var visibility = $("#newSetModal .btn-group > label.active > input").val();
 
 			var newSet = new Cards.Entities.Set({ 
 								name: name, 

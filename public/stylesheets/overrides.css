@@ -47,7 +47,9 @@ body {
   }
 }
 
-
+hr {
+  margin: 10px 0;
+}
 
 #wrap &gt; .container {
   padding-top: 60px;
@@ -152,7 +154,24 @@ code {
   transform: skew(5deg) rotate(5deg);
 }
 
-#cardCarousel ol.carousel-indicators {
+#cardCarousel .carousel-indicators .active {
+  background-color: #000;
+}
+#cardCarousel .carousel-indicators li {
+  border: 1px solid #000;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none;
+}
+
+.carousel-control {
+  color: #000;
+  width: 7%;
+}
+
+/*#cardCarousel ol.carousel-indicators {
   left: 120px;
   top: 15px;
 }
@@ -163,7 +182,7 @@ code {
 
 #cardCarousel ol.carousel-indicators li {
   background-color: #c0c0c0;
-}
+}*/
 
 /* This parent can be any width and height */
 .block {
@@ -189,13 +208,25 @@ code {
   font-size: 2em
 }
 
-.navbar .brand {
-  padding: 5px 20px;
+.navbar .navbar-brand {
+  padding: 10px 20px;
 }
 
-.navbar .brand img {
+.navbar .navbar-brand img {
   width: 142px;
   height: 30px;
+}
+
+.nav-header {
+display: block;
+padding: 3px 15px;
+font-size: 11px;
+font-weight: bold;
+line-height: 20px;
+color: #999999;
+text-shadow: 0 1px 0 
+rgba(255, 255, 255, 0.5);
+text-transform: uppercase;
 }
 
 .front {
@@ -215,13 +246,7 @@ code {
 }
 
 .carousel-control {
-    margin-top: -20px;
-    top: 50%;
     z-index: 5;
-    border: 0;
-    border-radius: 0;
-    margin: 0;
-    opacity: 0.3;
 }
 
 .carousel-inner {
