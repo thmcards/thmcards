@@ -10,7 +10,18 @@ Cards.module('Profile.Info', function(Info, App) {
 			ev.stopPropagation();
 			console.log("link");
 			
-			App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+			$.get('/badge', function(data) {
+				console.log(data);
+			  	
+				OpenBadges.issue(data, function(errors, successes) { 
+					console.log(errors, successes);
+			 	});
+			});
+
+
+			
+
+			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
 		}
 	});
 /*
