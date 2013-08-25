@@ -45,13 +45,13 @@ Cards.module('Set', function(Set, App){
 			});
 		},
 		showLearnLayout: function(name, id){
-/**
+
 			var personalcard = new Cards.Entities.Personalcard({ 
-								cardId: id, //durch id von karte ersetzen
-								box: "66"
+								cardId: "666666666666", //durch id von karte ersetzen
+								box: "1008"
 							 });
 			personalcard.save();
-**/
+
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
@@ -111,9 +111,19 @@ function FilteredCollection(collection, options){
     var filtered = new collection.constructor(collection.models, options);
         
     filtered.filter = function(criteria){
+    	console.log(criteria);
         var items;
         if (criteria){
-            items = collection.where(criteria);
+            items = _.filter(collection.models, function(model) {
+            	var pcard = _.first(model.get("persCard"));
+				if (pcard) {
+           			return pcard.value.box == criteria;
+           		}
+           		if (!pcard && criteria == 1){           			
+           			return true;
+           		} 
+           		else return false;
+			});
         } else {
             items = collection.models;
         }
@@ -124,6 +134,7 @@ function FilteredCollection(collection, options){
         filtered.reset(collection.models);
     });
     collection.on("reset", function(){
+    	console.log("reset");
         filtered.reset(collection.models);
     });          
         

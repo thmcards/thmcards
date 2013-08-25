@@ -35,9 +35,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 		events: {
 			"click a.carousel-control": "cycleCarousel"
 		},
-		filterBox: function(boxId) {
-			console.log(boxId);
-		},
 		cycleCarousel: function(ev) {
 			if($(ev.target).hasClass("left")) {
 				this.$el.carousel("prev");
@@ -48,12 +45,11 @@ Cards.module('Set.Learn', function(Learn, App) {
 		initialize: function() {
 			var that = this;
 			App.on('filter:box', function(boxId) {
-				that.tesaaat(boxId);
+				that.filterBox(boxId);
 			})
 		},
-		tesaaat: function(boxId) {
-			console.log("ffffilter", this.collection);
-			console.log(boxId);
+		filterBox: function(boxId) {
+			console.log(this.collection);
 			if(boxId != null) {
 				this.collection.filter(boxId);
 			} else {

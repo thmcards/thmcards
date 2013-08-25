@@ -352,25 +352,66 @@ app.post('/card', ensureAuthenticated, function(req, res){
 
 app.post('/personalcard', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
+  var username = req.session["passport"]["user"][0].username;
+  //revision von personalcard holen anhand cardId der normalen karte
+  db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body.cardId)}, function(err, body) {
+    var persCardRev;
+    if (!err){  
+      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })   
+      docs = _.map(docs, function(doc) { return doc.value});
 
-  db.insert(
-    { 
-      "created": time,
-      "owner": req.session["passport"]["user"][0].username,
-      "cardId": req.body.cardId,
-      "box": req.body.box,
-      "type": "personal_card"
-    }, 
-    function(err, body, header){
-      if(err) {
-        console.log('[db.insert] ', err.message);
-        return;
-      }
-      db.get(body.id, { revs_info: false }, function(err, body) {
-        if (!err)
-          res.json(body);
+      persCardRev = docs[0]._rev;
+      console.log(docs);
+      console.log("FUUUUUUCK: " + docs[0]._rev);
+    } else {
+      console.log("[db.personalcard/by_cardId]", err.message);
+    }
+
+    if (!persCardRev) { //wenn noch keine personalcard existiert
+      db.insert(
+        { 
+          "created": time,
+          "owner": req.session["passport"]["user"][0].username,
+          "cardId": req.body.cardId,
+          "box": "1",
+          "type": "personal_card"
+        }, 
+        function(err, body, header){
+          if(err) {
+            console.log('[db.insert] ', err.message);
+            return;
+          }
+          db.get(body.id, { revs_info: false }, function(err, body) {
+            if (!err)
+              res.json(body);
+          });
       });
-  });  
+    } else { //wenn sie schon existiert
+      console.log("Booooox: " + persCardRev);
+      db.insert(
+        { 
+          "_rev": persCardRev,
+          "created": docs[0].created,
+          "owner": docs[0].owner,
+          "cardId": docs[0].cardId,
+          "box": req.body.box  || docs[0].box,
+          "type": docs[0].type
+        },
+        docs[0]._id,
+        function(err, body, header){
+          if(err) {
+            console.log('[db.insert] ', err.message);
+            return;
+          }
+          db.get(body.id, { revs_info: false }, function(err, body) {
+            if (!err)
+              res.json(body);
+          });
+      });
+
+      console.log("buuuhuuhuu");
+    }
+  });
 });
 
 app.get('/badge', function(req, res) {

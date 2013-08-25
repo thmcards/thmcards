@@ -25,9 +25,9 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 
 			var bla = ev.target.id;
 
-			if(bla == 1) {
+			if(bla) {
 				// HIER MAL WAS VERNÜNFTIGES REIN WONACH GEFILTERT WIRD
-				App.trigger("filter:box", { test: "666"});
+				App.trigger("filter:box", ev.target.id);
 			} else {
 				// ANSONSTEN ZEIGE WIEDER ALLE
 				App.trigger("filter:box", null);
