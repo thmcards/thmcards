@@ -382,7 +382,12 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <span id="meteor-lives">0</span> Leben
+          <span id="meteor-level">1</span>. Level
+        </div>
+      </div>      
+      <div class="row">
+        <div class="col-md-12">
+          <span id="meteor-lifes">3</span> Leben
         </div>
       </div>
     </script>
@@ -395,12 +400,51 @@
         <input type="input" class="form-control meteor-answer" placeholder="Lösung eingeben" />
       </div>
       <div class="playcardcontainer" style="display: none"></div>
-      <a href="#" class="btn btn-default pull-right">Start</a>
+      <a href="#" class="btn btn-primary pull-right">Start</a>
       <a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
+      <a href="#" class="btn btn-default btn-info pull-right">Resume</a>
+
+
+      
+      <div class="modal fade" id="meteor-answer-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Lösung eingeben</h4>
+            </div>
+            <div class="modal-body">
+              <div class="panel panel-info">
+                <div class="panel-heading">Frage</div>
+                <div class="panel-body">
+                  <p id="meteor-answer-modal-front">yep yep...</p>
+                </div>
+              </div>
+
+              <div class="panel panel-success">
+                <div class="panel-heading">Korrekte Antwort</div>
+                <div class="panel-body">
+                  <p id="meteor-answer-modal-back">yep yep...</p>
+                </div>
+              </div>
+
+              
+              
+
+              <input type="text" placeholder="Korrekte Antwort eingeben" class="form-control" id="meteor-answer-modal-input" />
+            </div>
+            <div class="modal-footer">
+              
+              <button type="button" class="btn btn-success" disabled="disabled">Lösen</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+
     </script>
 
     <script type="text/template" id="game-meteor-playcard">
-      <span data-answer="<%= back.text_plain %>"><%= front.text_plain %></span>
+      <span data-answer="<%= back.text_plain.toLowerCase() %>" data-cardid="<%= _id %>"><%= front.text_plain %></span>
     </script>
 
     <!--Learn -->
@@ -503,6 +547,9 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>    
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.1-bundled/backbone.marionette.min.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.pause.min.js"></script>
+    <!--script type="text/javascript" src="javascripts/jquery.timer.js"></script-->
+
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <!--script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script-->
