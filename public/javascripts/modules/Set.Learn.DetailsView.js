@@ -123,7 +123,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 
 			model.save().then(function(){
-				App.trigger("filter:box", boxId);
+
+				App.trigger("filter:box", boxId--);
 			});
 
 		},
