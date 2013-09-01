@@ -62,6 +62,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var boxId = $("div.item.active").children(".box").attr("data-boxId");
 
+			var boxBefore = boxId;
+
 			if (boxId < 5) {
 				boxId++;
 			} else {
@@ -70,8 +72,16 @@ Cards.module('Set.Learn', function(Learn, App) {
 			console.log(boxId);
 
 			this.saveCard(cardId, boxId);
-			this.$el.find(":first-child").carousel("next");
 
+			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
+					App.trigger("filter:box", boxBefore);
+					this.renderModel();
+
+					console.log("cleaned. box:" + boxBefore);
+			}
+
+
+			this.$el.find(":first-child").carousel("next");
 
 
 			console.log($("div.item.active").children(".box").attr("data-id"));
@@ -79,7 +89,24 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		cardFail: function(ev) {
 
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+			var boxId = $("div.item.active").children(".box").attr("data-boxId");
+
+			var boxBefore = boxId;
+
+			boxId = 1;
+			console.log(boxId);
+
+			this.saveCard(cardId, boxId);
+
+			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
+					App.trigger("filter:box", boxBefore);
+					console.log("cleaned. box:" + boxBefore);
+			}
+
+
 			this.$el.find(":first-child").carousel("next");
+
 
 			console.log($("div.item.active").children(".box").attr("data-id"));
 
@@ -90,6 +117,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						box: boxId
 			});
 			personalcard.save();
+			this.collection.fetch()
 		},
 
 		initialize: function() {
@@ -110,7 +138,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			this.render();
 		},
 		onRender: function() {
-			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
+			//if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
 			
 			this.$el.find("div.item").first().addClass("active");
 
