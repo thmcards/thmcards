@@ -104,18 +104,28 @@ function FilteredCollection(collection, options){
     var filtered = new collection.constructor(collection.models, options);
         
     filtered.filter = function(criteria){
-    	console.log(criteria);
         var items;
         if (criteria){
             items = _.filter(collection.models, function(model) {
-            	var pcard = _.first(model.get("persCard"));
+            	var persCard = model.get("persCard");
+            	var pcard;
+            	if(_.isArray(persCard)) {
+            		pcard = _.first(model.get("persCard"));	
+            	} else {
+            		pcard = model.get("persCard");
+            	}
+
 				if (pcard) {
+					console.log(pcard.value.box, criteria);
            			return pcard.value.box == criteria;
+           		} else {
+           			console.log("no card");
            		}
-           		if (!pcard && criteria == 1){           			
+           		if (_.isUndefined(pcard) && criteria == 1){           			
            			return true;
            		} 
            		else return false;
+
 			});
         } else {
             items = collection.models;
@@ -123,7 +133,7 @@ function FilteredCollection(collection, options){
         filtered.reset(items);
     };
     collection.on("change", function(model){
-    	console.log("change");
+    	console.log("change", collection.models);
         filtered.reset(collection.models);
     });
     collection.on("reset", function(){

@@ -60,111 +60,72 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		cardSuccess: function(ev) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
-			var boxId = $("div.item.active").children(".box").attr("data-boxId");
-			
-			this.$el.find(":first-child").carousel("next");
+			var model = this.collection.get(cardId);
 
-			var boxBefore = boxId;
+			var boxId;
+			if(model.has("persCard")) {
+				var persCard;
+				if(_.isArray(model.get("persCard"))) {
+					persCard = _.first(model.get("persCard"));
+				} else {
+					persCard = model.get("persCard");
+				}
+
+				if(!_.isUndefined(persCard)) {
+					boxId = persCard.value.box;
+				} else {
+					boxId = 1;
+				}
+			} else {
+				console.log("eeelse");
+				boxId = 1;
+			}
 
 			if (boxId < 5) {
 				boxId++;
 			} else {
 				boxId == 5;
 			}
+
 			this.saveCard(cardId, boxId);
-			console.log("box", boxId);
-
-			
-
-			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
-					App.trigger("filter:box", boxBefore);
-					this.renderModel();
-
-					console.log("cleaned. box:" + boxBefore);
-			}
-
-
-			
-
-
-			console.log($("div.item.active").children(".box").attr("data-id"));
-
 		},
 		cardFail: function(ev) {
-
-			var cardId = $("div.item.active").children(".box").attr("data-id");
-			var boxId = $("div.item.active").children(".box").attr("data-boxId");
-
-			var boxBefore = boxId;
-
-			boxId = 1;
-			console.log(boxId);
-
-
-
-			this.$el.find(":first-child").carousel("next");
-
-
-			console.log($("div.item.active").children(".box").attr("data-id"));
-
-			this.saveCard(cardId, boxId);
-
-			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
-					App.trigger("filter:box", boxBefore);
-					console.log("cleaned. box:" + boxBefore);
-			}
-
-
-
+			console.log("fail");
+			
 		},
 		saveCard: function(cardId, boxId) {
 			var model = this.collection.get(cardId);
 
 			console.log("model", model);
 			if(model.has("persCard")) {
-				console.log("has persCard");
-				var persCard = _.first(model.get("persCard"));
-				persCard.value.box = boxId;
-				
-				model['persCard'] = persCard;
-				model.set({persCard: persCard});
 
-				console.log("newPers", persCard);
+				var persCard;
+				if(_.isArray(model.get("persCard"))) {
+					persCard = _.first(model.get("persCard"));
+				} else {
+					persCard = model.get("persCard");
+				}
+				if(!_.isUndefined(persCard)) {
+					persCard.value.box = boxId;	
+					model['persCard'] = persCard;
+					model.set({persCard: persCard});
+				} else {
+					persCard = {};
+					persCard.value = {
+					   "cardId": cardId,
+					   "box": boxId
+					}
+					model['persCard'] = persCard;
+					model.set({persCard: persCard});
+				}
 			} else {
-				console.log("bla");
-				var personalcard = new Cards.Entities.Personalcard({ 
-						cardId: cardId,
-						box: boxId
-				});
-				console.log(personalcard.parse());
+				console.log("passiert das hier überhaupt?!");
 			}
 
-			/*this.collection.create(model, {
-			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
-
-			    success : function(resp){
-			        
-			    },
-			    error : function(err) {
-			    	alert('There was an error. See console for details');
-			        console.log(err);
-				}
-			});*/
-			var that = this;
 			model.save().then(function(){
-				//that.render();
-				App.trigger("filter:box", boxId-1);
-				$("div.item").children(".box").attr("data-boxId", boxId-1);
+				App.trigger("filter:box", boxId);
 			});
 
-
-
-			/*var personalcard = new Cards.Entities.Personalcard({ 
-						cardId: cardId,
-						box: boxId
-			});
-			personalcard.save();
-			this.collection.fetch()*/
 		},
 
 		initialize: function() {
@@ -185,8 +146,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 			this.render();
 		},
 		onRender: function() {
-			//if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
-			
 			this.$el.find("div.item").first().addClass("active");
 
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();

@@ -417,7 +417,10 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   // persCard
-  console.log("persssCard", req.body.persCard.value.box);
+
+  console.log("body", req.body);
+
+  //console.log("persssCard", req.body.persCard.value.box);
 
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     console.log("rows" + body.rows)
@@ -431,8 +434,8 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
     } else {
       console.log("[db.personalcard/by_cardId]", err.message);
     }
-
-    if (!persCardRev) { //wenn noch keine personalcard existiert
+    console.log("persCardRev", persCardRev);
+    if (_.isUndefined(persCardRev)) { //wenn noch keine personalcard existiert
       db.insert(
         { 
           "created": time,
