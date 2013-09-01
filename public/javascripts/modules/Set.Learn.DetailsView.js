@@ -61,6 +61,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 		cardSuccess: function(ev) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var boxId = $("div.item.active").children(".box").attr("data-boxId");
+			
 			this.$el.find(":first-child").carousel("next");
 
 			var boxBefore = boxId;
@@ -70,9 +71,10 @@ Cards.module('Set.Learn', function(Learn, App) {
 			} else {
 				boxId == 5;
 			}
-			console.log(boxId);
-
 			this.saveCard(cardId, boxId);
+			console.log("box", boxId);
+
+			
 
 			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
 					App.trigger("filter:box", boxBefore);
@@ -118,12 +120,24 @@ Cards.module('Set.Learn', function(Learn, App) {
 		saveCard: function(cardId, boxId) {
 			var model = this.collection.get(cardId);
 
-			var persCard = _.first(model.get("persCard"));
-			persCard['boxId'] = boxId;
-			
-			model['persCard'] = persCard;
-			model.set({persCard: persCard});
+			console.log("model", model);
+			if(model.has("persCard")) {
+				console.log("has persCard");
+				var persCard = _.first(model.get("persCard"));
+				persCard.value.box = boxId;
+				
+				model['persCard'] = persCard;
+				model.set({persCard: persCard});
 
+				console.log("newPers", persCard);
+			} else {
+				console.log("bla");
+				var personalcard = new Cards.Entities.Personalcard({ 
+						cardId: cardId,
+						box: boxId
+				});
+				console.log(personalcard.parse());
+			}
 
 			/*this.collection.create(model, {
 			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection

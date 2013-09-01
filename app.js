@@ -417,13 +417,14 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var username = req.session["passport"]["user"][0].username;
   //revision von personalcard holen anhand cardId der normalen karte
   
-  
+
   // persCard
   console.log("persCard", req.body.persCard);
 
+  res.json(req.body);
 
   // vll überarbeiten?
-  db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body.cardId)}, function(err, body) {
+  /*db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body.cardId)}, function(err, body) {
     console.log("rows" + body.rows)
     var persCardRev;
     if (!err){  
@@ -477,7 +478,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
           });
       });
     }
-  });
+  });*/
 });
 
 app.get('/badge', function(req, res) {
