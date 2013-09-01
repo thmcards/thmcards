@@ -33,15 +33,65 @@ Cards.module('Set.Learn', function(Learn, App) {
 		itemViewContainer: "div.carousel-inner",
 		template: "#set-learn-collection",
 		events: {
-			"click a.carousel-control": "cycleCarousel"
+			"click a.carousel-control": "cycleCarousel",
+			"click button.card-success": "cardSuccess",
+			"click button.card-fail": "cardFail"
 		},
 		cycleCarousel: function(ev) {
-			if($(ev.target).hasClass("left")) {
-				this.$el.carousel("prev");
-			} else if($(ev.target).hasClass("right")) {
-				this.$el.carousel("next");
+		ev.preventDefault();
+		console.log($(ev.currentTarget));
+
+			if($(ev.currentTarget).hasClass("left")) {
+				this.$el.find(":first-child").carousel("prev");
+			} else if($(ev.currentTarget).hasClass("right")) {
+				this.$el.find(":first-child").carousel("next");
 			}
 		},
+		giveAnswer: function(ev) {
+		ev.preventDefault();
+
+
+			if($(ev.currentTarget).hasClass("left")) {
+				this.$el.find(":first-child").carousel("prev");
+			} else if($(ev.currentTarget).hasClass("right")) {
+				this.$el.find(":first-child").carousel("next");
+			}
+
+		},
+		cardSuccess: function(ev) {
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+			var boxId = $("div.item.active").children(".box").attr("data-boxId");
+
+			if (boxId < 5) {
+				boxId++;
+			} else {
+				boxId == 5;
+			}
+			console.log(boxId);
+
+			this.saveCard(cardId, boxId);
+			this.$el.find(":first-child").carousel("next");
+
+
+
+			console.log($("div.item.active").children(".box").attr("data-id"));
+
+		},
+		cardFail: function(ev) {
+
+			this.$el.find(":first-child").carousel("next");
+
+			console.log($("div.item.active").children(".box").attr("data-id"));
+
+		},
+		saveCard: function(cardId, boxId) {
+			var personalcard = new Cards.Entities.Personalcard({ 
+						cardId: cardId,
+						box: boxId
+			});
+			personalcard.save();
+		},
+
 		initialize: function() {
 			var that = this;
 			App.on('filter:box', function(boxId) {
@@ -72,7 +122,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				pickerContainer.append(indicatorElem);
 			}
 
-			this.$el.carousel({ interval: false });
+			this.$el.find(':first-child').carousel({ interval: false });
 		}
 	});
 });

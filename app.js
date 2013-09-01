@@ -354,15 +354,16 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   //revision von personalcard holen anhand cardId der normalen karte
+  console.log(req.body);
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body.cardId)}, function(err, body) {
+    console.log("rows" + body.rows)
     var persCardRev;
     if (!err){  
       var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })   
       docs = _.map(docs, function(doc) { return doc.value});
-
-      persCardRev = docs[0]._rev;
-      console.log(docs);
-      console.log("FUUUUUUCK: " + docs[0]._rev);
+      if (body.rows.length){
+        persCardRev = docs[0]._rev;
+      }
     } else {
       console.log("[db.personalcard/by_cardId]", err.message);
     }
@@ -373,7 +374,7 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
           "created": time,
           "owner": req.session["passport"]["user"][0].username,
           "cardId": req.body.cardId,
-          "box": "1",
+          "box": req.body.box || "1",
           "type": "personal_card"
         }, 
         function(err, body, header){
@@ -387,7 +388,6 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
           });
       });
     } else { //wenn sie schon existiert
-      console.log("Booooox: " + persCardRev);
       db.insert(
         { 
           "_rev": persCardRev,
@@ -408,8 +408,6 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
               res.json(body);
           });
       });
-
-      console.log("buuuhuuhuu");
     }
   });
 });

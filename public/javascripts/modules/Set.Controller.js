@@ -45,13 +45,6 @@ Cards.module('Set', function(Set, App){
 			});
 		},
 		showLearnLayout: function(name, id){
-
-			var personalcard = new Cards.Entities.Personalcard({ 
-								cardId: "666666666666", //durch id von karte ersetzen
-								box: "1008"
-							 });
-			personalcard.save();
-
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){

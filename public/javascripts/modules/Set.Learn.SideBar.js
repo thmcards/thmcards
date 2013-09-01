@@ -20,16 +20,10 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 			console.log(this.collection);
 		},
 		boxChoosen: function(ev) {
-			console.log(ev.target.id); //id aus event ziehen
-			//enstprechende karten in learn-region laden
-
-			var bla = ev.target.id;
-
-			if(bla) {
-				// HIER MAL WAS VERNÜNFTIGES REIN WONACH GEFILTERT WIRD
+			if(ev.target.id) {
 				App.trigger("filter:box", ev.target.id);
+				$("div.item").children(".box").attr("data-boxId", ev.target.id);
 			} else {
-				// ANSONSTEN ZEIGE WIEDER ALLE
 				App.trigger("filter:box", null);
 			}
 		},
