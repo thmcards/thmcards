@@ -351,6 +351,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
 
 
 app.post('/personalcard', ensureAuthenticated, function(req, res){
+  console.log("fuuuuuuuuuuuuuck")
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   //revision von personalcard holen anhand cardId der normalen karte
@@ -415,15 +416,9 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-  //revision von personalcard holen anhand cardId der normalen karte
-  
-
   // persCard
-  console.log("persCard", req.body.persCard);
+  console.log("persssCard", req.body.persCard.value.box);
 
-  //res.json(req.body);
-
-  // vll überarbeiten?
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     console.log("rows" + body.rows)
     var persCardRev;
@@ -442,8 +437,8 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         { 
           "created": time,
           "owner": req.session["passport"]["user"][0].username,
-          "cardId": req.body.cardId,
-          "box": req.body.box || "1",
+          "cardId": req.body._id,
+          "box": req.body.persCard.value.box || "1",
           "type": "personal_card"
         }, 
         function(err, body, header){
@@ -463,7 +458,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
           "created": docs[0].created,
           "owner": docs[0].owner,
           "cardId": docs[0].cardId,
-          "box": req.body.box  || docs[0].box,
+          "box": req.body.persCard.value.box  || docs[0].box,
           "type": docs[0].type
         },
         docs[0]._id,
