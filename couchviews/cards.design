@@ -1,0 +1,29 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 \{\
+   "_id": "_design/cards",\
+   "_rev": "4-a823f4a1beb7bfd86a1b109dcb6e8507",\
+   "language": "javascript",\
+   "views": \{\
+       "by_set": \{\
+           "map": "function(doc) \{ if (doc.type == 'card') \{ emit([doc.setId], doc); \}\}"\
+       \},\
+       "by_owner": \{\
+           "map": "function(doc) \{ if (doc.type == 'card') \{ emit([doc.owner], doc); \}\}"\
+       \},\
+       "count_by_setid": \{\
+           "map": "function(doc) \{ if (doc.type == 'card') \{ emit( [doc.setId], 1); \}\}",\
+           "reduce": "function(key, values, reduce) \{ return sum(values); \}"\
+       \},\
+       "personal_card_by_cardId": \{\
+           "map": "function(doc) \{ if (doc.type == 'personal_card') \{ emit([doc.cardId], doc); \}\}"\
+       \},\
+       "personal_card": \{\
+           "map": "function(doc) \{ if (doc.type == 'card') \{ emit( [doc.owner, doc._id,  0], doc); \} else if(doc.type == 'personal_card') \{ emit([doc.owner, doc.cardId, 1], doc)\}\}"\
+       \}\
+   \}\
+\}}
