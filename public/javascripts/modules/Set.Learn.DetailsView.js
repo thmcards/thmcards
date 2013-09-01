@@ -150,7 +150,14 @@ Cards.module('Set.Learn', function(Learn, App) {
 			        console.log(err);
 				}
 			});*/
-			model.save();
+			var that = this;
+			model.save().then(function(){
+				//that.render();
+				App.trigger("filter:box", boxId-1);
+				$("div.item").children(".box").attr("data-boxId", boxId-1);
+			});
+
+
 
 			/*var personalcard = new Cards.Entities.Personalcard({ 
 						cardId: cardId,
