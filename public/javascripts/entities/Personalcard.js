@@ -4,7 +4,8 @@ Cards.module('Entities', function(Entities, App, Backbone){
 		urlRoot: "/personalcard",
 		validate: function (attrs) {
 			//...
-	    }
+	    },
+	    idAttribute: "_id"
 	});
 
 	Entities.PersonalCollection = Backbone.Collection.extend({

@@ -112,12 +112,20 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 		},
 		saveCard: function(cardId, boxId) {
-			var personalcard = new Cards.Entities.Personalcard({ 
+			var model = this.collection.get(cardId);
+
+			var persCard = _.first(model.get("persCard"));
+			persCard.boxId = boxId;
+			
+			model.set({persCard: persCard});
+			model.save();
+
+			/*var personalcard = new Cards.Entities.Personalcard({ 
 						cardId: cardId,
 						box: boxId
 			});
 			personalcard.save();
-			this.collection.fetch()
+			this.collection.fetch()*/
 		},
 
 		initialize: function() {
