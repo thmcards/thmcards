@@ -60,9 +60,25 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		cardSuccess: function(ev) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
-			var boxId = $("div.item.active").children(".box").attr("data-boxId");
+
+			var model = this.collection.get(cardId);
+			console.log("model", model);
+			if(model.has("persCard")) {
+				var persCard;
+				if(_.isArray(model.get("persCard"))) {
+					persCard = _.first(model.get("persCard"));
+				} else {
+					persCard = model.get("persCard");
+				}
+				var boxId = persCard.value.box;
+				console.log("B" + boxId);
+
+			} else {
+				var boxId = 1;
+				console.log("shit happens");
+			}
 			
-			this.$el.find(":first-child").carousel("next");
+
 
 			var boxBefore = boxId;
 
@@ -71,7 +87,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 			} else {
 				boxId == 5;
 			}
-			this.saveCard(cardId, boxId);
+
+			this.saveCard(cardId, boxId, boxBefore);
+
 			console.log("box", boxId);
 
 			
@@ -93,37 +111,51 @@ Cards.module('Set.Learn', function(Learn, App) {
 		cardFail: function(ev) {
 
 			var cardId = $("div.item.active").children(".box").attr("data-id");
-			var boxId = $("div.item.active").children(".box").attr("data-boxId");
+			var model = this.collection.get(cardId);
+
+			console.log("model", model);
+			if(model.has("persCard")) {
+				var persCard;
+				if(_.isArray(model.get("persCard"))) {
+					persCard = _.first(model.get("persCard"));
+				} else {
+					persCard = model.get("persCard");
+				}
+				var boxId = persCard.value.box;
+				
+
+			} else {
+				console.log("shit happens");
+			}
 
 			var boxBefore = boxId;
 
 			boxId = 1;
 			console.log(boxId);
 
-
-
-			this.$el.find(":first-child").carousel("next");
-
-
-			console.log($("div.item.active").children(".box").attr("data-id"));
-
-			this.saveCard(cardId, boxId);
+			var failed = true;
+			this.saveCard(cardId, boxId, boxBefore, failed);
 
 			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
 					App.trigger("filter:box", boxBefore);
+					this.renderModel();
 					console.log("cleaned. box:" + boxBefore);
 			}
 
 
 
 		},
-		saveCard: function(cardId, boxId) {
+		saveCard: function(cardId, boxId, boxBefore, failed) {
 			var model = this.collection.get(cardId);
 
 			console.log("model", model);
 			if(model.has("persCard")) {
-				console.log("has persCard");
-				var persCard = _.first(model.get("persCard"));
+				var persCard;
+				if(_.isArray(model.get("persCard"))) {
+					persCard = _.first(model.get("persCard"));
+				} else {
+					persCard = model.get("persCard");
+				}
 				persCard.value.box = boxId;
 				
 				model['persCard'] = persCard;
@@ -139,32 +171,20 @@ Cards.module('Set.Learn', function(Learn, App) {
 				console.log(personalcard.parse());
 			}
 
-			/*this.collection.create(model, {
-			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
-
-			    success : function(resp){
-			        
-			    },
-			    error : function(err) {
-			    	alert('There was an error. See console for details');
-			        console.log(err);
-				}
-			});*/
+			var bId = boxId;
 			var that = this;
-			model.save().then(function(){
-				//that.render();
-				App.trigger("filter:box", boxId-1);
-				$("div.item").children(".box").attr("data-boxId", boxId-1);
-			});
+			if (!failed && bId < 5) {
+				model.save().then(function(){
+					App.trigger("filter:box", bId-1);
+					that.$el.find(":first-child").carousel("next");
+				});
+			} else {
+				model.save().then(function(){
+					App.trigger("filter:box", boxBefore);
+					that.$el.find(":first-child").carousel("next");
+				});
+			}
 
-
-
-			/*var personalcard = new Cards.Entities.Personalcard({ 
-						cardId: cardId,
-						box: boxId
-			});
-			personalcard.save();
-			this.collection.fetch()*/
 		},
 
 		initialize: function() {

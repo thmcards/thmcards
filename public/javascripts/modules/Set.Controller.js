@@ -108,7 +108,12 @@ function FilteredCollection(collection, options){
         var items;
         if (criteria){
             items = _.filter(collection.models, function(model) {
-            	var pcard = _.first(model.get("persCard"));
+            	var pcard;
+				if(_.isArray(model.get("persCard"))) {
+					pcard = _.first(model.get("persCard"));
+				} else {
+					pcard = model.get("persCard");
+				}
 				if (pcard) {
            			return pcard.value.box == criteria;
            		}
