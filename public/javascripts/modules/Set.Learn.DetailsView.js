@@ -61,6 +61,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 		cardSuccess: function(ev) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var boxId = $("div.item.active").children(".box").attr("data-boxId");
+			this.$el.find(":first-child").carousel("next");
 
 			var boxBefore = boxId;
 
@@ -81,7 +82,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 
 
-			this.$el.find(":first-child").carousel("next");
+			
 
 
 			console.log($("div.item.active").children(".box").attr("data-id"));
@@ -97,6 +98,13 @@ Cards.module('Set.Learn', function(Learn, App) {
 			boxId = 1;
 			console.log(boxId);
 
+
+
+			this.$el.find(":first-child").carousel("next");
+
+
+			console.log($("div.item.active").children(".box").attr("data-id"));
+
 			this.saveCard(cardId, boxId);
 
 			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
@@ -105,19 +113,29 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 
 
-			this.$el.find(":first-child").carousel("next");
-
-
-			console.log($("div.item.active").children(".box").attr("data-id"));
 
 		},
 		saveCard: function(cardId, boxId) {
 			var model = this.collection.get(cardId);
 
 			var persCard = _.first(model.get("persCard"));
-			persCard.boxId = boxId;
+			persCard['boxId'] = boxId;
 			
+			model['persCard'] = persCard;
 			model.set({persCard: persCard});
+
+
+			/*this.collection.create(model, {
+			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+
+			    success : function(resp){
+			        
+			    },
+			    error : function(err) {
+			    	alert('There was an error. See console for details');
+			        console.log(err);
+				}
+			});*/
 			model.save();
 
 			/*var personalcard = new Cards.Entities.Personalcard({ 
