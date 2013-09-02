@@ -30,6 +30,14 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 			ev.preventDefault();
 
 			console.log(this.model);
+		},
+		onRender: function() {
+			var that = this;
+			App.on("filter:box", function(boxId){
+				
+				that.$el.children("button.learn-box").removeClass("btn-info");
+				$("#"+boxId).addClass("btn-info");
+			})
 		}
 	});
 });
