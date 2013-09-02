@@ -36,7 +36,7 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 			App.on("filter:box", function(boxId){
 				
 				that.$el.children("button.learn-box").removeClass("btn-info");
-				$("#"+boxId).addClass("btn-info");
+				$("button[title='" + boxId + "']").addClass("btn-info");
 			})
 		}
 	});
