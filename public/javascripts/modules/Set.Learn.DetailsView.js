@@ -116,6 +116,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
+				  				App.on("cardModel:saved", function(val){
+				  					console.log("saved", val);
+				  				})
 							})				
 					} else {
 						this.saveCard(cardId, boxId, failed);
@@ -167,6 +170,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				success: function(){
 					console.log("success");
 					App.trigger("filter:box", actualBox);
+					App.trigger("cardModel:saved", 1);
 				}
 			});
 		},
