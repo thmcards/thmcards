@@ -70,6 +70,12 @@ Cards.module('Set.Learn', function(Learn, App) {
 			//anzahl items im aktuellen fach
 			var items = this.$el.find("div.item").length;
 
+			//zuletzt aktive lernkarte
+			var lastActiveItem = this.$el.find("div.item").index(this.$el.find("div.item.active"));
+
+
+
+
 			//boxid aus personalcard holen wenn vorhanden, ansonsten boxid initial auf 1
 			var model = this.collection.get(cardId);
 			if(!_.isEmpty(model.get("persCard"))) {
@@ -96,6 +102,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
+				  				that.$el.find("div.item");
 							})				
 					} else {
 						this.saveCard(cardId, boxId, failed);
@@ -116,6 +123,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
+				  				var activeCard = that.$el.find("div.item").get(lastActiveItem);
+								$(activeCard).addClass("active");
 							})				
 					} else {
 						this.saveCard(cardId, boxId, failed);
