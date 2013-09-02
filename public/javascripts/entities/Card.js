@@ -9,7 +9,8 @@ Cards.module('Entities', function(Entities, App, Backbone){
 	        if (!attrs.back) {
 	            return 'Please fill back field.';
 	        }
-	    }
+	    },
+		idAttribute: "_id"
 	});
 
 	Entities.CardCollection = Backbone.Collection.extend({

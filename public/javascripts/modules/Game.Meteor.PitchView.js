@@ -15,12 +15,17 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			"click a.btn-primary": "startGame",
 			"click a.btn-danger": "stopGame",
 			"click a.btn-info": "resumeGame",
-			"keyup input.meteor-answer": "onKeypress"
+			"keyup input.meteor-answer": "onKeypress",
+			"blur #itemcnt": "changeItemCnt",
+			"blur #itemspeed": "changeItemSpeed"
 		},
 		points: 0,
+		itemcnt: 1,
+		itemspeed: 8000,
 		level:1,
 		lifes:3,
 		timer:null,
+		gameLoop:null,
 		cardsOnPitch:null,
 		cardsQueue:null,
 		initialize: function() {
@@ -121,7 +126,34 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			$('#meteor-answer-modal').modal('show');
 		},
 		checkResult: function(answer) {
-			if(this.cardsOnPitch.length > 0 && this.runGame) {
+
+
+			var answeredCard = _.find(this.cardsQueue, function(card){
+				console.info(card.back.text_plain);
+				if(card.back.text_plain.toLowerCase() === answer.toLowerCase()) {
+					return true;
+				}
+			});
+
+			console.info("answered", answeredCard);
+
+
+			$(this).removeAttr("style");
+			console.log("answered!", answeredCard.identifier);
+		
+			answeredCard.div.stop().toggle({
+				effect: "explode",
+				complete: function(){
+					$(answeredCard.div).removeAttr("style");
+					answeredCard.onPitch = false;
+					answeredCard.div.hide();
+				}	
+			});
+			
+			
+			console.info("queue", this.cardsQueue);
+
+/*			if(this.cardsOnPitch.length > 0 && this.runGame) {
 
 				var filtered = _.find(this.cardsOnPitch, function(card){
 					return $(card).find(':first-child').attr('data-answer') == answer;
@@ -160,11 +192,29 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 					this.removeCardFromPitch(filtered);
 					
 				}
-			}
+			}*/
 		},
-		addCardToPitch: function(card) {
+		fillQueue: function(cardId){
 			var that = this;
 
+			var card = this.collection.get(cardId);
+			
+			var cardClone = card.pick('_id', 'front', 'back');
+			cardClone.identifier = cardClone._id+"_"+new Date().getTime();
+			cardClone.onPitch = false;
+			
+			var c = $("<div>").attr("data-id", cardClone._id).attr("data-identifier", cardClone.identifier).text(cardClone.front.text_plain)
+			c.addClass('meteor-playcard');
+			c.css("display", "none");
+
+
+			cardClone.div = c;
+
+			this.cardsQueue.push(cardClone);
+		},
+		addCardToPitch: function(cardId) {
+
+/*
 			var c = card.clone();
 			this.cardsQueue.push(c);
 
@@ -207,7 +257,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				);
 			}, timeout);
 			console.log("cop", that.cardsOnPitch);
-			
+			*/
 		},
 		removeCardFromPitch: function(card) {
 			console.log("cop", this.cardsOnPitch);
@@ -216,10 +266,9 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			this.cardsQueue.splice($.inArray(card, this.cardsOnPitch),1);
 
 			$(card).toggle("explode").remove();
-			console.log("cop", this.cardsOnPitch);
 		},
 		run: function() {
-			var that = this;
+			/*var that = this;
 			this.timer = setInterval(function() { 
 				if(!that.runGame) {
 
@@ -230,33 +279,120 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 					_.each($(that.pitch).children(), function(card) {
 						$(card).resume();
 					});
-					that.loop();
+					//that.loop();
+
+
+
+
+
 				};
-			}, 200);
+			}, 200);*/
+					var playcards = this.$el.find("div.playcardcontainer").find("span");
+					
+					var lastRandom = -1;
+					if(_.size(this.cardsQueue) < 10) {
+						var i = 0;
+						while(_.size(this.cardsQueue) < playcards.length) {
+							var random = Math.floor((Math.random()*this.collection.length));
+						
+							while(random == lastRandom) random = Math.floor((Math.random()*this.collection.length));
+
+							var cardId = this.collection.models[i].get("_id");
+
+							this.fillQueue(cardId);
+
+							console.log("size", _.size(this.cardsQueue));
+							lastRandom = random;	
+							i++;			
+						}
+					}
+					console.log(this.cardsQueue.length);
+
+					var that = this;
+
+					this.gameLoop = setInterval(function(){
+
+						if(that.runGame) {
+							console.log("onpitch", _.where(that.cardsQueue, {onPitch: true}).length, that.itemcnt);
+							if(_.where(that.cardsQueue, {onPitch: true}).length < that.itemcnt) {
+
+								that.cardsQueue = _.shuffle(that.cardsQueue);
+								var card = _.findWhere(that.cardsQueue, {onPitch: false})
+								card.onPitch = true;
+
+
+								card.div.appendTo("#meteor-pitch");
+								
+
+								card.div.css("left", Math.floor((Math.random()*800)+1));
+
+								card.div.animate({
+									top: $(this.pitch).height()-card.div.height()+500
+								}, {
+									duration: that.itemspeed,
+									//queue: "cards",
+									easing: "linear",
+									complete: function(){
+										/*console.log("complete", $(this).attr('data-identifier'));
+										var cdiv = this;
+										var me = _.findWhere(that.cardsQueue, {identifier: $(cdiv).attr('data-identifier')});
+											me.onPitch = false;
+										console.log("me", me);
+					*/
+
+									 	this.animationStarted = 0;
+										$(this).removeAttr("style");
+										console.log("complete", card.identifier);
+										card.onPitch = false;
+										that.runGame = false;
+									}
+								});
+								card.div.show();
+								console.log(that.runGame);
+							}
+							//card.div.dequeue("cards");
+						} else {
+							that.pauseCards();
+						}
+					}, 300)
 		},
 		loop: function() {
 			var that = this;
 
-			var playcards = this.$el.find("div.playcardcontainer").children();
-			var lastRandom = -1;
-			var cb = function(){
-				var random = Math.floor((Math.random()*playcards.length));
-				
-				while(random == lastRandom) random = Math.floor((Math.random()*playcards.length));
 
-				var card = $(playcards[random]);
-				that.addCardToPitch(card);
+			var playcards = this.$el.find("div.playcardcontainer").find("span");
+			console.log(playcards);
+
+			var lastRandom = -1;
+
+			while(_.size(this.cardsQueue) < 10) {
+				var random = Math.floor((Math.random()*that.collection.length));
+			
+				while(random == lastRandom) random = Math.floor((Math.random()*that.collection.length));
+
+				var cardId = that.collection.models[random].get("_id");
+
+				that.fillQueue(cardId);
 
 				lastRandom = random;				
-			};
-
-			if(this.cardsQueue.length < this.level*2)
-				setTimeout(cb, 50);
-
 			
+
+			//if(this.cardsQueue.length < this.level*2)
+			//	setTimeout(cb, 1000);
+
+			}
+		},
+		pauseCards: function() {
+			var cards = _.where(this.cardsQueue, {onPitch: true});
+
+			_.each(cards, function(card){
+				card.div.pause();
+			})
 		},
 		startGame: function(ev) {
 			ev.preventDefault();
+			this.runGame = true;
+			//console.log(this.collection.models[0].get("_id"));
 
 			this.run();
 
@@ -270,10 +406,26 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		resumeGame: function(ev) {
 			ev.preventDefault();
 
-			this.runGame = true;
-			_.each(this.cardsOnPitch, function(card) {
-				$(card).resume();
+			
+			var cards = _.where(this.cardsQueue, {onPitch: true});
+			console.log("onpitch", cards);
+			_.each(cards, function(card){
+				card.div.css("backgroundColor", "#ff0000");
+				card.div.resume();
 			});
+
+			this.runGame = true;
+		},
+		onClose: function(){
+			clearInterval(this.gameLoop);
+		},
+		changeItemCnt: function(){
+			this.itemcnt = $("#itemcnt").val();
+			console.log(itemcnt);
+		},
+		changeItemSpeed: function(){
+			this.itemspeed = $("#itemspeed").val();
+			console.log("speed", itemspeed);
 		}
 	});
 
