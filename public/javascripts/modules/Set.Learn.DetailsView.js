@@ -83,23 +83,45 @@ Cards.module('Set.Learn', function(Learn, App) {
 			} else {
 				var boxId = 1;
 			}
-			
-			//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
-			if(items > 1) {
-				this.$el.find(":first-child").carousel("next");				
-				var that = this;
-				this.$el.find(":first-child").on('slid.bs.carousel', function () {
-		  				that.saveCard(cardId, boxId, failed);
-					})				
-			} else {
-				console.log(failed);
-				this.saveCard(cardId, boxId, failed);
+
+			if (failed) {
+				if (boxId === 1) {
+					if(items > 1) {
+						this.$el.find(":first-child").carousel("next");	
+					}
+				} else {		
+					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
+					if(items > 1) {
+						this.$el.find(":first-child").carousel("next");				
+						var that = this;
+						this.$el.find(":first-child").on('slid.bs.carousel', function () {
+				  				that.saveCard(cardId, boxId, failed);
+							})				
+					} else {
+						this.saveCard(cardId, boxId, failed);
+					}
+
+				}
 			}
 
-			//bei letzter box
-			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
-					App.trigger("filter:box", boxId);
-					this.renderModel();
+			if (!failed) {
+				if (boxId === 5) {
+					if(items > 1) {
+						this.$el.find(":first-child").carousel("next");	
+					}
+				} else {		
+					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
+					if(items > 1) {
+						this.$el.find(":first-child").carousel("next");				
+						var that = this;
+						this.$el.find(":first-child").on('slid.bs.carousel', function () {
+				  				that.saveCard(cardId, boxId, failed);
+							})				
+					} else {
+						this.saveCard(cardId, boxId, failed);
+					}
+
+				}
 			}
 
 		},
@@ -140,12 +162,10 @@ Cards.module('Set.Learn', function(Learn, App) {
 					model['persCard'] = persCard;
 					model.set({persCard: persCard});
 			}
-
 			//speichern und in aktueller box bleiben
 			model.save().then(function(){
 				App.trigger("filter:box", actualBox);
 			});
-
 		},
 		initialize: function() {
 			var that = this;
