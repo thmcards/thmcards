@@ -90,14 +90,16 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 
 			var items = this.$el.find("div.item").length;
-
+			console.log("l", items)
 			if(items > 1) {
 				this.$el.find(":first-child").carousel("next");
+				
+			var that = this;
 
-				var that = this;
-				this.$el.find(":first-child").on('slide.bs.carousel', function () {
+			this.$el.find(":first-child").on('slid.bs.carousel', function () {
 	  				that.saveCard(cardId, boxId, boxBefore);
 				})
+				
 			} else {
 				this.saveCard(cardId, boxId, boxBefore);
 			}
@@ -108,7 +110,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 					console.log("cleaned. box:" + boxBefore);
 			}
-			
+
 			console.log($("div.item.active").children(".box").attr("data-id"));
 
 		},
