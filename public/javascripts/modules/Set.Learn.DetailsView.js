@@ -163,8 +163,11 @@ Cards.module('Set.Learn', function(Learn, App) {
 					model.set({persCard: persCard});
 			}
 			//speichern und in aktueller box bleiben
-			model.save().then(function(){
-				App.trigger("filter:box", actualBox);
+			model.save({}, {
+				success: function(){
+					console.log("success");
+					App.trigger("filter:box", actualBox);
+				}
 			});
 		},
 		initialize: function() {
