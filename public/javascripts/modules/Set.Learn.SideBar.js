@@ -20,8 +20,8 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 			console.log(this.collection);
 		},
 		boxChoosen: function(ev) {
-			if(ev.target.id) {
-				App.trigger("filter:box", ev.target.id);
+			if(ev.target.title) {
+				App.trigger("filter:box", ev.target.title);
 			} else {
 				App.trigger("filter:box", null);
 			}

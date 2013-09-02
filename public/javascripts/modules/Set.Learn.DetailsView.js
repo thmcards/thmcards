@@ -63,7 +63,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			var model = this.collection.get(cardId);
 			console.log("model", model);
-			if(model.has("persCard")) {
+			if(!_.isEmpty(model.get("persCard"))) {
 				var persCard;
 				if(_.isArray(model.get("persCard"))) {
 					persCard = _.first(model.get("persCard"));
@@ -120,7 +120,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var model = this.collection.get(cardId);
 
 			console.log("model", model);
-			if(model.has("persCard")) {
+			if(!_.isEmpty(model.get("persCard"))) {
 				var persCard;
 				if(_.isArray(model.get("persCard"))) {
 					persCard = _.first(model.get("persCard"));
@@ -140,23 +140,38 @@ Cards.module('Set.Learn', function(Learn, App) {
 			console.log(boxId);
 
 			var failed = true;
-			this.saveCard(cardId, boxId, boxBefore, failed);
+			var items = this.$el.find("div.item").length;
+			console.log("l", items)
+			if(items > 1) {
+				this.$el.find(":first-child").carousel("next");
+				
+			var that = this;
+
+			this.$el.find(":first-child").on('slid.bs.carousel', function () {
+	  				that.saveCard(cardId, boxId, boxBefore, failed);
+				})
+				
+			} else {
+				this.saveCard(cardId, boxId, boxBefore, failed);
+			}
 
 			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
 					App.trigger("filter:box", boxBefore);
 					this.renderModel();
+
 					console.log("cleaned. box:" + boxBefore);
 			}
 
+			console.log($("div.item.active").children(".box").attr("data-id"));
 
 
 		},
 		saveCard: function(cardId, boxId, boxBefore, failed) {
 			var model = this.collection.get(cardId);
-
+			var persCard;
 			console.log("model", model);
-			if(model.has("persCard")) {
-				var persCard;
+			if(!_.isEmpty(model.get("persCard"))) {
+	
 				if(_.isArray(model.get("persCard"))) {
 					persCard = _.first(model.get("persCard"));
 				} else {
@@ -170,10 +185,14 @@ Cards.module('Set.Learn', function(Learn, App) {
 				console.log("newPers", persCard);
 			} else {
 				console.log("bla");
-				var personalcard = new Cards.Entities.Personalcard({ 
-						cardId: cardId,
-						box: boxId
-				});
+					persCard = {};
+					persCard.value = {
+					   "cardId": cardId,
+					   "box": boxId
+					}
+					model['persCard'] = persCard;
+					model.set({persCard: persCard});
+
 				console.log(personalcard.parse());
 			}
 
