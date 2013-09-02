@@ -60,9 +60,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		cardSuccess: function(ev) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
-			var model = this.collection.get(cardId);
 
-			var boxId;
+			var model = this.collection.get(cardId);
+			console.log("model", model);
 			if(model.has("persCard")) {
 				var persCard;
 				if(_.isArray(model.get("persCard"))) {
@@ -70,16 +70,17 @@ Cards.module('Set.Learn', function(Learn, App) {
 				} else {
 					persCard = model.get("persCard");
 				}
+				var boxId = persCard.value.box;
+				console.log("B" + boxId);
 
-				if(!_.isUndefined(persCard)) {
-					boxId = persCard.value.box;
-				} else {
-					boxId = 1;
-				}
 			} else {
-				console.log("eeelse");
-				boxId = 1;
+				var boxId = 1;
+				console.log("shit happens");
 			}
+			
+
+
+			var boxBefore = boxId;
 
 			if (boxId < 5) {
 				boxId++;
@@ -87,45 +88,106 @@ Cards.module('Set.Learn', function(Learn, App) {
 				boxId == 5;
 			}
 
-			this.saveCard(cardId, boxId);
+
+			var items = this.$el.find("div.item").length;
+
+			if(items > 1) {
+				this.$el.find(":first-child").carousel("next");
+
+				var that = this;
+				this.$el.find(":first-child").on('slide.bs.carousel', function () {
+	  				that.saveCard(cardId, boxId, boxBefore);
+				})
+			} else {
+				this.saveCard(cardId, boxId, boxBefore);
+			}
+
+			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
+					App.trigger("filter:box", boxBefore);
+					this.renderModel();
+
+					console.log("cleaned. box:" + boxBefore);
+			}
+			
+			console.log($("div.item.active").children(".box").attr("data-id"));
+
 		},
 		cardFail: function(ev) {
-			console.log("fail");
-			
-		},
-		saveCard: function(cardId, boxId) {
+
+			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var model = this.collection.get(cardId);
 
 			console.log("model", model);
 			if(model.has("persCard")) {
-
 				var persCard;
 				if(_.isArray(model.get("persCard"))) {
 					persCard = _.first(model.get("persCard"));
 				} else {
 					persCard = model.get("persCard");
 				}
-				if(!_.isUndefined(persCard)) {
-					persCard.value.box = boxId;	
-					model['persCard'] = persCard;
-					model.set({persCard: persCard});
-				} else {
-					persCard = {};
-					persCard.value = {
-					   "cardId": cardId,
-					   "box": boxId
-					}
-					model['persCard'] = persCard;
-					model.set({persCard: persCard});
-				}
+				var boxId = persCard.value.box;
+				
+
 			} else {
-				console.log("passiert das hier überhaupt?!");
+				console.log("shit happens");
 			}
 
-			model.save().then(function(){
+			var boxBefore = boxId;
 
-				App.trigger("filter:box", boxId--);
-			});
+			boxId = 1;
+			console.log(boxId);
+
+			var failed = true;
+			this.saveCard(cardId, boxId, boxBefore, failed);
+
+			if($("div.item.active").children(".box").attr("data-id") == $("div.item").children(".box").last().attr("data-id")) {
+					App.trigger("filter:box", boxBefore);
+					this.renderModel();
+					console.log("cleaned. box:" + boxBefore);
+			}
+
+
+
+		},
+		saveCard: function(cardId, boxId, boxBefore, failed) {
+			var model = this.collection.get(cardId);
+
+			console.log("model", model);
+			if(model.has("persCard")) {
+				var persCard;
+				if(_.isArray(model.get("persCard"))) {
+					persCard = _.first(model.get("persCard"));
+				} else {
+					persCard = model.get("persCard");
+				}
+				persCard.value.box = boxId;
+				
+				model['persCard'] = persCard;
+				model.set({persCard: persCard});
+
+				console.log("newPers", persCard);
+			} else {
+				console.log("bla");
+				var personalcard = new Cards.Entities.Personalcard({ 
+						cardId: cardId,
+						box: boxId
+				});
+				console.log(personalcard.parse());
+			}
+
+			var bId = boxId;
+			var that = this;
+			if (!failed && bId < 5) {
+				model.save().then(function(){
+					App.trigger("filter:box", bId-1);
+					//that.$el.find(":first-child").carousel("next");
+				});
+			} else {
+				model.save().then(function(){
+					App.trigger("filter:box", boxBefore);
+					//that.$el.find(":first-child").carousel("next");
+				});
+			}
 
 		},
 
@@ -147,6 +209,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 			this.render();
 		},
 		onRender: function() {
+			//if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
+			
 			this.$el.find("div.item").first().addClass("active");
 
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
