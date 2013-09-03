@@ -174,16 +174,6 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 			this.cardsQueue.push(cardClone);
 		},
-		addCardToPitch: function(cardId) {
-
-		},
-		removeCardFromPitch: function(card) {
-			this.cardsOnPitch.splice($.inArray(card, this.cardsOnPitch),1);
-
-			this.cardsQueue.splice($.inArray(card, this.cardsOnPitch),1);
-
-			$(card).toggle("explode").remove();
-		},
 		run: function() {
 			var playcards = this.$el.find("div.playcardcontainer").find("span");
 			
@@ -222,7 +212,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 						card.div.appendTo("#meteor-pitch");
 						
 
-						card.div.css("left", Math.floor((Math.random()*800)+1));
+						card.div.css("left", Math.floor((Math.random()*800)+20));
 
 						card.div.animate({
 							top: $(this.pitch).height()-card.div.height()+500
@@ -248,32 +238,6 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				}
 			}, 300)
 		},
-		loop: function() {
-			var that = this;
-
-
-			var playcards = this.$el.find("div.playcardcontainer").find("span");
-			console.log(playcards);
-
-			var lastRandom = -1;
-
-			while(_.size(this.cardsQueue) < 10) {
-				var random = Math.floor((Math.random()*that.collection.length));
-			
-				while(random == lastRandom) random = Math.floor((Math.random()*that.collection.length));
-
-				var cardId = that.collection.models[random].get("_id");
-
-				that.fillQueue(cardId);
-
-				lastRandom = random;				
-			
-
-			//if(this.cardsQueue.length < this.level*2)
-			//	setTimeout(cb, 1000);
-
-			}
-		},
 		pauseCards: function() {
 			var cards = _.where(this.cardsQueue, {onPitch: true});
 
@@ -283,29 +247,46 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		},
 		startGame: function(ev) {
 			ev.preventDefault();
-			this.runGame = true;
-			//console.log(this.collection.models[0].get("_id"));
 
-			this.run();
+			$("#meteor-countdown-welcome").hide();
 
+			var countdown = $("#meteor-countdown-counter");
+
+			var count = 3;
+			var timer = setInterval(function() { handleTimer(count); }, 1000);
+
+			var that = this;
+			function endCountdown() {
+			  $("#meteor-countdown").hide();
+			  $("input.form-control.meteor-answer").prop('disabled', false);
+			  $("input.form-control.meteor-answer").focus();
+			  that.run();
+			}
+
+			function handleTimer() {
+			  if(count === 0) {
+			    clearInterval(timer);
+			    endCountdown();
+			  } else {
+			  	countdown.text(count);
+			    count--;
+			  }
+			}
 		},
 		stopGame: function(ev) {
 			ev.preventDefault();
 
 			this.runGame = false;
-
 		},
 		resumeGame: function(ev) {
 			ev.preventDefault();
 
-			
 			var cards = _.where(this.cardsQueue, {onPitch: true});
 			
 			_.each(cards, function(card){
 				card.div.css("backgroundColor", "#ff0000");
 				card.div.resume();
 			});
-
 			this.runGame = true;
 		},
 		onClose: function(){

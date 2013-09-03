@@ -12,6 +12,8 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
     <meta http-equiv="pragma" content="no-cache" />
 
+    <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
+
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <!--link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" /-->
@@ -393,14 +395,24 @@
     </script>
 
     <script type="text/template" id="game-meteor-pitch">
-      <div id="meteor-pitch" style="width: 100%; height: 500px; background-color: #fff">
-
+      <div id="meteor-pitch">
+        <div id="meteor-countdown">
+          <div id="meteor-countdown-welcome">
+            <div class="meteor-countdown-back">&nbsp;</div>
+            <div class="meteor-welcome-front">  
+              <span>Meteor</span>
+              <div class="meteor-welcome-description">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</div>
+              <div><a href="#" class="btn btn-primary btn-lg">Start</a></div>
+            </div>
+          </div>
+          <span id="meteor-countdown-counter" style="padding-top:150px; display:block"></span>
+        </div>
       </div>
       <div style="margin:20px 0">
-        <input type="input" class="form-control meteor-answer" placeholder="Lösung eingeben" />
+        <input type="input" class="form-control meteor-answer" disabled="disabled" placeholder="Lösung eingeben" />
       </div>
       <div class="playcardcontainer" style="display: none"></div>
-      <a href="#" class="btn btn-primary pull-right">Start</a>
+      
       <a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
       <a href="#" class="btn btn-default btn-info pull-right">Resume</a>
       <input type="text" class="form-control" id="itemcnt" placeholder="3" />
@@ -418,20 +430,16 @@
               <div class="panel panel-info">
                 <div class="panel-heading">Frage</div>
                 <div class="panel-body">
-                  <p id="meteor-answer-modal-front">yep yep...</p>
+                  <p id="meteor-answer-modal-front"></p>
                 </div>
               </div>
 
               <div class="panel panel-success">
                 <div class="panel-heading">Korrekte Antwort</div>
                 <div class="panel-body">
-                  <p id="meteor-answer-modal-back">yep yep...</p>
+                  <p id="meteor-answer-modal-back"></p>
                 </div>
               </div>
-
-              
-              
-
               <input type="text" placeholder="Korrekte Antwort eingeben" class="form-control" id="meteor-answer-modal-input" />
             </div>
             <div class="modal-footer">
