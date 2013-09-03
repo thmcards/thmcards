@@ -8,6 +8,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		cardClicked: function(ev) {
 			ev.preventDefault();
+			console.log(ev.currentTarget);
 
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
@@ -103,6 +104,10 @@ Cards.module('Set.Learn', function(Learn, App) {
 				if (boxId === 1) {
 					if(items > 1) {
 						this.$el.find(":first-child").carousel("next");	
+
+						this.$el.find('div.front').show();
+						this.$el.find('div.back').hide();
+						$("button.answer").hide();
 					}
 				} else {		
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
@@ -114,7 +119,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 							})				
 					} else {
-						this.saveCard(cardId, boxId, failed);
+						var lastCard = true;
+						this.saveCard(cardId, boxId, failed, lastCard);
+						console.log("letzte karte weg");
 					}
 
 				}
@@ -123,7 +130,11 @@ Cards.module('Set.Learn', function(Learn, App) {
 			if (!failed) {
 				if (boxId === 5) {
 					if(items > 1) {
-						this.$el.find(":first-child").carousel("next");	
+						this.$el.find(":first-child").carousel("next");
+
+						this.$el.find('div.front').show();
+						this.$el.find('div.back').hide();
+						$("button.answer").hide();
 					}
 				} else {		
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
@@ -135,14 +146,17 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 							})				
 					} else {
-						this.saveCard(cardId, boxId, failed);
+						var lastCard = true;
+						this.saveCard(cardId, boxId, failed, lastCard);
+						console.log("letzte karte weg");
 					}
 
 				}
 			}
 
 		},
-		saveCard: function(cardId, boxId, failed) {
+		saveCard: function(cardId, boxId, failed, lastCard) {
+			var that = this;
 			//boxid des aktuellen fachs
 			var actualBox = boxId;
 
@@ -185,6 +199,11 @@ Cards.module('Set.Learn', function(Learn, App) {
 					console.log("success");
 					App.trigger("filter:box", actualBox);
 					App.trigger("cardModel:saved");
+
+					if (lastCard) {
+						that.$el.find("div.carousel").hide();
+						that.$el.find("div.learn-endscreen").show();
+					}
 				}
 			});
 		},
@@ -193,6 +212,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			App.on('filter:box', function(boxId) {
 				that.filterBox(boxId);
 			})
+
 		},
 		filterBox: function(boxId) {
 			if(boxId != null) {
@@ -202,17 +222,18 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 			this.render();
 		},
-		onRender: function() {		
+		onRender: function() {	
+			$("div.learn-startscreen").hide();
+			$("div.learn-endscreen").hide();
+			$("div.carousel").show();	
 			this.$el.find("div.item").first().addClass("active");
 
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
 			for(var i = 0; i < this.collection.length; i++) {
 				var indicatorElem = $("<li></li>").attr("data-slide-to", i);
 				if(i === 0) indicatorElem.addClass("active");	
-
 				pickerContainer.append(indicatorElem);
 			}
-
 			this.$el.find(':first-child').carousel({ interval: false });
 		}
 	});

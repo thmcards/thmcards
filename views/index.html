@@ -481,7 +481,7 @@
 
 
     <script type="text/template" id="set-learn-collection">
-      <div id="cardCarousel" class="carousel slide">
+      <div id="cardCarousel" class="carousel slide" style="display:none">
         <ol class="carousel-indicators"></ol>
         <div class="carousel-inner"></div>
       </div>
@@ -489,6 +489,14 @@
       <div id="learn-navigation">
             <button class="btn btn-primary answer card-success" title="success" style="width:100%; margin-top:10px; display:none">Gewusst</button>
             <button class="btn btn-default answer card-fail" title="failed" style="width:100%; margin-top:10px; display:none">Nicht gewusst</button>
+      </div>
+
+      <div id="learn-endscreen" class="box learn-endscreen" style="display:none">
+        <div class="block"><div class="centered front" style="font-size:2em">Ich bin ein Endbildschirm</div></div>
+      </div>
+
+      <div id="learn-startscreen" class="box learn-startscreen">
+        <div class="block"><div class="centered front" style="font-size:2em">Ich bin ein Startbildschirm</div></div>
       </div>
     </script>
 
@@ -503,7 +511,7 @@
       <div class="box">
         <div class="block"><div class="centered front" style="font-size:2em">Keine Karten vorhanden</div>
       </div>
-    </script>   
+    </script> 
 
     <script type="text/template" id="profile-layout">
       <div class="row">
