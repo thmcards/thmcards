@@ -73,26 +73,17 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			}
 		},
 		noCorrectAnswer: function(cardId) {
-			console.info("no correct", cardId);
+			var that = this;
 
 			var card = _.findWhere(this.cardsQueue, {_id:cardId});
 
-			console.info("ccc", card);
-
-
-
-			var that = this;
-
-			//this.stopGame();
 			$("a.btn-danger").click();
 
-
 			if(this.lifes > 0) { 
-				this.lifes--;
+				this.removeLife();
 			} else {
 				console.log("game over!");
 			}
-			$("#meteor-lifes").text(this.lifes);
 
 			$('#meteor-answer-modal').on('show.bs.modal', function () {
 				$("#meteor-answer-modal-input").val('');
@@ -144,6 +135,10 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 				var score = parseInt($("#meteor-points").text()) + 5;
 				$("#meteor-points").text(score);
+				$("#meteor-points").effect("pulsate", { times:1 }, 1000);
+
+				this.addLife();
+
 				console.info("Correct Answer! "+answeredCard.back.text_plain, "New Score: "+score);
 
 				answeredCard.div.stop().toggle({
@@ -258,6 +253,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			var that = this;
 			function endCountdown() {
 			  $("#meteor-countdown").hide();
+			  $("#meteor-statistics").show();
 			  $("input.form-control.meteor-answer").prop('disabled', false);
 			  $("input.form-control.meteor-answer").focus();
 			  that.run();
@@ -299,6 +295,21 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		changeItemSpeed: function(){
 			this.itemspeed = $("#itemspeed").val();
 			console.log("speed", itemspeed);
+		},
+		addLife: function(){
+			var lifes = $("#meteor-lifes").children().length;
+			var life = $("<span>").addClass('glyphicon glyphicon-heart').css("display", "none");
+
+			if(lifes < 5) {
+				$("#meteor-lifes").append(life);
+				life.slideToggle(400);
+			}
+		},
+		removeLife: function(){
+			var lifes = $("#meteor-lifes").children().length;
+			
+			if(lifes > 0)
+				$("#meteor-lifes").children().last().remove();
 		}
 	});
 

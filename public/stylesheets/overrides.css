@@ -355,3 +355,44 @@ div.meteor-playcard {
   width: 70%
 }
 
+#meteor-statistics {
+  position: absolute;
+  width: 920px;
+  height: 30px;
+  z-index: 12;
+  margin-top: 5px;
+}
+
+#meteor-lifes {
+  width: 33%;
+  float:left;
+  text-align: left;
+  font-size: 2em;
+  color: #000;
+  padding-left: 25px;
+}
+
+#meteor-lifes span { 
+  display: inline-block;
+  margin-right: 5px;
+}
+
+#meteor-level {
+  width: 34%;
+  float:left;
+  text-align: center;
+  font-family: 'Black Ops One', cursive;
+  font-size: 2em;
+  color: #000;
+}
+
+#meteor-points {
+  width: 33%;
+  float:left;
+  text-align: right;
+  font-family: 'Black Ops One', cursive;
+  font-size: 2em;
+  color: #000;
+  padding-right: 25px;
+}
+
