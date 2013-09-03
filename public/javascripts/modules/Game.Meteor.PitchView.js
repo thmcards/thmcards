@@ -73,26 +73,17 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			}
 		},
 		noCorrectAnswer: function(cardId) {
-			console.info("no correct", cardId);
+			var that = this;
 
 			var card = _.findWhere(this.cardsQueue, {_id:cardId});
 
-			console.info("ccc", card);
-
-
-
-			var that = this;
-
-			//this.stopGame();
 			$("a.btn-danger").click();
 
-
 			if(this.lifes > 0) { 
-				this.lifes--;
+				this.removeLife();
 			} else {
 				console.log("game over!");
 			}
-			$("#meteor-lifes").text(this.lifes);
 
 			$('#meteor-answer-modal').on('show.bs.modal', function () {
 				$("#meteor-answer-modal-input").val('');
@@ -144,6 +135,10 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 				var score = parseInt($("#meteor-points").text()) + 5;
 				$("#meteor-points").text(score);
+				$("#meteor-points").effect("pulsate", { times:1 }, 1000);
+
+				this.addLife();
+
 				console.info("Correct Answer! "+answeredCard.back.text_plain, "New Score: "+score);
 
 				answeredCard.div.stop().toggle({
@@ -173,16 +168,6 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			cardClone.div = c;
 
 			this.cardsQueue.push(cardClone);
-		},
-		addCardToPitch: function(cardId) {
-
-		},
-		removeCardFromPitch: function(card) {
-			this.cardsOnPitch.splice($.inArray(card, this.cardsOnPitch),1);
-
-			this.cardsQueue.splice($.inArray(card, this.cardsOnPitch),1);
-
-			$(card).toggle("explode").remove();
 		},
 		run: function() {
 			var playcards = this.$el.find("div.playcardcontainer").find("span");
@@ -222,7 +207,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 						card.div.appendTo("#meteor-pitch");
 						
 
-						card.div.css("left", Math.floor((Math.random()*800)+1));
+						card.div.css("left", Math.floor((Math.random()*800)+20));
 
 						card.div.animate({
 							top: $(this.pitch).height()-card.div.height()+500
@@ -248,32 +233,6 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				}
 			}, 300)
 		},
-		loop: function() {
-			var that = this;
-
-
-			var playcards = this.$el.find("div.playcardcontainer").find("span");
-			console.log(playcards);
-
-			var lastRandom = -1;
-
-			while(_.size(this.cardsQueue) < 10) {
-				var random = Math.floor((Math.random()*that.collection.length));
-			
-				while(random == lastRandom) random = Math.floor((Math.random()*that.collection.length));
-
-				var cardId = that.collection.models[random].get("_id");
-
-				that.fillQueue(cardId);
-
-				lastRandom = random;				
-			
-
-			//if(this.cardsQueue.length < this.level*2)
-			//	setTimeout(cb, 1000);
-
-			}
-		},
 		pauseCards: function() {
 			var cards = _.where(this.cardsQueue, {onPitch: true});
 
@@ -283,29 +242,47 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		},
 		startGame: function(ev) {
 			ev.preventDefault();
-			this.runGame = true;
-			//console.log(this.collection.models[0].get("_id"));
 
-			this.run();
+			$("#meteor-countdown-welcome").hide();
 
+			var countdown = $("#meteor-countdown-counter");
+
+			var count = 3;
+			var timer = setInterval(function() { handleTimer(count); }, 1000);
+
+			var that = this;
+			function endCountdown() {
+			  $("#meteor-countdown").hide();
+			  $("#meteor-statistics").show();
+			  $("input.form-control.meteor-answer").prop('disabled', false);
+			  $("input.form-control.meteor-answer").focus();
+			  that.run();
+			}
+
+			function handleTimer() {
+			  if(count === 0) {
+			    clearInterval(timer);
+			    endCountdown();
+			  } else {
+			  	countdown.text(count);
+			    count--;
+			  }
+			}
 		},
 		stopGame: function(ev) {
 			ev.preventDefault();
 
 			this.runGame = false;
-
 		},
 		resumeGame: function(ev) {
 			ev.preventDefault();
 
-			
 			var cards = _.where(this.cardsQueue, {onPitch: true});
 			
 			_.each(cards, function(card){
 				card.div.css("backgroundColor", "#ff0000");
 				card.div.resume();
 			});
-
 			this.runGame = true;
 		},
 		onClose: function(){
@@ -318,6 +295,21 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		changeItemSpeed: function(){
 			this.itemspeed = $("#itemspeed").val();
 			console.log("speed", itemspeed);
+		},
+		addLife: function(){
+			var lifes = $("#meteor-lifes").children().length;
+			var life = $("<span>").addClass('glyphicon glyphicon-heart').css("display", "none");
+
+			if(lifes < 5) {
+				$("#meteor-lifes").append(life);
+				life.slideToggle(400);
+			}
+		},
+		removeLife: function(){
+			var lifes = $("#meteor-lifes").children().length;
+			
+			if(lifes > 0)
+				$("#meteor-lifes").children().last().remove();
 		}
 	});
 
