@@ -111,6 +111,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						this.$el.find('div.front').show();
 						this.$el.find('div.back').hide();
 						$("button.answer").hide();
+						$("div.learn-cardHelptext").show();
 					}
 				} else {		
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
@@ -138,6 +139,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						this.$el.find('div.front').show();
 						this.$el.find('div.back').hide();
 						$("button.answer").hide();
+						$("div.learn-cardHelptext").show();
 					}
 				} else {		
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
