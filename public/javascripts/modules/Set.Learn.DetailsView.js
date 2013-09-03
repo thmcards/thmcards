@@ -11,9 +11,11 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
+			var answerButtons = $("button.answer");
 
 			front.toggle();
 			back.toggle();
+			answerButtons.toggle();
 		},
 		linkClicked: function(ev) {
 			ev.preventDefault();
@@ -75,6 +77,13 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			console.info("LAI", lastActiveItem);
 
+			var that = this;
+	  		App.on("cardModel:saved", function(val){				
+				that.$el.find("div.item").removeClass("active");
+				var activeCard = that.$el.find("div.item").get(lastActiveItem);
+				$(activeCard).addClass("active");
+			})
+
 
 			//boxid aus personalcard holen wenn vorhanden, ansonsten boxid initial auf 1
 			var model = this.collection.get(cardId);
@@ -102,7 +111,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
-				  				that.$el.find("div.item");
+
 							})				
 					} else {
 						this.saveCard(cardId, boxId, failed);
@@ -123,14 +132,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
-
-				  				App.on("cardModel:saved", function(val){
-				  					
-				  					that.$el.find("div.item").removeClass("active");
-				  					var activeCard = that.$el.find("div.item").get(lastActiveItem);
-									$(activeCard).addClass("active");
-
-				  				})
 
 							})				
 					} else {
