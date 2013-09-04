@@ -232,7 +232,12 @@ Cards.module('Set.Learn', function(Learn, App) {
 			$("div.learn-startscreen").hide();
 			$("div.learn-endscreen").hide();
 			$("div.carousel").show();
-			$("div.learn-cardHelptext").show();
+
+			if (this.collection.length == 0) {
+				$("div.learn-cardHelptext").hide();
+			} else {
+				$("div.learn-cardHelptext").show();				
+			}
 
 			this.$el.find("div.item").first().addClass("active");
 
