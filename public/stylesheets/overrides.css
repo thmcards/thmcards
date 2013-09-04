@@ -271,6 +271,16 @@ text-transform: uppercase;
   z-index: 1;
 }
 
+.learn-cardHelptext {
+  display: inline-block;
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  font-family: 'Georgia', serif;
+}
+
 #google-imagesearch-result {
   width: 770px;
   text-align: center;

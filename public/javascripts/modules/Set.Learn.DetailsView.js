@@ -14,6 +14,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var back = $(ev.currentTarget).find('div.back');
 			var answerButtons = $("button.answer");
 
+
+			$("div.learn-cardHelptext").toggle();	
+
 			front.toggle();
 			back.toggle();
 			answerButtons.toggle();
@@ -108,6 +111,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						this.$el.find('div.front').show();
 						this.$el.find('div.back').hide();
 						$("button.answer").hide();
+						$("div.learn-cardHelptext").show();
 					}
 				} else {		
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
@@ -135,6 +139,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 						this.$el.find('div.front').show();
 						this.$el.find('div.back').hide();
 						$("button.answer").hide();
+						$("div.learn-cardHelptext").show();
 					}
 				} else {		
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
@@ -203,6 +208,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 					if (lastCard) {
 						that.$el.find("div.carousel").hide();
 						that.$el.find("div.learn-endscreen").show();
+						$("div.learn-cardHelptext").hide();
 					}
 				}
 			});
@@ -225,7 +231,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 		onRender: function() {	
 			$("div.learn-startscreen").hide();
 			$("div.learn-endscreen").hide();
-			$("div.carousel").show();	
+			$("div.carousel").show();
+			$("div.learn-cardHelptext").show();
+
 			this.$el.find("div.item").first().addClass("active");
 
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
