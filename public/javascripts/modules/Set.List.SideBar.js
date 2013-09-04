@@ -83,6 +83,15 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		},
 		initialize: function(options) {
 			this.collection = options.collection;
+		},
+		onShow: function(){
+
+			$('#newSetCategory').typeahead([
+				{
+					name: 'categories',
+					local: [ "Englisch", "Deutsch", "Informatik", "Jura", "Wirtschaft", "Bauingenieurwesen", "Bioinformatik", "Wirtschaftsinformatik" ]
+				}
+			]);
 		}
 	});
 });

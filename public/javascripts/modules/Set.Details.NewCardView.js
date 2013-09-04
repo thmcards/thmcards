@@ -58,7 +58,7 @@ Cards.module('Set.Details', function(Details, App) {
 			ev.preventDefault();
 			var that = this;
 
-			var searchInput = $(ev.target).prev();
+			var searchInput = $(ev.target).parent().prev();
 			var searchString = searchInput.val();
 
 			console.log("searching for", searchString);

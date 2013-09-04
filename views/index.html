@@ -302,7 +302,7 @@
 
     <script type="text/template" id="set-list-sideBar">
       <div class="input-group">
-        <input class="form-control" type="text" placeholder="Neuer Kartensatz" />
+        <input class="form-control" type="text" id="new-set-input" placeholder="Neuer Kartensatz" />
         <span class="input-group-btn">
           <button class="btn btn-default saveSet" type="button">Go</button>
         </span>
@@ -335,6 +335,12 @@
                   <label class="col-md-3 control-label" for="newSetDescription">Beschreibung</label>
                   <div class="col-md-9">
                     <textarea class="form-control" rows="3" id="newSetDescription" placeholder="Beschreibung"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="newSetCategory">Kategorie</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="newSetCategory" placeholder="Informatik, Jura, Wirtschaft, ...">
                   </div>
                 </div>
                 <div class="form-group">
@@ -590,6 +596,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <!--script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script-->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"></script>
 
     <script type="text/javascript" src="/javascripts/Cards.js"></script>
     
