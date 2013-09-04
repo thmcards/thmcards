@@ -237,40 +237,51 @@
       <table class="table table-bordered">
         <tbody>
           <tr>
-            <td style="padding:10px 25px 0 10px"><textarea id="front-textarea" placeholder="Vorderseite" style="width:100%; height:200px; margin-top:10px"></textarea></td> 
-            <td style="padding:10px 25px 0 10px"><textarea id="back-textarea" placeholder="Rückseite" style="width:100%; height:200px; margin-top:10px"></textarea></td> 
+            <td><textarea class="form-control" id="front-textarea" placeholder="Vorderseite" style="width:500px; height:200px; margin-top:10px"></textarea></td> 
+            <td><textarea class="form-control" id="back-textarea" placeholder="Rückseite" style="width:500px; height:200px; margin-top:10px"></textarea></td> 
           </tr>
           <tr>
             <td>
               <div class="input-append">
-                <input class="span4" id="set-details-newcard-input-pic-front-search" type="text" placeholder="Link oder Suchbegriff eingeben">
-                <button class="btn btn-pictureSearch" type="button" id="set-details-newcard-btn-pic-front-seach">Bildsuche</button>
+                <div class="input-group">
+                <input class="span4 form-control pull-left" style="" id="set-details-newcard-input-pic-front-search" type="text" placeholder="Link oder Suchbegriff eingeben">
+                  <span class="input-group-btn"><button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-newcard-btn-pic-front-seach">Bildsuche</button></span>
+                </div>
               </div>
             </td>
             <td>
               <div class="input-append">
-                <input class="span4" id="set-details-newcard-input-pic-back-search" type="text" placeholder="Link oder Suchbegriff eingeben">
-                <button class="btn btn-pictureSearch" type="button" id="set-details-newcard-btn-pic-back-seach">Bildsuche</button>
+                <div class="input-group">
+                <input class="span4 form-control pull-left" id="set-details-newcard-input-pic-back-search" type="text" placeholder="Link oder Suchbegriff eingeben">
+                <span class="input-group-btn">
+                <button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-newcard-btn-pic-back-seach">Bildsuche</button>
+                </span>
               </div>
             </td>
           </tr>
           <tr>
-            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-large cancel" style="width:200px">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large" data-loading-text="Speichere Karte...">Karte speichern</button></div></td>
+            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-default btn-large cancel" style="width:200px">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large" data-loading-text="Speichere Karte...">Karte speichern</button></div></td>
           </tr>
         </tbody>
       </table>
 
-      <div id="pictureSearchModal" class="modal hide fade pictureSearchModal" tabindex="-1" role="dialog" aria-labelledby="pictureSearchModal" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="myModalLabel">Bild einfügen</h3>
-        </div>
-        <div class="modal-body" id="pictureSearchModal-body">
+      <div id="pictureSearchModal" class="modal fade pictureSearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Bild einfügen</h4>
+            </div>
+            <div class="modal-body" id="pictureSearchModal-body">
 
-        </div>
-        <div class="modal-footer" id="pictureSearchModal-footer">
-        </div>
-      </div>
+            </div>
+            <div class="modal-footer" id="pictureSearchModal-footer">
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
+
 
 
     </script>
