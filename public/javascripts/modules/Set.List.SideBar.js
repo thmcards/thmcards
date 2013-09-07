@@ -15,6 +15,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			"click a.saveSet": "showSetModal",
 			"click #newSetModal button.btn-primary": "saveSet",
 			"click ul.nav-list a": "categoryClicked",
+			"click button.saveSet": "showModal",
 			"keyup input[type=text]": "onKeypress"
 		},
 		onKeypress: function(ev) {
@@ -23,6 +24,11 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			if(ev.which === ENTER_KEY) {
 				this.showSetModal();
 			}
+		},
+		showModal: function(ev) {
+			ev.preventDefault();
+
+			this.showSetModal();
 		},
 		categoryClicked: function(ev) {
 			ev.preventDefault();
