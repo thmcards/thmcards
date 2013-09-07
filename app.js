@@ -216,6 +216,33 @@ app.get('/', ensureAuthenticated, function(req, res){
     });
 });
 
+app.get('/set/category', function(req, res){
+  db.view('misc', 'all_set_categories', { group: true }, function(err, body) {
+    
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return {name: _.first(doc.key), count: doc.value }});
+      console.log(docs);
+      res.json(docs);
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
+});
+
+app.get('/set/category/:category', function(req, res){
+  var category = req.params.category;
+
+  db.view('sets', 'by_category', { startkey: new Array(category), endkey: new Array(category, {}) }, function(err, body) {
+    
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value });
+      res.json(docs);
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
+});
+
 app.get('/set/:id/personalcard', function(req, res){
   var username = req.session["passport"]["user"][0].username;
 
@@ -231,22 +258,6 @@ app.get('/set/:id/personalcard', function(req, res){
     console.log(cards);
 
     res.json(_.sortBy(cards, function(card){ return card.created }));
-  });
-});
-
-app.get('/pcard', function(req, res){
-  db.view('cards', 'personal_card', { startkey: new Array("knappoleon88"), endkey: new Array("knappoleon88", {}) }, function(err, body) {
-    
-    if (!err) {
-      console.log(body.rows);
-
-    var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) ); });
-    console.log(cards);
-
-
-    } else {
-      console.log("[db.cards/by_set]", err.message);
-    }
   });
 });
 
@@ -304,15 +315,13 @@ app.get('/user/:id', ensureAuthenticated, function(req, res){
 app.post('/set', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
 
+  var data = req.body;
+  data.owner = req.session["passport"]["user"][0].username;
+  data.type = "set";
+  data.created = time;
+
   db.insert(
-    { 
-      "created": time,
-      "owner": req.session["passport"]["user"][0].username,
-      "name": req.body.name,
-      "description": req.body.description,
-      "visibility": req.body.visibility,
-      "type": "set"
-    }, 
+    data, 
     function(err, body, header){
       if(err) {
         console.log('[db.insert] ', err.message);

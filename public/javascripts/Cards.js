@@ -8,6 +8,8 @@ Cards.addRegions({
 
 Cards.Router = Backbone.Marionette.AppRouter.extend({
 	appRoutes : {
+		"pool": "showPool",
+		"pool/category/:name": "showPoolCategory",
 		"set/list": "listSet",
 		"set/details/:setName/:setId": "showSet",
 		"set/details/:setName/:setId/new": "newCard",
@@ -29,6 +31,12 @@ var API = {
 	},
 	learnSet: function(name, id) {
 		Cards.Set.Controller.showLearnLayout(name, id);
+	},
+	showPool: function() {
+		Cards.Pool.Controller.showPoolLayout();
+	},
+	showPoolCategory: function(name) {
+		Cards.Pool.Controller.showPoolCategoryLayout(name);
 	},
 	showProfile: function(id) {
 		Cards.Profile.Controller.showLayout(id);
@@ -78,6 +86,16 @@ Cards.on("initialize:after", function() {
 });
 
 /* ROUTING EVENTS */
+Cards.on("pool", function(){
+	Cards.navigate("pool");
+	API.showPool();
+})
+
+Cards.on("pool:details", function(name){
+	Cards.navigate("pool/category/"+name);
+	API.showPoolCategory(name);
+})
+
 Cards.on("set:list", function(){
 	Cards.navigate("set/list");
 	API.listSet();
@@ -107,4 +125,48 @@ Cards.on("play:meteor", function(id){
 	Cards.navigate("play/meteor/"+id);
 	API.playMeteor(id);
 })
+
+function FilteredCollection(collection, options){
+    var filtered = new collection.constructor(collection.models, options);
+        
+    filtered.filter = function(criteria){
+        var items;
+        if (criteria){
+            items = _.filter(collection.models, function(model) {
+            	var persCard = model.get("persCard");
+            	var pcard;
+            	if(_.isArray(persCard)) {
+            		pcard = _.first(model.get("persCard"));	
+            	} else {
+            		pcard = model.get("persCard");
+            	}
+
+				if (pcard) {
+					console.log(pcard.value.box, criteria);
+           			return pcard.value.box == criteria;
+           		} else {
+           			console.log("no card");
+           		}
+           		if (_.isUndefined(pcard) && criteria == 1){           			
+           			return true;
+           		} 
+           		else return false;
+
+			});
+        } else {
+            items = collection.models;
+        }
+        filtered.reset(items);
+    };
+    collection.on("change", function(model){
+    	console.log("change", collection.models);
+        filtered.reset(collection.models);
+    });
+    collection.on("reset", function(){
+    	console.log("reset");
+        filtered.reset(collection.models);
+    });          
+        
+    return filtered;
+}
 

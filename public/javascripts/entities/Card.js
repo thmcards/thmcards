@@ -14,7 +14,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 	});
 
 	Entities.CardCollection = Backbone.Collection.extend({
-		model: Entities.Card,
+		model: Entities.Set,
 		url: function() {
 			return "/set/" + this.setId + "/card";
 		},

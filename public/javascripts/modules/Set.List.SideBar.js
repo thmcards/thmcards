@@ -8,7 +8,8 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			modalView: "#newSetModal",
 			modalBtnSave: "#newSetModal button.btn-primary",
 			modalInputName: "#newSetName",
-			modalInputDescription: "#newSetDescription"
+			modalInputDescription: "#newSetDescription",
+			modalInputCategory: "#newSetCategory"
 		},
 		events: {
 			"click a.saveSet": "showSetModal",
@@ -55,12 +56,14 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 
 			var name = this.ui.modalInputName.val();
 			var description = this.ui.modalInputDescription.val();
+			var category = this.ui.modalInputCategory.val();
 			var visibility = $("#newSetModal .btn-group > label.active > input").val();
 
 			var newSet = new Cards.Entities.Set({ 
 								name: name, 
 								description: description,
 								visibility: visibility,
+								category: category,
 								cardCnt: 0
 							 });
 

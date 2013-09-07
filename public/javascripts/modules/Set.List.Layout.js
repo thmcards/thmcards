@@ -4,6 +4,10 @@ Cards.module('Set.List', function(List, App) {
 		regions: {
 			sideBarRegion: "#set-list-sideBar-region",
 			listRegion: "#set-list-region"
+		},
+		onRender: function(){
+			$("#navbar").children().removeClass("active");
+			$("#navbar-ownsets").addClass("active");
 		}
 	});
 
