@@ -40,8 +40,11 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			this.ui.modalInputName.val(this.model.get("name"));
 			this.ui.modalInputDescription.val(this.model.get("description"));
 			this.ui.modalInputCategory.val(this.model.get("category"));
-
-			console.log(this.model.get("category"));
+			
+			if (this.model.get("visibility") === "public") {
+					$("#editSetModal .btn-group > label.private").removeClass("active");
+					$("#editSetModal .btn-group > label.public").addClass("active");
+			}
 
 			this.ui.modalView.on('hidden.bs.modal', function() {
 				that.ui.modalBtnSave.button('reset');
@@ -59,7 +62,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var name = this.ui.modalInputName.val();
 			var description = this.ui.modalInputDescription.val();
 			var category = this.ui.modalInputCategory.val();
-			var visibility = $("#newSetModal .btn-group > label.active > input").val();
+			var visibility = $("#editSetModal .btn-group > label.active > input").val();
 
 			this.model.save({name: name, description: description, visibility: visibility, category: category}, {
 			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
