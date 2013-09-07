@@ -14,6 +14,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		events: {
 			"click a.saveSet": "showSetModal",
 			"click #newSetModal button.btn-primary": "saveSet",
+			"click ul.nav-list a": "categoryClicked",
 			"keyup input[type=text]": "onKeypress"
 		},
 		onKeypress: function(ev) {
@@ -22,6 +23,24 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			if(ev.which === ENTER_KEY) {
 				this.showSetModal();
 			}
+		},
+		categoryClicked: function(ev) {
+			ev.preventDefault();
+
+			$(ev.currentTarget).parent().siblings().removeClass('active');
+			$(ev.currentTarget).parent().addClass('active');
+
+			if(ev.currentTarget.name === 'set-created') {
+				this.collection.fetch({ reset:true });
+			} else if(ev.currentTarget.name === 'set-learned') {
+				var that = this;
+				var learnedCollection = new Cards.Entities.SetLearnedCollection().fetch({
+					success: function(collection) {
+						that.collection.reset(collection.models);
+					}
+				});
+			}
+
 		},
 		showSetModal: function() {
 			var that = this;
@@ -89,12 +108,17 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		},
 		onShow: function(){
 
-			$('#newSetCategory').typeahead([
-				{
-					name: 'categories',
-					local: [ "Englisch", "Deutsch", "Informatik", "Jura", "Wirtschaft", "Bauingenieurwesen", "Bioinformatik", "Wirtschaftsinformatik" ]
-				}
-			]);
+			$('#newSetCategory').typeahead({
+				name: 'category',
+				remote:  '/typeahead/set/category?q=%QUERY',
+				prefetch: '/typeahead/set/category'/*,
+				footer: "<hr />",
+				template: [                                           
+				  '<p class="typeahead-name"><%= value %> <span>Kategorie</span></p>',                                      
+				  '<p class="typeahead-description"><%= count %> <% if(count > 1) { %> Kartensätze <% } else { %>Kartensatz<% } %></p>'                         
+				].join(''),                                                                 
+				engine: engine */
+			});
 		}
 	});
 });

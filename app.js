@@ -314,6 +314,36 @@ app.get('/set/:id/personalcard', function(req, res){
   });
 });
 
+app.get('/set/learned', function(req, res){
+  var username = req.session["passport"]["user"][0].username;
+
+  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+    var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
+    var setIds = new Array();
+    _.each(cards, function(card){      
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+
+      if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
+        setIds.push(card.value.setId);
+      }
+    }, this);
+    setIds = _.uniq(setIds);
+
+    db.get("_all_docs", { keys: setIds, include_docs: true } , function(err, body) {
+      if(!err) {
+        var docs = _.pluck(body.rows, "doc");
+        _.each(docs, function(doc){
+          doc.cardCnt = "-";
+        })
+        res.json(docs);
+      }
+      
+    });
+
+    
+  });
+});
+
 app.get('/set/:id/card', function(req, res){
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
@@ -337,20 +367,6 @@ app.get('/set/:id', function(req, res){
   });
 });
 
-app.get('/set', ensureAuthenticated, function(req, res){
-  db.view('sets', 'by_id_with_cards', function(err, body) {
-    var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
-
-    _.each(sets, function(set){      
-      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
-      set.value.cardCnt = cardCnt.length;
-    }, this);
-    sets = _.pluck(sets, "value");
-
-    res.json(_.sortBy(sets, function(set){ return set.name }));
-  });
-});
-
 app.get('/user/:id', ensureAuthenticated, function(req, res){
   db.view('users', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     console.log(body.rows);
@@ -362,6 +378,20 @@ app.get('/user/:id', ensureAuthenticated, function(req, res){
     userInfo.gravatarUrl = gravatarUrl;
 
     res.json(userInfo);
+  });
+});
+
+app.get('/set', ensureAuthenticated, function(req, res){
+  db.view('sets', 'by_id_with_cards', function(err, body) {
+    var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
+
+    _.each(sets, function(set){      
+      var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
+      set.value.cardCnt = cardCnt.length;
+    }, this);
+    sets = _.pluck(sets, "value");
+
+    res.json(_.sortBy(sets, function(set){ return set.name }));
   });
 });
 
@@ -443,8 +473,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
 app.post('/personalcard', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-  //revision von personalcard holen anhand cardId der normalen karte
-  console.log(req.body);
+
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body.cardId)}, function(err, body) {
     console.log("rows" + body.rows)
     var persCardRev;
@@ -505,11 +534,6 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-  // persCard
-
-  console.log("body", req.body);
-
-  //console.log("persssCard", req.body.persCard.value.box);
 
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     console.log("rows" + body.rows)
