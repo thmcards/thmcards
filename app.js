@@ -388,6 +388,42 @@ app.post('/set', ensureAuthenticated, function(req, res){
   });  
 });
 
+app.put('/set/:setid', ensureAuthenticated, function(req, res){
+
+  console.log("put put put" + req.body._id);
+
+  db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
+
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value});
+      console.log(docs);
+    } else {
+      console.log("[db.sets/by_id]", err.message);
+    }
+   });
+
+  /**
+  var time = new Date().getTime();
+
+  var data = req.body;
+  data.owner = req.session["passport"]["user"][0].username;
+  data.type = "set";
+  data.created = time;
+
+  db.insert(
+    data, 
+    function(err, body, header){
+      if(err) {
+        console.log('[db.insert] ', err.message);
+        return;
+      }
+      db.get(body.id, { revs_info: false }, function(err, body) {
+        if (!err)
+          res.json(body);
+      });
+  });  **/
+});
+
 app.post('/card', ensureAuthenticated, function(req, res){
   console.log(req.session);
 
