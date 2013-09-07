@@ -1,8 +1,6 @@
 Cards.module('Entities', function(Entities, App, Backbone){
 
-	Entities.Category = Backbone.Model.extend({
-		
-	});
+	Entities.Category = Backbone.Model.extend({ });
 
 	Entities.CategoryCollection = Backbone.Collection.extend({
 		model: Entities.Category,

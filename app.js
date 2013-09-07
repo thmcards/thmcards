@@ -19,10 +19,13 @@ var express = require('express')
   , passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
-  , GoogleStrategy = require('passport-google').Strategy;
+  , GoogleStrategy = require('passport-google').Strategy
+  , app = express()
   ;
 
-var app = express();
+  // piler!
+
+var srv = http.createServer(app);
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -37,7 +40,9 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
-  //app.use(express.logger());
+  
+
+
 });
 
 app.configure('development', function() {
@@ -83,9 +88,7 @@ function ensureAuthenticated(req, res, next) {
     {
       var usr = JSON.stringify({
         "id": user._id,
-        "name": user.name,
         "username": user.username,
-        "email": user.email,
         "provider": user.provider
       });
       res.cookie('usr', usr, { httpOnly: false });
@@ -593,7 +596,7 @@ app.get('/badge', function(req, res) {
   res.send(signature);
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 

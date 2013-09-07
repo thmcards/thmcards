@@ -96,8 +96,7 @@ Cards.on("initialize:after", function() {
 		remote:  '/typeahead/set/category?q=%QUERY',
 		prefetch: '/typeahead/set/category',
 		footer: "<hr />",
-		template: [
-		  //'<p class="typeahead-category"><%= name %></p>',                                                  
+		template: [                                           
 		  '<p class="typeahead-name"><%= value %> <span>Kategorie</span></p>',                                      
 		  '<p class="typeahead-description"><%= count %> <% if(count > 1) { %> Kartensätze <% } else { %>Kartensatz<% } %></p>'                         
 		].join(''),                                                                 
@@ -123,6 +122,7 @@ Cards.on("initialize:after", function() {
 	})
 	$("#input-search").on("blur", function(){
 		$(this).val("");
+		$(this).prev().val("");
 	})
 
 	console.log("THMcards has started!");
