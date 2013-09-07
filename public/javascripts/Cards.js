@@ -82,6 +82,50 @@ Cards.on("initialize:after", function() {
 		}
 	}
 
+	var engine = {
+	  compile: function(template) {
+	    var compiled = _.template(template);
+
+	    return {
+	      render: function(context) { return compiled(context); }
+	  	}
+	} };
+
+	$("#input-search").typeahead([{
+		name: 'category',
+		remote:  '/typeahead/set/category?q=%QUERY',
+		prefetch: '/typeahead/set/category',
+		template: [
+		  //'<p class="typeahead-category"><%= name %></p>',                                                  
+		  '<p class="typeahead-name"><%= value %> <span>Kategorie</span></p>',                                      
+		  '<p class="typeahead-description"><%= count %> <% if(count > 1) { %> Kartensätze <% } else { %>Kartensatz<% } %></p>'                         
+		].join(''),                                                                 
+		engine: engine 
+	},
+	{
+		name: 'sets',
+		remote: '/typeahead/set/visibility?q=%QUERY',
+		prefetch: '/typeahead/set/visibility',
+		template: [                  
+		  //'<p class="typeahead-category"><%= name %></p>',                                                  
+		  '<p class="typeahead-name"><%= value %> <span>Kartensatz</span></p>',                                      
+		  '<p class="typeahead-description"><%= description %></p>'                         
+		].join(''),                                                                 
+		engine: engine 
+	}]);
+
+	$("#input-search").on("typeahead:selected", function(ev, datum, name) {
+		console.log(datum);
+		console.log(name);
+		
+
+		if(name == "category") Cards.trigger("pool:details", datum.value);
+		if(name == "sets") Cards.trigger("set:details", datum.value, datum.id);
+
+		$("#input-search").blur().val("");
+	})
+
+
 	console.log("THMcards has started!");
 });
 
