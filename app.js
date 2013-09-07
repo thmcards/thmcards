@@ -53,6 +53,15 @@ app.configure('production', function() {
     });*/
 })
 
+function checkOwner(doc_id, owner, success_callback, error_callback) {
+  var isOwner = false;
+  db.get(doc_id, function(err, body){
+    var check = _.findWhere(body, {owner: owner});
+    console.log("check", check);
+    (!_.isUndefined(check)) ? success_callback() : error_callback();
+  });
+}
+
 //------------------------------------------------------------------------------------
 //-----------------------       LOGIN & AUTH       -----------------------------------
 //------------------------------------------------------------------------------------
@@ -232,7 +241,7 @@ app.get('/set/category', function(req, res){
 app.get('/typeahead/set/category', function(req, res){
   var query = '';
   if(!_.isUndefined(req.query.q)) query = req.query.q;
-  
+
   db.view('misc', 'all_set_categories', { group: true, startkey: new Array(query) }, function(err, body) {
     
     if (!err) {
@@ -375,27 +384,33 @@ app.post('/set', ensureAuthenticated, function(req, res){
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
-  var time = new Date().getTime();
+  console.log(req.session);
 
-  db.insert(
-    { 
-      "created": time,
-      "owner": req.session["passport"]["user"][0].username,
-      "setId": req.body.setId,
-      "front": req.body.front,
-      "back": req.body.back,
-      "type": "card"
-    }, 
-    function(err, body, header){
-      if(err) {
-        console.log('[db.insert] ', err.message);
-        return;
-      }
-      db.get(body.id, { revs_info: false }, function(err, body) {
-        if (!err)
-          res.json(body);
-      });
-  });  
+  checkOwner(req.body.setId, req.session["passport"]["user"][0].username, function(){
+    var time = new Date().getTime();
+
+    db.insert(
+      { 
+        "created": time,
+        "owner": req.session["passport"]["user"][0].username,
+        "setId": req.body.setId,
+        "front": req.body.front,
+        "back": req.body.back,
+        "type": "card"
+      }, 
+      function(err, body, header){
+        if(err) {
+          console.log('[db.insert] ', err.message);
+          return;
+        }
+        db.get(body.id, { revs_info: false }, function(err, body) {
+          if (!err)
+            res.json(body);
+        });
+    });  
+  }, function(){
+    res.send(403);
+  });
 });
 
 

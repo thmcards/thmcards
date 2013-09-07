@@ -74,6 +74,10 @@ code {
   margin-top: 8px;
 }
 
+.navbar li.dropdown {
+  min-width: 150px;
+}
+
 .boxsizingBorder {
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;

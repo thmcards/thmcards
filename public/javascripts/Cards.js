@@ -95,6 +95,7 @@ Cards.on("initialize:after", function() {
 		name: 'category',
 		remote:  '/typeahead/set/category?q=%QUERY',
 		prefetch: '/typeahead/set/category',
+		footer: "<hr />",
 		template: [
 		  //'<p class="typeahead-category"><%= name %></p>',                                                  
 		  '<p class="typeahead-name"><%= value %> <span>Kategorie</span></p>',                                      
@@ -106,8 +107,8 @@ Cards.on("initialize:after", function() {
 		name: 'sets',
 		remote: '/typeahead/set/visibility?q=%QUERY',
 		prefetch: '/typeahead/set/visibility',
-		template: [                  
-		  //'<p class="typeahead-category"><%= name %></p>',                                                  
+		footer: "<hr />",
+		template: [                                                
 		  '<p class="typeahead-name"><%= value %> <span>Kartensatz</span></p>',                                      
 		  '<p class="typeahead-description"><%= description %></p>'                         
 		].join(''),                                                                 
@@ -115,10 +116,6 @@ Cards.on("initialize:after", function() {
 	}]);
 
 	$("#input-search").on("typeahead:selected", function(ev, datum, name) {
-		console.log(datum);
-		console.log(name);
-		
-
 		if(name == "category") Cards.trigger("pool:details", datum.value);
 		if(name == "sets") Cards.trigger("set:details", datum.value, datum.id);
 
