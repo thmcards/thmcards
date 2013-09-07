@@ -293,8 +293,59 @@
     </script>
 
     <script type="text/template" id="set-details-controls">
-      <button class="btn btn-primary" id="set-details-controls-btn-newCard" style="width:100%">Neue Karte erstellen</button>
-      <button class="btn btn-default" style="width:100%; margin-top:10px">Kartensatz editieren</button>
+      <button class="btn btn-primary newCard" id="set-details-controls-btn-newCard" style="width:100%">Neue Karte erstellen</button>
+      <button class="btn btn-default editSet" style="width:100%; margin-top:10px">Kartensatz editieren</button>
+
+      <div class="modal fade" id="editSetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Kartensatz editieren</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="editSetName">Name</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="editSetName">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="editSetDescription">Beschreibung</label>
+                  <div class="col-md-9">
+                    <textarea class="form-control" rows="3" id="editSetDescription"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="editSetCategory">Kategorie</label>
+                  <div class="col-md-9">
+                    <input class="form-control" type="text" id="editSetCategory">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="editSetDescription">Sichtbar für</label>
+                  <div class="controls col-md-9">
+                    <div class="btn-group" data-toggle="buttons">
+                      <label class="btn btn-default active">
+                        <input type="radio" name="options" value="private" id="edit_visibility_private"> mich
+                      </label>
+                      <label class="btn btn-default">
+                        <input type="radio" name="options" value="public" id="edit_visibility_public"> alle
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
+              <button class="btn btn-delete" data-loading-text="Lösche Deck...">Kartensatz löschen</button>
+              <button class="btn btn-primary" data-loading-text="Speichere Deck...">Kartensatz speichern</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
     </script>
 
     <script type="text/template" id="set-list-sideBar">
@@ -362,7 +413,6 @@
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
-
 
     </script>
 
