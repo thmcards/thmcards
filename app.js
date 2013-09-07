@@ -53,6 +53,15 @@ app.configure('production', function() {
     });*/
 })
 
+function checkOwner(doc_id, owner, success_callback, error_callback) {
+  var isOwner = false;
+  db.get(doc_id, function(err, body){
+    var check = _.findWhere(body, {owner: owner});
+    console.log("check", check);
+    (!_.isUndefined(check)) ? success_callback() : error_callback();
+  });
+}
+
 //------------------------------------------------------------------------------------
 //-----------------------       LOGIN & AUTH       -----------------------------------
 //------------------------------------------------------------------------------------
@@ -229,6 +238,46 @@ app.get('/set/category', function(req, res){
   });
 });
 
+app.get('/typeahead/set/category', function(req, res){
+  var query = '';
+  if(!_.isUndefined(req.query.q)) query = req.query.q;
+
+  db.view('misc', 'all_set_categories', { group: true, startkey: new Array(query) }, function(err, body) {
+    
+    if (!err) {
+      
+      var docs = _.filter(body.rows, function(doc){ 
+        return _.first(doc.key).toLowerCase().indexOf(query.toLowerCase()) > -1;
+      });
+      docs = _.map(docs, function(doc) { return {value: _.first(doc.key), tokens: doc.key, count: doc.value }});
+      
+      res.json(docs);
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
+});
+
+app.get('/typeahead/set/visibility', function(req, res){
+  var query = '';
+  if(!_.isUndefined(req.query.q)) query = req.query.q;
+
+  db.view('sets', 'by_visibility', { startkey: new Array(query) }, function(err, body) {
+    console.log(body.rows);
+    if (!err) {
+      var docs = _.filter(body.rows, function(doc){ 
+        return doc.value.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      });
+
+      var docs = _.map(docs, function(doc) { return {value: doc.value.name, tokens: _.uniq(_.compact(_.union(doc.value.description, doc.value.name))), description: doc.value.description, id: doc.value._id }});
+      console.log(docs);
+      res.json(docs);
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
+});
+
 app.get('/set/category/:category', function(req, res){
   var category = req.params.category;
 
@@ -371,27 +420,33 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
-  var time = new Date().getTime();
+  console.log(req.session);
 
-  db.insert(
-    { 
-      "created": time,
-      "owner": req.session["passport"]["user"][0].username,
-      "setId": req.body.setId,
-      "front": req.body.front,
-      "back": req.body.back,
-      "type": "card"
-    }, 
-    function(err, body, header){
-      if(err) {
-        console.log('[db.insert] ', err.message);
-        return;
-      }
-      db.get(body.id, { revs_info: false }, function(err, body) {
-        if (!err)
-          res.json(body);
-      });
-  });  
+  checkOwner(req.body.setId, req.session["passport"]["user"][0].username, function(){
+    var time = new Date().getTime();
+
+    db.insert(
+      { 
+        "created": time,
+        "owner": req.session["passport"]["user"][0].username,
+        "setId": req.body.setId,
+        "front": req.body.front,
+        "back": req.body.back,
+        "type": "card"
+      }, 
+      function(err, body, header){
+        if(err) {
+          console.log('[db.insert] ', err.message);
+          return;
+        }
+        db.get(body.id, { revs_info: false }, function(err, body) {
+          if (!err)
+            res.json(body);
+        });
+    });  
+  }, function(){
+    res.send(403);
+  });
 });
 
 
