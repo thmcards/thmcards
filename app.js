@@ -88,9 +88,7 @@ function ensureAuthenticated(req, res, next) {
     {
       var usr = JSON.stringify({
         "id": user._id,
-        "name": user.name,
         "username": user.username,
-        "email": user.email,
         "provider": user.provider
       });
       res.cookie('usr', usr, { httpOnly: false });
