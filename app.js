@@ -440,8 +440,6 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
-  console.log(req.session);
-
   checkOwner(req.body.setId, req.session["passport"]["user"][0].username, function(){
     var time = new Date().getTime();
 
