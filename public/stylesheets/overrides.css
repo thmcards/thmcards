@@ -243,6 +243,10 @@ rgba(255, 255, 255, 0.5);
 text-transform: uppercase;
 }
 
+ul.nav-list li.active {
+  font-weight: bold;
+}
+
 .front {
   font-size:3em;
 }

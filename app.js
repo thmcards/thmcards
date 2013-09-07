@@ -59,11 +59,12 @@ app.configure('production', function() {
 })
 
 function checkOwner(doc_id, owner, success_callback, error_callback) {
-  var isOwner = false;
   db.get(doc_id, function(err, body){
-    var check = _.findWhere(body, {owner: owner});
-    console.log("check", check);
-    (!_.isUndefined(check)) ? success_callback() : error_callback();
+    if(_.has(body, "owner") && body.owner === owner) {
+      success_callback();
+    } else {
+      error_callback();
+    }
   });
 }
 
@@ -454,7 +455,6 @@ app.post('/card', ensureAuthenticated, function(req, res){
 
 
 app.post('/personalcard', ensureAuthenticated, function(req, res){
-  console.log("fuuuuuuuuuuuuuck")
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   //revision von personalcard holen anhand cardId der normalen karte
