@@ -459,6 +459,38 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
             db.bulk({"docs": personal}, function(err, body) {
               console.log(err);
               console.log(body);
+
+              var normalCard = new Array();
+              console.log(cardIds);
+              _.each(docs, function(doc){
+                 var doc = {
+                 _id: doc._id, _rev: doc._rev, _deleted: true
+                 }
+                 normalCard.push(doc)
+              }, this);
+
+              db.bulk({"docs": normalCard}, function(err, body) {
+                console.log(err);
+                console.log(body);
+
+                //hier is alles andere gelöscht
+
+                db.get(req.params.setid, function(err, body){
+                  if(!err) {
+                    var doc = _.first(body.rows);
+                    doc.value.delete = true;
+
+                    db.bulk({"docs": new Array(doc)}, function(err, body){
+                      console.log(err);
+                      console.log(body);
+                      console.log("alles weg (vielleicht)");
+                    });
+                  }
+                });
+
+
+              });
+
             });
           } else {
             console.log("[db.sets/by_id]", err.message);
@@ -466,25 +498,22 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
         });
       }, this);
 
-      var normalCard = new Array();
-      console.log(cardIds);
-      _.each(docs, function(doc){
-         var doc = {
-         _id: doc._id, _rev: doc._rev, _deleted: true
-         }
-         normalCard.push(doc)
-      }, this);
 
-      db.bulk({"docs": normalCard}, function(err, body) {
-        console.log(err);
-        console.log(body);
-      });
 
     } else {
       console.log("[db.sets/by_id]", err.message);
     }
   });
   //db.bulk.... eigentliches set löschen
+
+  db.get(req.params.setid, function(err, body){
+    if(!err) {
+      var doc = _.first(body.rows);
+      doc.value.delete = true;
+
+
+    }
+  });
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
