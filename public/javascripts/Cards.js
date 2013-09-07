@@ -123,6 +123,7 @@ Cards.on("initialize:after", function() {
 	})
 	$("#input-search").on("blur", function(){
 		$(this).val("");
+		$(this).prev().val("");
 	})
 
 	console.log("THMcards has started!");
