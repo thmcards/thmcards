@@ -477,9 +477,11 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
 
                 db.get(req.params.setid, function(err, body){
                   if(!err) {
-                    var doc = _.first(body.rows);
-                    doc.value.delete = true;
-
+                    var doc = {
+                    _id: body._id,
+                    _rev: body._rev,
+                    _deleted: true
+                    };
                     db.bulk({"docs": new Array(doc)}, function(err, body){
                       console.log(err);
                       console.log(body);
@@ -487,31 +489,29 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
                     });
                   }
                 });
-
-
               });
-
             });
           } else {
             console.log("[db.sets/by_id]", err.message);
           }
         });
       }, this);
-
-
-
+      db.get(req.params.setid, function(err, body){
+        if(!err) {
+          var doc = {
+          _id: body._id,
+          _rev: body._rev,
+          _deleted: true
+          };
+          db.bulk({"docs": new Array(doc)}, function(err, body){
+            console.log(err);
+            console.log(body);
+          });
+        }
+      });
+      res.json(body);
     } else {
       console.log("[db.sets/by_id]", err.message);
-    }
-  });
-  //db.bulk.... eigentliches set löschen
-
-  db.get(req.params.setid, function(err, body){
-    if(!err) {
-      var doc = _.first(body.rows);
-      doc.value.delete = true;
-
-
     }
   });
 });

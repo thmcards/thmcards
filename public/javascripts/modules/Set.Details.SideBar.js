@@ -76,8 +76,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			});
 		},
 		deleteSet: function(ev) {
+
 			var that = this;
-			console.log("deleeeeete");
 
 			this.ui.modalBtnDelete.button('loading');
 
@@ -85,6 +85,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 
 			    success : function(resp){
 			        that.ui.modalView.modal('hide');
+					that.ui.modalView.on('hidden.bs.modal', function() {
+					        App.trigger("set:list");
+					})
 			    },
 			    error : function(err) {
 			    	that.ui.modalBtnDelete.button('reset');
