@@ -215,7 +215,7 @@
 
     <script type="text/template" id="set-list-item">
       <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= _id %>/"><%= name %></a></td>
-      <td><%= cardCnt %></td>
+      <td align="right"><%= cardCnt %></td>
       <td>
         <div class="progress">
           <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
@@ -353,17 +353,15 @@
       <div class="input-group">
         <input class="form-control" type="text" id="new-set-input" placeholder="Neuer Kartensatz" />
         <span class="input-group-btn">
-          <button class="btn btn-default saveSet" type="button">Go</button>
+          <button class="btn btn-primary saveSet" type="button"><i class="glyphicon glyphicon-plus"></i></button>
         </span>
       </div>
 
       <hr />
       <ul class="nav nav-list">
         <li class="nav-header">Kategorie</li>
-        <li class="active"><a href="#">Alle</a></li>
-        <li><a href="#">ARSnova</a></li>
-        <li><a href="#">Nicht Gelernt</a></li>
-        <li><a href="#">Favorit</a></li>
+        <li class="active"><a href="#set/list/created" name="set-created">Erstellt</a></li>
+        <li><a href="#set/list/created" name="set-learned">Gelernt</a></li>
       </ul>
       <div class="modal fade" id="newSetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -421,8 +419,8 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Karten</th>
-          <th>Fortschritt</th>
+          <th width="9%">Karten</th>
+          <th width="30%">Fortschritt</th>
         </tr>
       </thead>
       <tbody></tbody>
