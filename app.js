@@ -408,6 +408,57 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 
 });
 
+app.delete('/set/:setid', ensureAuthenticated, function(req, res){
+
+  db.view('cards', 'by_set', { key: new Array(req.params.setid)}, function(err, body) {
+  if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value});
+      var cardIds = _.pluck(docs, "_id");
+
+      _.each(cardIds, function(cardId){
+        db.view('cards', 'personal_card_by_cardId', { key: new Array(cardId)}, function(err, body) {
+          if (!err) {
+            var docs = _.map(body.rows, function(doc) { return doc.value});
+            var personal = new Array();
+
+            _.each(docs, function(doc){
+               var doc = {
+               _id: doc._id, _rev: doc._rev, _deleted: true
+               }
+               personal.push(doc)
+            }, this);
+
+            db.bulk({"docs": personal}, function(err, body) {
+              console.log(err);
+              console.log(body);
+            });
+          } else {
+            console.log("[db.sets/by_id]", err.message);
+          }
+        });
+      }, this);
+
+      var normalCard = new Array();
+      console.log(cardIds);
+      _.each(docs, function(doc){
+         var doc = {
+         _id: doc._id, _rev: doc._rev, _deleted: true
+         }
+         normalCard.push(doc)
+      }, this);
+
+      db.bulk({"docs": normalCard}, function(err, body) {
+        console.log(err);
+        console.log(body);
+      });
+
+    } else {
+      console.log("[db.sets/by_id]", err.message);
+    }
+  });
+  //db.bulk.... eigentliches set löschen
+});
+
 app.post('/card', ensureAuthenticated, function(req, res){
   console.log(req.session);
 

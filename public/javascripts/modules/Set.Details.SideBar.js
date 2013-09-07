@@ -15,6 +15,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			inputSetName: "input[type=text]",
 			modalView: "#editSetModal",
 			modalBtnSave: "#editSetModal button.btn-primary",
+			modalBtnDelete: "#editSetModal button.btn-delete",
 			modalInputName: "#editSetName",
 			modalInputDescription: "#editSetDescription",
 			modalInputCategory: "#editSetCategory"
@@ -23,7 +24,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		events: {
 			"click .newCard": "newCardClicked",
 			"click .editSet": "showEditSetModal",
-			"click #editSetModal button.btn-primary": "updateSet"
+			"click #editSetModal button.btn-primary": "updateSet",
+			"click #editSetModal button.btn-delete": "deleteSet"
 		},
 		newCardClicked: function(ev) {
 			App.trigger("set:details:new", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
@@ -72,8 +74,26 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			        console.log(err);
 				}
 			});
-
-
 		},
+		deleteSet: function(ev) {
+			var that = this;
+			console.log("deleeeeete");
+
+			this.ui.modalBtnDelete.button('loading');
+
+			this.model.destroy({
+
+			    success : function(resp){
+			        that.ui.modalView.modal('hide');
+			    },
+			    error : function(err) {
+			    	that.ui.modalBtnDelete.button('reset');
+			        console.log('error callback');
+			        // this error message for dev only
+			        alert('There was an error. See console for details');
+			        console.log(err);
+				}
+			});
+		}
 	});
 });
