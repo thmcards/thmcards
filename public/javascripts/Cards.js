@@ -122,9 +122,11 @@ Cards.on("initialize:after", function() {
 		if(name == "category") Cards.trigger("pool:details", datum.value);
 		if(name == "sets") Cards.trigger("set:details", datum.value, datum.id);
 
-		$("#input-search").blur().val("");
+		$("#input-search").blur();
 	})
-
+	$("#input-search").on("blur", function(){
+		$(this).val("");
+	})
 
 	console.log("THMcards has started!");
 });
