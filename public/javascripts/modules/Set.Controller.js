@@ -99,17 +99,17 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
-		showDetailsEditCardLayout: function(name, id){
-			var set = new Cards.Entities.Set({id: id});
+		showDetailsEditCardLayout: function(id){
+			var card = new Cards.Entities.Card({_id: id});
+			console.log("cardid" + id);
 
-			set.fetch({
+			card.fetch({
 				success: function(){
-					console.log(set.get("id"));
 
 					var editCardLayout = new Cards.Set.Details.EditCardLayout();
 					Cards.mainRegion.show(editCardLayout);
 
-					var editCardView = new Cards.Set.Details.EditCardView({ model: set });
+					var editCardView = new Cards.Set.Details.EditCardView({ model: card });
 					editCardLayout.detailsRegion.show(editCardView);
 
 				},

@@ -44,8 +44,12 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		editClicked: function(ev) {
 			ev.preventDefault();
-			console.log("edit clicked" + this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
-			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+
+			//cardid holen
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+
+			console.log("edit clicked" + this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
 		},
 		cycleCarousel: function(ev) {
 			ev.preventDefault();

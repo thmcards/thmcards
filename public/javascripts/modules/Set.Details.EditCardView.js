@@ -2,7 +2,7 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.EditCardView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-editcard",
 		events: {
-			"click .btn-success": "saveCard",
+			//"click .btn-success": "saveCard",
 			"click .btn.cancel": "cancel",
 			"click .btn-pictureSearch": "pictureSearch",
 			"keyup input": "keyupInput",
@@ -167,8 +167,16 @@ Cards.module('Set.Details', function(Details, App) {
 				"image": false
 			}
 
+			console.log(this.model.attributes);
+
 			$("#editcard-front-textarea").wysihtml5(editorConfig);
 			$("#editcard-back-textarea").wysihtml5(editorConfig);
+
+			$("#editcard-front-textarea").val(this.model.attributes.front.text);
+			$("#editcard-back-textarea").val(this.model.attributes.back.text);
+
+			$("#set-details-editcard-input-pic-front-search").val(this.model.attributes.front.picture);
+			$("#set-details-editcard-input-pic-back-search").val(this.model.attributes.back.picture);
 		}
 	});
 });

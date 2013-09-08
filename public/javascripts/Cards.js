@@ -26,8 +26,8 @@ var API = {
 	newCard: function(name, id){
 		Cards.Set.Controller.showDetailsNewCardLayout(name, id);
 	},
-	editCard: function(name, id){
-		Cards.Set.Controller.showDetailsEditCardLayout(name, id);
+	editCard: function(cardId){
+		Cards.Set.Controller.showDetailsEditCardLayout(cardId);
 	},
 	showSet: function(name, id) {
 		Cards.Set.Controller.showDetailsLayout(name, id);
@@ -159,7 +159,7 @@ Cards.on("set:details:new", function(name, id){
 
 Cards.on("set:details:edit", function(name, id, cardId){
 	Cards.navigate("set/details/"+name+"/"+id+"/edit/"+cardId);
-	API.editCard(name, id, cardId);
+	API.editCard(cardId);
 })
 
 Cards.on("set:learn", function(name, id){
