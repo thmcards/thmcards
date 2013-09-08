@@ -377,8 +377,8 @@ app.get('/set/:id', function(req, res){
   });
 });
 
-app.get('/user/:id', ensureAuthenticated, function(req, res){
-  db.view('users', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+app.get('/user/:username', ensureAuthenticated, function(req, res){
+  db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
     console.log(body.rows);
     var userInfo = body.rows[0].value;
 

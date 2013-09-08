@@ -1,10 +1,10 @@
 Cards.module('Profile', function(Profile, App){
 	Profile.Controller = {
-		showLayout: function(id){
+		showLayout: function(username){
 			var profileLayout = new Cards.Profile.Layout();
 			Cards.mainRegion.show(profileLayout);
 
-			var user = new Cards.Entities.User({id: id});
+			var user = new Cards.Entities.User({username: username});
 
 			user.fetch({
 				success: function(){

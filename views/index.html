@@ -23,6 +23,8 @@
     <link href="/stylesheets/overrides.css" rel="stylesheet" />
     <!--[if lt IE 9]>
       <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+      <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/css3pie/1.0.0/PIE.js"></script>
     <![endif]-->
   </head>
 
@@ -103,9 +105,9 @@
     </script>
 
     <script type="text/template" id="pool-category-set-list-item">
-      <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= _id %>/"><%= name %></a></td>
+      <td><a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= _id %>/" class="pool-category-set-details-link"><%= name %></a></td>
       <td><%= description %></td>
-      <td><%= owner %></td>
+      <td><a href="#profile/<%= owner %>" class="pool-category-set-owner-link"><%= owner %></a></td>
     </script>
 
     <!-- LIST LAYOUTS -->
