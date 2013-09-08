@@ -485,7 +485,6 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
                     db.bulk({"docs": new Array(doc)}, function(err, body){
                       console.log(err);
                       console.log(body);
-                      console.log("alles weg (vielleicht)");
                     });
                   }
                 });
