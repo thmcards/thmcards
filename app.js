@@ -12,7 +12,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  , piler = require("piler")
+  //, piler = require("piler")
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
   , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
@@ -24,9 +24,10 @@ var express = require('express')
   , app = express()
   ;
 
+/*
 var clientjs = piler.createJSManager();
 var clientcss = piler.createCSSManager();
-
+*/
 var srv = http.createServer(app);
 
 app.configure(function(){
@@ -42,7 +43,7 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
-
+/*
   clientjs.bind(app,srv);
   clientcss.bind(app,srv);
 
@@ -50,6 +51,7 @@ app.configure(function(){
   clientcss.addFile(__dirname + "/public/stylesheets/non-responsive.css");
   clientcss.addFile(__dirname + "/public/stylesheets/bootstrap-wysihtml5.css");
   clientcss.addFile(__dirname + "/public/stylesheets/overrides.css");
+*/
 });
 
 app.configure('development', function() {
@@ -231,10 +233,10 @@ app.get('/whoami', ensureAuthenticated, function(req, res) {
 //------------------------------------------------------------------------------------
 
 app.get('/', ensureAuthenticated, function(req, res){
-  res.render("index.jade", {
+  /*res.render("index.jade", {
     layout: false,
     css: clientcss.renderTags()
-  });
+  });*/
   fs.readFile(__dirname + '/views/index.html', 'utf8', function(err, text){
         res.send(text);
     });

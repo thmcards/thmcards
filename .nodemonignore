@@ -11,3 +11,4 @@
 *.html
 # ./server.js
 /.git/
+/views/index.jade
