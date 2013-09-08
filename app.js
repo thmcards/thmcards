@@ -708,29 +708,67 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 });
 
 app.get('/score/:username', ensureAuthenticated, function(req, res){
-  res.json({
-    owner: req.session["passport"]["user"][0].username,
-    game: "meteor",
-    score: 5000,
-    gameCnt: 23,
-    games: [{
-      set: "blabla",
-      personalHighscore: 12321,
-      position: 3,
-      overallHighscore: 221123
-    }, {
-      set: "blabla",
-      personalHighscore: 12321,
-      position: 3,
-      overallHighscore: 221123
-    }, {
-      set: "blabla",
-      personalHighscore: 12321,
-      position: 3,
-      overallHighscore: 221123
-    }]
+  var game = "meteor";
+  var user = req.session["passport"]["user"][0].username;
+
+  db.view('score', 'highscore_by_game_user', { startkey: new Array(game, user), endkey: new Array(game, user), group: true }, function(err, body) {
+    var gameHighscore = _.first(body.rows).value;
+
+    db.view('score', 'score_by_game_user_set', { startkey: new Array(game, user), endkey: new Array(game, user, {}) }, function(err, body) {
+      console.log("body", body.rows);
+
+      var scores = new Array();
+      _.each(body.rows, function(score){
+        scores.push({
+          setId: score.key[2],
+          points: score.value
+        });
+        console.log(score.key[2], score.value);
+      });
+
+      scores = _.sortBy(scores, function(score){ return score.points });
+      console.log("scores", scores);
+      var groupedScores = _.groupBy(scores, function(score){ return score.setId });
+      console.log("groupScores", groupedScores);
+
+      var games = new Array();
+      _.each(groupedScores, function(score){
+        var highscore = _.last(score);
+    
+        games.push({
+          set: highscore.setId,
+          personalHighscore: highscore.points,
+          position: 0,
+          overallHighscore: 0
+        })
+        console.log(score.length);
+      });
+
+      res.json({
+        owner: req.session["passport"]["user"][0].username,
+        game: "meteor",
+        score: gameHighscore,
+        gameCnt: scores.length || 0,
+        games: games
+      });
+/*
+      var games = new Array();
+      _.each(body.rows, function(score){
+        var game = {
+          set: score.key[2],
+          personalHighscore: score.value,
+          position: 0,
+          overallHighscore: 0
+        }
+        games.push(game);
+      });
+*/
+
+
+    });
   });
-})
+});
+
 
 app.get('/badge', function(req, res) {
   var data = { 
