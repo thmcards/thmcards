@@ -3,12 +3,16 @@ Cards.module('Pool', function(Pool, App) {
 		tagName: "tr",
 		template: "#pool-category-set-list-item",
 		events: {
-			"click a": "linkClicked"
+			"click a.pool-category-set-details-link": "setNameClicked",
+			"click a.pool-category-set-owner-link": "setOwnerClicked",
 		},
-		linkClicked: function(ev){
+		setNameClicked: function(ev) {
 			ev.preventDefault();
-			console.log("asd");
 			App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+		},
+		setOwnerClicked: function(ev) {
+			ev.preventDefault();
+			App.trigger("profile", this.model.get("owner"));
 		}
 	});
 

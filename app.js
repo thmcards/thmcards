@@ -377,8 +377,8 @@ app.get('/set/:id', function(req, res){
   });
 });
 
-app.get('/user/:id', ensureAuthenticated, function(req, res){
-  db.view('users', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+app.get('/user/:username', ensureAuthenticated, function(req, res){
+  db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
     console.log(body.rows);
     var userInfo = body.rows[0].value;
 
@@ -389,6 +389,26 @@ app.get('/user/:id', ensureAuthenticated, function(req, res){
 
     res.json(userInfo);
   });
+});
+
+app.put('/user/:username', ensureAuthenticated, function(req, res){
+
+  db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
+    var user = body.rows[0].value;
+    var name = req.body.name;
+
+    user.name = name;  
+
+    db.insert(user, body.rows[0].id, function(err, body){
+      if(!err) {
+        res.json(body); 
+      } else {
+        console.log("[db.users/by_username]", err.message);
+      }
+      
+    });
+  });
+
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
@@ -575,14 +595,19 @@ app.post('/card', ensureAuthenticated, function(req, res){
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-
+  console.log("z627, body", req.body, req.params);
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
-    console.log("rows" + body.rows)
+    console.log("rows", body)
     var persCardRev;
     if (!err){  
-      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })   
-      docs = _.map(docs, function(doc) { return doc.value});
+      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })  
+      console.log("z633 docs", docs);
+      docs = _.map(docs, function(doc) { 
+        console.log("z634", doc, doc.value);
+        return doc.value
+      });
       if (body.rows.length){
+        console.log("z638", docs[0]);
         persCardRev = docs[0]._rev;
       }
     } else {
@@ -632,6 +657,75 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
     }
   });
 });
+
+app.get('/score/:username', ensureAuthenticated, function(req, res){
+  var game = "meteor";
+  var user = req.session["passport"]["user"][0].username;
+
+  db.view('score', 'highscore_by_game_user', { startkey: new Array(game, user), endkey: new Array(game, user), group: true }, function(err, body) {
+    var gameHighscore = _.first(body.rows).value;
+
+    db.view('score', 'score_by_game_user_set', { startkey: new Array(game, user), endkey: new Array(game, user, {}) }, function(err, body) {
+      
+      var scores = new Array();
+      _.each(body.rows, function(score){
+        scores.push({
+          setId: score.key[2],
+          points: score.value
+        });
+      });
+
+      scores = _.sortBy(scores, "points");
+      console.log("scores", scores);
+      var groupedScores = _.groupBy(scores, function(score){ return score.setId });
+      console.log("groupScores", groupedScores);
+
+      var games = new Array();
+      var keys = new Array();
+      _.each(groupedScores, function(score){
+        var highscore = _.last(score);
+    
+        keys.push(new Array(game, highscore.setId));
+
+        games.push({
+          set: highscore.setId,
+          personalHighscore: highscore.points,
+          position: 0,
+          overallHighscore: 0
+        });
+      });
+
+      db.view('score', 'score_by_game_set', { keys: keys }, function(err, body) {
+
+        var setScores = _.pluck(body.rows, "value");
+        setScores = _.sortBy(setScores, "points");
+        groupedSetScores = _.groupBy(setScores, function(score){ return score.setId });
+        
+        _.each(groupedSetScores, function(score){
+          var setHighscore = _.last(score);
+
+          var game = _.findWhere(games, {set: setHighscore.setId})
+          game.overallHighscore = setHighscore.points;
+          
+
+          var points = _.pluck(score, "points");
+          var pos = _.sortedIndex(points, game.personalHighscore);
+          game.position = points.length-pos;
+        });
+
+        res.json({
+          owner: req.session["passport"]["user"][0].username,
+          game: "meteor",
+          score: gameHighscore,
+          gameCnt: scores.length || 0,
+          games: games
+        });
+
+      });
+    });
+  });
+});
+
 
 app.get('/badge', function(req, res) {
   var data = { 

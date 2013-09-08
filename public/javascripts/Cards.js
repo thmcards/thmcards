@@ -41,8 +41,8 @@ var API = {
 	showPoolCategory: function(name) {
 		Cards.Pool.Controller.showPoolCategoryLayout(name);
 	},
-	showProfile: function(id) {
-		Cards.Profile.Controller.showLayout(id);
+	showProfile: function(username) {
+		Cards.Profile.Controller.showLayout(username);
 	},
 	playMeteor: function(id) {
 		Cards.Game.Controller.showMeteorLayout(id);
@@ -74,8 +74,8 @@ Cards.on("initialize:after", function() {
 	
 	$.cookie.json = true;
 	var usr = $.cookie('usr');
-	$("#usr-profile").text(usr.username);
-	$("#usr-profile").attr("href", "/#profile/"+usr.id);
+	$("#usr-name").text(usr.username);
+	$("#usr-profile").attr("href", "/#profile/"+usr.username);
 
 	if(Backbone.history) {
 		Backbone.history.start();
