@@ -724,7 +724,7 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
         });
       });
 
-      scores = _.sortBy(scores, function(score){ return score.points });
+      scores = _.sortBy(scores, "points");
       console.log("scores", scores);
       var groupedScores = _.groupBy(scores, function(score){ return score.setId });
       console.log("groupScores", groupedScores);
@@ -747,7 +747,7 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
       db.view('score', 'score_by_game_set', { keys: keys }, function(err, body) {
 
         var setScores = _.pluck(body.rows, "value");
-        setScores = _.sortBy(setScores, function(score){ return score.points });
+        setScores = _.sortBy(setScores, "points");
         groupedSetScores = _.groupBy(setScores, function(score){ return score.setId });
         
         _.each(groupedSetScores, function(score){
