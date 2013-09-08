@@ -21,6 +21,9 @@
     <link href="/stylesheets/non-responsive.css" rel="stylesheet" />
     <link href="/stylesheets/bootstrap-wysihtml5.css" rel="stylesheet" />
     <link href="/stylesheets/overrides.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <![endif]-->
   </head>
 
   <body>
@@ -341,7 +344,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
-              <button class="btn btn-delete" data-loading-text="Lösche Deck...">Kartensatz löschen</button>
+              <button class="btn btn-danger pull-left" data-loading-text="Lösche Deck...">Kartensatz löschen</button>
               <button class="btn btn-primary" data-loading-text="Speichere Deck...">Kartensatz speichern</button>
             </div>
           </div><!-- /.modal-content -->

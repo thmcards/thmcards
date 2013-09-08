@@ -1,0 +1,25 @@
+!!! 5
+html(lang='en')
+  head
+    title THMcards
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='')
+    meta(name='author', content='Daniel Knapp, Jan Kammer')
+    link(rel='shortcut icon', href='/img/favicon.ico', type='image/x-icon')
+    link(rel='icon', href='/img/favicon.ico', type='image/x-icon')
+    link(href='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css', rel='stylesheet')
+  body
+    div(style='position:absolute; left:50%; top:20%; width:512px; height: 300px; margin-left:-256px; border:0px solid #000; text-align:center; color: #555554')
+      img(src='/img/card_logo_welcome.png')
+      span(style='display:inline-block; margin-top: 25px;')
+        h2(style='float:left;') Create&period;
+        h2(style='float:left; margin-left:25px') Learn&period;
+        h2(style='float:left; margin-left:25px') Share&period;
+      hr
+      span(style='display:inline-block; margin-top: 15px;')
+        a(href='/auth/facebook', style='float:left')
+          img(src='https://cdn1.iconfinder.com/data/icons/yooicons_set01_socialbookmarks/64/social_facebook_box_white.png')
+        a(href='/auth/twitter', style='float:left; margin: auto 40px')
+          img(src='https://cdn1.iconfinder.com/data/icons/yooicons_set01_socialbookmarks/64/social_twitter_box_white.png')
+        a(href='/auth/google', style='float:left')
+          img(src='https://cdn1.iconfinder.com/data/icons/yooicons_set01_socialbookmarks/64/social_google_box_white.png')
