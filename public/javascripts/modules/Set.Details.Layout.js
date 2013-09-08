@@ -13,4 +13,10 @@ Cards.module('Set.Details', function(Details, App) {
 			detailsRegion: "#set-newcard-region",
 		}
 	});
+	Details.EditCardLayout = Backbone.Marionette.Layout.extend({
+		template: "#set-details-editcard-layout",
+		regions: {
+			detailsRegion: "#set-editcard-region",
+		}
+	});
 });

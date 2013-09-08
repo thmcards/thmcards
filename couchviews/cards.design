@@ -1,9 +1,13 @@
 {
    "_id": "_design/cards",
+   "_rev": "5-d24be4b2413ca1b3f428f33377336655",
    "language": "javascript",
    "views": {
        "by_set": {
            "map": "function(doc) { if (doc.type == 'card') { emit([doc.setId], doc); }}"
+       },
+       "by_id": {
+           "map": "function(doc) { if (doc.type == 'card') { emit([doc._id], doc); }}"
        },
        "by_owner": {
            "map": "function(doc) { if (doc.type == 'card') { emit([doc.owner], doc); }}"

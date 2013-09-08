@@ -143,11 +143,21 @@
         <h3 style="margin-bottom:20px">Neue Karte</h3>
       </div>
       <div class="col-md-12" id="set-newcard-region"></div>
-    </script>    
+    </script> 
+
+    <script type="text/template" id="set-details-editcard-layout">
+      <div class="col-md-12">
+        <h3 style="margin-bottom:20px">Karte bearbeiten</h3>
+      </div>
+      <div class="col-md-12" id="set-editcard-region"></div>
+    </script>       
 
     <script type="text/template" id="set-details-item">
-      <div class="box">
+      <div class="box" data-id="<%= _id %>">
         <span class="clicktoflip">Click to flip</span>
+        <a class="btn-editCard" href="#editCard">
+          <span>ich bin ein edit button</span>
+        </a>
         <div class="block"><div class="centered front"><%= front.text %></div><div class="centered back" style="display:none"><%= back.text %></div>
       </div>
     </script>
@@ -285,9 +295,55 @@
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
+    </script>
 
+    <script type="text/template" id="set-details-editcard"> 
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td><textarea class="form-control" id="editcard-front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0"></textarea></td> 
+            <td><textarea class="form-control" id="editcard-back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0"></textarea></td> 
+          </tr>
+          <tr>
+            <td>
+              <div class="input-append">
+                <div class="input-group">
+                <input class="span4 form-control pull-left" style="" id="set-details-editcard-input-pic-front-search" type="text" placeholder="Link oder Suchbegriff eingeben">
+                  <span class="input-group-btn"><button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-editcard-btn-pic-front-seach">Bildsuche</button></span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="input-append">
+                <div class="input-group">
+                <input class="span4 form-control pull-left" id="set-details-editcard-input-pic-back-search" type="text" placeholder="Link oder Suchbegriff eingeben">
+                <span class="input-group-btn">
+                <button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-editcard-btn-pic-back-seach">Bildsuche</button>
+                </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><div style="margin:20px auto; width:742px"><button style="width:200px; margin-right:130px" class="btn btn-danger btn-large" data-loading-text="Lösche Karte...">Karte löschen</button><button class="btn btn-default btn-large cancel" style="width:200px">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large" data-loading-text="Speichere Karte...">Karte speichern</button></div></td>
+          </tr>
+        </tbody>
+      </table>
 
+      <div id="pictureSearchModal" class="modal fade pictureSearchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Bild einfügen</h4>
+            </div>
+            <div class="modal-body" id="editcard-pictureSearchModal-body">
 
+            </div>
+            <div class="modal-footer" id="editcard-pictureSearchModal-footer">
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
     </script>
 
@@ -739,6 +795,7 @@
     <script type="text/javascript" src="/javascripts/modules/Set.Details.SideBar.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Details.DetailsView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Details.NewCardView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.Details.EditCardView.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.SideBar.js"></script>

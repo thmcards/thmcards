@@ -518,7 +518,6 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
                     db.bulk({"docs": new Array(doc)}, function(err, body){
                       console.log(err);
                       console.log(body);
-                      console.log("alles weg (vielleicht)");
                     });
                   }
                 });
@@ -547,6 +546,19 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
       console.log("[db.sets/by_id]", err.message);
     }
   });
+});
+
+app.get('/card/:id', ensureAuthenticated, function(req, res){
+  console.log(req.params);
+  db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+    if (!err) {
+      console.log(body);
+      var card = body.rows[0].value;
+      res.json(card);
+    } else {
+      console.log("[db.cards/by_id]", err.message);
+    }
+   });
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
@@ -580,67 +592,6 @@ app.post('/card', ensureAuthenticated, function(req, res){
 });
 
 
-app.post('/personalcard', ensureAuthenticated, function(req, res){
-  var time = new Date().getTime();
-  var username = req.session["passport"]["user"][0].username;
-
-  db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body.cardId)}, function(err, body) {
-    console.log("rows" + body.rows)
-    var persCardRev;
-    if (!err){  
-      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })   
-      docs = _.map(docs, function(doc) { return doc.value});
-      if (body.rows.length){
-        persCardRev = docs[0]._rev;
-      }
-    } else {
-      console.log("[db.personalcard/by_cardId]", err.message);
-    }
-
-    if (!persCardRev) { //wenn noch keine personalcard existiert
-      db.insert(
-        { 
-          "created": time,
-          "owner": req.session["passport"]["user"][0].username,
-          "cardId": req.body.cardId,
-          "box": req.body.box || "1",
-          "type": "personal_card"
-        }, 
-        function(err, body, header){
-          if(err) {
-            console.log('[db.insert] ', err.message);
-            return;
-          }
-          db.get(body.id, { revs_info: false }, function(err, body) {
-            if (!err)
-              res.json(body);
-          });
-      });
-    } else { //wenn sie schon existiert
-      db.insert(
-        { 
-          "_rev": persCardRev,
-          "created": docs[0].created,
-          "owner": docs[0].owner,
-          "cardId": docs[0].cardId,
-          "box": req.body.box  || docs[0].box,
-          "type": docs[0].type
-        },
-        docs[0]._id,
-        function(err, body, header){
-          if(err) {
-            console.log('[db.insert] ', err.message);
-            return;
-          }
-          db.get(body.id, { revs_info: false }, function(err, body) {
-            if (!err)
-              res.json(body);
-          });
-      });
-    }
-  });
-});
-
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
@@ -663,7 +614,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
       console.log("[db.personalcard/by_cardId]", err.message);
     }
     console.log("persCardRev", persCardRev);
-    if (_.isUndefined(persCardRev)) { //wenn noch keine personalcard existiert
+    if (_.isUndefined(persCardRev)) {
       db.insert(
         { 
           "created": time,
@@ -682,7 +633,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
               res.json(body);
           });
       });
-    } else { //wenn sie schon existiert
+    } else {
       db.insert(
         { 
           "_rev": persCardRev,

@@ -179,6 +179,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			//perscard holen/anlegen und mit neuer boxid aktualisieren
 			var model = this.collection.get(cardId);
+			console.log(model);
 			var persCard;
 			if(!_.isEmpty(model.get("persCard"))) {	
 				if(_.isArray(model.get("persCard"))) {
@@ -189,6 +190,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				persCard.value.box = boxId;				
 				model['persCard'] = persCard;
 				model.set({persCard: persCard});
+				console.log("vorhandene perscard");
 			} else {
 					persCard = {};
 					persCard.value = {
@@ -197,8 +199,10 @@ Cards.module('Set.Learn', function(Learn, App) {
 					}
 					model['persCard'] = persCard;
 					model.set({persCard: persCard});
+					console.log("neue perscard");
 			}
 			//speichern und in aktueller box bleiben
+			console.log("save");
 			model.save({}, {
 				success: function(){
 					console.log("success");
