@@ -2,9 +2,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 	SideBar.SideBarView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-sideBar",
 		className: "well well-sm sidebar-nav",
-		ui: {
-
-
+		initialize: function () {
+    		_.bindAll(this);
+    		this.model.on('change', this.render);
 		}
 	}),
 	SideBar.ControlsView = Backbone.Marionette.ItemView.extend({
