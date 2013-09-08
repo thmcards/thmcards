@@ -36,10 +36,16 @@ Cards.module('Set.Details', function(Details, App) {
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
-			"click button.play-meteor": "playMeteor"
+			"click button.play-meteor": "playMeteor",
+			"click a.btn-editCard": "editClicked"
 		},
 		playMeteor: function(ev) {
 			App.trigger("play:meteor", this.model.get("id"));
+		},
+		editClicked: function(ev) {
+			ev.preventDefault();
+			console.log("edit clicked" + this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
 		},
 		cycleCarousel: function(ev) {
 			ev.preventDefault();
@@ -66,7 +72,7 @@ Cards.module('Set.Details', function(Details, App) {
 				pickerContainer.append(indicatorElem);
 			}
 
-			this.$el.find(':first-child').carousel({ interval: 5000 });
+			this.$el.find(':first-child').carousel({ interval: false });
 		}
 	});
 });

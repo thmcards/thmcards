@@ -98,6 +98,25 @@ Cards.module('Set', function(Set, App){
 					console.log("error");
 				}
 			});
+		},
+		showDetailsEditCardLayout: function(name, id){
+			var set = new Cards.Entities.Set({id: id});
+
+			set.fetch({
+				success: function(){
+					console.log(set.get("id"));
+
+					var editCardLayout = new Cards.Set.Details.EditCardLayout();
+					Cards.mainRegion.show(editCardLayout);
+
+					var editCardView = new Cards.Set.Details.EditCardView({ model: set });
+					editCardLayout.detailsRegion.show(editCardView);
+
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
 		}
 	}
 });
