@@ -169,7 +169,7 @@ Cards.on("set:learn", function(name, id){
 
 Cards.on("profile", function(username){
 	Cards.navigate("profile/"+username);
-	API.showProfile(id);
+	API.showProfile(username);
 })
 
 Cards.on("play:meteor", function(id){

@@ -9,7 +9,7 @@ Cards.module('Pool', function(Pool, App) {
 		},
 		linkClicked: function(ev){
 			ev.preventDefault();
-			App.trigger("pool:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'));
+			App.trigger("pool:details", this.model.get("name"));
 		}
 	});
 
