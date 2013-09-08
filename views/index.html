@@ -609,7 +609,11 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12" id="profile-info-region"></div>
+        <div class="col-md-6" id="profile-info-region"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" id="profile-score-region"></div>
       </div>
 
       <div class="row">
@@ -621,17 +625,81 @@
       </div>
 
       <div class="row">
-        <div class="col-md-12" id="profile-score-region"></div>
+        <div class="col-md-12" id="profile-set-region"></div>
       </div>
     </script>
 
     <script type="text/template" id="profile-info-item">
-
-      <div>
-        <img src="<%= gravatarUrl %>" width="40" height="40" /> <%= username %>
-
-        <a href="#">BADGE!!!</a>
+      <div class="panel-heading">
+        <h3 class="panel-title">Hallo, <%= name || username %></h3>
       </div>
+      <div class="panel-body">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-md-4 control-label">Benutzername</label>
+            <div class="col-md-8">
+              <p class="form-control-static"><%= username %></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Angemeldet via</label>
+            <div class="col-md-8">
+              <p class="form-control-static"><%= provider.charAt(0).toUpperCase() + provider.slice(1) %></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputNameProfile" class="col-md-4 control-label">Name</label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" id="inputNameProfile" placeholder="Wie heißt du?" value="<%= name %>">
+            </div>
+          </div>
+        </form>
+
+        <!--img src="<%= gravatarUrl %>" width="40" height="40" /> <%= username %>
+
+        <a href="#">BADGE!!!</a-->
+      </div>
+    </script>
+
+    <script type="text/template" id="profile-score-item">
+      <div class="panel-heading">
+        <h3 class="panel-title">Punktestand</h3>
+      </div>
+      <div class="panel-body">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-md-6 control-label">Gesamtpunktzahl</label>
+            <div class="col-md-6">
+              <p class="form-control-static"><%= score %></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-6 control-label">Gespielt</label>
+            <div class="col-md-6">
+              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt > 0) { %>Spiele<%} else {%>Spiel<%} %> <small class="text-muted">(Ø <%= (score/gameCnt).toFixed(1) %>)</small></p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <table class="table table-hover table-striped">
+        <thead>
+          <th>Kartensatz</th>
+          <th>Pers. Highscore</th>
+          <th>Pos.</th>
+          <th>Highscore</th>
+        </thead>
+        <tbody>
+          <% 
+            if(games.length > 0) {
+              _.each(games, function(game){
+          %>
+                <tr><td><%= game.set %></td><td><%= game.personalHighscore %></td><td><%= game.position %></td><td><%= game.overallHighscore %></td></tr>
+          <%
+              })
+            }
+          %>
+        </tbody>
+      </table>
     </script>
 
     <script type="text/template" id="profile-badge-list">
@@ -658,6 +726,7 @@
     <script type="text/javascript" src="/javascripts/entities/User.js"></script>
     <script type="text/javascript" src="/javascripts/entities/Personalcard.js"></script>
     <script type="text/javascript" src="/javascripts/entities/Category.js"></script>
+    <script type="text/javascript" src="/javascripts/entities/Score.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Pool.Controller.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Pool.CategoryView.js"></script>
@@ -681,6 +750,7 @@
     <script type="text/javascript" src="/javascripts/modules/Profile.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.Controller.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.InfoView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Profile.ScoreView.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Game.Meteor.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Game.Controller.js"></script>

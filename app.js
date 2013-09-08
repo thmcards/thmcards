@@ -391,6 +391,26 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
   });
 });
 
+app.put('/user/:username', ensureAuthenticated, function(req, res){
+
+  db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
+    var user = body.rows[0].value;
+    var name = req.body.name;
+
+    user.name = name;  
+
+    db.insert(user, body.rows[0].id, function(err, body){
+      if(!err) {
+        res.json(body); 
+      } else {
+        console.log("[db.users/by_username]", err.message);
+      }
+      
+    });
+  });
+
+});
+
 app.get('/set', ensureAuthenticated, function(req, res){
   db.view('sets', 'by_id_with_cards', function(err, body) {
     var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
@@ -624,14 +644,19 @@ app.post('/personalcard', ensureAuthenticated, function(req, res){
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-
+  console.log("z627, body", req.body, req.params);
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
-    console.log("rows" + body.rows)
+    console.log("rows", body)
     var persCardRev;
     if (!err){  
-      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })   
-      docs = _.map(docs, function(doc) { return doc.value});
+      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })  
+      console.log("z633 docs", docs);
+      docs = _.map(docs, function(doc) { 
+        console.log("z634", doc, doc.value);
+        return doc.value
+      });
       if (body.rows.length){
+        console.log("z638", docs[0]);
         persCardRev = docs[0]._rev;
       }
     } else {
@@ -681,6 +706,31 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
     }
   });
 });
+
+app.get('/score/:username', ensureAuthenticated, function(req, res){
+  res.json({
+    owner: req.session["passport"]["user"][0].username,
+    game: "meteor",
+    score: 5000,
+    gameCnt: 23,
+    games: [{
+      set: "blabla",
+      personalHighscore: 12321,
+      position: 3,
+      overallHighscore: 221123
+    }, {
+      set: "blabla",
+      personalHighscore: 12321,
+      position: 3,
+      overallHighscore: 221123
+    }, {
+      set: "blabla",
+      personalHighscore: 12321,
+      position: 3,
+      overallHighscore: 221123
+    }]
+  });
+})
 
 app.get('/badge', function(req, res) {
   var data = { 
