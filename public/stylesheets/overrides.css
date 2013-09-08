@@ -526,3 +526,7 @@ div.meteor-playcard {
 .typeahead-description {
   font-size: 0.8em;
 }
+
+table.table-bordered .progress {
+  margin: 0;
+}

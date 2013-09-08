@@ -71,7 +71,7 @@ Cards.on("initialize:after", function() {
 	
 	$.cookie.json = true;
 	var usr = $.cookie('usr');
-	$("#usr-profile").text(usr.username);
+	$("#usr-name").text(usr.username);
 	$("#usr-profile").attr("href", "/#profile/"+usr.id);
 
 	if(Backbone.history) {
