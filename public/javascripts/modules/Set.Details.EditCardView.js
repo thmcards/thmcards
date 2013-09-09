@@ -2,8 +2,9 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.EditCardView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-editcard",
 		events: {
-			//"click .btn-success": "saveCard",
+			"click .btn-success": "editCard",
 			"click .btn.cancel": "cancel",
+			"click .btn-danger": "deleteCard",
 			"click .btn-pictureSearch": "pictureSearch",
 			"keyup input": "keyupInput",
 			"focus input": "focusInput"
@@ -17,35 +18,38 @@ Cards.module('Set.Details', function(Details, App) {
 		cancel: function(ev) {
 			history.back();
 		},
-		saveCard: function(ev) {
+		editCard: function(ev) {
 			this.ui.saveBtn.button('loading');
+			var that = this;
 
-			var setId = this.model.get('id');
-			var setName = this.model.get('name');
+			var cardId = this.model.get('_id');
+			console.log(cardId);
 
 			var card = new Cards.Entities.Card({
+				_id: cardId,
 				front: {
 					text: $("#editcard-front-textarea").val(),
-					text_plain: $("#front-textarea").val().replace(/(<([^>]+)>)/ig,""),
+					text_plain: $("#editcard-front-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-front-search").val() || null,
 					video: null
 				},
 				back: {
 					text: $("#editcard-back-textarea").val(),
-					text_plain: $("#back-textarea").val().replace(/(<([^>]+)>)/ig,""),
+					text_plain: $("#editcard-back-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-back-search").val() || null,
 					video: null
-				},
-				setId: setId
+				}
 			});
 
 			if(card.isValid()) {
 				card.save({}, {
 					success: function(model, response) {
-						Cards.trigger("set:details", setName.replace(/[^a-zA-Z0-9-_]/g, '_'), setId);
+						console.log("card saved");
+						history.back();
 					},
 					error: function(model, error) {
-						this.ui.saveBtn.button('reset');
+						console.log(error);
+						that.ui.saveBtn.button('reset');
 						alert("something went wrong");
 					}
 				});
@@ -53,6 +57,10 @@ Cards.module('Set.Details', function(Details, App) {
 				alert('not valid');
 				this.ui.saveBtn.button('reset');
 			}
+		},
+		deleteCard: function(ev) {
+			console.log("löschen!!!");
+
 		},
 		pictureSearch: function(ev) {
 			ev.preventDefault();

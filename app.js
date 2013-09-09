@@ -561,6 +561,30 @@ app.get('/card/:id', ensureAuthenticated, function(req, res){
    });
 });
 
+app.put('/card/:id', ensureAuthenticated, function(req, res){
+  checkOwner(req.body._id, req.session["passport"]["user"][0].username, function(){
+    db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
+      var card = body.rows[0].value;
+      var front = req.body.front;
+      var back = req.body.back;
+
+      card.front = front;
+      card.back = back;  
+
+      db.insert(card, req.params._id, function(err, body){
+        if(!err) {
+          res.json(body); 
+        } else {
+          console.log("[db.users/by_username]", err.message);
+        }
+        
+      });
+    });
+  }, function(){
+    res.send(403);
+  });
+});
+
 app.post('/card', ensureAuthenticated, function(req, res){
   console.log(req.session);
 
