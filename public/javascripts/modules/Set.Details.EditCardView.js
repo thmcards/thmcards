@@ -12,6 +12,7 @@ Cards.module('Set.Details', function(Details, App) {
 		ui: {
 			saveBtn: ".btn-success",
 			cancelBtn: ".btn.cancel",
+			deleteBtn: ".btn-danger",
 			picSearchFrontbtn: "#set-details-editcard-btn-pic-front-seach",
 			pictureSearchModal: "#editcard-pictureSearchModal"
 		},
@@ -59,7 +60,22 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		deleteCard: function(ev) {
-			console.log("löschen!!!");
+			var that = this;
+			this.ui.deleteBtn.button('loading');
+
+			this.model.destroy({
+			    success : function(resp){
+			    	console.log("gelöscht");
+					history.back();
+			    },
+			    error : function(err) {
+			    	that.ui.deleteBtn.button('reset');
+			        console.log('error callback');
+			        // this error message for dev only
+			        alert('There was an error. See console for details');
+			        console.log(err);
+				}
+			});
 
 		},
 		pictureSearch: function(ev) {

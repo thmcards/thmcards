@@ -263,6 +263,18 @@ ul.nav-list li.active {
   font-style: italic;
 }
 
+.btn-editCard {
+  position: absolute; 
+  left: 67px; 
+  top: 12px; 
+}
+
+.btn-deleteCard {
+  position: absolute; 
+  left: 47px; 
+  top: 12px; 
+}
+
 .carousel-control {
     z-index: 5;
 }

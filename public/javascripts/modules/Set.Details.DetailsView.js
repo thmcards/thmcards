@@ -37,7 +37,8 @@ Cards.module('Set.Details', function(Details, App) {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
 			"click button.play-meteor": "playMeteor",
-			"click a.btn-editCard": "editClicked"
+			"click a.btn-editCard": "editClicked",
+			"click a.btn-deleteCard": "deleteClicked"
 		},
 		playMeteor: function(ev) {
 			App.trigger("play:meteor", this.model.get("id"));
@@ -50,6 +51,16 @@ Cards.module('Set.Details', function(Details, App) {
 
 			console.log("edit clicked" + this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
 			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+		},
+		deleteClicked: function(ev) {
+			ev.preventDefault();
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+
+			var actualCard = this.collection.get(cardId);
+			console.log(this.collection);
+			actualCard.destroy();
+
+
 		},
 		cycleCarousel: function(ev) {
 			ev.preventDefault();

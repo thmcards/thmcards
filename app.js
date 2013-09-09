@@ -571,7 +571,7 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
       card.front = front;
       card.back = back;  
 
-      db.insert(card, req.params._id, function(err, body){
+      db.insert(card, req.params.id, function(err, body){
         if(!err) {
           res.json(body); 
         } else {
@@ -579,6 +579,30 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
         }
         
       });
+    });
+  }, function(){
+    res.send(403);
+  });
+});
+
+app.delete('/card/:id', ensureAuthenticated, function(req, res) {
+  checkOwner(req.params.id, req.session["passport"]["user"][0].username, function(){
+    db.get(req.params.id, function(err, body){
+      if(!err) {
+        var doc = {
+        _id: body._id,
+        _rev: body._rev,
+        _deleted: true
+        };
+        db.bulk({"docs": new Array(doc)}, function(err, body){
+          if (!err) {
+              console.log("card deleted");
+              res.json(body);           
+           } else {
+              console.log('[db.delete] ', err.message);            
+           }
+        });
+      }
     });
   }, function(){
     res.send(403);

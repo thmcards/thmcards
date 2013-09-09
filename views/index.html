@@ -155,8 +155,11 @@
     <script type="text/template" id="set-details-item">
       <div class="box" data-id="<%= _id %>">
         <span class="clicktoflip">Click to flip</span>
+        <a class="btn-deleteCard" href="#deleteCard">
+          <i class="glyphicon glyphicon-ban-circle"></i>
+        </a>
         <a class="btn-editCard" href="#editCard">
-          <span>ich bin ein edit button</span>
+          <i class="glyphicon glyphicon-pencil"></i>
         </a>
         <div class="block"><div class="centered front"><%= front.text %></div><div class="centered back" style="display:none"><%= back.text %></div>
       </div>
