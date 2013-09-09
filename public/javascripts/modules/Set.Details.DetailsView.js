@@ -58,9 +58,17 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var actualCard = this.collection.get(cardId);
 			console.log(this.collection);
-			actualCard.destroy();
-
-
+			actualCard.destroy({
+			    success : function(resp){
+			    	console.log("card deleted");
+			    },
+			    error : function(err) {
+			        console.log('error callback');
+			        // this error message for dev only
+			        alert('There was an error. See console for details');
+			        console.log(err);
+				}
+			});
 		},
 		cycleCarousel: function(ev) {
 			ev.preventDefault();
