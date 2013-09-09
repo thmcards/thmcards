@@ -24,8 +24,11 @@ Cards.module('Set', function(Set, App){
 					
 					cardCollection.fetch({
 						success: function(){
-							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
-							detailsLayout.detailsRegion.show(detailsView);
+						//	var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
+						//	detailsLayout.detailsRegion.show(detailsView);
+
+							var detailsListView = new Cards.Set.Details.DetailsListView({ collection: cardCollection, model: set });
+							detailsLayout.detailsRegion.show(detailsListView);
 						},
 						error: function(){
 

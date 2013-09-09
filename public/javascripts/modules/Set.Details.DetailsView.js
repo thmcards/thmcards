@@ -98,4 +98,46 @@ Cards.module('Set.Details', function(Details, App) {
 			this.$el.find(':first-child').carousel({ interval: false });
 		}
 	});
+
+	Details.DetailsListView = Backbone.Marionette.CompositeView.extend({
+		//emptyView: Details.EmptyView,
+		itemView: Details.ListItem,
+		itemViewContainer: "#cardList",
+		template: "#set-details-collection-list",
+		events: {
+
+		}
+	/**	editClicked: function(ev) {
+			ev.preventDefault();
+
+			//cardid holen
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+
+			console.log("edit clicked" + this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+		},
+		deleteClicked: function(ev) {
+			ev.preventDefault();
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+
+			var actualCard = this.collection.get(cardId);
+			console.log(this.collection);
+			actualCard.destroy({
+			    success : function(resp){
+			    	console.log("card deleted");
+			    },
+			    error : function(err) {
+			        console.log('error callback');
+			        // this error message for dev only
+			        alert('There was an error. See console for details');
+			        console.log(err);
+				}
+			});
+		} **/
+	});
+
+	Details.ListItem = Backbone.Marionette.ItemView.extend({
+	    template: "#set-details-list-item",
+	    tagName: 'li'
+	});
 });
