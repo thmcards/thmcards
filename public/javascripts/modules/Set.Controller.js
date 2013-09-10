@@ -12,7 +12,7 @@ Cards.module('Set', function(Set, App){
 			setLayout.sideBarRegion.show(sideBarView);
 
 		},
-		showDetailsLayout: function(name, id){
+		showDetailsLayout: function(id){
 
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
@@ -24,9 +24,40 @@ Cards.module('Set', function(Set, App){
 					
 					cardCollection.fetch({
 						success: function(){
-						//	var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
-						//	detailsLayout.detailsRegion.show(detailsView);
+							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
+							detailsLayout.detailsRegion.show(detailsView);
+						},
+						error: function(){
 
+						}
+					});
+
+					
+					var sideBarView = new Cards.Set.Details.SideBar.SideBarView({ model: set});
+					detailsLayout.sideBarRegion.show(sideBarView);
+
+					if(set.get("owner") === $.cookie('usr').username) {
+						var constrolsView = new Cards.Set.Details.SideBar.ControlsView({ model: set});
+						detailsLayout.controlsRegion.show(constrolsView);
+					}
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
+		},
+		showDetailsListLayout: function(id){
+
+			var set = new Cards.Entities.Set({id: id});
+			set.fetch({
+				success: function(){
+					var detailsLayout = new Cards.Set.Details.Layout();
+					Cards.mainRegion.show(detailsLayout);
+
+					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
+					
+					cardCollection.fetch({
+						success: function(){
 							var detailsListView = new Cards.Set.Details.DetailsListView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsListView);
 						},
@@ -49,7 +80,7 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
-		showLearnLayout: function(name, id){
+		showLearnLayout: function(id){
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
@@ -83,7 +114,7 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
-		showDetailsNewCardLayout: function(name, id){
+		showDetailsNewCardLayout: function(id){
 			var set = new Cards.Entities.Set({id: id});
 
 			set.fetch({

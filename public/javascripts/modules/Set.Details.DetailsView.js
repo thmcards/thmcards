@@ -49,8 +49,7 @@ Cards.module('Set.Details', function(Details, App) {
 			//cardid holen
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 
-			console.log("edit clicked" + this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
-			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+			App.trigger("set:details:edit", this.model.get("_id"), cardId);
 		},
 		deleteClicked: function(ev) {
 			ev.preventDefault();
@@ -80,7 +79,7 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		learnClicked: function(ev) {
-			App.trigger("set:learn", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+			App.trigger("set:learn", this.model.get("_id"));
 		},
 		onRender: function() {
 			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
@@ -96,6 +95,9 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 
 			this.$el.find(':first-child').carousel({ interval: false });
+
+			$('#btnToCardLayout').addClass("active");
+			$('#btnToListLayout').removeClass("active");
 		}
 	});
 
@@ -125,7 +127,7 @@ Cards.module('Set.Details', function(Details, App) {
 			ev.preventDefault();
 
 			var cardId = $(ev.currentTarget).attr("data-id")
-			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+			App.trigger("set:details:edit", this.model.get("_id"), cardId);
 		},
 		deleteClicked: function(ev) {
 			ev.preventDefault();
@@ -145,5 +147,9 @@ Cards.module('Set.Details', function(Details, App) {
 				}
 			});
 		},
+		onRender: function(ev) {
+			$('#btnToListLayout').addClass("active");
+			$('#btnToCardLayout').removeClass("active");
+		}
 	});
 });

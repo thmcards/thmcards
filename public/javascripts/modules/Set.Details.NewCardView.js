@@ -42,7 +42,7 @@ Cards.module('Set.Details', function(Details, App) {
 			if(card.isValid()) {
 				card.save({}, {
 					success: function(model, response) {
-						Cards.trigger("set:details", setName.replace(/[^a-zA-Z0-9-_]/g, '_'), setId);
+						Cards.trigger("set:details", setId);
 					},
 					error: function(model, error) {
 						this.ui.saveBtn.button('reset');
