@@ -824,7 +824,7 @@
           <div class="form-group">
             <label class="col-md-6 control-label">Gespielt</label>
             <div class="col-md-6">
-              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt > 0) { %>Spiele<%} else {%>Spiel<%} %> <small class="text-muted">(Ø ~<%= _.str.numberFormat(score/gameCnt, 0, ',', '.') %>)</small></p>
+              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt != 1) { %>Spiele<%} else {%>Spiel<%} %> <small class="text-muted">(Ø ~<%= _.str.numberFormat(score/gameCnt, 0, ',', '.') %>)</small></p>
             </div>
           </div>
         </form>
@@ -844,8 +844,10 @@
                 <tr><td><a href="#set/details/<%= game.setName %>/<%= game.setId %>" class="set-link" data-set-id="<%= game.setId %>"><%= game.setName %></a></td><td><%= _.str.numberFormat(game.personalHighscore, 0, ',', '.') %></td><td><%= game.position %></td><td><%= _.str.numberFormat(game.overallHighscore, 0, ',', '.') %></td></tr>
           <%
               })
-            }
+            } else {
           %>
+                <tr><td colspan="4" align="center"><p class="text-muted" style="margin-top:10px; font-style:italic">Du hast bisher noch kein Spiel gespielt</p></td>
+          <%  } %>
         </tbody>
       </table>
     </script>

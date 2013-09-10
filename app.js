@@ -746,75 +746,86 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
   var user = req.session["passport"]["user"][0].username;
 
   db.view('score', 'highscore_by_game_user', { startkey: new Array(game, user), endkey: new Array(game, user), group: true }, function(err, body) {
-    var gameHighscore = _.first(body.rows).value;
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
 
-    db.view('score', 'score_by_game_user_set', { startkey: new Array(game, user), endkey: new Array(game, user, {}) }, function(err, body) {
-      var scores = new Array();
-      _.each(body.rows, function(score){
-        scores.push({
-          setId: score.key[2],
-          points: score.value
+      var gameHighscore = _.first(body.rows).value;
+
+      db.view('score', 'score_by_game_user_set', { startkey: new Array(game, user), endkey: new Array(game, user, {}) }, function(err, body) {
+        var scores = new Array();
+        _.each(body.rows, function(score){
+          scores.push({
+            setId: score.key[2],
+            points: score.value
+          });
         });
-      });
 
-      scores = _.sortBy(scores, "points");
-      var groupedScores = _.groupBy(scores, function(score){ return score.setId });
+        scores = _.sortBy(scores, "points");
+        var groupedScores = _.groupBy(scores, function(score){ return score.setId });
+        
+        var games = new Array();
+        var keys = new Array();
+        _.each(groupedScores, function(score){
+          var highscore = _.last(score);
       
-      var games = new Array();
-      var keys = new Array();
-      _.each(groupedScores, function(score){
-        var highscore = _.last(score);
-    
-        keys.push(new Array(game, highscore.setId));
+          keys.push(new Array(game, highscore.setId));
 
-        games.push({
-          setId: highscore.setId,
-          setName: "unknown",
-          personalHighscore: highscore.points,
-          position: 0,
-          overallHighscore: 0
-        });
-      });
-
-      var setIds = _.pluck(games, "setId");
-      setIds = _.map(setIds, function(set) { return new Array(set)});
-
-      db.view('sets', 'by_id', { keys: setIds }, function(err, body) {
-        var sets = _.pluck(body.rows, "value");
-
-        _.each(sets, function(set) {
-          var game = _.findWhere(games, { setId: set._id });
-
-          game.setName = set.name;
-          game.setId = set._id;
+          games.push({
+            setId: highscore.setId,
+            setName: "unknown",
+            personalHighscore: highscore.points,
+            position: 0,
+            overallHighscore: 0
+          });
         });
 
-        db.view('score', 'score_by_game_set', { keys: keys }, function(err, body) {
-          var setScores = _.pluck(body.rows, "value");
-          setScores = _.sortBy(setScores, "points");
-          groupedSetScores = _.groupBy(setScores, function(score){ return score.setId });
-          
-          _.each(groupedSetScores, function(score){
-            var setHighscore = _.last(score);
+        var setIds = _.pluck(games, "setId");
+        setIds = _.map(setIds, function(set) { return new Array(set)});
 
-            var game = _.findWhere(games, {setId: setHighscore.setId})
-            game.overallHighscore = setHighscore.points;
+        db.view('sets', 'by_id', { keys: setIds }, function(err, body) {
+          var sets = _.pluck(body.rows, "value");
 
-            var points = _.pluck(score, "points");
-            var pos = _.sortedIndex(points, game.personalHighscore);
-            game.position = points.length-pos;
+          _.each(sets, function(set) {
+            var game = _.findWhere(games, { setId: set._id });
+
+            game.setName = set.name;
+            game.setId = set._id;
           });
 
-          res.json({
-            owner: req.session["passport"]["user"][0].username,
-            game: "meteor",
-            score: gameHighscore,
-            gameCnt: scores.length || 0,
-            games: games
+          db.view('score', 'score_by_game_set', { keys: keys }, function(err, body) {
+            var setScores = _.pluck(body.rows, "value");
+            setScores = _.sortBy(setScores, "points");
+            groupedSetScores = _.groupBy(setScores, function(score){ return score.setId });
+            
+            _.each(groupedSetScores, function(score){
+              var setHighscore = _.last(score);
+
+              var game = _.findWhere(games, {setId: setHighscore.setId})
+              game.overallHighscore = setHighscore.points;
+
+              var points = _.pluck(score, "points");
+              var pos = _.sortedIndex(points, game.personalHighscore);
+              game.position = points.length-pos;
+            });
+
+            res.json({
+              owner: req.session["passport"]["user"][0].username,
+              game: "meteor",
+              score: gameHighscore,
+              gameCnt: scores.length || 0,
+              games: games
+            });
           });
         });
       });
-    });
+    } else {
+      res.json({
+        owner: req.session["passport"]["user"][0].username,
+        game: "meteor",
+        score: 0,
+        gameCnt: 0,
+        games: {}
+      });
+    }
   });
 });
 
