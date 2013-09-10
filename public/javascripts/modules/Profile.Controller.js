@@ -14,6 +14,19 @@ Cards.module('Profile', function(Profile, App){
 
 				}
 			});
+			
+			var xpModel = new Backbone.Model({
+				urlRoot: '/user/'+username+'/xp'
+			});
+			xpModel.fetch({
+				success: function(){
+					//var infoView = new Cards.Profile.InfoItemView({ model: user });
+					//profileLayout.infoRegion.show(infoView);
+				},
+				error: function(){
+
+				}
+			});
 
 			var score = new Cards.Entities.Score({username: username});
 			score.fetch({

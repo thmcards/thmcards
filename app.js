@@ -12,7 +12,6 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
-  //, piler = require("piler")
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
   , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
@@ -24,10 +23,6 @@ var express = require('express')
   , app = express()
   ;
 
-/*
-var clientjs = piler.createJSManager();
-var clientcss = piler.createCSSManager();
-*/
 var srv = http.createServer(app);
 
 app.configure(function(){
@@ -43,15 +38,6 @@ app.configure(function(){
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
-/*
-  clientjs.bind(app,srv);
-  clientcss.bind(app,srv);
-
-  clientcss.addFile(__dirname + "/public/stylesheets/style.css");
-  clientcss.addFile(__dirname + "/public/stylesheets/non-responsive.css");
-  clientcss.addFile(__dirname + "/public/stylesheets/bootstrap-wysihtml5.css");
-  clientcss.addFile(__dirname + "/public/stylesheets/overrides.css");
-*/
 });
 
 app.configure('development', function() {
@@ -59,12 +45,7 @@ app.configure('development', function() {
 });
 
 app.configure('production', function() {
-  /*app.use(function(req, res, next) {
-      if(!req.secure && process.env.NODE_ENV == 'production') {
-        return res.redirect('https://' + req.get('Host') + req.url);
-      }
-      next();
-    });*/
+
 })
 
 function checkOwner(doc_id, owner, success_callback, error_callback) {
@@ -75,6 +56,55 @@ function checkOwner(doc_id, owner, success_callback, error_callback) {
       error_callback();
     }
   });
+}
+
+var redeemXPoints = function(name, value, username) {
+  var now = new Date().getTime();
+  db.insert({
+          type: "xp",
+          name: name,
+          value: value,
+          gained: now,
+          owner: username
+        },    
+        function(err, body) {
+          if(!err && body.ok) {
+            console.log("XP '"+name+" ("+value+")' redemmed for user '"+username+"'");
+          } else {
+            console.log("Wasn't able to redeem XP for user '"+username+"'");
+          }
+        });  
+  }
+
+var redeemLoginXPoints = function(username){
+  var msPerDay = 86400 * 1000;
+  var now = new Date().getTime();
+
+  var todayStart = now - (now % msPerDay);
+      todayStart += ((new Date).getTimezoneOffset() * 60 * 1000)
+  var todayEnd = todayStart + (msPerDay-1000);
+
+  db.view("xp", "by_owner_name_gained", { startkey: new Array(username, "daily_login", todayStart ), endkey: new Array(username, "daily_login", todayEnd)}, function(err, body){
+    if(!err) {
+      if(!_.isUndefined(body.rows) && body.rows.length > 0) {
+        console.log("Daily Login XP ALREADY redemmed for user '"+username+"'");
+      } else {
+        db.insert({
+          type: "xp",
+          name: "daily_login",
+          value: 5,
+          gained: now,
+          owner: username
+        }, function(err, body) {
+          if(!err && body.ok) {
+            console.log("Daily Login XP redemmed for user '"+username+"'");
+          } else {
+            console.log("Wasn't able to redeem Daily Login XP for user '"+username+"'");
+          }
+        })
+      }
+    }
+  })
 }
 
 //------------------------------------------------------------------------------------
@@ -179,7 +209,7 @@ passport.use(new GoogleStrategy({
 ));
 
 app.get('/login', function(req, res) {
-  if(req.isAuthenticated()) res.redirect('/');
+  if(req.isAuthenticated()) res.redirect('/'); 
 
   fs.readFile(__dirname + '/views/welcome.html', 'utf8', function(err, text){
     res.send(text);
@@ -192,6 +222,7 @@ app.get('/auth/twitter',
 app.get('/auth/twitter/callback', 
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   function(req, res) {
+    redeemLoginXPoints(res.req.user.username);
     res.redirect('/');
   }
 );
@@ -201,6 +232,7 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email, us
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
+    redeemLoginXPoints(_.first(res.req.user).username);
     res.redirect('/');
   }
 );
@@ -210,6 +242,7 @@ app.get('/auth/google', passport.authenticate('google'));
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
+    redeemLoginXPoints(_.first(res.req.user).username);
     res.redirect('/');
   }
 );
@@ -391,6 +424,14 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
   });
 });
 
+app.get('/user/:username/xp', ensureAuthenticated, function(req, res){
+  db.view('xp', 'by_owner', { key: new Array(req.params.username) }, function(err, body) {
+    console.log(body.rows);
+
+    res.json(body.rows);
+  });
+});
+
 app.put('/user/:username', ensureAuthenticated, function(req, res){
 
   db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
@@ -440,6 +481,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
         console.log('[db.insert] ', err.message);
         return;
       }
+      redeemXPoints("create_set", 2, req.session["passport"]["user"][0].username);
       db.get(body.id, { revs_info: false }, function(err, body) {
         if (!err)
           res.json(body);
@@ -629,6 +671,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
           console.log('[db.insert] ', err.message);
           return;
         }
+        redeemXPoints("create_card", 1, req.session["passport"]["user"][0].username);
         db.get(body.id, { revs_info: false }, function(err, body) {
           if (!err)
             res.json(body);
