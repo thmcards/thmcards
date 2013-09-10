@@ -92,7 +92,7 @@ var redeemLoginXPoints = function(username){
         db.insert({
           type: "xp",
           name: "daily_login",
-          value: 5,
+          value: 3,
           gained: now,
           owner: username
         }, function(err, body) {
