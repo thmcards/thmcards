@@ -715,6 +715,63 @@
       </div>
     </script>
 
+    <script type="text/template" id="profile-xp-item">
+      <div class="panel-heading">
+        <h3 class="panel-title">Erfahrungspunkte (XP)</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row" style="margin-bottom:15px">
+          <div class="col-md-3">
+            <div class="well well-sm" style="margin:0; text-align:center">
+              <div class="row"><span style="display:inline-block; height:50px; font-size:40px"><%= _.str.numberFormat(totalXPoints, 0, ',', '.') %></span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px">Total</span></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="well well-sm" style="margin:0; text-align:center">
+              <div class="row"><span style="display:inline-block; height:50px; font-size:30px"><%= _.str.numberFormat(todayXPoints, 0, ',', '.') %></span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px">Heute</span></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="well well-sm" style="margin:0; text-align:center">
+              <div class="row"><span style="display:inline-block; height:50px; font-size:20px"><%= _.str.numberFormat(yesterdayXPoints, 0, ',', '.') %></span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px">Gestern</span></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="well well-sm" style="margin:0; text-align:center">
+              <div class="row"><span style="display:inline-block; height:50px; "><%= _.str.numberFormat(lastSevenDaysXPoints, 0, ',', '.') %></span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px">7 Tage</span></div>
+            </div>
+          </div>
+        </div>
+        <% if(lastRedeem) { %>
+        <div class="row" style="margin-bottom:15px">
+          <div class="col-md-12">
+            <span class="text-muted">Zuletzt für: </span> <span class="pull-right text-muted"><%= lastRedeem.name %> (+<%= lastRedeem.value %>)</span>
+          </div>
+        </div>
+        <hr />
+        <% } %>
+        <div class="row" style="margin-top:15px">
+          <div class="col-md-2" style="text-align:center;">
+            <div style=" width:36px; height:36px; background-image:url('/img/trophy_36x36.png')"><span style="font-weight:bold; color: #000; font-size:13px; padding-top:5px; display:inline-block"><%= currentLevel %></span></div>
+          </div>
+          <div class="col-md-8" style="text-align:center">
+            <div class="progress" style="margin:0">
+              <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= pointsLevel-pointsRemaining %>0%;">
+                <span class="sr-only"><%= pointsLevel-pointsRemaining %>0% Complete</span>
+              </div>
+            </div>
+            <small class="text-muted">Noch <em><%= _.str.numberFormat(pointsRemaining, 0, ',', '.') %> Punkte</em> bis zum nächsten Level</small>
+          </div>
+          <div class="col-md-2" style="text-align:center"><img src="/img/trophy_36x36_gray.png" /></div>
+        </div>
+      </div>    
+      
+    </script>
+
     <script type="text/template" id="profile-info-item">
       <div class="panel-heading">
         <h3 class="panel-title">Hallo, <%= name || username %></h3>
@@ -730,7 +787,7 @@
           <div class="form-group">
             <label class="col-md-4 control-label">Angemeldet via</label>
             <div class="col-md-8">
-              <p class="form-control-static"><%= provider.charAt(0).toUpperCase() + provider.slice(1) %></p>
+              <p class="form-control-static"><%= _.str.capitalize(provider) %></p>
             </div>
           </div>
           <div class="form-group">
@@ -756,13 +813,13 @@
           <div class="form-group">
             <label class="col-md-6 control-label">Gesamtpunktzahl</label>
             <div class="col-md-6">
-              <p class="form-control-static"><%= score %></p>
+              <p class="form-control-static"><%= _.str.numberFormat(score, 0, ',', '.') %></p>
             </div>
           </div>
           <div class="form-group">
             <label class="col-md-6 control-label">Gespielt</label>
             <div class="col-md-6">
-              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt > 0) { %>Spiele<%} else {%>Spiel<%} %> <small class="text-muted">(Ø <%= (score/gameCnt).toFixed(1) %>)</small></p>
+              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt > 0) { %>Spiele<%} else {%>Spiel<%} %> <small class="text-muted">(Ø ~<%= _.str.numberFormat(score/gameCnt, 0, ',', '.') %>)</small></p>
             </div>
           </div>
         </form>
@@ -779,7 +836,7 @@
             if(games.length > 0) {
               _.each(games, function(game){
           %>
-                <tr><td><a href="#set/details/<%= game.setName %>/<%= game.setId %>" class="set-link" data-set-id="<%= game.setId %>"><%= game.setName %></a></td><td><%= game.personalHighscore %></td><td><%= game.position %></td><td><%= game.overallHighscore %></td></tr>
+                <tr><td><a href="#set/details/<%= game.setName %>/<%= game.setId %>" class="set-link" data-set-id="<%= game.setId %>"><%= game.setName %></a></td><td><%= _.str.numberFormat(game.personalHighscore, 0, ',', '.') %></td><td><%= game.position %></td><td><%= _.str.numberFormat(game.overallHighscore, 0, ',', '.') %></td></tr>
           <%
               })
             }
@@ -794,6 +851,8 @@
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.string/2.3.3/underscore.string.min.js"></script>
+    <script type="text/javascript"> _.mixin(_.str.exports()) </script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.1-bundled/backbone.marionette.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -839,6 +898,7 @@
     <script type="text/javascript" src="/javascripts/modules/Profile.Controller.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.InfoView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.ScoreView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Profile.XpView.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Game.Meteor.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Game.Controller.js"></script>

@@ -1,0 +1,27 @@
+{
+   "_id": "_design/score",
+   "language": "javascript",
+   "views": {
+       "by_id": {
+           "map": "function(doc) { if (doc.type == 'score') { emit([doc._id], doc); }}"
+       },
+       "score_by_game_user_set": {
+           "map": "function(doc) { if (doc.type == 'score') { emit([doc.game, doc.owner, doc.setId], doc.points); } }"
+       },
+       "highscore_by_game_user": {
+           "map": "function(doc) { if (doc.type == 'score') { emit([doc.game, doc.owner], doc.points); } }",
+           "reduce": "function(keys, values) {  return sum(values); }"
+       },
+       "score_by_game_set": {
+           "map": "function(doc) { if (doc.type == 'score') { emit([doc.game, doc.setId], { setId: doc.setId, points: doc.points }); } }"
+       },
+       "highscore_by_game_set": {
+           "map": "function(doc) { if (doc.type == 'score') { emit([doc.game, doc.setId], doc.points); } }",
+           "reduce": "function(keys, values) {  return sum(values); }"
+       },
+       "highscore_by_game": {
+           "map": "function(doc) { if (doc.type == 'score') { emit(doc.game, doc.points); } }",
+           "reduce": "function(keys, values) {  return sum(values); }"
+       }
+   }
+}

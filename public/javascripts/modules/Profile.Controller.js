@@ -14,14 +14,13 @@ Cards.module('Profile', function(Profile, App){
 
 				}
 			});
-			
-			var xpModel = new Backbone.Model({
-				urlRoot: '/user/'+username+'/xp'
-			});
-			xpModel.fetch({
-				success: function(){
-					//var infoView = new Cards.Profile.InfoItemView({ model: user });
-					//profileLayout.infoRegion.show(infoView);
+
+			var xpModel = new Backbone.Model({}, {
+				url: 'score/'+username+'/xp'
+			}).fetch({
+				success: function(model){
+					var xpView = new Cards.Profile.XpItemView({ model: model });
+					profileLayout.xpRegion.show(xpView);
 				},
 				error: function(){
 

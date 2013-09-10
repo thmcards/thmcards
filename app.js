@@ -424,14 +424,6 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/user/:username/xp', ensureAuthenticated, function(req, res){
-  db.view('xp', 'by_owner', { key: new Array(req.params.username) }, function(err, body) {
-    console.log(body.rows);
-
-    res.json(body.rows);
-  });
-});
-
 app.put('/user/:username', ensureAuthenticated, function(req, res){
 
   db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
@@ -766,10 +758,8 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
       });
 
       scores = _.sortBy(scores, "points");
-      console.log("scores", scores);
       var groupedScores = _.groupBy(scores, function(score){ return score.setId });
-      console.log("groupScores", groupedScores);
-
+      
       var games = new Array();
       var keys = new Array();
       _.each(groupedScores, function(score){
@@ -825,6 +815,85 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
         });
       });
     });
+  });
+});
+
+app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
+  var msPerDay = 86400 * 1000;
+  var now = new Date().getTime();
+
+  var todayStart = now - (now % msPerDay);
+      todayStart += ((new Date).getTimezoneOffset() * 60 * 1000)
+  var todayEnd = todayStart + (msPerDay-1000);
+
+  var yesterdayStart = todayStart - msPerDay;
+  var yesterdayEnd = todayEnd - msPerDay;
+
+  var lastSevenDaysStart = todayStart - (msPerDay*7);
+  var lastSevenDaysEnd = todayEnd - (msPerDay*7);
+
+  var pointsPerLevel = 10;
+
+  var result = {
+      totalXPoints: 0,
+      todayXPoints: 0,
+      yesterdayXPoints: 0,
+      lastSevenDaysXPoints: 0,
+      currentLevel: 1,
+      pointsRemaining: pointsPerLevel,
+      pointsLevel: pointsPerLevel
+  }
+
+  db.view('xp', 'by_owner', { key: new Array(req.params.username) }, function(err, body) {
+    console.log(body.rows);
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+      var xpoints = _.pluck(body.rows, "value");
+
+      var groupedXPoints = _.groupBy(xpoints, "name");
+      console.log(groupedXPoints);
+
+      var todayXPoints = _.reduce(_.pluck(_(xpoints).filter(function(point){
+        if(point.gained >= todayStart && point.gained <= todayEnd) return point;
+      }), "value"), function(memo, num){ return memo + num; }, 0);
+
+      var yesterdayXPoints = _.reduce(_.pluck(_(xpoints).filter(function(point){
+        if(point.gained >= yesterdayStart && point.gained <= yesterdayEnd) return point;
+      }), "value"), function(memo, num){ return memo + num; }, 0);
+
+      var lastSevenDaysXPoints = _.reduce(_.pluck(_(xpoints).filter(function(point){
+        if(point.gained >= lastSevenDaysStart && point.gained <= todayEnd) return point;
+      }), "value"), function(memo, num){ return memo + num; }, 0);
+
+      var totalXPpoints = 0
+      _.each(xpoints, function(point) {
+        totalXPpoints += point.value;
+      });
+
+      var lastRedeem = _.first(_.sortBy(xpoints, "gained").reverse());
+
+      var currentLevel = Math.floor(totalXPpoints/pointsPerLevel)+1;
+      var pointsRemaining = pointsPerLevel-(totalXPpoints % pointsPerLevel);
+
+      result = {
+        totalXPoints: totalXPpoints,
+        todayXPoints: todayXPoints,
+        yesterdayXPoints: yesterdayXPoints,
+        lastSevenDaysXPoints: lastSevenDaysXPoints,
+        lastRedeem: {
+          name: lastRedeem.name,
+          value: lastRedeem.value
+        },
+        currentLevel: currentLevel,
+        pointsRemaining: pointsRemaining,
+        pointsLevel: pointsPerLevel
+      }
+
+      
+    } else {
+
+    }
+    res.json(result);
+    
   });
 });
 
