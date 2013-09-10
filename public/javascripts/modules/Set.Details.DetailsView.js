@@ -100,12 +100,50 @@ Cards.module('Set.Details', function(Details, App) {
 	});
 
 	Details.ListItem = Backbone.Marionette.ItemView.extend({
-	    template: "#yyyyyyyyy"
+		tagName: "tr",
+	    template: "#set-details-listitem"
 	});
 
+	Details.ListEmptyView = Backbone.Marionette.ItemView.extend({
+		tagName: "tr",
+		template: "#set-details-listitem-empty",
+		className: "empty-listitem"
+	});	
+
 	Details.DetailsListView = Backbone.Marionette.CompositeView.extend({
+		emptyView: Details.ListEmptyView,
+		tagName: "table",
+		className: "table table-bordered table-striped table-hover",
 		itemView: Details.ListItem,
-		itemViewContainer: "ul",
-		template: "#xxxxxxxx"
+		itemViewContainer: "tbody",
+		template: "#set-details-list",
+		events: {
+			"click a.btn-listEditCard": "editClicked",
+			"click a.btn-listDeleteCard": "deleteClicked"
+		},
+		editClicked: function(ev) {
+			ev.preventDefault();
+
+			var cardId = $(ev.currentTarget).attr("data-id")
+			App.trigger("set:details:edit", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"), cardId);
+		},
+		deleteClicked: function(ev) {
+			ev.preventDefault();
+			var cardId = $(ev.currentTarget).attr("data-id")
+
+			var actualCard = this.collection.get(cardId);
+			console.log(this.collection);
+			actualCard.destroy({
+			    success : function(resp){
+			    	console.log("card deleted");
+			    },
+			    error : function(err) {
+			        console.log('error callback');
+			        // this error message for dev only
+			        alert('There was an error. See console for details');
+			        console.log(err);
+				}
+			});
+		},
 	});
 });

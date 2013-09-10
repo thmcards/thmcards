@@ -162,13 +162,34 @@
       </div>
     </script>
 
-    <script type="text/template" id="xxxxxxxx">
-        <h4><%= name %></h4>
-        <ul></ul>
+    <script type="text/template" id="set-details-list">
+        <thead>
+          <tr>
+            <th width="45%">Vorderseite</th>
+            <th width="45%">Rückseite</th>
+            <th width="10%">Optionen</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
     </script>  
 
-    <script type="text/template" id="yyyyyyyyy">
-        <li><%= _id %></li>
+    <script type="text/template" id="set-details-listitem">
+        <td><span style="font-family:'Georgia'"><%= front.text %></span></td>
+        <td><span style="font-family:'Georgia'"><%= back.text %></span></td>
+        <td>
+          <a class="btn btn-xs btn-primary btn-listEditCard" data-id="<%= _id %>" href="#editCard" style="margin-left:5px">
+            <i class="glyphicon glyphicon-pencil"></i>
+          </a>
+          <a class="btn btn-xs btn-primary btn-listDeleteCard" data-id="<%= _id %>" href="#deleteCard">
+            <i class="glyphicon glyphicon-ban-circle"></i>
+          </a>
+        </td>
+    </script>
+
+    <script type="text/template" id="set-details-listitem-empty">
+        <td colspan="3" align="center">
+          <span style="font-family:'Georgia'">Keine Karten vorhanden</span>
+        </td>
     </script>
 
     <script type="text/template" id="set-details-item-empty">
