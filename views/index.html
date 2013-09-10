@@ -177,10 +177,10 @@
         <td><span style="font-family:'Georgia'"><%= front.text %></span></td>
         <td><span style="font-family:'Georgia'"><%= back.text %></span></td>
         <td>
-          <a class="btn btn-xs btn-primary btn-listEditCard" data-id="<%= _id %>" href="#editCard" style="margin-left:5px">
+          <a class="btn btn-xs btn-default btn-listEditCard" data-id="<%= _id %>" href="#editCard" style="margin-left:5px">
             <i class="glyphicon glyphicon-pencil"></i>
           </a>
-          <a class="btn btn-xs btn-primary btn-listDeleteCard" data-id="<%= _id %>" href="#deleteCard">
+          <a class="btn btn-xs btn-default btn-listDeleteCard" data-id="<%= _id %>" href="#deleteCard">
             <i class="glyphicon glyphicon-ban-circle"></i>
           </a>
         </td>
@@ -387,6 +387,11 @@
       <hr />
       <span class="nav-header" style="padding-left:0">Erstellt von</span>
       <span style="font-family:'Georgia'"><a href="/#profile/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
+      <hr />
+      <div class="btn-group btn-group-xs">
+        <button type="button" id="btnToCardLayout" class="btn btn-default btn-cardLayout">Karte</button>
+        <button type="button" id="btnToListLayout" class="btn btn-default btn-listLayout">Liste</button>
+      </div>
     </script>
 
     <script type="text/template" id="set-details-controls">

@@ -11,9 +11,10 @@ Cards.Router = Backbone.Marionette.AppRouter.extend({
 		"pool": "showPool",
 		"pool/category/:name": "showPoolCategory",
 		"set/list": "listSet",
-		"set/details/:setName/:setId": "showSet",
-		"set/details/:setName/:setId/new": "newCard",
-		"set/learn/:setName/:setId": "learnSet",
+		"set/details/:setId": "showSet",
+		"set/detailslist/:setId": "showSetList",
+		"set/details/:setId/new": "newCard",
+		"set/learn/:setId": "learnSet",
 		"profile/:id": "showProfile",
 		"game/meteor/:id": "playMeteor"
 	}		
@@ -23,17 +24,20 @@ var API = {
 	listSet: function(){
 		Cards.Set.Controller.showListLayout();
 	},
-	newCard: function(name, id){
-		Cards.Set.Controller.showDetailsNewCardLayout(name, id);
+	newCard: function(id){
+		Cards.Set.Controller.showDetailsNewCardLayout(id);
 	},
 	editCard: function(cardId){
 		Cards.Set.Controller.showDetailsEditCardLayout(cardId);
 	},
-	showSet: function(name, id) {
-		Cards.Set.Controller.showDetailsLayout(name, id);
+	showSet: function(id) {
+		Cards.Set.Controller.showDetailsLayout(id);
 	},
-	learnSet: function(name, id) {
-		Cards.Set.Controller.showLearnLayout(name, id);
+	showSetList: function(id) {
+		Cards.Set.Controller.showDetailsListLayout(id);
+	},
+	learnSet: function(id) {
+		Cards.Set.Controller.showLearnLayout(id);
 	},
 	showPool: function() {
 		Cards.Pool.Controller.showPoolLayout();
@@ -147,24 +151,29 @@ Cards.on("set:list", function(){
 	API.listSet();
 });
 
-Cards.on("set:details", function(name, id){
-	Cards.navigate("set/details/"+name+"/"+id);
-	API.showSet(name, id);
+Cards.on("set:details", function(id){
+	Cards.navigate("set/details/"+id);
+	API.showSet(id);
 })
 
-Cards.on("set:details:new", function(name, id){
-	Cards.navigate("set/details/"+name+"/"+id+"/new");
-	API.newCard(name, id);
+Cards.on("set:detailslist", function(id){
+	Cards.navigate("set/detailslist/"+id);
+	API.showSetList(id);
 })
 
-Cards.on("set:details:edit", function(name, id, cardId){
-	Cards.navigate("set/details/"+name+"/"+id+"/edit/"+cardId);
+Cards.on("set:details:new", function(id){
+	Cards.navigate("set/details/"+id+"/new");
+	API.newCard(id);
+})
+
+Cards.on("set:details:edit", function(id, cardId){
+	Cards.navigate("set/details/"+id+"/edit/"+cardId);
 	API.editCard(cardId);
 })
 
-Cards.on("set:learn", function(name, id){
-	Cards.navigate("set/learn/"+name+"/"+id);
-	API.learnSet(name, id);
+Cards.on("set:learn", function(id){
+	Cards.navigate("set/learn/"+id);
+	API.learnSet(id);
 })
 
 Cards.on("profile", function(username){

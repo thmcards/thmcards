@@ -2,6 +2,20 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 	SideBar.SideBarView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-sideBar",
 		className: "well well-sm sidebar-nav",
+		events: {
+			"click button.btn-cardLayout": "switchToCardLayout",
+			"click button.btn-listLayout": "switchToListLayout"
+		},
+		switchToCardLayout: function(ev) {
+			if (!$('#btnToCardLayout').hasClass("active")) {
+				App.trigger("set:details", this.model.get("_id"));
+			}		
+		},
+		switchToListLayout: function(ev) {
+			if (!$('#btnToListLayout').hasClass("active")) {
+				App.trigger("set:detailslist", this.model.get("_id"));
+			}
+		},
 		initialize: function () {
     		_.bindAll(this);
     		this.model.on('change', this.render);
@@ -27,8 +41,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			"click #editSetModal button.btn-primary": "updateSet",
 			"click #editSetModal button.btn-danger": "deleteSet"
 		},
+
 		newCardClicked: function(ev) {
-			App.trigger("set:details:new", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("_id"));
+			App.trigger("set:details:new", this.model.get("_id"));
 		},
 		showEditSetModal: function() {
 			var that = this;
