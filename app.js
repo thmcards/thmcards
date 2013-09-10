@@ -414,12 +414,6 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
   db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
     if(!_.isUndefined(body.rows) && _.isArray(body.rows)) {
       var userInfo = body.rows[0].value;
-
-      var emailHash = crypto.createHash('md5').update(userInfo.email.toLowerCase()).digest("hex")
-      
-      var gravatarUrl = "http://www.gravatar.com/avatar/" + emailHash + "?s=40";
-      userInfo.gravatarUrl = gravatarUrl;
-
       res.json(userInfo);
     } else {
       console.log("user/username", body);
