@@ -265,20 +265,8 @@
         <% if(cardCnt > 0) { %><span class="badge pull-right"><%= cardCnt %></span><% } %>
         <a href="#set/details/<%= name.replace(/[^a-zA-Z0-9-_]/g, '_') %>/<%= _id %>/"><%= name %></a>
       </td>
+      <td><%= category %></td>
       <td><%= description %></td>
-      <td>
-        <div class="progress">
-          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-          <span class="sr-only">80% Complete (danger)</span>
-        </div>
-          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%">
-            <span class="sr-only">60% Complete (warning)</span>
-          </div>
-          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-          <span class="sr-only">40% Complete (success)</span>
-        </div>
-        </div>
-      </td>
     </script>
 
     <script type="text/template" id="set-details-newcard"> 
@@ -520,8 +508,8 @@
       <thead>
         <tr>
           <th>Name</th>
+          <th width="25%">Kategorie</th>
           <th width="40%">Beschreibung</th>
-          <th width="25%">Fortschritt</th>
         </tr>
       </thead>
       <tbody></tbody>
