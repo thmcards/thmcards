@@ -19,18 +19,25 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		initialize: function () {
     		_.bindAll(this);
     		this.model.on('change', this.render);
-		},
+		}
+	}),
+	SideBar.RatingsView = Backbone.Marionette.ItemView.extend({
+		template: "#set-details-rating",
+		className: "well well-sm sidebar-nav",
 		onRender: function() {
+			console.log("ren");
 			this.$("#raty").raty({ 
 				score: function() {
 			      return $(this).attr('data-score');
 			    },
+			    readonly: true,
 				starOff: '/img/star-off.png',
 				starOn : '/img/star-on.png',
 				starHalf: '/img/star-half.png'
 			});
 		}
 	}),
+
 	SideBar.ControlsView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-controls",
 		className: "well well-sm sidebar-nav",
@@ -49,9 +56,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			"click .newCard": "newCardClicked",
 			"click .editSet": "showEditSetModal",
 			"click #editSetModal button.btn-primary": "updateSet",
-			"click #editSetModal button.btn-danger": "deleteSet"
+			"click #editSetModal button.btn-danger": "deleteSet",
+			"click a.show-rating": "showRatings"
 		},
-
 		newCardClicked: function(ev) {
 			App.trigger("set:details:new", this.model.get("_id"));
 		},
@@ -122,6 +129,10 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			        console.log(err);
 				}
 			});
+		},
+		showRatings: function(ev) {
+			ev.preventDefault();
+			App.trigger('set:rating', this.model.get("id"));
 		}
 	});
 });
