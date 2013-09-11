@@ -151,6 +151,35 @@ Cards.module('Set', function(Set, App){
 					console.log("error");
 				}
 			});
+		},
+		showRatingLayout: function(id) {
+			var set = new Cards.Entities.Set({id: id});
+
+			set.fetch({
+				success: function(set){
+
+				var detailsLayout = new Cards.Set.Details.Layout();
+				Cards.mainRegion.show(detailsLayout);
+
+				var ratingCollection = new Cards.Entities.RatingCollection([], {setId: id});
+
+				ratingCollection.fetch({
+					success: function(){
+						var ratingView = new Cards.Set.Rating.RatingView({ collection: ratingCollection });
+						detailsLayout.detailsRegion.show(ratingView);
+					},
+					error: function() {
+
+					}
+				})
+						
+				var sideBarView = new Cards.Set.Rating.SideBarView({ model: set});
+				detailsLayout.sideBarRegion.show(sideBarView);
+				},
+				error: function(){
+
+				}
+			});
 		}
 	}
 });

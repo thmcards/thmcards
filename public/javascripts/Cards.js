@@ -11,6 +11,7 @@ Cards.Router = Backbone.Marionette.AppRouter.extend({
 		"pool": "showPool",
 		"pool/category/:name": "showPoolCategory",
 		"set/list": "listSet",
+		"set/rating/:setId": "showSetRating",
 		"set/details/:setId": "showSet",
 		"set/detailslist/:setId": "showSetList",
 		"set/details/:setId/new": "newCard",
@@ -35,6 +36,9 @@ var API = {
 	},
 	showSetList: function(id) {
 		Cards.Set.Controller.showDetailsListLayout(id);
+	},
+	showSetRating: function(id) {
+		Cards.Set.Controller.showRatingLayout(id);
 	},
 	learnSet: function(id) {
 		Cards.Set.Controller.showLearnLayout(id);
@@ -150,6 +154,11 @@ Cards.on("set:list", function(){
 	Cards.navigate("set/list");
 	API.listSet();
 });
+
+Cards.on("set:rating", function(id){
+	Cards.navigate("set/rating/"+id);
+	API.showSetRating(id);
+})
 
 Cards.on("set:details", function(id){
 	Cards.navigate("set/details/"+id);

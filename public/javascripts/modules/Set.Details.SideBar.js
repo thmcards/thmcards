@@ -49,9 +49,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			"click .newCard": "newCardClicked",
 			"click .editSet": "showEditSetModal",
 			"click #editSetModal button.btn-primary": "updateSet",
-			"click #editSetModal button.btn-danger": "deleteSet"
+			"click #editSetModal button.btn-danger": "deleteSet",
+			"click a.show-rating": "showRatings"
 		},
-
 		newCardClicked: function(ev) {
 			App.trigger("set:details:new", this.model.get("_id"));
 		},
@@ -122,6 +122,10 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			        console.log(err);
 				}
 			});
+		},
+		showRatings: function(ev) {
+			ev.preventDefault();
+			App.trigger('set:rating', this.model.get("id"));
 		}
 	});
 });

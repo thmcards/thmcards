@@ -910,6 +910,19 @@ app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
   });
 });
 
+app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
+  db.view("rating", "by_set", { key: new Array(req.params.setId)}, function(err, body) {
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+      var ratings = _.pluck(body.rows, "value");
+
+      res.json(ratings);
+    } else {
+      console.log("[rating/by_set]", err);
+      res.json([]);
+    }
+  });
+});
+
 
 app.get('/badge', function(req, res) {
   var data = { 
