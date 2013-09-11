@@ -389,7 +389,7 @@
       <span class="nav-header" style="padding-left:0;">Bewertung</span>
       <div  style="text-align:center">
         <span id="raty" data-score="<%= avgValutation %>" style="display:inline-block"></span>
-        <span style="display:inline-block;font-size:11px" class="text-muted">Ø <%= avgValutation %> Sterne bei <a href="#set/rating/<%= setId %>" class="show-rating"><%= totalValutations %> Bewertungen</a></span>
+        <span style="display:inline-block;font-size:11px" class="text-muted">Ø <%= _.str.numberFormat(avgValutation, 1, ',', '.') %> Sterne bei <a href="#set/rating/<%= setId %>" class="show-rating"><%= _.str.numberFormat(totalValutations, 0, ',', '.') %> Bewertungen</a></span>
       </div>
     </script>
 
