@@ -380,6 +380,8 @@ app.get('/set/learned', function(req, res){
         var docs = _.pluck(body.rows, "doc");
         _.each(docs, function(doc){
           doc.cardCnt = "-";
+
+          if(!_.has(doc, "category") && _.isUndefined(doc.category)) doc.category = "";
         })
         res.json(docs);
       }
@@ -449,6 +451,8 @@ app.get('/set', ensureAuthenticated, function(req, res){
     _.each(sets, function(set){      
       var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
       set.value.cardCnt = cardCnt.length;
+
+      if(!_.has(set.value, "category") && _.isUndefined(set.value.category)) set.value.category = "";
     }, this);
     sets = _.pluck(sets, "value");
 
