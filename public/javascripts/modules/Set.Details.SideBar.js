@@ -3,8 +3,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		template: "#set-details-sideBar",
 		className: "well well-sm sidebar-nav",
 		events: {
-			"click button.btn-cardLayout": "switchToCardLayout",
-			"click button.btn-listLayout": "switchToListLayout"
+			"click a.btn-cardLayout": "switchToCardLayout",
+			"click a.btn-listLayout": "switchToListLayout"
 		},
 		switchToCardLayout: function(ev) {
 			if (!$('#btnToCardLayout').hasClass("active")) {

@@ -376,10 +376,13 @@
       <span class="nav-header" style="padding-left:0">Erstellt von</span>
       <span style="font-family:'Georgia'"><a href="/#profile/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
       <hr />
-      <div class="btn-group btn-group-xs">
-        <button type="button" id="btnToCardLayout" class="btn btn-default btn-cardLayout">Karte</button>
-        <button type="button" id="btnToListLayout" class="btn btn-default btn-listLayout">Liste</button>
+      <span class="nav-header" style="padding-left:0; margin-bottom:3px">Ansicht wechseln</span>
+      <div class="btn-group btn-group-xs btn-group-justified">
+        <a id="btnToCardLayout" class="btn btn-default btn-cardLayout">Karte</a>
+        <a id="btnToListLayout" class="btn btn-default btn-listLayout">Liste</a>
       </div>
+      <hr />
+      <span class="nav-header" style="padding-left:0;">Bewertung</span>
     </script>
 
     <script type="text/template" id="set-details-controls">
@@ -847,12 +850,11 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.1-bundled/backbone.marionette.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-    <script type="text/javascript" src="javascripts/jquery.pause.min.js"></script>
+    <script type="text/javascript" src="javascripts/lib/jquery.pause.min.js"></script>
     <!--script type="text/javascript" src="javascripts/jquery.timer.js"></script-->
 
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <!--script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script-->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"></script>
 
@@ -899,8 +901,8 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="/javascripts/Date.format.min.js"></script>
 
-    <script type="text/javascript" src="/javascripts/wysihtml5-0.3.0.min.js"></script>
-    <script type="text/javascript" src="/javascripts/bootstrap-wysihtml5.js"></script>
+    <script type="text/javascript" src="/javascripts/lib/wysihtml5-0.3.0.min.js"></script>
+    <script type="text/javascript" src="/javascripts/lib/bootstrap-wysihtml5.js"></script>
 
     <script src="http://beta.openbadges.org/issuer.js"></script>
 
