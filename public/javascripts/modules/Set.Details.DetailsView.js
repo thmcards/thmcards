@@ -18,8 +18,6 @@ Cards.module('Set.Details', function(Details, App) {
 		linkClicked: function(ev) {
 			ev.preventDefault();
 			console.log("link");
-			
-			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
 		}
 	});	
 
