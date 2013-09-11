@@ -68,6 +68,14 @@ Cards.module('Set', function(Set, App){
 						success: function(){
 							var detailsListView = new Cards.Set.Details.DetailsListView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsListView);
+							
+							var rating = new Cards.Entities.Rating({ setId: set.get("id")});
+							rating.fetch({
+								success: function(rating){
+									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
+									detailsLayout.ratingRegion.show(ratingsView);
+								}
+							})
 						},
 						error: function(){
 
@@ -172,7 +180,7 @@ Cards.module('Set', function(Set, App){
 				var ratingCollection = new Cards.Entities.RatingCollection([], {setId: id});
 
 				ratingCollection.fetch({
-					success: function(){
+					success: function(ratingCollection){
 						var ratingView = new Cards.Set.Rating.RatingView({ collection: ratingCollection });
 						detailsLayout.detailsRegion.show(ratingView);
 					},
