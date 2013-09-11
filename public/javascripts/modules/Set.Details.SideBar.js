@@ -19,6 +19,16 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		initialize: function () {
     		_.bindAll(this);
     		this.model.on('change', this.render);
+		},
+		onRender: function() {
+			this.$("#raty").raty({ 
+				score: function() {
+			      return $(this).attr('data-score');
+			    },
+				starOff: '/img/star-off.png',
+				starOn : '/img/star-on.png',
+				starHalf: '/img/star-half.png'
+			});
 		}
 	}),
 	SideBar.ControlsView = Backbone.Marionette.ItemView.extend({
