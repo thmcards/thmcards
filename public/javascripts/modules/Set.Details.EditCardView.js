@@ -4,17 +4,16 @@ Cards.module('Set.Details', function(Details, App) {
 		events: {
 			"click .btn-success": "editCard",
 			"click .btn.cancel": "cancel",
-			"click .btn-danger": "deleteCard",
-			"click .btn-cardDelete": "deleteClicked",
+			"click .btn-warning": "deleteCard",
+			"click .btn-card-delete": "deleteClicked",
 			"click .btn-pictureSearch": "pictureSearch",
 			"keyup input": "keyupInput",
-			"focus input": "focusInput",
-			//"clickoutside .btn-cardDelete" : "disableButton"
+			"focus input": "focusInput"
 		},
 		ui: {
 			saveBtn: ".btn-success",
 			cancelBtn: ".btn.cancel",
-			deleteBtn: ".btn-cardDelete",
+			deleteBtn: ".btn-card-delete",
 			picSearchFrontbtn: "#set-details-editcard-btn-pic-front-seach",
 			pictureSearchModal: "#editcard-pictureSearchModal"
 		},
@@ -61,18 +60,19 @@ Cards.module('Set.Details', function(Details, App) {
 				this.ui.saveBtn.button('reset');
 			}
 		},
-		disableButton: function(ev) {
+		resetDeleteButton: function(ev) {
 			console.log("outside clicked");
-			if ($(".btn-cardDelete").hasClass("btn-danger")) {
-					$(".btn-cardDelete").removeClass("btn-danger");
-					$(".btn-cardDelete").text("Karte löschen");
+			if ($("a.btn-card-delete").hasClass("btn-warning")) {
+					$("a.btn-card-delete").removeClass("btn-warning");
+					$("a.btn-card-delete").addClass("btn-danger");
+					$("a.btn-card-delete").text("Karte löschen");
 			}
 		},
 		deleteClicked: function(ev) {
 			console.log("delete clicked");
-			$(".btn-cardDelete").text("Sicher?");
-			$(".btn-cardDelete").addClass("btn-danger");
-
+			$("a.btn-card-delete").removeClass("btn-danger");
+			$("a.btn-card-delete").text("Sicher?");
+			$("a.btn-card-delete").addClass("btn-warning");
 		},
 		deleteCard: function(ev) {
 			var that = this;
@@ -199,7 +199,8 @@ Cards.module('Set.Details', function(Details, App) {
 			google.load('search', '1', {callback: loadSearch });
 		},
 		onShow: function() {
-			$(".btn-cardDelete").clickoutside(this.disableButton);
+			console.log($("a.btn-card-delete"));
+			
 			var editorConfig = {
 				"font-styles": false,
 				"color": false,
@@ -218,8 +219,13 @@ Cards.module('Set.Details', function(Details, App) {
 			$("#set-details-editcard-input-pic-front-search").val(this.model.attributes.front.picture);
 			$("#set-details-editcard-input-pic-back-search").val(this.model.attributes.back.picture);
 		},
-		onRender: function() {
-
+		onClose: function(){
+			console.log("asd");
+			$(".btn-cardDelete").off('clickout');
+		},
+		onRender: function(){
+			console.log(this.$("a.btn-card-delete"));
+			this.$("a.btn-card-delete").clickout(this.resetDeleteButton);
 		}
 	});
 });
