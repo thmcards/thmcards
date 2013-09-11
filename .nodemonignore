@@ -13,3 +13,4 @@
 /.git/
 /views/index.jade
 .DS_Store
+/couchviews/
