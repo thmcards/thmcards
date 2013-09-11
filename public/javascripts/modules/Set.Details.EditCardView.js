@@ -5,14 +5,16 @@ Cards.module('Set.Details', function(Details, App) {
 			"click .btn-success": "editCard",
 			"click .btn.cancel": "cancel",
 			"click .btn-danger": "deleteCard",
+			"click .btn-cardDelete": "deleteClicked",
 			"click .btn-pictureSearch": "pictureSearch",
 			"keyup input": "keyupInput",
-			"focus input": "focusInput"
+			"focus input": "focusInput",
+			//"clickoutside .btn-cardDelete" : "disableButton"
 		},
 		ui: {
 			saveBtn: ".btn-success",
 			cancelBtn: ".btn.cancel",
-			deleteBtn: ".btn-danger",
+			deleteBtn: ".btn-cardDelete",
 			picSearchFrontbtn: "#set-details-editcard-btn-pic-front-seach",
 			pictureSearchModal: "#editcard-pictureSearchModal"
 		},
@@ -58,6 +60,19 @@ Cards.module('Set.Details', function(Details, App) {
 				alert('not valid');
 				this.ui.saveBtn.button('reset');
 			}
+		},
+		disableButton: function(ev) {
+			console.log("outside clicked");
+			if ($(".btn-cardDelete").hasClass("btn-danger")) {
+					$(".btn-cardDelete").removeClass("btn-danger");
+					$(".btn-cardDelete").text("Karte löschen");
+			}
+		},
+		deleteClicked: function(ev) {
+			console.log("delete clicked");
+			$(".btn-cardDelete").text("Sicher?");
+			$(".btn-cardDelete").addClass("btn-danger");
+
 		},
 		deleteCard: function(ev) {
 			var that = this;
@@ -184,6 +199,7 @@ Cards.module('Set.Details', function(Details, App) {
 			google.load('search', '1', {callback: loadSearch });
 		},
 		onShow: function() {
+			$(".btn-cardDelete").clickoutside(this.disableButton);
 			var editorConfig = {
 				"font-styles": false,
 				"color": false,
@@ -201,6 +217,9 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$("#set-details-editcard-input-pic-front-search").val(this.model.attributes.front.picture);
 			$("#set-details-editcard-input-pic-back-search").val(this.model.attributes.back.picture);
+		},
+		onRender: function() {
+
 		}
 	});
 });
