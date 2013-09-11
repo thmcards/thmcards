@@ -26,6 +26,14 @@ Cards.module('Set', function(Set, App){
 						success: function(){
 							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsView);
+
+							var rating = new Cards.Entities.Rating({ setId: set.get("id")});
+							rating.fetch({
+								success: function(rating){
+									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
+									detailsLayout.ratingRegion.show(ratingsView);
+								}
+							})
 						},
 						error: function(){
 

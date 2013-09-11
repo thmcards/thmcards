@@ -4,6 +4,7 @@ Cards.module('Set.Details', function(Details, App) {
 		regions: {
 			detailsRegion: "#set-details-region",
 			sideBarRegion: "#set-details-sideBar-region",
+			ratingRegion: "#set-details-rating-region",
 			controlsRegion: "#set-details-controls-region",
 		}
 	});

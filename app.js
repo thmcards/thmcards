@@ -910,6 +910,30 @@ app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
   });
 });
 
+app.get('/rating/:setId', ensureAuthenticated, function(req, res){
+  var result = {
+    totalValutations: 0,
+    avgValutation: 0,
+    setId: req.params.setId
+  }
+
+  db.view("rating", "by_set", { key: new Array(req.params.setId)}, function(err, body) {
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+      var ratings = _.pluck(body.rows, "value");
+
+      var avgValutation = (_.reduce(_.pluck(ratings, "value"), function(memo, num){ return memo + num; }, 0))/ratings.length;
+      
+      result.avgValutation = avgValutation;
+      result.totalValutations = ratings.length;
+
+      res.json(result);
+    } else {
+      console.log("[rating/by_set]", err);
+      res.json(result);
+    }
+  });
+});
+
 app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
   db.view("rating", "by_set", { key: new Array(req.params.setId)}, function(err, body) {
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {

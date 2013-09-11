@@ -132,6 +132,7 @@
       <div class="row">
         <div class="col-md-3">
           <div id="set-details-sideBar-region"></div>
+          <div id="set-details-rating-region"></div>
           <div id="set-details-controls-region"></div>
         </div>
         <div class="col-md-9" id="set-details-region"></div>
@@ -382,10 +383,13 @@
         <a id="btnToListLayout" class="btn btn-default btn-listLayout">Liste</a>
       </div>
       <hr />
+    </script>
+
+    <script type="text/template" id="set-details-rating">
       <span class="nav-header" style="padding-left:0;">Bewertung</span>
       <div  style="text-align:center">
-        <span id="raty" data-score="4.34" style="display:inline-block"></span>
-        <span style="display:inline-block;font-size:11px" class="text-muted">Ø 4.34 Sterne bei <a href="#set/rating/<%= _id %>" class="show-rating">33 Bewertungen</a></span>
+        <span id="raty" data-score="<%= avgValutation %>" style="display:inline-block"></span>
+        <span style="display:inline-block;font-size:11px" class="text-muted">Ø <%= avgValutation %> Sterne bei <a href="#set/rating/<%= setId %>" class="show-rating"><%= totalValutations %> Bewertungen</a></span>
       </div>
     </script>
 
