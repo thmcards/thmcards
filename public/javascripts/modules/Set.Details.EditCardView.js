@@ -2,7 +2,7 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.EditCardView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-editcard",
 		events: {
-			"click .btn-success": "editCard",
+			"click .btn.save": "editCard",
 			"click .btn.cancel": "cancel",
 			"click .btn-warning": "deleteCard",
 			"click .btn-card-delete": "deleteClicked",
@@ -11,7 +11,7 @@ Cards.module('Set.Details', function(Details, App) {
 			"focus input": "focusInput"
 		},
 		ui: {
-			saveBtn: ".btn-success",
+			saveBtn: ".btn.save",
 			cancelBtn: ".btn.cancel",
 			deleteBtn: ".btn-card-delete",
 			picSearchFrontbtn: "#set-details-editcard-btn-pic-front-seach",
