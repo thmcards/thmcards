@@ -484,7 +484,6 @@ app.post('/set', ensureAuthenticated, function(req, res){
 });
 
 app.put('/set/:setid', ensureAuthenticated, function(req, res){
-
   db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});

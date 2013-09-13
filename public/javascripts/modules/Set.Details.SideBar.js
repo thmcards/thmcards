@@ -79,6 +79,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 				that.ui.modalBtnSave.button('reset');
 				that.ui.modalInputName.val('');
 				that.ui.modalInputDescription.val('');
+				that.$('.help-block').text('');
+				that.$('.setdetails').removeClass('has-error');
+
 			})
 			this.ui.modalView.modal('show');
 		},
@@ -92,21 +95,50 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var description = this.ui.modalInputDescription.val();
 			var category = this.ui.modalInputCategory.val();
 			var visibility = $("#editSetModal .btn-group > label.active > input").val();
+			console.log(this.model);
+			var editedSet = this.model;
+			editedSet.set({
+					name: name, 
+					description: description,
+					visibility: visibility,
+					category: category,
+					cardCnt: 0
+				 });
 
-			this.model.save({name: name, description: description, visibility: visibility, category: category}, {
-			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
-
-			    success : function(resp){
-			        that.ui.modalView.modal('hide');
-			    },
-			    error : function(err) {
-			    	that.ui.modalBtnSave.button('reset');
-			        console.log('error callback');
-			        // this error message for dev only
-			        alert('There was an error. See console for details');
-			        console.log(err);
-				}
-			});
+			if(editedSet.isValid()) {
+				editedSet.save({},{
+				    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+				    success : function(resp){
+				        that.ui.modalView.modal('hide');
+				    },
+				    error : function(err) {
+				    	that.ui.modalBtnSave.button('reset');
+				        console.log('error callback');
+				        // this error message for dev only
+				        alert('There was an error. See console for details');
+				        console.log(err);
+					}
+				});
+			} else {
+				this.showErrors(this.model.validationError);
+				this.ui.modalBtnSave.button('reset');
+			}
+		},
+		showErrors: function(errors) {
+			console.log("showerrors");
+			this.$('.help-block').text('');
+			this.$('.setdetails').removeClass('has-error');
+		    _.each(errors, function (error) {
+		        var cardside = this.$('div.' + error.name);
+		        cardside.addClass('has-error');
+		        var helptext = this.$('span.' + error.name);
+		        helptext.text(error.message);
+		    }, this);
+		}, 
+		hideErrors: function () {
+			console.log("hideerrors");
+			this.$('.help-block').text('');
+			this.$('.setdetails').removeClass('has-error');
 		},
 		deleteClicked: function(ev) {
 			$(".btn-setDelete").removeClass("btn-danger");

@@ -8,6 +8,20 @@ Cards.module('Entities', function(Entities, App, Backbone){
 				return "/set";
 			}
 		},
+		validate: function (attrs) {
+			console.log(attrs);
+			var errors = [];
+	        if (!attrs.name) {
+	            errors.push({name: 'name', message: 'Bitte Namen angeben.'});
+	        }
+	        if (!attrs.description) {
+	            errors.push({name: 'description', message: 'Bitte Beschreibung angeben.'});
+	        }
+	        if (!attrs.category) {
+	            errors.push({name: 'category', message: 'Bitte Kategorie angeben.'});
+	        }
+	        return errors.length > 0 ? errors : false;
+	    },
 		idAttribute: "_id"
 	});
 
