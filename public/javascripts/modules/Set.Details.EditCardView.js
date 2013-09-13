@@ -25,7 +25,6 @@ Cards.module('Set.Details', function(Details, App) {
 			var that = this;
 
 			var cardId = this.model.get('_id');
-			console.log(cardId);
 
 			var card = new Cards.Entities.Card({
 				_id: cardId,
@@ -46,6 +45,7 @@ Cards.module('Set.Details', function(Details, App) {
 			if(card.isValid()) {
 				card.save({}, {
 					success: function(model, response) {
+						that.hideErrors();
 						console.log("card saved");
 						history.back();
 					},
@@ -56,12 +56,11 @@ Cards.module('Set.Details', function(Details, App) {
 					}
 				});
 			} else {
-				alert('not valid');
+				this.showErrors(card.validationError);
 				this.ui.saveBtn.button('reset');
 			}
 		},
 		resetDeleteButton: function(ev) {
-			console.log("outside clicked");
 			if ($("a.btn-card-delete").hasClass("btn-warning")) {
 					$("a.btn-card-delete").removeClass("btn-warning");
 					$("a.btn-card-delete").addClass("btn-danger");
@@ -69,7 +68,6 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		deleteClicked: function(ev) {
-			console.log("delete clicked");
 			$("a.btn-card-delete").removeClass("btn-danger");
 			$("a.btn-card-delete").text("Sicher?");
 			$("a.btn-card-delete").addClass("btn-warning");
@@ -92,6 +90,21 @@ Cards.module('Set.Details', function(Details, App) {
 				}
 			});
 
+		},
+		showErrors: function(errors) {
+			this.$('.help-block').text('');
+			this.$('.cardtext').removeClass('has-error');
+		    _.each(errors, function (error) {
+		        var cardside = this.$('td.' + error.name);
+		        cardside.addClass('has-error');
+		        var helptext = this.$('span.' + error.name);
+		        helptext.text(error.message);
+		    }, this);
+		},
+ 
+		hideErrors: function () {
+			this.$('.help-block').text('');
+			this.$('.cardtext').removeClass('has-error');
 		},
 		pictureSearch: function(ev) {
 			ev.preventDefault();
