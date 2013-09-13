@@ -95,9 +95,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var description = this.ui.modalInputDescription.val();
 			var category = this.ui.modalInputCategory.val();
 			var visibility = $("#editSetModal .btn-group > label.active > input").val();
-			console.log(this.model);
-			var editedSet = this.model;
-			editedSet.set({
+
+			this.model.set({
 					name: name, 
 					description: description,
 					visibility: visibility,
@@ -105,8 +104,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 					cardCnt: 0
 				 });
 
-			if(editedSet.isValid()) {
-				editedSet.save({},{
+			if(this.model.isValid()) {
+				this.model.save({},{
 				    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
 				    success : function(resp){
 				        that.ui.modalView.modal('hide');
