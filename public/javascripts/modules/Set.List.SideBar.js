@@ -71,6 +71,8 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 				that.ui.modalBtnSave.button('reset');
 				that.ui.modalInputName.val('');
 				that.ui.modalInputDescription.val('');
+				that.$('.help-block').text('');
+				that.$('.setdetails').removeClass('has-error');
 			})
 			this.ui.modalView.modal('show');
 		},
@@ -92,22 +94,42 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 								cardCnt: 0
 							 });
 
-			this.collection.create(newSet, {
-			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+			if(newSet.isValid()) {
+				this.collection.create(newSet, {
+				    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
 
-			    success : function(resp){
-			        that.ui.modalView.modal('hide');
-			    },
-			    error : function(err) {
-			    	that.ui.modalBtnSave.button('reset');
-			        console.log('error callback');
-			        // this error message for dev only
-			        alert('There was an error. See console for details');
-			        console.log(err);
-				}
-			});
-
-
+				    success : function(resp){
+				        that.ui.modalView.modal('hide');
+				    },
+				    error : function(err) {
+				    	that.ui.modalBtnSave.button('reset');
+				        console.log('error callback');
+				        // this error message for dev only
+				        alert('There was an error. See console for details');
+				        console.log(err);
+					}
+				});
+			} else {
+				this.showErrors(newSet.validationError);
+				this.ui.modalBtnSave.button('reset');
+			}
+		},
+		showErrors: function(errors) {
+			console.log("showerrors");
+			this.$('.help-block').text('');
+			this.$('.setdetails').removeClass('has-error');
+		    _.each(errors, function (error) {
+		        var cardside = this.$('div.' + error.name);
+		        cardside.addClass('has-error');
+		        var helptext = this.$('span.' + error.name);
+		        helptext.text(error.message);
+		    }, this);
+		},
+ 
+		hideErrors: function () {
+			console.log("hideerrors");
+			this.$('.help-block').text('');
+			this.$('.setdetails').removeClass('has-error');
 		},
 		initialize: function(options) {
 			this.collection = options.collection;

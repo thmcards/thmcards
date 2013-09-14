@@ -46,7 +46,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			inputSetName: "input[type=text]",
 			modalView: "#editSetModal",
 			modalBtnSave: "#editSetModal button.btn-primary",
-			modalBtnDelete: "#editSetModal button.btn-delete",
+			modalBtnDelete: "#editSetModal button.btn-setDelete",
 			modalInputName: "#editSetName",
 			modalInputDescription: "#editSetDescription",
 			modalInputCategory: "#editSetCategory"
@@ -56,7 +56,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			"click .newCard": "newCardClicked",
 			"click .editSet": "showEditSetModal",
 			"click #editSetModal button.btn-primary": "updateSet",
-			"click #editSetModal button.btn-danger": "deleteSet",
+			"click #editSetModal button.btn-danger": "deleteClicked",
+			"click #editSetModal button.btn-warning": "deleteSet",
 			"click a.show-rating": "showRatings"
 		},
 		newCardClicked: function(ev) {
@@ -78,6 +79,10 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 				that.ui.modalBtnSave.button('reset');
 				that.ui.modalInputName.val('');
 				that.ui.modalInputDescription.val('');
+				that.$('.help-block').text('');
+				that.$('.setdetails').removeClass('has-error');
+				that.model.fetch();
+
 			})
 			this.ui.modalView.modal('show');
 		},
@@ -92,27 +97,64 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var category = this.ui.modalInputCategory.val();
 			var visibility = $("#editSetModal .btn-group > label.active > input").val();
 
-			this.model.save({name: name, description: description, visibility: visibility, category: category}, {
-			    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+			this.model.set({
+					name: name, 
+					description: description,
+					visibility: visibility,
+					category: category,
+					cardCnt: 0
+				 });
 
-			    success : function(resp){
-			        that.ui.modalView.modal('hide');
-			    },
-			    error : function(err) {
-			    	that.ui.modalBtnSave.button('reset');
-			        console.log('error callback');
-			        // this error message for dev only
-			        alert('There was an error. See console for details');
-			        console.log(err);
-				}
-			});
+			if(this.model.isValid()) {
+				this.model.save({},{
+				    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
+				    success : function(resp){
+				        that.ui.modalView.modal('hide');
+				    },
+				    error : function(err) {
+				    	that.ui.modalBtnSave.button('reset');
+				        console.log('error callback');
+				        // this error message for dev only
+				        alert('There was an error. See console for details');
+				        console.log(err);
+					}
+				});
+			} else {
+				this.showErrors(this.model.validationError);
+				this.ui.modalBtnSave.button('reset');
+			}
+		},
+		showErrors: function(errors) {
+			console.log("showerrors");
+			this.$('.help-block').text('');
+			this.$('.setdetails').removeClass('has-error');
+		    _.each(errors, function (error) {
+		        var cardside = this.$('div.' + error.name);
+		        cardside.addClass('has-error');
+		        var helptext = this.$('span.' + error.name);
+		        helptext.text(error.message);
+		    }, this);
+		}, 
+		hideErrors: function () {
+			console.log("hideerrors");
+			this.$('.help-block').text('');
+			this.$('.setdetails').removeClass('has-error');
+		},
+		deleteClicked: function(ev) {
+			$(".btn-setDelete").removeClass("btn-danger");
+			$(".btn-setDelete").text("Sicher?");
+			$(".btn-setDelete").addClass("btn-warning");
+		},
+		resetDeleteButton: function(ev) {
+			if ($(".btn-setDelete").hasClass("btn-warning")) {
+					$(".btn-setDelete").removeClass("btn-warning");
+					$(".btn-setDelete").addClass("btn-danger");
+					$(".btn-setDelete").text("Kartensatz löschen");
+			}
 		},
 		deleteSet: function(ev) {
-
 			var that = this;
-
 			this.ui.modalBtnDelete.button('loading');
-
 			this.model.destroy({
 
 			    success : function(resp){
@@ -133,6 +175,14 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		showRatings: function(ev) {
 			ev.preventDefault();
 			App.trigger('set:rating', this.model.get("id"));
+		},
+		onClose: function(){
+			console.log("asd");
+			$(".btn-setDelete").off('clickout');
+		},
+		onRender: function(){
+			console.log(this.$(".btn-setDelete"));
+			this.$(".btn-setDelete").clickout(this.resetDeleteButton);
 		}
 	});
 });

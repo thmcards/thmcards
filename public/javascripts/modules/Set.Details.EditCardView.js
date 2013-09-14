@@ -2,7 +2,7 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.EditCardView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-editcard",
 		events: {
-			"click .btn-success": "editCard",
+			"click .btn.save": "editCard",
 			"click .btn.cancel": "cancel",
 			"click .btn-warning": "deleteCard",
 			"click .btn-card-delete": "deleteClicked",
@@ -11,41 +11,43 @@ Cards.module('Set.Details', function(Details, App) {
 			"focus input": "focusInput"
 		},
 		ui: {
-			saveBtn: ".btn-success",
+			saveBtn: ".btn.save",
 			cancelBtn: ".btn.cancel",
 			deleteBtn: ".btn-card-delete",
 			picSearchFrontbtn: "#set-details-editcard-btn-pic-front-seach",
 			pictureSearchModal: "#editcard-pictureSearchModal"
 		},
 		cancel: function(ev) {
+			this.model.fetch();
 			history.back();
 		},
 		editCard: function(ev) {
 			this.ui.saveBtn.button('loading');
 			var that = this;
 
-			var cardId = this.model.get('_id');
-			console.log(cardId);
 
-			var card = new Cards.Entities.Card({
-				_id: cardId,
-				front: {
+			var	front = {
 					text: $("#editcard-front-textarea").val(),
 					text_plain: $("#editcard-front-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-front-search").val() || null,
 					video: null
-				},
-				back: {
+				};
+			var	back = {
 					text: $("#editcard-back-textarea").val(),
 					text_plain: $("#editcard-back-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-back-search").val() || null,
 					video: null
-				}
-			});
+				};
 
-			if(card.isValid()) {
-				card.save({}, {
+			this.model.set({
+				front: front,
+				back: back
+			})
+
+			if(this.model.isValid()) {
+				this.model.save({}, {
 					success: function(model, response) {
+						that.hideErrors();
 						console.log("card saved");
 						history.back();
 					},
@@ -56,12 +58,11 @@ Cards.module('Set.Details', function(Details, App) {
 					}
 				});
 			} else {
-				alert('not valid');
+				this.showErrors(this.model.validationError);
 				this.ui.saveBtn.button('reset');
 			}
 		},
 		resetDeleteButton: function(ev) {
-			console.log("outside clicked");
 			if ($("a.btn-card-delete").hasClass("btn-warning")) {
 					$("a.btn-card-delete").removeClass("btn-warning");
 					$("a.btn-card-delete").addClass("btn-danger");
@@ -69,7 +70,6 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		deleteClicked: function(ev) {
-			console.log("delete clicked");
 			$("a.btn-card-delete").removeClass("btn-danger");
 			$("a.btn-card-delete").text("Sicher?");
 			$("a.btn-card-delete").addClass("btn-warning");
@@ -92,6 +92,21 @@ Cards.module('Set.Details', function(Details, App) {
 				}
 			});
 
+		},
+		showErrors: function(errors) {
+			this.$('.help-block').text('');
+			this.$('.cardtext').removeClass('has-error');
+		    _.each(errors, function (error) {
+		        var cardside = this.$('td.' + error.name);
+		        cardside.addClass('has-error');
+		        var helptext = this.$('span.' + error.name);
+		        helptext.text(error.message);
+		    }, this);
+		},
+ 
+		hideErrors: function () {
+			this.$('.help-block').text('');
+			this.$('.cardtext').removeClass('has-error');
 		},
 		pictureSearch: function(ev) {
 			ev.preventDefault();

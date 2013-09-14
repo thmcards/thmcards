@@ -484,7 +484,6 @@ app.post('/set', ensureAuthenticated, function(req, res){
 });
 
 app.put('/set/:setid', ensureAuthenticated, function(req, res){
-
   db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});
@@ -506,81 +505,84 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 });
 
 app.delete('/set/:setid', ensureAuthenticated, function(req, res){
+  checkOwner(req.params.setid, req.session["passport"]["user"][0].username, function(){
+    db.view('cards', 'by_set', { key: new Array(req.params.setid)}, function(err, body) {
+    if (!err) {
+        var docs = _.map(body.rows, function(doc) { return doc.value});
+        var cardIds = _.pluck(docs, "_id");
 
-  db.view('cards', 'by_set', { key: new Array(req.params.setid)}, function(err, body) {
-  if (!err) {
-      var docs = _.map(body.rows, function(doc) { return doc.value});
-      var cardIds = _.pluck(docs, "_id");
+        _.each(cardIds, function(cardId){
+          db.view('cards', 'personal_card_by_cardId', { key: new Array(cardId)}, function(err, body) {
+            if (!err) {
+              var docs = _.map(body.rows, function(doc) { return doc.value});
+              var personal = new Array();
 
-      _.each(cardIds, function(cardId){
-        db.view('cards', 'personal_card_by_cardId', { key: new Array(cardId)}, function(err, body) {
-          if (!err) {
-            var docs = _.map(body.rows, function(doc) { return doc.value});
-            var personal = new Array();
-
-            _.each(docs, function(doc){
-               var doc = {
-               _id: doc._id, _rev: doc._rev, _deleted: true
-               }
-               personal.push(doc)
-            }, this);
-
-            db.bulk({"docs": personal}, function(err, body) {
-              console.log(err);
-              console.log(body);
-
-              var normalCard = new Array();
-              console.log(cardIds);
               _.each(docs, function(doc){
                  var doc = {
                  _id: doc._id, _rev: doc._rev, _deleted: true
                  }
-                 normalCard.push(doc)
+                 personal.push(doc)
               }, this);
 
-              db.bulk({"docs": normalCard}, function(err, body) {
+              db.bulk({"docs": personal}, function(err, body) {
                 console.log(err);
                 console.log(body);
 
-                //hier is alles andere gelöscht
+                var normalCard = new Array();
+                console.log(cardIds);
+                _.each(docs, function(doc){
+                   var doc = {
+                   _id: doc._id, _rev: doc._rev, _deleted: true
+                   }
+                   normalCard.push(doc)
+                }, this);
 
-                db.get(req.params.setid, function(err, body){
-                  if(!err) {
-                    var doc = {
-                    _id: body._id,
-                    _rev: body._rev,
-                    _deleted: true
-                    };
-                    db.bulk({"docs": new Array(doc)}, function(err, body){
-                      console.log(err);
-                      console.log(body);
-                    });
-                  }
+                db.bulk({"docs": normalCard}, function(err, body) {
+                  console.log(err);
+                  console.log(body);
+
+                  //hier is alles andere gelöscht
+
+                  db.get(req.params.setid, function(err, body){
+                    if(!err) {
+                      var doc = {
+                      _id: body._id,
+                      _rev: body._rev,
+                      _deleted: true
+                      };
+                      db.bulk({"docs": new Array(doc)}, function(err, body){
+                        console.log(err);
+                        console.log(body);
+                      });
+                    }
+                  });
                 });
               });
+            } else {
+              console.log("[db.sets/by_id]", err.message);
+            }
+          });
+        }, this);
+        db.get(req.params.setid, function(err, body){
+          if(!err) {
+            var doc = {
+            _id: body._id,
+            _rev: body._rev,
+            _deleted: true
+            };
+            db.bulk({"docs": new Array(doc)}, function(err, body){
+              console.log(err);
+              console.log(body);
             });
-          } else {
-            console.log("[db.sets/by_id]", err.message);
           }
         });
-      }, this);
-      db.get(req.params.setid, function(err, body){
-        if(!err) {
-          var doc = {
-          _id: body._id,
-          _rev: body._rev,
-          _deleted: true
-          };
-          db.bulk({"docs": new Array(doc)}, function(err, body){
-            console.log(err);
-            console.log(body);
-          });
-        }
-      });
-      res.json(body);
-    } else {
-      console.log("[db.sets/by_id]", err.message);
-    }
+        res.json(body);
+      } else {
+        console.log("[db.sets/by_id]", err.message);
+      }
+    });
+  }, function(){
+    res.send(403);
   });
 });
 
@@ -632,11 +634,27 @@ app.delete('/card/:id', ensureAuthenticated, function(req, res) {
         };
         db.bulk({"docs": new Array(doc)}, function(err, body){
           if (!err) {
-              console.log("card deleted");
-              res.json(body);           
-           } else {
-              console.log('[db.delete] ', err.message);            
-           }
+            db.view('cards', 'personal_card_by_cardId', { key: new Array(req.params.id)}, function(err, body) {
+              if (!err) {
+                var docs = _.map(body.rows, function(doc) { return doc.value});
+                var personal = new Array();
+                _.each(docs, function(doc){
+                   var doc = {
+                   _id: doc._id, _rev: doc._rev, _deleted: true
+                   }
+                   personal.push(doc)
+                }, this);
+                db.bulk({"docs": personal}, function(err, body) {               
+                  console.log("personalcard" + err);
+                  console.log("personalcard" + body);
+                });               
+                console.log("card deleted");
+                res.json(body);   
+              }    
+            });
+          } else {
+                console.log('[db.delete] ', err.message);            
+          }
         });
       }
     });

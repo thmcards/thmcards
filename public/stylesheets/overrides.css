@@ -218,10 +218,9 @@ code {
 .centered {
   display: inline-block;
   vertical-align: middle;
-  width: 300px;
+  width: 580px;
   font-size: 2em
 }
-
 .navbar .navbar-brand {
   padding: 10px 20px;
 }
@@ -246,7 +245,6 @@ text-transform: uppercase;
 ul.nav-list li.active {
   font-weight: bold;
 }
-
 .front {
   font-size:3em;
 }
@@ -254,7 +252,6 @@ ul.nav-list li.active {
 .back, .front {
   line-height: 1.4em;
 }
-
 .clicktoflip {
   color:#666; 
   position: absolute; 

@@ -3,12 +3,14 @@ Cards.module('Entities', function(Entities, App, Backbone){
 	Entities.Card = Backbone.Model.extend({
 		urlRoot: "/card",
 		validate: function (attrs) {
-	        if (!attrs.front) {
-	            return 'Please fill front field.';
+			var errors = [];
+	        if (!attrs.front.text) {
+	            errors.push({name: 'fronttext', message: 'Bitte Vorderseite ausfüllen.'});
 	        }
-	        if (!attrs.back) {
-	            return 'Please fill back field.';
+	        if (!attrs.back.text) {
+	            errors.push({name: 'backtext', message: 'Bitte Rückseite ausfüllen.'});
 	        }
+	        return errors.length > 0 ? errors : false;
 	    },
 		idAttribute: "_id"
 	});

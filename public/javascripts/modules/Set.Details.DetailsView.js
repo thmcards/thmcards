@@ -18,8 +18,6 @@ Cards.module('Set.Details', function(Details, App) {
 		linkClicked: function(ev) {
 			ev.preventDefault();
 			console.log("link");
-			
-			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
 		}
 	});	
 
@@ -82,6 +80,10 @@ Cards.module('Set.Details', function(Details, App) {
 			App.trigger("set:learn", this.model.get("_id"));
 		},
 		onRender: function() {
+
+
+
+
 			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
 			
 			this.$el.find("div.item").first().addClass("active");
@@ -98,6 +100,31 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$('#btnToCardLayout').addClass("active");
 			$('#btnToListLayout').removeClass("active");
+		},
+		onShow: function() {
+		var that = this;
+		var tweak = 200;
+
+		    $.fn.resizeText = function(){
+		      var size = parseInt($(this).css("fontSize"));
+		      var html = $(this).html();
+		      var textLength = html.length;
+		      var span = "<span style='display:none'>" + html + "</span>";
+		      that.$el.append(span);
+		      var width = that.$el.find('span:last').width();
+		      console.log(that.$el.find('span:last'));
+		      console.log(width);
+		      console.log($(this).width());
+		      var newSize = ($(this).width()-tweak)/(width)*size;
+		      console.log(newSize);
+		      if (newSize < "45"){
+		      	console.log("edited size enabled");
+		      	$(this).css("fontSize", newSize);
+		      }
+		      return width;
+		    };
+
+		    this.$el.find("div.front").resizeText();
 		}
 	});
 

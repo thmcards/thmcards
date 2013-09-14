@@ -19,6 +19,7 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		saveCard: function(ev) {
 			this.ui.saveBtn.button('loading');
+			var that = this;
 
 			var setId = this.model.get('id');
 			var setName = this.model.get('name');
@@ -38,21 +39,38 @@ Cards.module('Set.Details', function(Details, App) {
 				},
 				setId: setId
 			});
-
 			if(card.isValid()) {
 				card.save({}, {
 					success: function(model, response) {
+						that.hideErrors();
+						console.log("card saved");
 						history.back();
 					},
 					error: function(model, error) {
-						this.ui.saveBtn.button('reset');
+						console.log(error);
+						that.ui.saveBtn.button('reset');
 						alert("something went wrong");
 					}
 				});
 			} else {
-				alert('not valid');
+				this.showErrors(card.validationError);
 				this.ui.saveBtn.button('reset');
 			}
+		},
+		showErrors: function(errors) {
+			this.$('.help-block').text('');
+			this.$('.cardtext').removeClass('has-error');
+		    _.each(errors, function (error) {
+		        var cardside = this.$('td.' + error.name);
+		        cardside.addClass('has-error');
+		        var helptext = this.$('span.' + error.name);
+		        helptext.text(error.message);
+		    }, this);
+		},
+ 
+		hideErrors: function () {
+			this.$('.help-block').text('');
+			this.$('.cardtext').removeClass('has-error');
 		},
 		pictureSearch: function(ev) {
 			ev.preventDefault();
