@@ -634,11 +634,27 @@ app.delete('/card/:id', ensureAuthenticated, function(req, res) {
         };
         db.bulk({"docs": new Array(doc)}, function(err, body){
           if (!err) {
-              console.log("card deleted");
-              res.json(body);           
-           } else {
-              console.log('[db.delete] ', err.message);            
-           }
+            db.view('cards', 'personal_card_by_cardId', { key: new Array(req.params.id)}, function(err, body) {
+              if (!err) {
+                var docs = _.map(body.rows, function(doc) { return doc.value});
+                var personal = new Array();
+                _.each(docs, function(doc){
+                   var doc = {
+                   _id: doc._id, _rev: doc._rev, _deleted: true
+                   }
+                   personal.push(doc)
+                }, this);
+                db.bulk({"docs": personal}, function(err, body) {               
+                  console.log("personalcard" + err);
+                  console.log("personalcard" + body);
+                });               
+                console.log("card deleted");
+                res.json(body);   
+              }    
+            });
+          } else {
+                console.log('[db.delete] ', err.message);            
+          }
         });
       }
     });
