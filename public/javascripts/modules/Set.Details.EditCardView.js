@@ -18,32 +18,34 @@ Cards.module('Set.Details', function(Details, App) {
 			pictureSearchModal: "#editcard-pictureSearchModal"
 		},
 		cancel: function(ev) {
+			this.model.fetch();
 			history.back();
 		},
 		editCard: function(ev) {
 			this.ui.saveBtn.button('loading');
 			var that = this;
 
-			var cardId = this.model.get('_id');
 
-			var card = new Cards.Entities.Card({
-				_id: cardId,
-				front: {
+			var	front = {
 					text: $("#editcard-front-textarea").val(),
 					text_plain: $("#editcard-front-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-front-search").val() || null,
 					video: null
-				},
-				back: {
+				};
+			var	back = {
 					text: $("#editcard-back-textarea").val(),
 					text_plain: $("#editcard-back-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-back-search").val() || null,
 					video: null
-				}
-			});
+				};
 
-			if(card.isValid()) {
-				card.save({}, {
+			this.model.set({
+				front: front,
+				back: back
+			})
+
+			if(this.model.isValid()) {
+				this.model.save({}, {
 					success: function(model, response) {
 						that.hideErrors();
 						console.log("card saved");
@@ -56,7 +58,7 @@ Cards.module('Set.Details', function(Details, App) {
 					}
 				});
 			} else {
-				this.showErrors(card.validationError);
+				this.showErrors(this.model.validationError);
 				this.ui.saveBtn.button('reset');
 			}
 		},

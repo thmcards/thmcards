@@ -81,6 +81,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 				that.ui.modalInputDescription.val('');
 				that.$('.help-block').text('');
 				that.$('.setdetails').removeClass('has-error');
+				that.model.fetch();
 
 			})
 			this.ui.modalView.modal('show');
