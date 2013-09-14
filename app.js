@@ -587,12 +587,12 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
 app.get('/card/:id', ensureAuthenticated, function(req, res){
   console.log(req.params);
   db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
-    if (!err) {
-      console.log(body);
+    if (!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
       var card = body.rows[0].value;
       res.json(card);
     } else {
       console.log("[db.cards/by_id]", err.message);
+      res.json(404);
     }
    });
 });
