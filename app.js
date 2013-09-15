@@ -107,6 +107,31 @@ var redeemLoginXPoints = function(username){
   })
 }
 
+var xpForLevel = function(level) {
+  var points = 0;
+  output = 0;
+
+  for (lvl = 1; lvl < level; lvl++)
+  {
+    points += Math.floor(lvl + 30 * Math.pow(2, lvl / 10.));
+    output = Math.floor(points / 4);
+  } 
+  return output;
+}
+
+var levelForXp = function(pts) {
+  var points = 0;
+  var output = 0;
+  var lvl = 1;
+
+  while(pts > output) {
+    points += Math.floor(lvl + 30 * Math.pow(2, lvl / 10.));
+      output = Math.floor(points / 4);
+      if(pts >= output) lvl++;
+    }
+    return lvl;
+}
+
 //------------------------------------------------------------------------------------
 //-----------------------       LOGIN & AUTH       -----------------------------------
 //------------------------------------------------------------------------------------
@@ -881,7 +906,6 @@ app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
       var xpoints = _.pluck(body.rows, "value");
 
       var groupedXPoints = _.groupBy(xpoints, "name");
-      console.log(groupedXPoints);
 
       var todayXPoints = _.reduce(_.pluck(_(xpoints).filter(function(point){
         if(point.gained >= todayStart && point.gained <= todayEnd) return point;
@@ -902,8 +926,11 @@ app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
 
       var lastRedeem = _.first(_.sortBy(xpoints, "gained").reverse());
 
-      var currentLevel = Math.floor(totalXPpoints/pointsPerLevel)+1;
-      var pointsRemaining = pointsPerLevel-(totalXPpoints % pointsPerLevel);
+      var currentLevel = levelForXp(totalXPpoints);
+      var pointsRemaining = xpForLevel(currentLevel+1)-totalXPpoints;
+
+      console.log(currentLevel, levelForXp(totalXPpoints));
+      console.log(currentLevel, xpForLevel(currentLevel+1));
 
       result = {
         totalXPoints: totalXPpoints,
