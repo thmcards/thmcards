@@ -25,4 +25,15 @@ Cards.module('Entities', function(Entities, App, Backbone){
 			Backbone.Collection.apply(this, arguments);
 		}
 	});
+
+	Entities.CardMemoCollection = Backbone.Collection.extend({
+		model: Entities.Card,
+		url: function() {
+			return "/set/" + this.setId + "/memo/card";
+		},
+		constructor: function(models, options){
+			this.setId = options.setId;
+			Backbone.Collection.apply(this, arguments);
+		}
+	});
 });

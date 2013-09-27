@@ -130,6 +130,33 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
+		showMemoLayout: function(id){
+			var set = new Cards.Entities.Set({id: id});
+			set.fetch({
+				success: function(){
+					var memoLayout = new Cards.Set.Memo.Layout();
+					Cards.mainRegion.show(memoLayout);
+
+					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id") });
+					
+					personalCollection.fetch({
+						success: function(){
+							// copy mit filterfunktion der original liste, die wird angezeigt
+							var filteredCollection = FilteredCollection(personalCollection, { setId: set.get("id") });
+							
+							var memoView = new Cards.Set.Memo.DetailsView({ collection: filteredCollection });
+							memoLayout.detailsRegion.show(memoView);
+						},
+						error: function(){
+
+						}
+					});
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
+		},
 		showDetailsNewCardLayout: function(id){
 			var set = new Cards.Entities.Set({id: id});
 

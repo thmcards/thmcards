@@ -221,12 +221,12 @@
       <div class="row">
         <div class="col-md-4">
           <div class="well well-sm" style="margin-bottom:0; min-height:244px">
-            <h4>Leitner</h4>
+            <h4>Lernen</h4>
             <hr />
               
             <hr />
-            <button class="btn btn-default learn" style="width:100%">Freies Lernen</button>
-            <button class="btn btn-default" style="margin-top:10px; width:100%">Lernvorschläge</button>
+            <button class="btn btn-default learn" style="width:100%">Lernkartei</button>
+            <button class="btn btn-default memo" style="margin-top:10px; width:100%">Memo</button>
           </div>
         </div>
         <div class="col-md-8">
@@ -753,6 +753,88 @@
       </div>
     </script> 
 
+    <!--Memo -->
+    <script type="text/template" id="set-memo-layout">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="set-memo-region"></div>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/template" id="set-memo-sideBar"> 
+      <h4 style="margin:0">Memo</h4>
+      <hr />
+      <span style="font-family:'Georgia'; font-style:italic">echt jetzt...</span>
+      <hr />
+    </script>
+
+    <script type="text/template" id="set-memo-controls">
+
+    </script>
+
+
+    <script type="text/template" id="set-memo-collection">
+      <div id="cardCarousel" class="carousel slide">
+        <ol class="carousel-indicators"></ol>
+        <div class="carousel-inner"></div>
+      </div>
+      <button class="btn btn-primary answer show-answer" title="success" style="width:30%; margin-top:10px">Zeige Antwort</button>
+      <div class="rating-controls" style="display:none">
+        <div class="btn-toolbar" style="margin-top:10px">
+          <div class="btn-group">
+            <button class="btn btn-default rate-answer" title="0">0</button>
+            <button class="btn btn-default rate-answer" title="1">1</button>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-default rate-answer" title="2">2</button>
+            <button class="btn btn-default rate-answer" title="3">3</button>
+            <button class="btn btn-default rate-answer" title="4">4</button>
+            <button class="btn btn-default rate-answer" title="5">5</button>
+          </div>
+        </div>
+        <div class="learn-cardHelptext" style="width:150px">
+            <span>Bewerte deine Antwort</span>
+        </div>
+      </div>
+
+      <div class="box learn-endscreen" style="display:none">
+        <div class="block">
+          <div class="centered front" style="font-size:2em">
+                Lerneinheit erfolgreich beendet
+          </div>
+          <div class="centered front" style="font-size:1.2em; width:500px">
+                Wähle ein weiteres Fach oder gehe zurück zur Hauptseite</div>
+          </div>
+        </div>
+      </div>
+
+
+    </script>
+
+    <script type="text/template" id="set-memo-item">
+    <div class="row twosided" data-id="<%= _id %>">
+      <div class="col-md-6">
+        <div class="box">
+          <span class="clicktoflip">Vorderseite</span>
+          <div class="block"><div class="centered cardcontent-front"><%= front.text %></div></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="box">
+          <span class="clicktoflip">Rückseite</span>
+          <div class="block"><div class="centered cardcontent-back" style="display:none"><%= back.text %></div></div>
+        </div>
+      </div>
+    </div>
+    </script>
+
+    <script type="text/template" id="set-memo-item-empty">
+      <div class="box">
+        <div class="block"><div class="centered front" style="font-size:2em">Lege -hier- Kartensätze an, um sie lernen zu können</div>
+      </div>
+    </script> 
+
     <script type="text/template" id="profile-layout">
       <div class="row">
         <div class="col-md-12">
@@ -955,6 +1037,10 @@
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.SideBar.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Set.Learn.DetailsView.js"></script>
+
+    <script type="text/javascript" src="/javascripts/modules/Set.Memo.Layout.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.Memo.SideBar.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Set.Memo.DetailsView.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Profile.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.Controller.js"></script>
