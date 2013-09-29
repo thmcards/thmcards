@@ -733,8 +733,8 @@ app.post('/card', ensureAuthenticated, function(req, res){
   });
 });
 
-
-app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+  console.log("personalcard post");
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   console.log("z627, body", req.body, req.params);
@@ -757,47 +757,72 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
       console.log("[db.personalcard/by_cardId]", err.message);
     }
     console.log("persCardRev", persCardRev);
-    if (_.isUndefined(persCardRev)) {
-      db.insert(
-        { 
-          "created": time,
-          "owner": req.session["passport"]["user"][0].username,
-          "cardId": req.body._id,
-          "box": req.body.persCard.value.box || "1",
-          "type": "personal_card"
-        }, 
-        function(err, body, header){
-          if(err) {
-            console.log('[db.insert] ', err.message);
-            return;
-          }
-          db.get(body.id, { revs_info: false }, function(err, body) {
-            if (!err)
-              res.json(body);
-          });
+    db.insert(
+      { 
+        "created": time,
+        "owner": req.session["passport"]["user"][0].username,
+        "cardId": req.body._id,
+        "box": req.body.persCard.value.box || "1",
+        "type": "personal_card"
+      }, 
+      function(err, body, header){
+        if(err) {
+          console.log('[db.insert] ', err.message);
+          return;
+        }
+        db.get(body.id, { revs_info: false }, function(err, body) {
+          if (!err)
+            res.json(body);
+        });
+    });
+  });
+});
+
+
+app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+  console.log("personalcard put");
+  var time = new Date().getTime();
+  var username = req.session["passport"]["user"][0].username;
+  console.log("z627, body", req.body, req.params);
+  console.log("rated" + req.body.persCard.value.last_rated);
+  db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
+    console.log("rows", body)
+    var persCardRev;
+    if (!err){  
+      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })  
+      console.log("z633 docs", docs);
+      docs = _.map(docs, function(doc) { 
+        console.log("z634", doc, doc.value);
+        return doc.value
       });
+      if (body.rows.length){
+        console.log("z638", docs[0]);
+        persCardRev = docs[0]._rev;
+      }
     } else {
-      db.insert(
-        { 
-          "_rev": persCardRev,
-          "created": docs[0].created,
-          "owner": docs[0].owner,
-          "cardId": docs[0].cardId,
-          "box": req.body.persCard.value.box  || docs[0].box,
-          "type": docs[0].type
-        },
-        docs[0]._id,
-        function(err, body, header){
-          if(err) {
-            console.log('[db.insert] ', err.message);
-            return;
-          }
-          db.get(body.id, { revs_info: false }, function(err, body) {
-            if (!err)
-              res.json(body);
-          });
-      });
+      console.log("[db.personalcard/by_cardId]", err.message);
     }
+    console.log("persCardRev", persCardRev);
+    db.insert(
+      { 
+        "_rev": persCardRev,
+        "created": docs[0].created,
+        "owner": docs[0].owner,
+        "cardId": docs[0].cardId,
+        "box": req.body.persCard.value.box  || docs[0].box,
+        "type": docs[0].type
+      },
+      docs[0]._id,
+      function(err, body, header){
+        if(err) {
+          console.log('[db.insert] ', err.message);
+          return;
+        }
+        db.get(body.id, { revs_info: false }, function(err, body) {
+          if (!err)
+            res.json(body);
+        });
+    });
   });
 });
 
