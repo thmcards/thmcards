@@ -713,6 +713,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   console.log("z627, body", req.body, req.params);
+  console.log("rated" + req.body.persCard.value.last_rated);
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     console.log("rows", body)
     var persCardRev;
