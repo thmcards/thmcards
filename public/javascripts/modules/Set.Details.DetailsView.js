@@ -34,6 +34,7 @@ Cards.module('Set.Details', function(Details, App) {
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
+			"click button.memo": "memoClicked",
 			"click button.play-meteor": "playMeteor",
 			"click a.btn-editCard": "editClicked",
 			"click a.btn-deleteCard": "deleteClicked"
@@ -78,6 +79,9 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		learnClicked: function(ev) {
 			App.trigger("set:learn", this.model.get("_id"));
+		},
+		memoClicked: function(ev) {
+			App.trigger("set:memo", this.model.get("_id"));
 		},
 		onRender: function() {
 

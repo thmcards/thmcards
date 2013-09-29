@@ -426,6 +426,20 @@ app.get('/set/:id/card', function(req, res){
   });
 });
 
+app.get('/set/:id/memo/card', function(req, res){
+  //check for supermemo values and filter...
+
+  db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
+    
+    if (!err) {
+      var docs = _.map(body.rows, function(doc) { return doc.value});
+      res.json(docs);
+    } else {
+      console.log("[db.cards/by_set]", err.message);
+    }
+  });
+});
+
 app.get('/set/:id', function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!err) {
