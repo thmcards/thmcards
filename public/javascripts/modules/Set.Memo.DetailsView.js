@@ -62,8 +62,9 @@ Cards.module('Set.Memo', function(Memo, App) {
 
 			//perscard holen/anlegen
 			var model = this.collection.get(cardId);
-			console.log(model);
+			console.log("model", model);
 			var persCard;
+			var type;
 
 			if(!_.isEmpty(model.get("persCard"))) {	
 				if(_.isArray(model.get("persCard"))) {
@@ -74,6 +75,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				persCard.value.last_rated = rating;				
 				model['persCard'] = persCard;
 				model.set({persCard: persCard});
+				type = 'put';
 				console.log("vorhandene perscard");
 			} else {
 					persCard = {};
@@ -83,11 +85,13 @@ Cards.module('Set.Memo', function(Memo, App) {
 					}
 					model['persCard'] = persCard;
 					model.set({persCard: persCard});
-					console.log("neue perscard");
+					type = 'post';
+					console.log("neue perscard", persCard);
 			}
 			//speichern
 			console.log("save");
 			model.save({}, {
+				type: type,
 				success: function(){
 					console.log("success");
 					
