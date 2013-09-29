@@ -737,26 +737,6 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   console.log("personalcard post");
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-  console.log("z627, body", req.body, req.params);
-  console.log("rated" + req.body.persCard.value.last_rated);
-  db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
-    console.log("rows", body)
-    var persCardRev;
-    if (!err){  
-      var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })  
-      console.log("z633 docs", docs);
-      docs = _.map(docs, function(doc) { 
-        console.log("z634", doc, doc.value);
-        return doc.value
-      });
-      if (body.rows.length){
-        console.log("z638", docs[0]);
-        persCardRev = docs[0]._rev;
-      }
-    } else {
-      console.log("[db.personalcard/by_cardId]", err.message);
-    }
-    console.log("persCardRev", persCardRev);
     db.insert(
       { 
         "created": time,
@@ -771,58 +751,66 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
           return;
         }
         db.get(body.id, { revs_info: false }, function(err, body) {
-          if (!err)
-            res.json(body);
+          if (!err){
+            var persCard = {};
+            persCard.value = body;
+            db.get(req.body._id, { revs_info: false }, function(err, body) {
+              if (!err)
+                body.persCard = persCard;
+                console.log("res post");
+                console.log(body);
+                res.json(body);
+            });
+          }
         });
     });
   });
-});
 
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   console.log("personalcard put");
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-  console.log("z627, body", req.body, req.params);
-  console.log("rated" + req.body.persCard.value.last_rated);
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
-    console.log("rows", body)
-    var persCardRev;
     if (!err){  
       var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })  
-      console.log("z633 docs", docs);
       docs = _.map(docs, function(doc) { 
-        console.log("z634", doc, doc.value);
         return doc.value
       });
       if (body.rows.length){
-        console.log("z638", docs[0]);
-        persCardRev = docs[0]._rev;
+        db.insert(
+        { 
+          "_rev": docs[0]._rev,
+          "created": docs[0].created,
+          "owner": docs[0].owner,
+          "cardId": docs[0].cardId,
+          "box": req.body.persCard.value.box  || docs[0].box,
+          "type": docs[0].type
+        },
+        docs[0]._id,
+        function(err, body, header){
+          if(err) {
+            console.log('[db.insert] ', err.message);
+            return;
+          }
+          db.get(body.id, { revs_info: false }, function(err, body) {
+            if (!err){
+              var persCard = {};
+              persCard.value = body;
+              db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
+                if (!err)
+                  body.persCard = persCard;
+                  console.log("res put");
+                  console.log(body);
+                  res.json(body);
+              });
+            }
+          });
+      });
       }
     } else {
       console.log("[db.personalcard/by_cardId]", err.message);
     }
-    console.log("persCardRev", persCardRev);
-    db.insert(
-      { 
-        "_rev": persCardRev,
-        "created": docs[0].created,
-        "owner": docs[0].owner,
-        "cardId": docs[0].cardId,
-        "box": req.body.persCard.value.box  || docs[0].box,
-        "type": docs[0].type
-      },
-      docs[0]._id,
-      function(err, body, header){
-        if(err) {
-          console.log('[db.insert] ', err.message);
-          return;
-        }
-        db.get(body.id, { revs_info: false }, function(err, body) {
-          if (!err)
-            res.json(body);
-        });
-    });
   });
 });
 

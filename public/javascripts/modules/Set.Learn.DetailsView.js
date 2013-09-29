@@ -190,6 +190,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				persCard.value.box = boxId;				
 				model['persCard'] = persCard;
 				model.set({persCard: persCard});
+				type = 'put';
 				console.log("vorhandene perscard");
 			} else {
 					persCard = {};
@@ -199,11 +200,13 @@ Cards.module('Set.Learn', function(Learn, App) {
 					}
 					model['persCard'] = persCard;
 					model.set({persCard: persCard});
+					type = 'post';
 					console.log("neue perscard");
 			}
 			//speichern und in aktueller box bleiben
 			console.log("save");
 			model.save({}, {
+				type: type,
 				success: function(){
 					console.log("success");
 					App.trigger("filter:box", actualBox);
