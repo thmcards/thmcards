@@ -333,11 +333,12 @@ div.img-tb-container {
 }
 
 div.meteor-playcard {
-  color: #000; 
+  color: #fff; 
   text-align: center; 
-  border-radius: 15px;
+  border-radius: 5px;
   background-color: #F9F9F9;
-  border: 1px solid #c0c0c0;
+  background-image:url('/img/meteor-card.jpg');
+  border: 1px solid #000;
   position: absolute;
   padding: 5px;
   width: 100px;
