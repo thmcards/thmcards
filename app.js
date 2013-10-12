@@ -902,6 +902,80 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
   });
 });
 
+app.post('/score/:username', ensureAuthenticated, function(req, res){
+    var game = 'meteor';
+    var owner = req.body.owner;
+    var setId = req.body.setId;
+    var points = req.body.points;
+
+    if(points > 0) {
+      db.insert({
+        type: "score",
+        game: game,
+        owner: owner,
+        setId: setId,
+        owner: owner
+      },    
+      function(err, body) {
+              
+      });  
+    }
+
+    db.view('score', 'score_by_game_set', { key: new Array(game, setId) }, function(err, body) {
+            var scores = new Array();
+
+            _.each(body.rows, function(score){
+              var player = false;
+              if(score.value.owner == owner) { player = true; }
+              scores.push({
+                setId: score.value.setId,
+                points: score.value.points,
+                owner: score.value.owner,
+                isPlayer: player
+              });
+            });
+
+            scores = _.sortBy(scores, "points").reverse();
+
+            var highscores = {};
+            _.each(scores, function(score){
+              if(_.has(highscores, score.owner)) {
+                if(highscores[score.owner].points < score.points) 
+                  highscores[score.owner] = score;
+              } else {
+                highscores[score.owner] = score;
+              }
+              
+            });
+
+            highscores = _.flatten(highscores);
+            var ownerScore = _.findWhere(highscores, {owner: owner})
+            highscores = _.toArray(highscores);
+            var idx = _.indexOf(highscores, ownerScore);
+
+            var x = new Array();
+
+            if(highscores.length == idx+1) {
+              x.push(highscores[idx-2]);
+              x.push(highscores[idx-1]);
+              x.push(highscores[idx]);
+            } else if(0 == idx) {
+              x.push(highscores[idx]);
+              x.push(highscores[idx+1]);
+              x.push(highscores[idx+2]);
+            } else {
+              x.push(highscores[idx-1]);
+              x.push(highscores[idx]);
+              x.push(highscores[idx+1]);
+            }
+
+            x = _.compact(x);
+
+            res.json(x);
+          });
+
+});
+
 app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
   var msPerDay = 86400 * 1000;
   var now = new Date().getTime();

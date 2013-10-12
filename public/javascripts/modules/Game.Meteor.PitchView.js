@@ -15,6 +15,8 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			"click a.btn-primary": "startGame",
 			"click a.btn-danger": "stopGame",
 			"click a.btn-info": "resumeGame",
+			"click button.back": "backToList",
+			"click button.newGame": "startNewGame",
 			"keyup input.meteor-answer": "onKeypress",
 			"blur #itemcnt": "changeItemCnt",
 			"blur #itemspeed": "changeItemSpeed"
@@ -28,6 +30,16 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		gameLoop:null,
 		cardsOnPitch:null,
 		cardsQueue:null,
+		backToList: function() {
+			$('#meteor-gameover-modal').modal('hide');
+			$('#meteor-gameover-modal').on('hidden.bs.modal', function () {
+				history.back();
+			});
+		},
+		startNewGame: function() {
+			$('#meteor-gameover-modal').modal('hide');
+			location.reload();
+		},
 		initialize: function() {
 			this.cardsOnPitch = new Array();
 			this.cardsQueue = new Array();
@@ -79,48 +91,49 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 			$("a.btn-danger").click();
 
-			if(this.lifes > 0) { 
+			if(this.lifes > 1) { 
 				this.removeLife();
-			} else {
-				console.log("game over!");
-			}
 
-			$('#meteor-answer-modal').on('show.bs.modal', function () {
-				$("#meteor-answer-modal-input").val('');
-				$("#meteor-answer-modal-front").text(card.front.text_plain);
-				$("#meteor-answer-modal-back").text(card.back.text_plain);
-			});
+				$('#meteor-answer-modal').on('show.bs.modal', function () {
+					$("#meteor-answer-modal-input").val('');
+					$("#meteor-answer-modal-front").text(card.front.text_plain);
+					$("#meteor-answer-modal-back").text(card.back.text_plain);
+				});
 
-			$('#meteor-answer-modal').on('shown.bs.modal', function () {
-				$("#meteor-answer-modal-input").focus();
-			});
+				$('#meteor-answer-modal').on('shown.bs.modal', function () {
+					$("#meteor-answer-modal-input").focus();
+				});
 
-			$("#meteor-answer-modal-input").on('keyup', function(ev){
-				var ENTER_KEY = 13;
-				if($(this).val() == $("#meteor-answer-modal-back").text()) {
-					$("#meteor-answer-modal button.btn-success").removeAttr('disabled');
-					if(ev.which === ENTER_KEY) {
-						$("#meteor-answer-modal button.btn-success").click();
+				$("#meteor-answer-modal-input").on('keyup', function(ev){
+					var ENTER_KEY = 13;
+					if($(this).val() == $("#meteor-answer-modal-back").text()) {
+						$("#meteor-answer-modal button.btn-success").removeAttr('disabled');
+						if(ev.which === ENTER_KEY) {
+							$("#meteor-answer-modal button.btn-success").click();
+						}
+					} else {
+						$("#meteor-answer-modal button.btn-success").attr('disabled', 'disabled');
 					}
-				} else {
-					$("#meteor-answer-modal button.btn-success").attr('disabled', 'disabled');
-				}
-			});
+				});
 
-			$("#meteor-answer-modal button.btn-success").on('click', function(ev) {
-				$('#meteor-answer-modal').modal('hide');
-			})
+				$("#meteor-answer-modal button.btn-success").on('click', function(ev) {
+					$('#meteor-answer-modal').modal('hide');
+				})
 
-			$('#meteor-answer-modal').on('hidden.bs.modal', function () {
-				that.runGame = true;
-			});
+				$('#meteor-answer-modal').on('hidden.bs.modal', function () {
+					that.runGame = true;
+				});
 
-			$('#meteor-answer-modal').on('hide.bs.modal', function () {
-				$("input.meteor-answer").val('');
-				$("input.meteor-answer").focus();
-			});
+				$('#meteor-answer-modal').on('hide.bs.modal', function () {
+					$("input.meteor-answer").val('');
+					$("input.meteor-answer").focus();
+				});
 
-			$('#meteor-answer-modal').modal('show');
+				$('#meteor-answer-modal').modal('show');
+			} else {
+				this.removeLife();
+				this.gameOver();
+			}
 		},
 		checkResult: function(answer) {
 			var answeredCard = _.find(this.cardsQueue, function(card){
@@ -303,13 +316,73 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			if(lifes < 5) {
 				$("#meteor-lifes").append(life);
 				life.slideToggle(400);
+				this.lifes++;
 			}
 		},
 		removeLife: function(){
 			var lifes = $("#meteor-lifes").children().length;
 			
-			if(lifes > 0)
+			if(lifes > 0) {
 				$("#meteor-lifes").children().last().remove();
+				this.lifes--;
+			}
+
+		},
+		gameOver: function(){
+			var that = this;
+			var usr = $.cookie('usr').username;
+
+			this.runGame = false;
+
+			$.ajax({
+				type: "POST",
+				url: "/score/"+usr,
+				data: {
+					type: 'score',
+					game: 'meteor',
+					setId: this.collection.setId,
+					points: that.points,
+					owner: usr
+				},
+				success: function(data, status, xhr){
+					$('#meteor-gameover-modal .modal-body strong').first().text(that.points);
+					var panel = $('#meteor-gameover-modal .modal-body div.panel');
+
+					if(data.length > 0) panel.show();
+
+					var tbody = $('#meteor-gameover-modal .modal-body tbody');
+					tbody.empty();
+
+					_.each(data, function(row) {
+						console.log(row);
+						var tr = $("<tr>");
+						if(row.isPlayer) tr.addClass('active');
+
+						tr.append("<td>"+row.owner+"</td>");
+						tr.append("<td>"+row.points+"</td>");
+						tbody.append(tr);
+					})
+
+
+					$('#meteor-gameover-modal').modal('show');
+				},
+				dataType: "json"
+			});
+
+
+			$('#meteor-gameover-modal').on('show.bs.modal', function () {
+				
+			});
+
+			$('#meteor-gameover-modal').on('shown.bs.modal', function () {
+
+			});
+
+			$("#meteor-gameover-modal button.btn-success").on('click', function(ev) {
+
+			})
+
+
 		}
 	});
 

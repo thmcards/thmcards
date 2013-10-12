@@ -14,9 +14,6 @@ Cards.module('Game', function(Game, App){
 						success: function(){
 							var pitchView = new Cards.Game.Meteor.Pitch.PitchView({ collection: cardCollection });
 							meteorLayout.pitchRegion.show(pitchView);
-
-							var sideBarView = new Cards.Game.Meteor.SideBar.SideBarView();
-							meteorLayout.sideBarRegion.show(sideBarView);
 						},
 						error: function(){
 

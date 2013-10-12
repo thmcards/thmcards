@@ -219,43 +219,25 @@
         <div class="col-md-12"><h4>&nbsp</h4></div>
       </div>
       <div class="row">
-        <div class="col-md-4">
-          <div class="well well-sm" style="margin-bottom:0; min-height:244px">
+        <div class="col-md-6">
+          <div class="well well-sm" style="margin-bottom:0; min-height:200px">
             <h4>Lernen</h4>
             <hr />
               
             <hr />
-            <button class="btn btn-default learn" style="width:100%">Lernkartei</button>
-            <button class="btn btn-default memo" style="margin-top:10px; width:100%">Memo</button>
+            <button class="btn btn-default learn btn-block">Lernkartei</button>
+            <button class="btn btn-default memo btn-block" style="margin-top:10px;">Memo</button>
           </div>
         </div>
-        <div class="col-md-8">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="well well-sm" style="margin-bottom:0">
-                <h4>Meteor</h4>
-                <hr />
-                <div><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32x32/cup_gold.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">3.548 Punkte</span></div>
-                <div style="margin:10px 0"><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32/award_star_gold_3.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">1 / 10 Badges </span></div>
-                <hr />
-                
-                <button class="btn btn-primary play-meteor" style="width:100%">Spielen</button>
-                
-                <button class="btn btn-default" style="margin-top:10px; width:100%">60-Sek Challenge</button>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="well well-sm" style="margin-bottom:0">
-                <h4>Jeopardy</h4>
-                <hr />
-                <div><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32x32/cup_gold.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">3.548 Punkte</span></div>
-                <div style="margin:10px 0"><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32/award_star_gold_3.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">1 / 10 Badges </span></div>
-                <hr />
-                <button class="btn btn-default" style="width:100%">Üben</button>
-                
-                <button class="btn btn-default" style="margin-top:10px; width:100%">60-Sek Challenge</button>
-              </div>
-            </div>
+        <div class="col-md-6">
+          <div class="well well-sm" style="margin-bottom:0">
+            <h4>Meteor</h4>
+            <hr />
+            <div><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32x32/cup_gold.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">3.548 Punkte</span></div>
+            <div style="margin:10px 0"><img src="https://cdn1.iconfinder.com/data/icons/fatcow/32/award_star_gold_3.png" /> <span class="pull-right" style="line-height:32px; font-family:'Georgia', serif;">1 / 10 Badges </span></div>
+            <hr />
+            
+            <button class="btn btn-primary play-meteor btn-block">Spielen</button>
           </div>
         </div>
       </div>
@@ -627,10 +609,10 @@
       </div>
       <div class="playcardcontainer" style="display: none"></div>
       
-      <a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
+      <!--a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
       <a href="#" class="btn btn-default btn-info pull-right">Resume</a>
       <input type="text" class="form-control" id="itemcnt" placeholder="3" />
-      <input type="text" class="form-control" id="itemspeed" placeholder="1000" />
+      <input type="text" class="form-control" id="itemspeed" placeholder="1000" /-->
 
 
       
@@ -663,6 +645,38 @@
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
+
+
+      <div class="modal fade" id="meteor-gameover-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Game Over</h4>
+            </div>
+            <div class="modal-body">
+              <div class="alert alert-info" style="text-align:center">Du hast <strong>400</strong> <strong>Punkte</strong> erzielt!</div>
+
+              <div class="panel panel-success" style="display:none">
+
+                <div class="panel-heading">Highscores</div>
+
+                <table class="table">
+                  <thead>
+                    <th>Spieler</th><th>Punkte</th>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default back">Zurück</button>
+              <button type="button" class="btn btn-success newGame">Neues Spiel</button>
+
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->      
 
 
     </script>
@@ -967,7 +981,7 @@
       <table class="table table-hover table-striped">
         <thead>
           <th>Kartensatz</th>
-          <th>Pers. Highscore</th>
+          <th>Dein Highscore</th>
           <th>Pos.</th>
           <th>Highscore</th>
         </thead>
