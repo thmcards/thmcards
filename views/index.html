@@ -1002,7 +1002,64 @@
     </script>
 
     <script type="text/template" id="profile-badge-list">
+      <div class="panel-heading">
+        <h3 class="panel-title">Badges</h3>
+      </div>
+      <div class="panel-body">
+      <p class="text-muted">Text über Badges und so</p>
+      </div>
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Badge</th>
+              <th>Beschreibung</th>
+              <th width="300">Fortschritt</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+    </script>
 
+    <script type="text/template" id="profile-badge-item">
+      <td align="center"><strong><%= name %></strong><br /><br />
+      <img src="/badges/<%= _id %>_3.png" width="30" height="30" />
+      <img src="/badges/<%= _id %>_2.png" width="30" height="30" />
+      <img src="/badges/<%= _id %>_1.png" width="60" />
+      </td>
+      <td><p style="margin:5px 0 15px 0"><%= description %></p>
+
+      <table class="table table-bordered" style="margin-bottom:0; position:relative; bottom:5px">
+        <tbody>
+        <tr><td class="active"><strong>Gold</strong></td><td><%= rank["1"] %> <%= unit %></td><td class="active"><strong>Silber</strong></td><td><%= rank["2"] %> <%= unit %></td><td class="active"><strong>Bronze</strong></td><td><%= rank["3"] %> <%= unit %></td></tr>
+        </tbody>
+      </table>
+      </td>
+      <td >
+      <%
+        if(typeof(user) != "undefined") {
+      %>
+        <div style="float:left; width:75px; height:75px; margin-right:10px;">
+        <img src="/badges/<%= _id %>_<%= user.rank %>.png" alt="<%= name %>" width="75" height="75" />
+        </div>
+        <div>
+        <p>
+          <strong><%= name %> 
+          <% if(user.rank == 3) { %> (Bronze) <% } %>
+          <% if(user.rank == 2) { %> (Silber) <% } %>
+          <% if(user.rank == 1) { %> (Gold) <% } %>
+          </strong><br />
+          <small>Erhalten am <%= new Date(user.issuedOn*1000).format('d.m.y')  %></small>
+        </p>
+
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="<%= user.score/rank[user.rank-1]*100 %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= user.score/rank[user.rank-1]*100 %>%">
+          </div>
+          </div>
+        </div>
+      <%
+        }
+      %>
+      </td>
     </script>
 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -1012,6 +1069,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.marionette/1.0.1-bundled/backbone.marionette.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
     <script type="text/javascript" src="javascripts/lib/jquery.pause.min.js"></script>
     <!--script type="text/javascript" src="javascripts/jquery.timer.js"></script-->
 
@@ -1029,6 +1087,7 @@
     <script type="text/javascript" src="/javascripts/entities/Category.js"></script>
     <script type="text/javascript" src="/javascripts/entities/Score.js"></script>
     <script type="text/javascript" src="/javascripts/entities/Rating.js"></script>
+    <script type="text/javascript" src="/javascripts/entities/Badge.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Pool.Controller.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Pool.CategoryView.js"></script>
@@ -1061,6 +1120,7 @@
     <script type="text/javascript" src="/javascripts/modules/Profile.InfoView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.ScoreView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.XpView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Profile.BadgeView.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Game.Meteor.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Game.Controller.js"></script>
@@ -1075,7 +1135,7 @@
     <script type="text/javascript" src="/javascripts/lib/jquery.raty.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/jquery.clickout.js"></script>
 
-    <script src="http://beta.openbadges.org/issuer.js"></script>
+    <script src="https://backpack.openbadges.org/issuer.js"></script>
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
@@ -1083,6 +1143,12 @@
       $(function(){
         Cards.start();
       })
+
+      var socket = io.connect('http://localhost');
+      socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+      });
     </script>
   </body>
 </html>

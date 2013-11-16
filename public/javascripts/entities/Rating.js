@@ -2,7 +2,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Rating = Backbone.Model.extend({
 		urlRoot: "/rating",
-		idAttribute: "setId"
+		idAttribute: "_id"
 	});
 
 	Entities.RatingCollection = Backbone.Collection.extend({

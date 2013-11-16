@@ -16,7 +16,7 @@ Cards.module('Profile', function(Profile, App){
 			});
 
 			var xpModel = new Backbone.Model({}, {
-				url: 'score/'+username+'/xp'
+				url: 'xp/'+username
 			}).fetch({
 				success: function(model){
 					var xpView = new Cards.Profile.XpItemView({ model: model });
@@ -37,6 +37,10 @@ Cards.module('Profile', function(Profile, App){
 
 				}
 			});
+
+			var badges = new Cards.Entities.BadgeCollection([], { username:username});
+			var badgeView = new Cards.Profile.BadgeView({ collection: badges });
+			profileLayout.badgeRegion.show(badgeView);
 		}
 	}
 });

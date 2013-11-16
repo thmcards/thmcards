@@ -248,6 +248,7 @@ app.get('/auth/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   function(req, res) {
     redeemLoginXPoints(res.req.user.username);
+    checkBadgeStammgast(res.req.user.username);
     res.redirect('/');
   }
 );
@@ -258,6 +259,7 @@ app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     redeemLoginXPoints(_.first(res.req.user).username);
+    checkBadgeStammgast(_.first(res.req.user).username);
     res.redirect('/');
   }
 );
@@ -268,6 +270,7 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     redeemLoginXPoints(_.first(res.req.user).username);
+    checkBadgeStammgast(_.first(res.req.user).username);
     res.redirect('/');
   }
 );
@@ -385,7 +388,7 @@ app.get('/set/:id/personalcard', function(req, res){
   });
 });
 
-app.get('/set/learned', function(req, res){
+app.get('/set/learned', ensureAuthenticated, function(req, res){
   var username = req.session["passport"]["user"][0].username;
 
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
@@ -993,7 +996,7 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
 
 });
 
-app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
+app.get('/xp/:username', ensureAuthenticated, function(req, res){
   var msPerDay = 86400 * 1000;
   var now = new Date().getTime();
 
@@ -1074,7 +1077,7 @@ app.get('/score/:username/xp', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/rating/:setId', ensureAuthenticated, function(req, res){
+app.get('/rating/avg/:setId', ensureAuthenticated, function(req, res){
   var result = {
     totalValutations: 0,
     avgValutation: 0,
@@ -1111,8 +1114,203 @@ app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
   });
 });
 
+app.get('/badge/:username', ensureAuthenticated, function(req, res){
+  var user = req.session["passport"]["user"][0].username;
 
-app.get('/badge', function(req, res) {
+  db.view("badge", "by_name", function(err, body) {
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+      var badges = _.pluck(body.rows, "value");
+      var idxBadges = _.indexBy(badges, "_id");
+      console.log(idxBadges);
+
+
+        db.view("issuedBadge", "by_owner", { keys: new Array(user) }, function(err, body) {
+          if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+            var issuedBadges = _.sortBy(_.pluck(body.rows, "value"), function(badge) {
+              return badge.rank;
+            });
+
+            _.each(issuedBadges, function(badge){
+              var badgeType = badge.badge;
+              console.log(badgeType);
+              console.log('type', idxBadges[badgeType]);
+
+              var usrBadge = _.pick(badge, 'issuedOn', 'rank', 'score');
+              if(_.has(idxBadges[badgeType], "user")) {
+                if(idxBadges[badgeType].user.rank > usrBadge.rank) idxBadges[badgeType].user = usrBadge;
+              } else {
+                idxBadges[badgeType].user = usrBadge;
+              }
+            });
+            res.json(_.flatten(idxBadges));
+          } else {
+            res.json(_.flatten(idxBadges));      
+          }
+        });
+    } else {
+
+    }
+  });
+});
+
+var checkDaysInRow = function(daysInRow, username, callback) {
+  console.log("dir", daysInRow);
+  db.view("xp", "by_owner_name_gained", { startkey: new Array(username, "daily_login" ), endkey: new Array(username, "daily_login", {})}, function(err, body){
+    var keys = _.pluck(body.rows, "value");
+    keys = _.sortBy(keys, function(key) { return -key.gained});
+
+    var dates = _.pluck(keys, "gained");
+    dates =  _.map(dates, function(date) {
+      var d = new Date(date);
+      return new Array(d.getFullYear(),(d.getMonth()+1),d.getDate());
+    })
+    var next = 0;
+
+    var sequentialDays = 0;
+    var daysInARow = false;
+    for(var i=0; i < dates.length; i++) {
+      
+      if(i < dates.length-1) {
+        next = i+1;
+      } else {
+        next = i;
+      }
+      try {
+        if(dates[i][0] == dates[next][0] && dates[i][1] == dates[next][1] && (dates[i][2]-1) == dates[next][2]) {
+          sequentialDays++;
+          if(sequentialDays >= daysInRow) daysInARow = true;
+          console.log("seq", sequentialDays);
+        } else {
+          sequentialDays = 0;
+        }
+      } catch (e) {
+        break;
+      }
+    }
+    callback(daysInARow);
+  });
+}
+
+
+var issueBadge = function(badge, owner, rank, score, callback) {
+  db.view("issuedBadge", "by_badge_owner_rank", { startkey: new Array(badge, owner, rank), endkey: new Array(badge, owner, rank)}, function(err, body){
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+            console.log("Badge '"+badge+"' ("+rank+") ALREADY issued for user '"+owner+"'");
+    } else {
+      db.insert({
+          type: "issuedBadge",
+          badge: badge,
+          rank: rank,
+          score: score,
+          issuedOn: Math.round((new Date()).getTime() / 1000),
+          owner: owner
+        },    
+        function(err, body) {
+          if(!err && body.ok) {
+            console.log("Badge '"+badge+"' ("+rank+") issued for user '"+owner+"'");
+          } else {
+            console.log("No Badge for '"+username+"'");
+          }
+        });
+    }
+    if(callback) callback();
+  });
+}
+
+
+var checkBadgeStammgast = function(owner) {
+  console.log("CHECK STAMMGAST LAN", owner);
+  var badge = 'badge/stammgast';
+  db.get(badge, function(err, body) {
+  if (!err) {
+    _.each(body.rank, function(days) {
+      
+      checkDaysInRow(days, owner, function(result){
+        var rank = _.indexOf(_.values(body.rank), days)+1;
+        
+        if(result) {
+          console.log("issue", rank);
+          issueBadge(badge, owner, rank, 0);
+        } else {
+          console.log("asd");
+        }
+      })
+    });
+  }
+});
+}
+
+var checkBadgeAutor = function(owner) {
+    var badge = "badge/autor";
+    db.get(badge, function(err, body) {
+      if (!err) {
+        var rank = body.rank;
+        db.view('sets', 'by_id_with_cards', function(err, body) {
+        var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == owner )); })
+
+        _.each(sets, function(set){      
+          var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
+          set.value.cardCnt = cardCnt.length;
+
+          if(!_.has(set.value, "category") && _.isUndefined(set.value.category)) set.value.category = "";
+        }, this);
+
+        sets = _.pluck(sets, "value");
+
+        sets = _.filter(sets, function(set){ return set.cardCnt >= 5 && set.visibility == 'public' });
+
+
+        _.each(rank, function(r){
+          if(sets.length >= r) {
+            var rankValue = _.indexOf(_.values(rank), r)+1;
+            issueBadge(badge, owner, rankValue, sets.length);
+          }
+        });
+      });
+    }
+  });
+}
+
+var checkBadgeKritiker = function(owner) {
+    var badge = "badge/kritiker";
+    db.get(badge, function(err, body) {
+      if (!err) {
+        var rank = body.rank;
+        db.view('rating', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
+        var sets = _.pluck(body.rows, "value");
+        
+
+
+        sets = _.filter(sets, function(set){ 
+          return set.comment.length >= 80;
+        });
+
+
+        _.each(rank, function(r){
+          if(sets.length >= r) {
+            var rankValue = _.indexOf(_.values(rank), r)+1;
+            issueBadge(badge, owner, rankValue, sets.length);
+          }
+        });
+      });
+    }
+  });
+}
+
+app.get('/xxp', function(req, res){
+  var username = "dan.knapp@web.de";
+  /*checkDaysInRow(3, username, function(row) {
+    if(row) {
+      issueBadge("badge/stammgast", "dan.knapp@web.de", 2, 0);
+    } else {
+      res.json({ "result": "false"});  
+    }
+  });*/
+checkBadgeKritiker(username);
+  
+});
+
+/*app.get('/badge', function(req, res) {
   var data = { 
   "uid": "f2c20",
   "recipient": {
@@ -1138,7 +1336,7 @@ app.get('/badge', function(req, res) {
   
   res.set('Content-Type', 'text/plain');
   res.send(signature);
-});
+});*/
 
 srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

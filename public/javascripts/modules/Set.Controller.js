@@ -27,13 +27,11 @@ Cards.module('Set', function(Set, App){
 							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsView);
 
-							var rating = new Cards.Entities.Rating({ setId: set.get("id")});
-							rating.fetch({
-								success: function(rating){
-									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
-									detailsLayout.ratingRegion.show(ratingsView);
-								}
-							})
+							$.get("/rating/avg/"+set.get("id"), function(data){
+								var rating = new Cards.Entities.Rating(data);
+								var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
+								detailsLayout.ratingRegion.show(ratingsView);
+							});
 						},
 						error: function(){
 
@@ -209,6 +207,7 @@ Cards.module('Set', function(Set, App){
 				ratingCollection.fetch({
 					success: function(ratingCollection){
 						var ratingView = new Cards.Set.Rating.RatingView({ collection: ratingCollection });
+						console.log(ratingCollection);
 						detailsLayout.detailsRegion.show(ratingView);
 					},
 					error: function() {

@@ -14,7 +14,8 @@
     "passport-facebook": "*",
     "passport-twitter": "*",
     "passport-google": "*",
-    "jws": "*"
+    "jws": "*",
+    "socket.io": "0.9.16"
   },
   "subdomain": "thmcards",
   "engines": {
