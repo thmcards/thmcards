@@ -734,7 +734,6 @@ app.post('/card', ensureAuthenticated, function(req, res){
 });
 
 app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
-  console.log("personalcard post");
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
     db.insert(
@@ -768,7 +767,6 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
-  console.log("personalcard put");
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
@@ -901,6 +899,25 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
     }
   });
 });
+
+app.get('/score/:username/:set', function(req, res){
+  var game = "meteor";
+  var user = req.session["passport"]["user"][0].username;
+  var setId = req.params.set;
+
+  var result = { score: 0, badges: 0, badgesTotal: 0 };
+
+  db.view('score', 'score_by_game_user_set', { key: new Array(game, user, setId) }, function(err, body) {
+    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+      var score = _.first(body.rows);
+      result.score = score.value;
+      res.json(result);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 
 app.post('/score/:username', ensureAuthenticated, function(req, res){
     var game = 'meteor';

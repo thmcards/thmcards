@@ -85,10 +85,12 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		onRender: function() {
 
-
-
-
-			if(this.collection.length == 0) this.$el.find("a.carousel-control").hide();
+			if(this.collection.length == 0) {
+				this.$el.find("a.carousel-control").hide();
+				this.$el.find("button.play-meteor").prop('disabled', true);
+				this.$el.find("button.learn").prop('disabled', true);
+				this.$el.find("button.memo").prop('disabled', true);
+			}
 			
 			this.$el.find("div.item").first().addClass("active");
 
@@ -104,6 +106,14 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$('#btnToCardLayout').addClass("active");
 			$('#btnToListLayout').removeClass("active");
+
+			var usr = $.cookie('usr');
+			$("#usr-name").text();
+			$.get("/score/"+usr.username+"/"+this.model.get("_id"), function( data ) {
+				$("#meteor-set-points").text(data.score);
+			}).fail(function(){
+				console.log("yeah");
+			});
 		},
 		onShow: function() {
 		var that = this;
