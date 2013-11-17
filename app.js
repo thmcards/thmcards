@@ -23,6 +23,12 @@ var express = require('express')
   , app = express()
   ;
 
+
+var secret = 'some secret';
+var sessionKey = 'express.sid';
+var cookieParser = express.cookieParser(secret);
+var sessionStore = new express.session.MemoryStore()
+
 var srv = http.createServer(app);
 
 app.configure(function(){
@@ -30,23 +36,62 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
-  app.use(express.cookieParser());
+  app.use(cookieParser);
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({ secret: "averysecretsecret", maxAge: Date.now() + (30 * 86400 * 1000) }));
+  app.use(express.session({ store: sessionStore, key: sessionKey }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function() {
-  app.use(express.errorHandler());
+var io = require('socket.io').listen(srv);
+
+io.set('authorization', function(handshake, cb) {
+  if(handshake.headers.cookie)
+  {
+    cookieParser(handshake, null, function(err) {
+      
+    if(handshake.signedCookies[sessionKey])
+    {
+      handshake.sessionID = handshake.signedCookies[sessionKey];
+      handshake.sessionStore = sessionStore; //Session contstructor needs an Object with sessionStore set
+      sessionStore.get(handshake.sessionID, function(err, session) {
+        if(err)
+        cb(err.message, false);
+        else
+        {
+          var s = handshake.session = new express.session.Session(handshake, session);
+          cb(null, true);
+        }
+      });
+    }
+    else cb('Session cookie could not be found', false);
+
+
+    });
+  }
+  else cb('Session cookie could not be found', false);
 });
 
-app.configure('production', function() {
+io.sockets.on('connection', function(socket) {
+  console.log('Socket connected with SID: ' + socket.handshake.sessionID);
+  socket.set('sessionID', socket.handshake.sessionID);
 
-})
+  socket.on('disconnect', function() {
+    console.log("DISCONNECT");
+  });
+});
+
+function getSocketBySessionID(sessionID) {
+  var skt = null;
+  
+  _.each(io.sockets.clients(), function(socket) {
+    if(sessionID == socket.store.data.sessionID) skt = socket;
+  })
+  return skt;
+}
 
 function checkOwner(doc_id, owner, success_callback, error_callback) {
   db.get(doc_id, function(err, body){
@@ -144,7 +189,6 @@ passport.deserializeUser(function(obj, done) {
 });
 
 function ensureAuthenticated(req, res, next) {
-  
   if (req.isAuthenticated()) {
     var user = _.first(req.session.passport.user);
 
@@ -247,8 +291,8 @@ app.get('/auth/twitter',
 app.get('/auth/twitter/callback', 
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   function(req, res) {
-    redeemLoginXPoints(res.req.user.username);
-    checkBadgeStammgast(res.req.user.username);
+    redeemLoginXPoints(_.first(res.req.user).username);
+    checkBadgeStammgast(_.first(res.req.user).username);
     res.redirect('/');
   }
 );
@@ -308,7 +352,6 @@ app.get('/set/category', function(req, res){
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return {name: _.first(doc.key), count: doc.value }});
-      console.log(docs);
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
@@ -341,14 +384,12 @@ app.get('/typeahead/set/visibility', function(req, res){
   if(!_.isUndefined(req.query.q)) query = req.query.q;
 
   db.view('sets', 'by_visibility', { startkey: new Array(query) }, function(err, body) {
-    console.log(body.rows);
     if (!err) {
       var docs = _.filter(body.rows, function(doc){ 
         return doc.value.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
       });
 
       var docs = _.map(docs, function(doc) { return {value: doc.value.name, tokens: _.uniq(_.compact(_.union(doc.value.description, doc.value.name))), description: doc.value.description, id: doc.value._id }});
-      console.log(docs);
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
@@ -381,8 +422,6 @@ app.get('/set/:id/personalcard', function(req, res){
       card.value.persCard = persCard;
     }, this);
     cards = _.pluck(cards, "value");
-
-    console.log(cards);
 
     res.json(_.sortBy(cards, function(card){ return card.created }));
   });
@@ -487,6 +526,18 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
+  console.log("session", req.sessionID);
+
+  setTimeout(function(){
+  var socket = getSocketBySessionID(req.sessionID);
+  if(socket != null) {
+    socket.emit("badge", { badge: "badge/stammgast", rank: 3, title: "Stammgast (YOLO STYLE)"});
+  }
+  
+  }, 2000);
+  
+
+
   db.view('sets', 'by_id_with_cards', function(err, body) {
     var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
 
@@ -567,11 +618,8 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
               }, this);
 
               db.bulk({"docs": personal}, function(err, body) {
-                console.log(err);
-                console.log(body);
-
+                
                 var normalCard = new Array();
-                console.log(cardIds);
                 _.each(docs, function(doc){
                    var doc = {
                    _id: doc._id, _rev: doc._rev, _deleted: true
@@ -580,11 +628,7 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
                 }, this);
 
                 db.bulk({"docs": normalCard}, function(err, body) {
-                  console.log(err);
-                  console.log(body);
-
-                  //hier is alles andere gelöscht
-
+                  
                   db.get(req.params.setid, function(err, body){
                     if(!err) {
                       var doc = {
@@ -594,7 +638,6 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
                       };
                       db.bulk({"docs": new Array(doc)}, function(err, body){
                         console.log(err);
-                        console.log(body);
                       });
                     }
                   });
@@ -614,7 +657,6 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
             };
             db.bulk({"docs": new Array(doc)}, function(err, body){
               console.log(err);
-              console.log(body);
             });
           }
         });
@@ -629,7 +671,6 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
 });
 
 app.get('/card/:id', ensureAuthenticated, function(req, res){
-  console.log(req.params);
   db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
       var card = body.rows[0].value;
@@ -706,8 +747,6 @@ app.delete('/card/:id', ensureAuthenticated, function(req, res) {
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
-  console.log(req.session);
-
   checkOwner(req.body.setId, req.session["passport"]["user"][0].username, function(){
     var time = new Date().getTime();
 
@@ -759,8 +798,6 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
             db.get(req.body._id, { revs_info: false }, function(err, body) {
               if (!err)
                 body.persCard = persCard;
-                console.log("res post");
-                console.log(body);
                 res.json(body);
             });
           }
@@ -801,8 +838,6 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
               db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
                 if (!err)
                   body.persCard = persCard;
-                  console.log("res put");
-                  console.log(body);
                   res.json(body);
               });
             }
@@ -1023,7 +1058,6 @@ app.get('/xp/:username', ensureAuthenticated, function(req, res){
   }
 
   db.view('xp', 'by_owner', { key: new Array(req.params.username) }, function(err, body) {
-    console.log(body.rows);
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
       var xpoints = _.pluck(body.rows, "value");
 
@@ -1050,9 +1084,6 @@ app.get('/xp/:username', ensureAuthenticated, function(req, res){
 
       var currentLevel = levelForXp(totalXPpoints);
       var pointsRemaining = xpForLevel(currentLevel+1)-totalXPpoints;
-
-      console.log(currentLevel, levelForXp(totalXPpoints));
-      console.log(currentLevel, xpForLevel(currentLevel+1));
 
       result = {
         totalXPoints: totalXPpoints,
@@ -1121,9 +1152,7 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
       var badges = _.pluck(body.rows, "value");
       var idxBadges = _.indexBy(badges, "_id");
-      console.log(idxBadges);
-
-
+      
         db.view("issuedBadge", "by_owner", { keys: new Array(user) }, function(err, body) {
           if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
             var issuedBadges = _.sortBy(_.pluck(body.rows, "value"), function(badge) {
@@ -1132,7 +1161,6 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
 
             _.each(issuedBadges, function(badge){
               var badgeType = badge.badge;
-              console.log(badgeType);
               console.log('type', idxBadges[badgeType]);
 
               var usrBadge = _.pick(badge, 'issuedOn', 'rank', 'score');
@@ -1154,7 +1182,6 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
 });
 
 var checkDaysInRow = function(daysInRow, username, callback) {
-  console.log("dir", daysInRow);
   db.view("xp", "by_owner_name_gained", { startkey: new Array(username, "daily_login" ), endkey: new Array(username, "daily_login", {})}, function(err, body){
     var keys = _.pluck(body.rows, "value");
     keys = _.sortBy(keys, function(key) { return -key.gained});
@@ -1179,7 +1206,6 @@ var checkDaysInRow = function(daysInRow, username, callback) {
         if(dates[i][0] == dates[next][0] && dates[i][1] == dates[next][1] && (dates[i][2]-1) == dates[next][2]) {
           sequentialDays++;
           if(sequentialDays >= daysInRow) daysInARow = true;
-          console.log("seq", sequentialDays);
         } else {
           sequentialDays = 0;
         }
@@ -1219,7 +1245,6 @@ var issueBadge = function(badge, owner, rank, score, callback) {
 
 
 var checkBadgeStammgast = function(owner) {
-  console.log("CHECK STAMMGAST LAN", owner);
   var badge = 'badge/stammgast';
   db.get(badge, function(err, body) {
   if (!err) {
@@ -1229,10 +1254,7 @@ var checkBadgeStammgast = function(owner) {
         var rank = _.indexOf(_.values(body.rank), days)+1;
         
         if(result) {
-          console.log("issue", rank);
           issueBadge(badge, owner, rank, 0);
-        } else {
-          console.log("asd");
         }
       })
     });
@@ -1307,7 +1329,6 @@ app.get('/xxp', function(req, res){
     }
   });*/
 checkBadgeKritiker(username);
-  
 });
 
 /*app.get('/badge', function(req, res) {

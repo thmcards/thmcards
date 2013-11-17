@@ -1,0 +1,15 @@
+{
+   "_id": "_design/issuedBadge",
+   "language": "javascript",
+   "views": {
+       "by_badge": {
+           "map": "function(doc) { if (doc.type == 'issuedBadge') { emit(doc.badge, doc); }}"
+       },
+       "by_owner": {
+           "map": "function(doc) { if (doc.type == 'issuedBadge') { emit(doc.owner, doc); }}"
+       },
+       "by_badge_owner_rank": {
+           "map": "function(doc) { if (doc.type == 'issuedBadge') { emit([doc.badge, doc.owner, doc.rank], doc); }}"
+       }
+   }
+}
