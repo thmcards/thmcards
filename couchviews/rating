@@ -10,6 +10,9 @@
        },
        "by_set": {
            "map": "function(doc) { if (doc.type == 'rating') { emit([doc.setId], doc); } }"
+       },
+       "by_set_owner": {
+           "map": "function(doc) { if (doc.type == 'rating') { emit([doc.setId, doc.owner], doc); }}"
        }
    }
 }
