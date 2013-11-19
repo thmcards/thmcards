@@ -8,8 +8,8 @@
   "dependencies": {
     "express": "3.4.0",
     "nconf": "0.6.*",
-    "nano": "4.1.*",
-    "underscore": "1.5.*",
+    "nano": "4.2.1",
+    "underscore": "1.5.2",
     "passport": "0.1.*",
     "passport-facebook": "1.0.*",
     "passport-twitter": "1.0.*",
