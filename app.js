@@ -216,7 +216,7 @@ function ensureAuthenticated(req, res, next) {
 var User = {};
 User.findOrCreate = function(profile, done) {
   db.view('users', 'by_provider_and_username', { key: new Array(profile.provider, profile.username) }, function(err, body) {
-      if(body.rows.length > 0) {
+      if(_.size(body.rows) > 0) {
         var user = _.map(body.rows, function(doc) { return doc.value});
         return done(err, user);
       } else {
@@ -338,10 +338,6 @@ app.get('/whoami', ensureAuthenticated, function(req, res) {
 //------------------------------------------------------------------------------------
 
 app.get('/', ensureAuthenticated, function(req, res){
-  /*res.render("index.jade", {
-    layout: false,
-    css: clientcss.renderTags()
-  });*/
   fs.readFile(__dirname + '/views/index.html', 'utf8', function(err, text){
         res.send(text);
     });
