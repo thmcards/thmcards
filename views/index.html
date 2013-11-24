@@ -949,19 +949,19 @@
           </div>
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
-              <div class="row"><span style="display:inline-block; height:50px; font-size:30px"><%= _.str.numberFormat(todayXPoints, 0, ',', '.') %></span></div>
+              <div class="row" style="height:50px;"><span style="display:inline-block; font-size:30px; margin-top:12px"><%= _.str.numberFormat(todayXPoints, 0, ',', '.') %></span></div>
               <div class="row"><span class="text-muted" style="font-size:12px">Heute</span></div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
-              <div class="row"><span style="display:inline-block; height:50px; font-size:20px"><%= _.str.numberFormat(yesterdayXPoints, 0, ',', '.') %></span></div>
+              <div class="row" style="height:50px;"><span style="display:inline-block; font-size:25px; margin-top:17px; height:25px;"><%= _.str.numberFormat(yesterdayXPoints, 0, ',', '.') %></span></div>
               <div class="row"><span class="text-muted" style="font-size:12px">Gestern</span></div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
-              <div class="row"><span style="display:inline-block; height:50px; "><%= _.str.numberFormat(lastSevenDaysXPoints, 0, ',', '.') %></span></div>
+              <div class="row" style="height:50px;"><span style="display:inline-block; font-size:20px; margin-top:22px; height:20px"><%= _.str.numberFormat(lastSevenDaysXPoints, 0, ',', '.') %></span></div>
               <div class="row"><span class="text-muted" style="font-size:12px">7 Tage</span></div>
             </div>
           </div>
@@ -986,7 +986,9 @@
             </div>
             <small class="text-muted">Noch <em><%= _.str.numberFormat(pointsRemaining, 0, ',', '.') %> Punkte</em> bis zum nächsten Level</small>
           </div>
-          <div class="col-md-2" style="text-align:center"><img src="/img/trophy_36x36_gray.png" /></div>
+          <div class="col-md-2" style="text-align:center;">
+            <div style=" width:36px; height:36px; background-image:url('/img/trophy_36x36_gray.png')"><span style="font-weight:bold; color: #fff; font-size:13px; padding-top:5px; display:inline-block"><%= currentLevel+1 %></span></div>
+          </div>
         </div>
       </div>    
       

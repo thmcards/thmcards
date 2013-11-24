@@ -577,8 +577,7 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});
-      doc[0].rating = (req.body.rating === 'true');
-      
+
       db.insert(req.body, doc[0]._id, function(err, body, header){
           if(err) {
             console.log('[db.insert] ', err.message);
@@ -1081,6 +1080,12 @@ app.get('/xp/:username', ensureAuthenticated, function(req, res){
 
       var lastRedeem = _.first(_.sortBy(xpoints, "gained").reverse());
 
+      var lastRedeemName = '';
+      if(lastRedeem.name == 'create_set') lastRedeemName = 'Kartensatz angelegt';
+      if(lastRedeem.name == 'create_card') lastRedeemName = 'Karte angelegt';
+      if(lastRedeem.name == 'daily_login') lastRedeemName = 'Login';
+      if(lastRedeem.name == 'rating') lastRedeemName = 'Kartensatz bewertet';
+
       var currentLevel = levelForXp(totalXPpoints);
       var pointsRemaining = xpForLevel(currentLevel+1)-totalXPpoints;
 
@@ -1090,7 +1095,7 @@ app.get('/xp/:username', ensureAuthenticated, function(req, res){
         yesterdayXPoints: yesterdayXPoints,
         lastSevenDaysXPoints: lastSevenDaysXPoints,
         lastRedeem: {
-          name: lastRedeem.name,
+          name: lastRedeemName,
           value: lastRedeem.value
         },
         currentLevel: currentLevel,
@@ -1159,6 +1164,8 @@ app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
   },    
   function(err, body) {
     if(!err && body.ok) {
+      redeemXPoints('rating', 1, owner);
+
       res.json(body);
     } else {
       res.send(404);
