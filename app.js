@@ -137,7 +137,7 @@ var redeemLoginXPoints = function(username){
         db.insert({
           type: "xp",
           name: "daily_login",
-          value: 3,
+          value: 2,
           gained: now,
           owner: username
         }, function(err, body) {
@@ -565,7 +565,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
         console.log('[db.insert] ', err.message);
         return;
       }
-      redeemXPoints("create_set", 2, req.session["passport"]["user"][0].username);
+      redeemXPoints("create_set", 3, req.session["passport"]["user"][0].username);
       db.get(body.id, { revs_info: false }, function(err, body) {
         if (!err)
           res.json(body);
@@ -762,7 +762,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
           console.log('[db.insert] ', err.message);
           return;
         }
-        redeemXPoints("create_card", 1, req.session["passport"]["user"][0].username);
+        redeemXPoints("create_card", 2, req.session["passport"]["user"][0].username);
         db.get(body.id, { revs_info: false }, function(err, body) {
           if (!err)
             res.json(body);
