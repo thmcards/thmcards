@@ -27,11 +27,13 @@ Cards.module('Set', function(Set, App){
 							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsView);
 
-							$.get("/rating/avg/"+set.get("id"), function(data){
-								var rating = new Cards.Entities.Rating(data);
-								var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
-								detailsLayout.ratingRegion.show(ratingsView);
-							});
+							if(set.get("rating") === true) {
+								$.get("/rating/avg/"+set.get("id"), function(data){
+									var rating = new Cards.Entities.Rating(data);
+									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
+									detailsLayout.ratingRegion.show(ratingsView);
+								});	
+							}
 						},
 						error: function(){
 
@@ -67,13 +69,15 @@ Cards.module('Set', function(Set, App){
 							var detailsListView = new Cards.Set.Details.DetailsListView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsListView);
 							
-							var rating = new Cards.Entities.Rating({ setId: set.get("id")});
-							rating.fetch({
-								success: function(rating){
-									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
-									detailsLayout.ratingRegion.show(ratingsView);
-								}
-							})
+							if(set.get("rating") === true) {
+								var rating = new Cards.Entities.Rating({ setId: set.get("id")});
+								rating.fetch({
+									success: function(rating){
+										var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
+										detailsLayout.ratingRegion.show(ratingsView);
+									}
+								})
+							}
 						},
 						error: function(){
 

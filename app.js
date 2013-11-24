@@ -556,6 +556,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
   data.owner = req.session["passport"]["user"][0].username;
   data.type = "set";
   data.created = time;
+  data.rating = (req.body.rating === 'true');
 
   db.insert(
     data, 
@@ -576,6 +577,8 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});
+      doc[0].rating = (req.body.rating === 'true');
+      
       db.insert(req.body, doc[0]._id, function(err, body, header){
           if(err) {
             console.log('[db.insert] ', err.message);
@@ -1139,6 +1142,30 @@ app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
       res.json([]);
     }
   });
+});
+
+app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
+  var value = parseInt(req.body.value);
+  var comment = req.body.comment;
+  var setId = req.params.setId;
+  var owner = req.session["passport"]["user"][0].username;
+
+  db.insert({
+    type: "rating",
+    value: value,
+    comment: comment,
+    setId: setId,
+    owner: owner
+  },    
+  function(err, body) {
+    if(!err && body.ok) {
+      res.json(body);
+    } else {
+      res.send(404);
+    }
+  });
+
+
 });
 
 app.get('/badge/:username', ensureAuthenticated, function(req, res){

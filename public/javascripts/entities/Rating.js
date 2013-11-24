@@ -1,7 +1,7 @@
 Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Rating = Backbone.Model.extend({
-		urlRoot: "/rating",
+		urlRoot: "/set/rating",
 		idAttribute: "_id"
 	});
 

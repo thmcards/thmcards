@@ -85,13 +85,15 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			var description = this.ui.modalInputDescription.val();
 			var category = this.ui.modalInputCategory.val();
 			var visibility = $("#newSetModal .btn-group > label.active > input").val();
+			var rating = $("#newSetModal .btn-group-rating > label.active > input").val();
 
 			var newSet = new Cards.Entities.Set({ 
 								name: name, 
 								description: description,
 								visibility: visibility,
 								category: category,
-								cardCnt: 0
+								cardCnt: 0,
+								rating: rating
 							 });
 
 			if(newSet.isValid()) {

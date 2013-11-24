@@ -25,7 +25,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		template: "#set-details-rating",
 		className: "well well-sm sidebar-nav",
 		onRender: function() {
-			console.log("ren");
+			var that = this; 
 			this.$("#raty").raty({ 
 				score: function() {
 			      return $(this).attr('data-score');
@@ -33,7 +33,52 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			    readonly: true,
 				starOff: '/img/star-off.png',
 				starOn : '/img/star-on.png',
-				starHalf: '/img/star-half.png'
+				starHalf: '/img/star-half.png',
+				hints       : ['bad', 'poor', 'regular', 'good', 'gorgeous'],
+				halfShow    : true,
+				half        : false,
+				click: function(rating) {
+					$('#ratingStars').raty({
+						readOnly: true,
+						score: rating,
+						starOff: '/img/star-off.png',
+						starOn : '/img/star-on.png'
+					});
+					$('#ratingModal').find('span.rating123').text(rating);
+					$('#ratingModal').find('span.rating-title').text($("#set-details-sideBar-region").find("h4").text());
+					$('#ratingModal').find('textarea').on('keyup', function(ev){
+						var lgth = $(ev.currentTarget).val().length;
+						$('#ratingModal').find('small.char-cnt').text(lgth);
+						if(lgth >= 80) {
+							$('#ratingModal').find('button.btn-primary').prop("disabled", false);
+						}
+					});
+					$('#ratingModal').modal('show');
+
+					$('#ratingModal').on('hide', function(){
+
+					});
+
+					$('#ratingModal').find('button.btn-primary').on('click', function(ev){
+						$('#ratingModal').find('button.btn-primary').button('loading');
+						var ratingObj = { 	
+										value: rating, 
+										comment: $('#ratingModal').find('textarea').val()
+									 };
+						console.log(that.model);
+
+						$.post('/set/rating/'+that.model.get('setId'), ratingObj, function(res){
+							if(_.has(res, 'ok') && res.ok == true) {
+								$('#ratingModal').modal('hide');
+								$('#ratingModal').find('button.btn-primary').button('reset');
+								App.trigger("set:rating", that.model.get('setId'));
+							}
+						}).fail(function(){
+
+						});
+					});
+				}
+
 			});
 		}
 	}),
@@ -74,6 +119,12 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 					$("#editSetModal .btn-group > label.private").removeClass("active");
 					$("#editSetModal .btn-group > label.public").addClass("active");
 			}
+			
+			if (this.model.get("rating") === false) {
+				console.log("RATING");
+					$("#editSetModal .btn-group-rating > label.rating-true").removeClass("active");
+					$("#editSetModal .btn-group-rating > label.rating-false").addClass("active");
+			}
 
 			this.ui.modalView.on('hidden.bs.modal', function() {
 				that.ui.modalBtnSave.button('reset');
@@ -88,7 +139,6 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		},
 		updateSet: function(ev) {
 			var that = this;
-			console.log("updaaaate");
 
 			this.ui.modalBtnSave.button('loading');
 
@@ -96,13 +146,15 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var description = this.ui.modalInputDescription.val();
 			var category = this.ui.modalInputCategory.val();
 			var visibility = $("#editSetModal .btn-group > label.active > input").val();
+			var rating = $("#editSetModal .btn-group-rating > label.active > input").val();
 
 			this.model.set({
 					name: name, 
 					description: description,
 					visibility: visibility,
 					category: category,
-					cardCnt: 0
+					cardCnt: 0,
+					rating: (rating === 'true')
 				 });
 
 			if(this.model.isValid()) {
