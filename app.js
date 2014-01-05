@@ -565,7 +565,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
         console.log('[db.insert] ', err.message);
         return;
       }
-      redeemXPoints("create_set", 3, req.session["passport"]["user"][0].username);
+      redeemXPoints("create_set", 2, req.session["passport"]["user"][0].username);
       db.get(body.id, { revs_info: false }, function(err, body) {
         if (!err)
           res.json(body);
