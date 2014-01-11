@@ -146,13 +146,11 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 			if(!_.isUndefined(answeredCard)) {
 
-				var score = parseInt($("#meteor-points").text()) + 5;
-				$("#meteor-points").text(score);
-				$("#meteor-points").effect("pulsate", { times:1 }, 1000);
+				this.addPoints(5);
 
 				this.addLife();
 
-				console.info("Correct Answer! "+answeredCard.back.text_plain, "New Score: "+score);
+				console.info("Correct Answer! "+answeredCard.back.text_plain, this.points);
 
 				answeredCard.div.stop().toggle({
 					effect: "explode",
@@ -164,6 +162,15 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				});
 			}
 
+		},
+		addPoints: function(points) {
+			var score = parseInt($("#meteor-points").text()) + points;
+			this.points = score;
+
+			$("#meteor-points").text(score);
+			$("#meteor-points").effect("pulsate", { times:1 }, 1000);
+
+			this.checkLevel();
 		},
 		fillQueue: function(cardId){
 			var that = this;
@@ -327,6 +334,18 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				this.lifes--;
 			}
 
+		},
+		checkLevel: function(){
+			console.info("check level", this.points);
+			if(this.points > 5) this.nextLevel();
+		},
+		nextLevel: function(){
+			var currentLevel = this.level;
+			var nextLevel = currentLevel+1;
+
+			this.level = nextLevel;
+			console.info(this.level, nextLevel);
+			$("#meteor-level-cnt").text(nextLevel);
 		},
 		gameOver: function(){
 			var that = this;

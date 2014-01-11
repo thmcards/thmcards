@@ -502,23 +502,23 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
 });
 
 app.put('/user/:username', ensureAuthenticated, function(req, res){
+  if(req.params.username === req.session["passport"]["user"][0].username) {
+      db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
+        var user = body.rows[0].value;
+        var name = req.body.name;
 
-  db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
-    var user = body.rows[0].value;
-    var name = req.body.name;
+        user.name = name;  
 
-    user.name = name;  
-
-    db.insert(user, body.rows[0].id, function(err, body){
-      if(!err) {
-        res.json(body); 
-      } else {
-        console.log("[db.users/by_username]", err.message);
-      }
-      
-    });
-  });
-
+        db.insert(user, body.rows[0].id, function(err, body){
+          if(!err) {
+            res.json(body); 
+          } else {
+            console.log("[db.users/by_username]", err.message);
+          }
+          
+        });
+      });
+  }
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
@@ -1134,6 +1134,34 @@ app.get('/rating/avg/:setId', ensureAuthenticated, function(req, res){
       res.json(result);
     }
   });
+});
+
+app.get('/rating/permission/:setId', ensureAuthenticated, function(req, res){
+  var setId = req.params.setId;
+  var owner = req.session["passport"]["user"][0].username;
+
+  var ownerPermission = false;
+  db.get(setId, function(err, body) {
+    if (!err) {
+      if(body.owner !== owner) {
+        ownerPermission = true;
+      }
+    }
+  });
+
+  var ratedPermission = false;
+  db.view("rating", "by_set_owner", { key: new Array(setId, owner)}, function(err, body) {
+    if(!_.isUndefined(body.rows) && !err) {
+      if(body.rows.length == 0) {
+        ratedPermission = true;
+      }
+    } else {
+      console.log("[rating/by_set_owner]", err);
+    }
+  });  
+  var permission = ownerPermission && ratedPermission;
+  res.json({"permission": permission});
+
 });
 
 app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
