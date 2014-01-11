@@ -76,11 +76,11 @@ io.set('authorization', function(handshake, cb) {
 });
 
 io.sockets.on('connection', function(socket) {
-  console.log('Socket connected with SID: ' + socket.handshake.sessionID);
+  console.log('Socket connected with SID: ' + socket.handshake.sessionID, socket.store.id);
   socket.set('sessionID', socket.handshake.sessionID);
 
   socket.on('disconnect', function() {
-    console.log("DISCONNECT");
+    console.log("DISCONNECT: ", socket);
   });
 });
 
@@ -90,6 +90,7 @@ function getSocketBySessionID(sessionID) {
   _.each(io.sockets.clients(), function(socket) {
     if(sessionID == socket.store.data.sessionID) skt = socket;
   })
+  console.log(sessionID, skt.store.id);
   return skt;
 }
 
@@ -522,18 +523,6 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
-  console.log("session", req.sessionID);
-
-  setTimeout(function(){
-  var socket = getSocketBySessionID(req.sessionID);
-  if(socket != null) {
-    socket.emit("badge", { badge: "badge/stammgast", rank: 3, title: "Stammgast (YOLO STYLE)"});
-  }
-  
-  }, 2000);
-  
-
-
   db.view('sets', 'by_id_with_cards', function(err, body) {
     var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
 
@@ -745,13 +734,14 @@ app.delete('/card/:id', ensureAuthenticated, function(req, res) {
 });
 
 app.post('/card', ensureAuthenticated, function(req, res){
-  checkOwner(req.body.setId, req.session["passport"]["user"][0].username, function(){
+  var owner = req.session["passport"]["user"][0].username;
+  checkOwner(req.body.setId, owner, function(){
     var time = new Date().getTime();
 
     db.insert(
       { 
         "created": time,
-        "owner": req.session["passport"]["user"][0].username,
+        "owner": owner,
         "setId": req.body.setId,
         "front": req.body.front,
         "back": req.body.back,
@@ -762,7 +752,8 @@ app.post('/card', ensureAuthenticated, function(req, res){
           console.log('[db.insert] ', err.message);
           return;
         }
-        redeemXPoints("create_card", 2, req.session["passport"]["user"][0].username);
+        redeemXPoints("create_card", 2, owner);
+        checkBadgeAutor(owner, req.sessionID);
         db.get(body.id, { revs_info: false }, function(err, body) {
           if (!err)
             res.json(body);
@@ -1275,8 +1266,17 @@ var checkDaysInRow = function(daysInRow, username, callback) {
   });
 }
 
+var sendMessageToUser = function(sessionID, messageType, messageObject) {
+  setTimeout(function(){
+    var socket = getSocketBySessionID(sessionID);
+    console.log("socket", socket.store.id);
+    if(socket != null) {
+      socket.emit(messageType, messageObject);
+    }
+  }, 2000);
+}
 
-var issueBadge = function(badge, owner, rank, score, callback) {
+var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
   db.view("issuedBadge", "by_badge_owner_rank", { startkey: new Array(badge, owner, rank), endkey: new Array(badge, owner, rank)}, function(err, body){
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
             console.log("Badge '"+badge+"' ("+rank+") ALREADY issued for user '"+owner+"'");
@@ -1292,6 +1292,7 @@ var issueBadge = function(badge, owner, rank, score, callback) {
         function(err, body) {
           if(!err && body.ok) {
             console.log("Badge '"+badge+"' ("+rank+") issued for user '"+owner+"'");
+            sendMessageToUser(sessionID, "badge", { badge: badge, rank: rank, title: badge});
           } else {
             console.log("No Badge for '"+username+"'");
           }
@@ -1320,7 +1321,7 @@ var checkBadgeStammgast = function(owner) {
 });
 }
 
-var checkBadgeAutor = function(owner) {
+var checkBadgeAutor = function(owner, sessionID) {
     var badge = "badge/autor";
     db.get(badge, function(err, body) {
       if (!err) {
@@ -1343,7 +1344,7 @@ var checkBadgeAutor = function(owner) {
         _.each(rank, function(r){
           if(sets.length >= r) {
             var rankValue = _.indexOf(_.values(rank), r)+1;
-            issueBadge(badge, owner, rankValue, sets.length);
+            issueBadge(badge, owner, sessionID, rankValue, sets.length);
           }
         });
       });
