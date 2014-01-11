@@ -90,7 +90,7 @@ function getSocketBySessionID(sessionID) {
   _.each(io.sockets.clients(), function(socket) {
     if(sessionID == socket.store.data.sessionID) skt = socket;
   })
-  console.log(sessionID, skt.store.id);
+
   return skt;
 }
 
@@ -1292,7 +1292,11 @@ var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
         function(err, body) {
           if(!err && body.ok) {
             console.log("Badge '"+badge+"' ("+rank+") issued for user '"+owner+"'");
-            sendMessageToUser(sessionID, "badge", { badge: badge, rank: rank, title: badge});
+
+            db.get(badge, function(err, badge){
+              sendMessageToUser(sessionID, "badge", { badge: badge._id, rank: rank, title: badge.name});
+            })
+            
           } else {
             console.log("No Badge for '"+username+"'");
           }
@@ -1313,7 +1317,7 @@ var checkBadgeStammgast = function(owner) {
         var rank = _.indexOf(_.values(body.rank), days)+1;
         
         if(result) {
-          issueBadge(badge, owner, rank, 0);
+          issueBadge(body, owner, rank, 0);
         }
       })
     });

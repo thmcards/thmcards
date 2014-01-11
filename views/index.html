@@ -1214,23 +1214,31 @@
       });
       socket.on('badge', function (badge) {
         console.log(badge);
-        $("#notificationContainer strong.badgeTitle").text(badge.title);
+        $("#notificationContainer .badgeTitle").text(badge.title);
+        var rank = new Array("Gold", "Silber", "Bronze");
+
+        $("#notificationContainer span.rank").text(rank[badge.rank-1]);
         $("#notificationContainer img").attr('src', '/badges/'+badge.badge+'_'+badge.rank+'.png');
         $("#notificationContainer").fadeIn();
+
+        $("#notificationContainer button.close").click(function(ev){
+          console.log("close");
+          $("#notificationContainer").fadeOut();
+        });
       });
+
+
     </script>
-    <div id="notificationContainer" class="alert alert-success alert-dismissable" style="display:none; position:absolute; right:10px; top:10px; z-index:10000; opacity: 0.8;">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="float:right">&times;</button>
+    <div id="notificationContainer" style="padding:10px 15px 15px; position: absolute; display:none; width:350px; right: 10px; top: 10px; z-index: 10000; opacity: 0.9; border:1px solid #777; background-color:#fff; border-radius:5px">
+      <button type="button" class="close" aria-hidden="true" style="float:right">&times;</button>
       <div style="float:left; margin-right:20px;">
-        <img src="/badges/badge/stammgast_3.png" alt="<%= name %>" width="55" height="55" style="margin-top:5px; display:inline-block" />
-        </div>
-        <div>
-        <p>
-          <small>
-          Du hast einen neuen Badge gesammelt!
-          <br />
-          <strong class="badgeTitle">Stammgast (Bronze) </strong></small>
-        </p>
+        <img src="/badges/badge/stammgast_3.png" alt="<%= name %>" width="75" height="75" style="margin-top:5px; display:inline-block" />
+      </div>
+      <div>
+          <h4>Neuer Badge</h4>
+          Du hast den Badge <strong class="badgeTitle">Stammgast</strong> <strong>(<span class="rank"></span>)</strong> erhalten
+      </div>
+      <div><a class="btn btn-default btn-xs pull-right">Ansehen</a></div>
     </div>
   </body>
 </html>
