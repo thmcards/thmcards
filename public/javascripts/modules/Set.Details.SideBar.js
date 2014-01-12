@@ -28,7 +28,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var that = this;
 
 			$.get('/rating/permission/'+this.model.get('setId'), function(res){
-				console.log(!res.permission);
+				console.log("perm", res.permission);
 				that.$("#raty").raty({ 
 					score: function() {
 				      return $(this).attr('data-score');
@@ -59,10 +59,10 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 						$('#ratingModal').modal('show');
 
 						$('#ratingModal').on('hide', function(){
-
+							$('#ratingModal').find('button.btn-primary'),off('click');
 						});
 
-						$('#ratingModal').find('button.btn-primary').on('click', function(ev){
+						$('#ratingModal').find('button.btn-primary').click(function(ev){
 							$('#ratingModal').find('button.btn-primary').button('loading');
 							var ratingObj = { 	
 											value: rating, 

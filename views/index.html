@@ -1213,7 +1213,7 @@
         console.log(data);
       });
       socket.on('badge', function (badge) {
-        console.log(badge);
+        console.log("badge", badge);
         $("#notificationContainer .badgeTitle").text(badge.title);
         var rank = new Array("Gold", "Silber", "Bronze");
 

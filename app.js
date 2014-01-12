@@ -293,7 +293,7 @@ app.get('/auth/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   function(req, res) {
     redeemLoginXPoints(_.first(res.req.user).username);
-    checkBadgeStammgast(_.first(res.req.user).username);
+    checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
     res.redirect('/');
   }
 );
@@ -304,7 +304,7 @@ app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     redeemLoginXPoints(_.first(res.req.user).username);
-    checkBadgeStammgast(_.first(res.req.user).username);
+    checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
     res.redirect('/');
   }
 );
@@ -315,7 +315,7 @@ app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     redeemLoginXPoints(_.first(res.req.user).username);
-    checkBadgeStammgast(_.first(res.req.user).username);
+    checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
     res.redirect('/');
   }
 );
@@ -523,6 +523,12 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
+  setTimeout(function(){
+
+    checkBadgeKritikerLiebling(req.session["passport"]["user"][0].username, req.sessionID);
+
+  }, 5000);
+    
   db.view('sets', 'by_id_with_cards', function(err, body) {
     var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == req.session["passport"]["user"][0].username )); })
 
@@ -1134,24 +1140,24 @@ app.get('/rating/permission/:setId', ensureAuthenticated, function(req, res){
   var ownerPermission = false;
   db.get(setId, function(err, body) {
     if (!err) {
-      if(body.owner !== owner) {
-        ownerPermission = true;
+      if(body.owner == owner) {
+        res.json({"permission":false, "owner":false});
       }
     }
   });
 
-  var ratedPermission = false;
   db.view("rating", "by_set_owner", { key: new Array(setId, owner)}, function(err, body) {
     if(!_.isUndefined(body.rows) && !err) {
-      if(body.rows.length == 0) {
-        ratedPermission = true;
+      if(_.size(body.rows) == 0) {
+        res.json({"permission": true});
+      } else {
+        res.json({"permission": false});
       }
     } else {
       console.log("[rating/by_set_owner]", err);
     }
   });  
-  var permission = ownerPermission && ratedPermission;
-  res.json({"permission": permission});
+  
 
 });
 
@@ -1184,7 +1190,7 @@ app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
   function(err, body) {
     if(!err && body.ok) {
       redeemXPoints('rating', 1, owner);
-
+      checkBadgeKritiker(req.session["passport"]["user"][0].username, req.sessionID);
       res.json(body);
     } else {
       res.send(404);
@@ -1267,18 +1273,18 @@ var checkDaysInRow = function(daysInRow, username, callback) {
 }
 
 var sendMessageToUser = function(sessionID, messageType, messageObject) {
+  console.log(sessionID, messageType, messageObject);
   setTimeout(function(){
     var socket = getSocketBySessionID(sessionID);
-    console.log("socket", socket.store.id);
     if(socket != null) {
       socket.emit(messageType, messageObject);
     }
-  }, 2000);
+  }, 500);
 }
 
 var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
   db.view("issuedBadge", "by_badge_owner_rank", { startkey: new Array(badge, owner, rank), endkey: new Array(badge, owner, rank)}, function(err, body){
-    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
+    if(!_.isUndefined(body.rows) && !err && _.size(body.rows) > 0) {
             console.log("Badge '"+badge+"' ("+rank+") ALREADY issued for user '"+owner+"'");
     } else {
       db.insert({
@@ -1294,6 +1300,7 @@ var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
             console.log("Badge '"+badge+"' ("+rank+") issued for user '"+owner+"'");
 
             db.get(badge, function(err, badge){
+              console.log(badge);
               sendMessageToUser(sessionID, "badge", { badge: badge._id, rank: rank, title: badge.name});
             })
             
@@ -1307,7 +1314,7 @@ var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
 }
 
 
-var checkBadgeStammgast = function(owner) {
+var checkBadgeStammgast = function(owner, sessionID) {
   var badge = 'badge/stammgast';
   db.get(badge, function(err, body) {
   if (!err) {
@@ -1317,7 +1324,7 @@ var checkBadgeStammgast = function(owner) {
         var rank = _.indexOf(_.values(body.rank), days)+1;
         
         if(result) {
-          issueBadge(body, owner, rank, 0);
+          issueBadge(badge, owner, sessionID, rank, 0);
         }
       })
     });
@@ -1356,25 +1363,74 @@ var checkBadgeAutor = function(owner, sessionID) {
   });
 }
 
-var checkBadgeKritiker = function(owner) {
+function average (arr)
+{
+  return _.reduce(arr, function(memo, num)
+  {
+    return memo + num;
+  }, 0) / arr.length;
+}
+
+var checkBadgeKritikerLiebling = function(owner, sessionID) {
+    var badge = "badge/krone";
+    db.get(badge, function(err, body) {
+      if (!err) {
+        var rank = body.rank;
+
+        db.view('sets', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
+          if(!err && _.size(body.rows) > 0) {
+            var setIds = _.pluck(body.rows, "id");
+            console.log(setIds);
+            setIds = _.map(setIds, function(set) { return new Array(set)});
+
+            db.view('rating', 'by_set', { keys: setIds }, function(err, body) {
+              if(!err && _.size(body.rows) > 0) {
+                var ratings = _.groupBy(_.pluck(body.rows, "value"), "setId");
+                console.log(ratings);
+
+                var cntRatedSets = 0;
+                _.each(ratings, function(rating) {
+                  if(rating.length >= 5) {
+                    var values = _.pluck(rating, "value");
+                    var avg = average(values);
+                    console.log(avg);
+                    if(avg >= 4.5) cntRatedSets++;
+                  }
+                });
+
+                _.each(rank, function(r){
+                  if(cntRatedSets >= r) {
+                    var rankValue = _.indexOf(_.values(rank), r)+1;
+                    issueBadge(badge, owner, sessionID, rankValue, cntRatedSets);
+                  }
+                });
+              }
+              
+            });
+          }
+        });
+    }
+  });
+}
+
+
+
+var checkBadgeKritiker = function(owner, sessionID) {
     var badge = "badge/kritiker";
     db.get(badge, function(err, body) {
       if (!err) {
         var rank = body.rank;
         db.view('rating', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
         var sets = _.pluck(body.rows, "value");
-        
-
 
         sets = _.filter(sets, function(set){ 
-          return set.comment.length >= 80;
+          return set.comment.length >= 60;
         });
-
 
         _.each(rank, function(r){
           if(sets.length >= r) {
             var rankValue = _.indexOf(_.values(rank), r)+1;
-            issueBadge(badge, owner, rankValue, sets.length);
+            issueBadge(badge, owner, sessionID, rankValue, sets.length);
           }
         });
       });
@@ -1391,7 +1447,7 @@ app.get('/xxp', function(req, res){
       res.json({ "result": "false"});  
     }
   });*/
-checkBadgeKritiker(username);
+checkBadgeKritikerLiebling(username, req.sessionID);
 });
 
 /*app.get('/badge', function(req, res) {
