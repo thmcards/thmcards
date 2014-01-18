@@ -7,6 +7,6 @@
 	"facebook_clientid": "479179358837571",
 	"facebook_clientsecret": "9af20c0ab66f8c5ba6f8d714b339be23",
 	"twitter_key": "1Icj0eY0NYmUoMSiGA",
-	"twitter_secret": "wsgFgVlT2p1R41rr1EYeUm6PqBwfqA3DIgtgC0h6c"
-
+	"twitter_secret": "wsgFgVlT2p1R41rr1EYeUm6PqBwfqA3DIgtgC0h6c",
+	"badge_url": "http://thmcards.jit.su/badges/"
 }

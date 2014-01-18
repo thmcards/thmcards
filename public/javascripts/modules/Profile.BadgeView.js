@@ -18,15 +18,23 @@ Cards.module('Profile', function(Profile, App) {
 		itemView: Profile.BadgeItemView,
 		itemViewContainer: "tbody",
 		events: {
-			"click a": "linkClicked"
+			"click a.issueBadge": "issueBadge"
 		},
 		initialize: function() {
 			this.collection.fetch();
 		},
-		linkClicked: function(ev){
+		issueBadge: function(ev){
 			ev.preventDefault();
-			
-			
+
+			$.get("/syncbadges", function(assertions){
+				OpenBadges.issue(assertions, function(errors, successes){
+					console.log("badge errors", errors);
+					console.log("badge successes", successes);
+				});	
+			})
+			.fail(function() {
+			    alert( "error" );
+			})
 		}
 	});
 });
