@@ -507,9 +507,10 @@ app.get('/set/:id', function(req, res){
 });
 
 app.get('/user/:username', ensureAuthenticated, function(req, res){
-  db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
-    if(!_.isUndefined(body.rows) && _.isArray(body.rows)) {
-      var userInfo = body.rows[0].value;
+  db.view('users', 'by_username', { key: req.params.username }, function(err, body) {
+    if(!_.isUndefined(body.rows) && _.size(body.rows) > 0) {
+
+      var userInfo = _.first(body.rows).value;
       res.json(userInfo);
     } else {
       console.log("user/username", body);
@@ -1496,7 +1497,101 @@ app.get('/xxp', function(req, res){
 checkBadgeKritikerLiebling(username, req.sessionID);
 });
 
-/*app.get('/badge', function(req, res) {
+app.get('/badges/issuer', function(req, res) {
+  res.json({
+    name : "THM - Technische Hochschule Mittelhessen",
+    url : "http://www.thm.de/"
+  });
+});
+
+app.get('/badges/badge/:badge/:rank.json', function(req, res) {
+  //res.json({ everything: "cool json" });
+  var badge = "badge/"+req.params.badge;
+  var rank = req.params.rank;
+  var badgeUrl = nconf.get("badge_url");
+  console.log(badge);
+  db.get(badge, function(err, badge){
+    if(!err) {
+
+      var badgeClass = {};
+
+      badgeClass.name = badge.name;
+      badgeClass.description = badge.description;
+      badgeClass.image = badgeUrl + "/" + badge._id + "_" + rank + ".png";
+      badgeClass.criteria = badgeUrl + "/" + badge._id + ".html";
+      badgeClass.issuer = badgeUrl + "issuer";
+
+      res.json(badgeClass);
+    } else {
+      console.log(err);
+    }
+  });
+
+});
+app.get('/badges/badge/:badge:rank.html', function(req, res) {
+  res.json({ everything: "cool html" });
+});
+
+app.get('/syncbadges', function(req, res) {
+  var owner = "dan.knapp@web.de";
+  var badgesToIssue = new Array();
+  var badgeUrl = nconf.get("badge_url");
+db.view("issuedBadge", "by_owner", { keys: new Array(owner) }, function(err, body) {
+          if(!_.isUndefined(body.rows) && !err && _.size(body.rows) > 0) {
+            var issuedBadges = _.sortBy(_.pluck(body.rows, "value"), function(badge) {
+              return badge.rank;
+            });
+
+            //res.json(issuedBadges);
+            
+            db.view("users", "by_username", { keys: new Array(owner) }, function(err, body) {
+              if(!err && _.size(body.rows) > 0) {
+                var user = _.first(body.rows).value;
+                
+
+
+                _.each(issuedBadges, function(badge){
+                  var data = {};
+
+                  data.uid = badge._id;
+                  data.recipient = { type: "email", hashed: false, identity: user.username };
+                  data.image = badgeUrl + badge.badge + "_" + badge.rank + ".png";
+                  data.evidence = badgeUrl + badge.badge + ".html";
+                  data.issuedOn = badge.issuedOn;
+                  data.badge = badgeUrl + badge.badge + "/" + badge.rank + ".json";
+                  data.verify = { type: "signed", url: badgeUrl + "public.pem" };
+
+                  var signature = jws.sign({
+                    header: { alg: 'rs256'},
+                    payload: data,
+                    secret: fs.readFileSync('private.pem')
+                  });
+
+                  badgesToIssue.push(signature);
+                });
+
+
+
+
+
+
+                res.json(badgesToIssue);
+              }
+            });
+
+
+
+
+
+          } else {  
+
+          }
+        });
+
+
+
+
+/*
   var data = { 
   "uid": "f2c20",
   "recipient": {
@@ -1521,8 +1616,10 @@ checkBadgeKritikerLiebling(username, req.sessionID);
   });
   
   res.set('Content-Type', 'text/plain');
-  res.send(signature);
-});*/
+  res.send(signature);*/
+});
+
+
 
 srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
