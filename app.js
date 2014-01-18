@@ -178,6 +178,22 @@ var levelForXp = function(pts) {
     return lvl;
 }
 
+var calcInterval = function(current_interval, last_rated) {
+
+  //return interval;
+
+}
+
+var calcEF = function() {
+
+  //EF':=EF+(0.1-(5-q)*(0.08+(5-q)*0.02))
+}
+
+var calcNextDate = function(interval, ef) {
+  //for n>2: I(n):=I(n-1)*EF
+  
+}
+
 //------------------------------------------------------------------------------------
 //-----------------------       LOGIN & AUTH       -----------------------------------
 //------------------------------------------------------------------------------------
@@ -773,13 +789,18 @@ app.post('/card', ensureAuthenticated, function(req, res){
 app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
+
     db.insert(
       { 
         "created": time,
         "owner": req.session["passport"]["user"][0].username,
         "cardId": req.body._id,
         "box": req.body.persCard.value.box || "1",
-        "type": "personal_card"
+        "type": "personal_card",
+        "sm_times_learned": "1",
+        "sm_interval": "0",
+        "sm_ef": "2.5",
+        "sm_instant_repeat": "0"
       }, 
       function(err, body, header){
         if(err) {
@@ -803,7 +824,10 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
+  var today = new Date();
   var username = req.session["passport"]["user"][0].username;
+  console.log("rated: " + req.body.persCard.value.last_rated);
+
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     if (!err){  
       var docs = _.filter(body.rows, function(row){ return (row.value.owner == username ); })  
@@ -811,6 +835,22 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         return doc.value
       });
       if (body.rows.length){
+        console.log("sm_interval: " + parseInt(docs[0].sm_interval));
+        console.log(today);
+
+
+
+        var interval = calcInterval(docs[0].sm_interval, req.body.persCard.value.last_rated);
+        var ef = calcEF(docs[0].sm_ef, req.body.persCard.value.last_rated);
+
+        var next_date = calcNextDate(interval, ef);
+
+        var instant_repeat = "0";
+        if (req.body.persCard.value.last_rated < 3) {
+          instant_repeat = "1"
+        }
+        
+
         db.insert(
         { 
           "_rev": docs[0]._rev,
@@ -818,7 +858,13 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
           "owner": docs[0].owner,
           "cardId": docs[0].cardId,
           "box": req.body.persCard.value.box  || docs[0].box,
-          "type": docs[0].type
+          "type": docs[0].type,
+          "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
+          "sm_interval": interval,
+          "sm_ef": ef,
+          "sm_next_learning_date": next_date,
+          "sm_instant_repeat": instant_repeat, // nur am gleichen tag wiederholen - current date und last date checken
+          "sm_last_learned": today
         },
         docs[0]._id,
         function(err, body, header){
