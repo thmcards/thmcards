@@ -178,20 +178,23 @@ var levelForXp = function(pts) {
     return lvl;
 }
 
-var calcInterval = function(current_interval, last_rated) {
+var calcInterval = function(current_interval, last_rated, callback) {
 
   //return interval;
-
+  if(_.isUndefined(callback)) return interval;
+  callback(interval);
 }
 
-var calcEF = function() {
+var calcEF = function(callback) {
 
   //EF':=EF+(0.1-(5-q)*(0.08+(5-q)*0.02))
+  if(_.isUndefined(callback)) return ef;
+  callback(ef);
 }
 
 var calcNextDate = function(interval, ef) {
   //for n>2: I(n):=I(n-1)*EF
-  
+  return xxx;
 }
 
 //------------------------------------------------------------------------------------
@@ -841,50 +844,51 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 
 
-        var interval = calcInterval(docs[0].sm_interval, req.body.persCard.value.last_rated);
-        var ef = calcEF(docs[0].sm_ef, req.body.persCard.value.last_rated);
+        calcInterval(_.first(docs).sm_interval, req.body.persCard.value.last_rated, function(interval){
+          calcEF(_.first(docs).sm_ef, req.body.persCard.value.last_rated, function(ef){
+            var next_date = calcNextDate(interval, ef);    
 
-        var next_date = calcNextDate(interval, ef);
-
-        var instant_repeat = "0";
-        if (req.body.persCard.value.last_rated < 3) {
-          instant_repeat = "1"
-        }
-        
-
-        db.insert(
-        { 
-          "_rev": docs[0]._rev,
-          "created": docs[0].created,
-          "owner": docs[0].owner,
-          "cardId": docs[0].cardId,
-          "box": req.body.persCard.value.box  || docs[0].box,
-          "type": docs[0].type,
-          "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
-          "sm_interval": interval,
-          "sm_ef": ef,
-          "sm_next_learning_date": next_date,
-          "sm_instant_repeat": instant_repeat, // nur am gleichen tag wiederholen - current date und last date checken
-          "sm_last_learned": today
-        },
-        docs[0]._id,
-        function(err, body, header){
-          if(err) {
-            console.log('[db.insert] ', err.message);
-            return;
-          }
-          db.get(body.id, { revs_info: false }, function(err, body) {
-            if (!err){
-              var persCard = {};
-              persCard.value = body;
-              db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
-                if (!err)
-                  body.persCard = persCard;
-                  res.json(body);
-              });
+            var instant_repeat = "0";
+            if (req.body.persCard.value.last_rated < 3) {
+              instant_repeat = "1"
             }
+
+            db.insert(
+            { 
+              "_rev": docs[0]._rev,
+              "created": docs[0].created,
+              "owner": docs[0].owner,
+              "cardId": docs[0].cardId,
+              "box": req.body.persCard.value.box  || docs[0].box,
+              "type": docs[0].type,
+              "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
+              "sm_interval": interval,
+              "sm_ef": ef,
+              "sm_next_learning_date": next_date,
+              "sm_instant_repeat": instant_repeat, // nur am gleichen tag wiederholen - current date und last date checken
+              "sm_last_learned": today
+            },
+            docs[0]._id,
+            function(err, body, header){
+              if(err) {
+                console.log('[db.insert] ', err.message);
+                return;
+              }
+              db.get(body.id, { revs_info: false }, function(err, body) {
+                if (!err){
+                  var persCard = {};
+                  persCard.value = body;
+                  db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
+                    if (!err)
+                      body.persCard = persCard;
+                      res.json(body);
+                  });
+                }
+              });
+            });
           });
-      });
+        });
+
       }
     } else {
       console.log("[db.personalcard/by_cardId]", err.message);
