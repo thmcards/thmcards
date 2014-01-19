@@ -1601,7 +1601,10 @@ app.get('/badges/badge/:badge/:rank.json', function(req, res) {
 
       var badgeClass = {};
 
-      badgeClass.name = badge.name;
+      var rankStr = "Gold";
+      if(rank == 3) rankStr = "Bronze";
+      if(rank == 2) rankStr = "Silber";
+      badgeClass.name = badge.name + " (" + rankStr + ")";
       badgeClass.description = badge.description;
       badgeClass.image = badgeUrl + "/" + badge._id + "_" + rank + ".png";
       badgeClass.criteria = badgeUrl + "/" + badge._id + ".html";
