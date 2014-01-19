@@ -1103,7 +1103,7 @@
         if(typeof(user) != "undefined") {
       %>
         <div style="float:left; width:75px; height:75px; margin-right:10px;">
-        <img src="/badges/<%= _id %>_<%= user.rank %>.png" alt="<%= name %>" width="75" height="75" />
+        <img src="/badges/<%= _id %>_<%= user.rank %><% if(user.issuedOn == 0) { %>_gray<% } %>.png" alt="<%= name %>" width="75" height="75" />
         </div>
         <div>
         <p>
@@ -1112,11 +1112,16 @@
           <% if(user.rank == 2) { %> (Silber) <% } %>
           <% if(user.rank == 1) { %> (Gold) <% } %>
           </strong><br />
-          <small>Erhalten am <%= new Date(user.issuedOn*1000).format('d.m.y')  %></small>
+          <small>
+          <% if(user.issuedOn > 0) { %>
+            Erhalten am <%= new Date(user.issuedOn*1000).format('d.m.y')  %></small>
+          <% } else { %>
+            Mach´ weiter und sammel diesen Bronze-Badge:
+          <% } %>
         </p>
 
         <div class="progress">
-          <div class="progress-bar" role="progressbar" aria-valuenow="<%= user.score/rank[user.rank-1]*100 %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= user.score/rank[user.rank-1]*100 %>%">
+          <div class="progress-bar" role="progressbar" aria-valuenow="<%= user.progress/user.nextRank*100 %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= user.progress/user.nextRank*100 %>%">
           </div>
           </div>
         </div>

@@ -1267,7 +1267,6 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
 
             _.each(issuedBadges, function(badge){
               var badgeType = badge.badge;
-              console.log('type', idxBadges[badgeType]);
 
               var usrBadge = _.pick(badge, 'issuedOn', 'rank', 'score');
               if(_.has(idxBadges[badgeType], "user")) {
@@ -1276,10 +1275,46 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
                 idxBadges[badgeType].user = usrBadge;
               }
             });
-            res.json(_.flatten(idxBadges));
-          } else {
+            //7res.json(_.flatten(idxBadges));
+          }/* else {
             res.json(_.flatten(idxBadges));      
-          }
+          }*/
+          var results = _.flatten(idxBadges);
+          console.log("------");
+          console.log(results);
+          console.log("------");
+
+          db.view('badgeProgress', 'by_owner', { keys: new Array(user) }, function(err, body) {
+            console.log("body", body);
+            if(!err && !_.isEmpty(body.rows)) {
+              var badgeProgress = _.pluck(body.rows, "value");
+              console.log("progresssadasd", badgeProgress);
+              var badges = new Array();
+              
+              
+                _.each(badgeProgress, function(progress){
+                  _.each(results, function(badge){
+                  console.log(badge._id, progress.badge)
+                  if(badge._id == progress.badge && _.has(badge, "user")) {
+                    badge.user.progress = progress.score;
+                    badge.user.nextRank = progress.nextRank;
+                    console.log(badge._id, badge.user.issuedOn);
+                  } else {
+                    if(!_.has(badge, "user")) {
+                      badge.user = {};
+                      badge.user.progress = 0;
+                      badge.user.issuedOn = 0;
+                      badge.user.rank = 3;
+                      badge.user.nextRank = badge.rank[2];  
+                    }
+                    
+                  }
+                });
+              });
+              res.json(results);
+            }
+
+          });
         });
     } else {
 
@@ -1364,6 +1399,52 @@ var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
   });
 }
 
+var setBadgeProgress = function(badge, owner, score, nextRank) {
+  var badgeShort = badge.split("/")[1];
+
+  db.view('badgeProgress', 'by_owner_badge', { startkey: new Array(owner, badge), endkey: new Array(owner, badge) }, function(err, body) {
+    if(!err) {
+      console.log("badge progress", badge, owner, score, nextRank);
+      
+
+      if(_.isEmpty(body.rows)) {
+        var badgeProgress = {};
+        badgeProgress.badge = badge;
+        badgeProgress.owner = owner;
+        badgeProgress.score = score;
+        badgeProgress.nextRank = nextRank;
+        badgeProgress.type = "badgeProgress";
+
+        db.insert(badgeProgress,
+        function(err, body){
+          if(!err && body.ok) {
+            console.log("new score update");
+          } else {
+            console.log("new score fail");
+          }
+        });
+
+      } else {
+        var badgeProgress = _.first(body.rows).value;
+        console.log(badgeProgress);
+        badgeProgress.score = score;
+        badgeProgress.nextRank = nextRank;
+
+        db.insert(badgeProgress,    
+        function(err, body) {
+          if(!err && body.ok) {
+            console.log("score update");
+          } else {
+            console.log("score error");
+          }
+        });          
+      }
+
+      
+    }
+  });
+}
+
 
 var checkBadgeStammgast = function(owner, sessionID) {
   var badge = 'badge/stammgast';
@@ -1375,7 +1456,7 @@ var checkBadgeStammgast = function(owner, sessionID) {
         var rank = _.indexOf(_.values(body.rank), days)+1;
         
         if(result) {
-          issueBadge(badge, owner, sessionID, rank, 0);
+          issueBadge(badge, owner, sessionID, rank, result);
         }
       })
     });
@@ -1402,13 +1483,16 @@ var checkBadgeAutor = function(owner, sessionID) {
 
         sets = _.filter(sets, function(set){ return set.cardCnt >= 5 && set.visibility == 'public' });
 
-
+        var rankValue = 3;
+        var nextRank = rank[2];
         _.each(rank, function(r){
           if(sets.length >= r) {
-            var rankValue = _.indexOf(_.values(rank), r)+1;
+            if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
+            rankValue = _.indexOf(_.values(rank), r)+1;
             issueBadge(badge, owner, sessionID, rankValue, sets.length);
           }
         });
+        setBadgeProgress(badge, owner, sets.length, nextRank);
       });
     }
   });
@@ -1449,12 +1533,16 @@ var checkBadgeKritikerLiebling = function(owner, sessionID) {
                   }
                 });
 
+                var rankValue = rank[2];
+                var nextRank = 0;
                 _.each(rank, function(r){
                   if(cntRatedSets >= r) {
-                    var rankValue = _.indexOf(_.values(rank), r)+1;
+                    if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
+                    rankValue = _.indexOf(_.values(rank), r)+1;
                     issueBadge(badge, owner, sessionID, rankValue, cntRatedSets);
                   }
                 });
+                setBadgeProgress(badge, owner, cntRatedSets, nextRank);
               }
               
             });
@@ -1478,28 +1566,22 @@ var checkBadgeKritiker = function(owner, sessionID) {
           return set.comment.length >= 60;
         });
 
+        var nextRank = rank[2];
+        var rankValue = 3;
         _.each(rank, function(r){
           if(sets.length >= r) {
-            var rankValue = _.indexOf(_.values(rank), r)+1;
+            if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
+            console.log("next", nextRank, rank[_.indexOf(_.values(rank), r)], _.values(rank));
+            rankValue = _.indexOf(_.values(rank), r)+1;
             issueBadge(badge, owner, sessionID, rankValue, sets.length);
           }
+          setBadgeProgress(badge, owner, sets.length, nextRank);
         });
+        
       });
     }
   });
 }
-
-app.get('/xxp', function(req, res){
-  var username = "dan.knapp@web.de";
-  /*checkDaysInRow(3, username, function(row) {
-    if(row) {
-      issueBadge("badge/stammgast", "dan.knapp@web.de", 2, 0);
-    } else {
-      res.json({ "result": "false"});  
-    }
-  });*/
-checkBadgeKritikerLiebling(username, req.sessionID);
-});
 
 app.get('/badges/issuer', function(req, res) {
   res.json({
@@ -1621,6 +1703,17 @@ db.view("issuedBadge", "by_owner", { keys: new Array(owner) }, function(err, bod
   
   res.set('Content-Type', 'text/plain');
   res.send(signature);*/
+});
+
+app.get('/progress', function(req, res) {
+
+var badge = "badge/kritiker";
+var owner = "dan.knapp@web.de";
+var score = 10;
+var rank = 3;
+
+setBadgeProgress(badge, owner, score, rank);
+
 });
 
 
