@@ -1,0 +1,12 @@
+{
+   "_id": "_design/badgeProgress",
+   "language": "javascript",
+   "views": {
+       "by_owner_badge": {
+           "map": "function(doc) { if (doc.type == 'badgeProgress') { emit([doc.owner, doc.badge], doc); }}"
+       },
+       "by_owner": {
+           "map": "function(doc) { if (doc.type == 'badgeProgress') { emit(doc.owner, doc); }}"
+       }
+   }
+}
