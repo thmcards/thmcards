@@ -12,6 +12,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
+  , date = require('date-utils')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
   , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
@@ -179,22 +180,52 @@ var levelForXp = function(pts) {
 }
 
 var calcInterval = function(current_interval, last_rated, callback) {
+  var interval;
+  if(last_rated < 3) {
+    interval = 1;
+  }
+  else {
+    interval = parseInt(current_interval) + 1;
+  }
+  console.log("Interval(number): " + interval);
 
-  //return interval;
   if(_.isUndefined(callback)) return interval;
   callback(interval);
 }
 
-var calcEF = function(callback) {
+var calcEF = function(ef_old, last_rated, callback) {
+  var ef;
 
-  //EF':=EF+(0.1-(5-q)*(0.08+(5-q)*0.02))
+  ef= parseFloat(ef_old)+(0.1-(5-parseInt(last_rated))*(0.08+(5-parseInt(last_rated))*0.02));
+  if(ef<1.3) {
+    ef = 1.3;
+  }
+
+  console.log("EF: " + ef);
+
   if(_.isUndefined(callback)) return ef;
   callback(ef);
 }
 
-var calcNextDate = function(interval, ef) {
-  //for n>2: I(n):=I(n-1)*EF
-  return xxx;
+var calcIntervalDays = function(interval, interval_days_before, ef) {
+  var interval_days;
+
+  if(interval == 1) {
+    interval_days = 1;
+  }
+
+  if(interval == 2) {
+    interval_days = 6;
+  }
+
+  if(interval > 2) {
+
+    interval_days = Math.ceil(parseInt(interval_days_before) * parseFloat(ef));
+  }
+
+  console.log("Interval in days before: " + interval_days_before)
+  console.log("Interval in days after: " + interval_days)
+  return interval_days;
 }
 
 //------------------------------------------------------------------------------------
@@ -473,6 +504,7 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
 });
 
 app.get('/set/:id/card', function(req, res){
+  console.log("using normal api!");
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
@@ -485,12 +517,18 @@ app.get('/set/:id/card', function(req, res){
 });
 
 app.get('/set/:id/memo/card', function(req, res){
-  //check for supermemo values and filter...
-
+  console.log("using memo api!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
+
+      //check for supermemo values and filter...
+
+  //filtern nach karten die ins zeitintervall passen
+
+  //danach karten suchen mit instant_repeat=1
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value});
+
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
@@ -794,6 +832,8 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
 
+
+  //unterscheidung sm und leitner für smtimeslearned 0 oder 1
     db.insert(
       { 
         "created": time,
@@ -801,10 +841,12 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         "cardId": req.body._id,
         "box": req.body.persCard.value.box || "1",
         "type": "personal_card",
-        "sm_times_learned": "1",
+        "sm_times_learned": "0",
         "sm_interval": "0",
         "sm_ef": "2.5",
-        "sm_instant_repeat": "0"
+        "sm_instant_repeat": "0",
+        "sm_interval_days": "0",
+        "sm_last_learned": "0"
       }, 
       function(err, body, header){
         if(err) {
@@ -828,9 +870,10 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
-  var today = new Date();
+  var today = Date.today();
   var username = req.session["passport"]["user"][0].username;
-  console.log("rated: " + req.body.persCard.value.last_rated);
+  console.log(req.body.persCard.value);
+  console.log("heute: " + today);
 
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     if (!err){  
@@ -839,55 +882,94 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         return doc.value
       });
       if (body.rows.length){
-        console.log("sm_interval: " + parseInt(docs[0].sm_interval));
+        console.log("sm_times_learned: " + docs[0].sm_times_learned);
         console.log(today);
+        console.log(req.body.persCard.value);
 
+        if (_.has(req.body.persCard.value, "last_rated")){
+          console.log("personalcard --> supermemo");
+          calcInterval(_.first(docs).sm_interval, req.body.persCard.value.last_rated, function(interval){
+            calcEF(_.first(docs).sm_ef, req.body.persCard.value.last_rated, function(ef){
+              var interval_days = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);    
 
-
-        calcInterval(_.first(docs).sm_interval, req.body.persCard.value.last_rated, function(interval){
-          calcEF(_.first(docs).sm_ef, req.body.persCard.value.last_rated, function(ef){
-            var next_date = calcNextDate(interval, ef);    
-
-            var instant_repeat = "0";
-            if (req.body.persCard.value.last_rated < 3) {
-              instant_repeat = "1"
-            }
-
-            db.insert(
-            { 
-              "_rev": docs[0]._rev,
-              "created": docs[0].created,
-              "owner": docs[0].owner,
-              "cardId": docs[0].cardId,
-              "box": req.body.persCard.value.box  || docs[0].box,
-              "type": docs[0].type,
-              "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
-              "sm_interval": interval,
-              "sm_ef": ef,
-              "sm_next_learning_date": next_date,
-              "sm_instant_repeat": instant_repeat, // nur am gleichen tag wiederholen - current date und last date checken
-              "sm_last_learned": today
-            },
-            docs[0]._id,
-            function(err, body, header){
-              if(err) {
-                console.log('[db.insert] ', err.message);
-                return;
+              var instant_repeat = "0";
+              if (parseInt(req.body.persCard.value.last_rated) < 4) {
+                instant_repeat = "1"
               }
-              db.get(body.id, { revs_info: false }, function(err, body) {
-                if (!err){
-                  var persCard = {};
-                  persCard.value = body;
-                  db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
-                    if (!err)
-                      body.persCard = persCard;
-                      res.json(body);
-                  });
+
+              db.insert(
+              { 
+                "_rev": docs[0]._rev,
+                "created": docs[0].created,
+                "owner": docs[0].owner,
+                "cardId": docs[0].cardId,
+                "type": docs[0].type,
+                "box": docs[0].box,
+                "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
+                "sm_interval": interval,
+                "sm_ef": ef,
+                "sm_interval_days": interval_days,
+                "sm_instant_repeat": instant_repeat,
+                "sm_last_learned": today
+              },
+              docs[0]._id,
+              function(err, body, header){
+                if(err) {
+                  console.log('[db.insert] ', err.message);
+                  return;
                 }
+                db.get(body.id, { revs_info: false }, function(err, body) {
+                  if (!err){
+                    var persCard = {};
+                    persCard.value = body;
+                    db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
+                      if (!err)
+                        body.persCard = persCard;
+                        res.json(body);
+                    });
+                  }
+                });
               });
             });
           });
-        });
+        }
+
+        if (!_.has(req.body.persCard.value, "last_rated")){
+          console.log("personalcard --> leitner");
+              db.insert(
+              { 
+                "_rev": docs[0]._rev,
+                "created": docs[0].created,
+                "owner": docs[0].owner,
+                "cardId": docs[0].cardId,
+                "type": docs[0].type,
+                "box": req.body.persCard.value.box  || docs[0].box,
+                "sm_times_learned": docs[0].sm_times_learned,
+                "sm_interval": docs[0].sm_interval,
+                "sm_ef": docs[0].sm_ef,
+                "sm_interval_days": docs[0].sm_interval_days,
+                "sm_instant_repeat": docs[0].sm_instant_repeat,
+                "sm_last_learned": docs[0].sm_last_learned
+              },
+              docs[0]._id,
+              function(err, body, header){
+                if(err) {
+                  console.log('[db.insert] ', err.message);
+                  return;
+                }
+                db.get(body.id, { revs_info: false }, function(err, body) {
+                  if (!err){
+                    var persCard = {};
+                    persCard.value = body;
+                    db.get(docs[0].cardId, { revs_info: false }, function(err, body) {
+                      if (!err)
+                        body.persCard = persCard;
+                        res.json(body);
+                    });
+                  }
+                });
+              });
+        }
 
       }
     } else {
