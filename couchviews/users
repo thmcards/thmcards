@@ -9,7 +9,7 @@
            "map": "function(doc) { if (doc.type == 'user') { emit([doc.provider, doc.username], doc); }}"
        },
        "by_username": {
-           "map": "function(doc) { if (doc.type == 'user') { emit([doc.username], doc); }}"
+           "map": "function(doc) { if (doc.type == 'user') { emit(doc.username, doc); }}"
        },
        "by_id": {
            "map": "function(doc) { if (doc.type == 'user') { emit([doc._id], doc); }}"
