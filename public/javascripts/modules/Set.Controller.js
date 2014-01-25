@@ -139,20 +139,38 @@ Cards.module('Set', function(Set, App){
 					var memoLayout = new Cards.Set.Memo.Layout();
 					Cards.mainRegion.show(memoLayout);
 
+/*
+					var cardCollection = new Cards.Entities.CardMemoCollection([], { setId: set.get("id") });
+					
+					cardCollection.fetch({
+						success: function(){
+							var memoView = new Cards.Set.Memo.DetailsView({ collection: cardCollection, model: set });
+							memoLayout.detailsRegion.show(memoView);
+							
+						},
+						error: function(){
+
+						}
+					});
+
+*/
+
 					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id") });
 					
 					personalCollection.fetch({
 						success: function(){
-							// copy mit filterfunktion der original liste, die wird angezeigt
-							var filteredCollection = FilteredCollection(personalCollection, { setId: set.get("id") });
 							
-							var memoView = new Cards.Set.Memo.DetailsView({ collection: filteredCollection });
+							var memoView = new Cards.Set.Memo.DetailsView({ collection: personalCollection });
 							memoLayout.detailsRegion.show(memoView);
 						},
 						error: function(){
 
 						}
 					});
+
+
+
+					
 				},
 				error: function(){
 					console.log("error");
