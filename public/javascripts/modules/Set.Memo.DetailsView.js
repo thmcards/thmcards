@@ -81,8 +81,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 					persCard = {};
 					persCard.value = {
 					   "cardId": cardId,
-					   "last_rated": rating,
-					   "memo": 1
+					   "last_rated": rating
 					}
 					model['persCard'] = persCard;
 					model.set({persCard: persCard});

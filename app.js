@@ -460,6 +460,7 @@ app.get('/set/category/:category', function(req, res){
 
 app.get('/set/:id/personalcard', function(req, res){
   var username = req.session["passport"]["user"][0].username;
+  console.log("personalcard api");
 
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
 
@@ -505,6 +506,7 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
 
 app.get('/set/:id/card', function(req, res){
   console.log("using normal api!");
+  console.log(req.params);
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
@@ -518,21 +520,21 @@ app.get('/set/:id/card', function(req, res){
 
 app.get('/set/:id/memo/card', function(req, res){
   console.log("using memo api!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
+  var username = req.session["passport"]["user"][0].username;
 
-      //check for supermemo values and filter...
+  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
 
-  //filtern nach karten die ins zeitintervall passen
+    var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
+    _.each(cards, function(card){      
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+      card.value.persCard = persCard;
+    }, this);
+    cards = _.pluck(cards, "value");
 
-  //danach karten suchen mit instant_repeat=1
-    
-    if (!err) {
-      var docs = _.map(body.rows, function(doc) { return doc.value});
+    //var cardsFiltered = _.filter(cards, function(card){console.log(JSON.stringify(card.persCard[0].value.sm_ef));})
+    console.log("....................");
 
-      res.json(docs);
-    } else {
-      console.log("[db.cards/by_set]", err.message);
-    }
+    res.json(_.sortBy(cards, function(card){ return card.created }));
   });
 });
 
@@ -831,7 +833,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
 app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
   var username = req.session["passport"]["user"][0].username;
-
+  console.log("creating new personalcard");
 
   //unterscheidung sm und leitner für smtimeslearned 0 oder 1
     db.insert(
@@ -841,6 +843,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         "cardId": req.body._id,
         "box": req.body.persCard.value.box || "1",
         "type": "personal_card",
+        "times_learned": "1",
         "sm_times_learned": "0",
         "sm_interval": "0",
         "sm_ef": "2.5",
@@ -905,6 +908,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
                 "cardId": docs[0].cardId,
                 "type": docs[0].type,
                 "box": docs[0].box,
+                "times_learned": parseInt(docs[0].times_learned) + 1,
                 "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
                 "sm_interval": interval,
                 "sm_ef": ef,
@@ -944,6 +948,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
                 "cardId": docs[0].cardId,
                 "type": docs[0].type,
                 "box": req.body.persCard.value.box  || docs[0].box,
+                "times_learned": parseInt(docs[0].times_learned) + 1,
                 "sm_times_learned": docs[0].sm_times_learned,
                 "sm_interval": docs[0].sm_interval,
                 "sm_ef": docs[0].sm_ef,

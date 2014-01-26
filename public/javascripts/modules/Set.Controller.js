@@ -139,23 +139,7 @@ Cards.module('Set', function(Set, App){
 					var memoLayout = new Cards.Set.Memo.Layout();
 					Cards.mainRegion.show(memoLayout);
 
-/*
-					var cardCollection = new Cards.Entities.CardMemoCollection([], { setId: set.get("id") });
-					
-					cardCollection.fetch({
-						success: function(){
-							var memoView = new Cards.Set.Memo.DetailsView({ collection: cardCollection, model: set });
-							memoLayout.detailsRegion.show(memoView);
-							
-						},
-						error: function(){
-
-						}
-					});
-
-*/
-
-					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id") });
+					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id"), url:"/set/" + set.get("id") + "/memo/card" });
 					
 					personalCollection.fetch({
 						success: function(){
@@ -167,10 +151,6 @@ Cards.module('Set', function(Set, App){
 
 						}
 					});
-
-
-
-					
 				},
 				error: function(){
 					console.log("error");
