@@ -221,6 +221,12 @@ code {
   width: 580px;
   font-size: 2em
 }
+.double {
+  display: inline-block;
+  vertical-align: middle;
+  width: 350px;
+  font-size: 2em
+}
 .navbar .navbar-brand {
   padding: 10px 20px;
 }

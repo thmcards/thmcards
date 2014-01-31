@@ -103,6 +103,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 						that.$el.find(":first-child").carousel("next");					
 					} else {
 						that.$el.find("div.carousel").hide();
+						that.$el.find("button.show-answer").hide();
 						that.$el.find("div.learn-endscreen").show();
 					}
 				}
@@ -118,6 +119,9 @@ Cards.module('Set.Memo', function(Memo, App) {
 
 
 			this.$el.find("div.item").first().addClass("active");
+			if (this.collection.length != 0) {
+				this.$el.find("button.show-answer").show();
+			}
 
 			this.$el.find(':first-child').carousel({ interval: false });
 		}

@@ -521,7 +521,7 @@ app.get('/set/:id/card', function(req, res){
 app.get('/set/:id/memo/card', function(req, res){
   console.log("using memo api!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   var username = req.session["passport"]["user"][0].username;
-
+  var today = Date.today();
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
 
     var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
@@ -530,11 +530,36 @@ app.get('/set/:id/memo/card', function(req, res){
       card.value.persCard = persCard;
     }, this);
     cards = _.pluck(cards, "value");
+    
+    var cardsFiltered = _.filter(cards, function(card){
+      console.log(JSON.stringify(card));
+            
+      //console.log(JSON.stringify(card.persCard[0].value.sm_ef));
+      //wenn keine personalcard vorhanden nicht rausfiltern zeile 1205 (if xy return...)
+      if(_.isEmpty(card.persCard)){ return card};
 
-    //var cardsFiltered = _.filter(cards, function(card){console.log(JSON.stringify(card.persCard[0].value.sm_ef));})
+      if(!_.isEmpty(card.persCard)){
+        var lastLearned = new Date(card.persCard[0].value.sm_last_learned);
+        var nextDate = new Date(card.persCard[0].value.sm_next_date);
+        console.log("nicht leer");
+        console.log("last learned: " + card.persCard[0].value.sm_last_learned);
+        console.log("next date: " + card.persCard[0].value.sm_next_date);
+        console.log("to learn or not: " + Date.compare(lastLearned, nextDate));
+        //wenn personalcard vorhancen, filtere nach datum (last learned + intervaldays >= today)
+        //if(lastLearned.add(intervalDays) >= today){ return card};
+        if(Date.compare(lastLearned, nextDate) >= 0){ return card};
+      };
+
+      if(!_.isEmpty(card.persCard)){
+        //filtere nach instantrepeat=1
+        if(parseInt(card.persCard[0].value.sm_instant_repeat) == 1) { return card};
+      };
+        
+    })
+    
     console.log("....................");
 
-    res.json(_.sortBy(cards, function(card){ return card.created }));
+    res.json(_.sortBy(cardsFiltered, function(card){ return card.created }));
   });
 });
 
@@ -835,7 +860,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var username = req.session["passport"]["user"][0].username;
   console.log("creating new personalcard");
 
-  //unterscheidung sm und leitner für smtimeslearned 0 oder 1
+  //unterscheidung sm und leitner für smtimeslearned 0 oder 1 und sm last_learned
     db.insert(
       { 
         "created": time,
@@ -849,7 +874,8 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         "sm_ef": "2.5",
         "sm_instant_repeat": "0",
         "sm_interval_days": "0",
-        "sm_last_learned": "0"
+        "sm_last_learned": "0",
+        "sm_next_date": "0"
       }, 
       function(err, body, header){
         if(err) {
@@ -893,11 +919,13 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
           console.log("personalcard --> supermemo");
           calcInterval(_.first(docs).sm_interval, req.body.persCard.value.last_rated, function(interval){
             calcEF(_.first(docs).sm_ef, req.body.persCard.value.last_rated, function(ef){
-              var interval_days = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);    
+              var intervalDays = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);
+              var currentDate = today.clone();
+              var nextDate = currentDate.addDays(parseInt(intervalDays));
 
-              var instant_repeat = "0";
+              var instantRepeat = "0";
               if (parseInt(req.body.persCard.value.last_rated) < 4) {
-                instant_repeat = "1"
+                instantRepeat = "1"
               }
 
               db.insert(
@@ -912,9 +940,10 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
                 "sm_times_learned": parseInt(docs[0].sm_times_learned) + 1,
                 "sm_interval": interval,
                 "sm_ef": ef,
-                "sm_interval_days": interval_days,
-                "sm_instant_repeat": instant_repeat,
-                "sm_last_learned": today
+                "sm_interval_days": intervalDays,
+                "sm_instant_repeat": instantRepeat,
+                "sm_last_learned": today,
+                "sm_next_date": nextDate
               },
               docs[0]._id,
               function(err, body, header){
