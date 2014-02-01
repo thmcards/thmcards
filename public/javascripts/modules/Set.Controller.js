@@ -44,7 +44,7 @@ Cards.module('Set', function(Set, App){
 					var sideBarView = new Cards.Set.Details.SideBar.SideBarView({ model: set});
 					detailsLayout.sideBarRegion.show(sideBarView);
 
-					if(set.get("owner") === $.cookie('usr').username) {
+					if(set.get("owner") === $.parseJSON($.cookie('usr')).username) {
 						var constrolsView = new Cards.Set.Details.SideBar.ControlsView({ model: set});
 						detailsLayout.controlsRegion.show(constrolsView);
 					}

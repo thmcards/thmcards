@@ -16,7 +16,8 @@
     "passport-google": "0.3.*",
     "jws": "0.2.*",
     "socket.io": "0.9.16",
-    "date-utils": "1.2.15"
+    "date-utils": "1.2.15",
+    "helmet": "*"
   },
   "subdomain": "thmcards",
   "engines": {

@@ -13,6 +13,7 @@ var express = require('express')
   , path = require('path')
   , fs = require('fs')
   , date = require('date-utils')
+  , helmet = require('helmet')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
   , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
@@ -37,19 +38,44 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
+  //app.use(helmet.csp());
+  app.use(helmet.xframe());
+  app.use(helmet.iexss());
+  app.use(helmet.contentTypeOptions());
+  app.use(helmet.cacheControl());
+  app.use(helmet.hsts());
   app.use(cookieParser);
-  app.use(express.bodyParser());
+  app.use(express.json());
   app.use(express.methodOverride());
-  app.use(express.session({ store: sessionStore, key: sessionKey, cookie: { httpOnly: true, secure: true } }));
+  app.use(express.session({ store: sessionStore, key: sessionKey, cookie: { httpOnly: true } }));
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use((function(options) {
+    var csrf = express.csrf(options);
+    return function(req, res, next) {
+      function onCsrfCalled() {
+        var token = req.csrfToken();
+        var cookie = req.cookies['csrf.token'];
+
+        if(token && cookie !== token) {
+          res.cookie('csrf.token', token);
+        }
+        res.header('Vary', 'Cookie');
+
+        next();
+      }
+      csrf(req, res, onCsrfCalled);
+    }
+  })());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
+
 var io = require('socket.io').listen(srv);
 
 io.set('authorization', function(handshake, cb) {
+
   if(handshake.headers.cookie)
   {
     cookieParser(handshake, null, function(err) {
@@ -247,9 +273,9 @@ function ensureAuthenticated(req, res, next) {
     if (cookie === undefined)
     {
       var usr = JSON.stringify({
-        "id": user._id,
+        //"id": user._id,
         "username": user.username,
-        "provider": user.provider
+        //"provider": user.provider
       });
       res.cookie('usr', usr, { httpOnly: false });
     }
@@ -377,13 +403,7 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/whoami', ensureAuthenticated, function(req, res) {
-  var user = {
-    "username": req.session.passport.user.username,
-    "email":  req.session.passport.user.email,
-    "name": req.session.passport.user.username
-  }
-  res.set('Content-Type', 'text/json');
-  res.send(JSON.stringify(user));
+  res.json(_.pick(_.first(req.session.passport.user), 'username', 'name', 'email'));
 });
 
 //------------------------------------------------------------------------------------

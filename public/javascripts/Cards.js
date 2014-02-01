@@ -85,10 +85,11 @@ Cards.on("initialize:after", function() {
 	    }
 	});
 	
-	$.cookie.json = true;
-	var usr = $.cookie('usr');
-	$("#usr-name").text(usr.username);
-	$("#usr-profile").attr("href", "/#profile/"+usr.username);
+	$.get("/whoami", function( usr ) {
+		$("#usr-name").text(usr.username);
+		$("#usr-profile").attr("href", "/#profile/"+usr.username);
+	});
+
 
 	if(Backbone.history) {
 		Backbone.history.start();
@@ -140,6 +141,28 @@ Cards.on("initialize:after", function() {
 		$(this).val("");
 		$(this).prev().val("");
 	})
+
+	// CSRF Hook
+	$(document).ajaxSend(function(event, xhr, settings) {
+
+	  function sameOrigin(url) {
+	    var host = document.location.host; // host + port
+	    var protocol = document.location.protocol;
+	    var sr_origin = '//' + host;
+	    var origin = protocol + sr_origin;
+	    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+	           (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+	           !(/^(\/\/|http:|https:).*/.test(url));
+	  }
+
+	  function safeMethod(method) {
+	    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	  }
+
+	  if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+	    xhr.setRequestHeader("X-CSRFToken", $.cookie('csrf.token'));
+	  }
+	});
 
 	console.log("THMcards has started!");
 });
