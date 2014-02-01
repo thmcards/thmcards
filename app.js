@@ -40,7 +40,7 @@ app.configure(function(){
   app.use(cookieParser);
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({ store: sessionStore, key: sessionKey }));
+  app.use(express.session({ store: sessionStore, key: sessionKey, cookie: { httpOnly: true, secure: true } }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
