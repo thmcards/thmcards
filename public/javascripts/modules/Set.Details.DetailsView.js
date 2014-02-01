@@ -14,6 +14,11 @@ Cards.module('Set.Details', function(Details, App) {
 
 			front.toggle();
 			back.toggle();
+
+			this.$el.find("div.cardContent.back").toggleClass('active');
+			this.$el.find("div.cardContent.front").toggleClass('active');
+
+			console.log(this.$el.find("div.cardContent.front"));
 		},
 		linkClicked: function(ev) {
 			ev.preventDefault();
@@ -31,16 +36,26 @@ Cards.module('Set.Details', function(Details, App) {
 		itemView: Details.ItemView,
 		itemViewContainer: "div.carousel-inner",
 		template: "#set-details-collection",
+		ui: {
+			modalView: "#pictureModal"
+		},
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
 			"click button.memo": "memoClicked",
 			"click button.play-meteor": "playMeteor",
 			"click a.btn-editCard": "editClicked",
+			"click a.btn-showPictureModal": "showModal",
 			"click a.btn-deleteCard": "deleteClicked"
 		},
 		playMeteor: function(ev) {
 			App.trigger("play:meteor", this.model.get("id"));
+		},
+		showModal: function(ev) {
+			ev.preventDefault();
+			console.log("modal!!!!!!");
+
+			this.showPictureModal();
 		},
 		editClicked: function(ev) {
 			ev.preventDefault();
@@ -77,6 +92,32 @@ Cards.module('Set.Details', function(Details, App) {
 				this.$el.find(":first-child").carousel("next");
 			}
 		},
+		showPictureModal: function() {
+			var that = this;
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+			var actualCard = this.collection.get(cardId);
+			var cardContent = null;
+
+			if(this.$el.find("div.cardContent.front").hasClass('active')){
+				cardContent = actualCard.get("front");
+			} else if(this.$el.find("div.cardContent.back").hasClass('active')) {
+				cardContent = actualCard.get("back");
+			}
+			
+			console.log(cardContent.picture);
+
+			var imgElem = $(document.createElement('img'));
+			imgElem.attr('src', cardContent.picture);
+			imgElem.attr('title', cardContent.text);
+			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('width', "538px");
+
+
+			$("#setdetails-pictureModal-body").empty();
+			$("#setdetails-pictureModal-body").append(imgElem);
+
+			this.ui.modalView.modal('show');
+		},
 		learnClicked: function(ev) {
 			App.trigger("set:learn", this.model.get("_id"));
 		},
@@ -106,6 +147,12 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$('#btnToCardLayout').addClass("active");
 			$('#btnToListLayout').removeClass("active");
+
+			this.$el.find("div.cardContent.back").removeClass('active');
+			this.$el.find("div.cardContent.front").addClass('active');
+
+			//...
+			this.$el.find("a.btn-showPictureModal").show();
 
 			var usr = $.cookie('usr');
 			$("#usr-name").text();

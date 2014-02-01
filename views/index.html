@@ -159,7 +159,10 @@
         <a class="btn-editCard" href="#editCard">
           <i class="glyphicon glyphicon-pencil"></i>
         </a>
-        <div class="block"><div class="centered front"><%= front.text %></div><div class="centered back" style="display:none"><%= back.text %></div>
+        <a class="btn-showPictureModal" href="#showPictureModal" style="display:none">
+          <i class="glyphicon glyphicon-picture"></i>
+        </a>
+        <div class="block"><div class="cardContent centered front active"><%= front.text %></div><div class="cardContent centered back" style="display:none"><%= back.text %></div>
       </div>
     </script>
 
@@ -213,6 +216,22 @@
           <span class="icon-next"></span>
         </a>
       </div>
+
+
+      <div class="modal fade" id="pictureModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body" id="setdetails-pictureModal-body">
+
+
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
 
 
       <div class="row">
@@ -855,7 +874,7 @@
         <ol class="carousel-indicators"></ol>
         <div class="carousel-inner"></div>
       </div>
-      <button class="btn btn-primary answer show-answer" title="success" style="width:30%; margin-top:10px">Zeige Antwort</button>
+      <button class="btn btn-primary answer show-answer" title="success" style="width:30%; margin-top:10px; display:none;">Zeige Antwort</button>
       <div class="rating-controls" style="display:none">
         <div class="btn-toolbar" style="margin-top:10px">
           <div class="btn-group">
@@ -893,13 +912,13 @@
       <div class="col-md-6">
         <div class="box">
           <span class="clicktoflip">Vorderseite</span>
-          <div class="block"><div class="centered cardcontent-front"><%= front.text %></div></div>
+          <div class="block"><div class="double cardcontent-front"><%= front.text %></div></div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="box">
           <span class="clicktoflip">Rückseite</span>
-          <div class="block"><div class="centered cardcontent-back" style="display:none"><%= back.text %></div></div>
+          <div class="block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
         </div>
       </div>
     </div>
@@ -907,7 +926,7 @@
 
     <script type="text/template" id="set-memo-item-empty">
       <div class="box">
-        <div class="block"><div class="centered front" style="font-size:2em">Lege -hier- Kartensätze an, um sie lernen zu können</div>
+        <div class="block"><div class="double front" style="font-size:2em">Aktuell keine nach Lernplan zu lernenden Karten</div>
       </div>
     </script> 
 

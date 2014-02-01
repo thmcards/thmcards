@@ -221,6 +221,12 @@ code {
   width: 580px;
   font-size: 2em
 }
+.double {
+  display: inline-block;
+  vertical-align: middle;
+  width: 350px;
+  font-size: 2em
+}
 .navbar .navbar-brand {
   padding: 10px 20px;
 }
@@ -263,6 +269,12 @@ ul.nav-list li.active {
 .btn-editCard {
   position: absolute; 
   left: 47px; 
+  top: 12px; 
+}
+
+.btn-showPictureModal {
+  position: absolute; 
+  left: 70px; 
   top: 12px; 
 }
 

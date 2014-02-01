@@ -27,6 +27,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			"click button.rate-answer": "rateAnswer"
 		},
 		cycleCarousel: function(ev) {
+		this.collection.fetch();
 		ev.preventDefault();
 		console.log($(ev.currentTarget));
 
@@ -93,16 +94,19 @@ Cards.module('Set.Memo', function(Memo, App) {
 			model.save({}, {
 				type: type,
 				success: function(){
-					console.log("success");
+					console.log("success" + cardId);
+					//that.collection.remove(that.collection.get(cardId));
 					
 					that.$el.find("div.cardcontent-back").hide();
 					that.$el.find("div.rating-controls").hide();
 					that.$el.find("button.show-answer").removeClass("disabled");
+
 					if(items > 1) {
 						App.trigger("cardModel:saved");
 						that.$el.find(":first-child").carousel("next");					
 					} else {
 						that.$el.find("div.carousel").hide();
+						that.$el.find("button.show-answer").hide();
 						that.$el.find("div.learn-endscreen").show();
 					}
 				}
@@ -118,6 +122,9 @@ Cards.module('Set.Memo', function(Memo, App) {
 
 
 			this.$el.find("div.item").first().addClass("active");
+			if (this.collection.length != 0) {
+				this.$el.find("button.show-answer").show();
+			}
 
 			this.$el.find(':first-child').carousel({ interval: false });
 		}
