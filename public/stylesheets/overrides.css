@@ -272,6 +272,12 @@ ul.nav-list li.active {
   top: 12px; 
 }
 
+.btn-showPictureModal {
+  position: absolute; 
+  left: 70px; 
+  top: 12px; 
+}
+
 .carousel-control {
     z-index: 5;
 }
