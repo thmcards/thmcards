@@ -38,7 +38,6 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
-  //app.use(helmet.csp());
   app.use(helmet.xframe());
   app.use(helmet.iexss());
   app.use(helmet.contentTypeOptions());

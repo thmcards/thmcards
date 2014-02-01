@@ -21,7 +21,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		onKeypress: function(ev) {
 			var ENTER_KEY = 13;
 
-			if(ev.which === ENTER_KEY) {
+			if(ev.which === ENTER_KEY && $("#new-set-input").is(":focus")) {
 				this.showSetModal();
 			}
 		},
