@@ -2,8 +2,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Score = Backbone.Model.extend({
 		urlRoot: "/score",
-		idAttribute: "username",
-		url: "/asd/asd"
+		idAttribute: "username"
 	});
 
 	Entities.ScoreCollection = Backbone.Collection.extend({
