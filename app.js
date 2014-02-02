@@ -630,7 +630,7 @@ app.get('/set', ensureAuthenticated, function(req, res){
   setTimeout(function(){
 
     checkBadgeKritikerLiebling(req.session["passport"]["user"][0].username, req.sessionID);
-
+    checkBadgeStreber(req.session["passport"]["user"][0].username, req.sessionID);
   }, 5000);
     
   db.view('sets', 'by_id_with_cards', function(err, body) {
@@ -696,74 +696,6 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 
 app.get('/blabla', function(req, res){
 
-
-  var username = "dan.knapp@web.de";
-
-  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
-    var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
-    var setIds = new Array();
-    _.each(cards, function(card){      
-      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
-
-      if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
-        setIds.push(card.value.setId);
-      }
-    }, this);
-    setIds = _.uniq(setIds);
-
-    var setKeys = new Array();
-    _.each(setIds, function(id){
-      setKeys.push(new Array(id));
-    })
-
-
-
-
-    db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
-      if (!err) {
-        var docs = _.map(body.rows, function(doc) { return doc.value});
-        var cardIds = _.pluck(docs, "_id");
-
-        console.log(cardIds);
-        
-        var learnedCards = 0;
-
-
-        var keys = new Array();
-
-        _.each(cardIds, function(id){
-          keys.push(new Array(id));
-        });
-
-          db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
-            if (!err) {
-              var docs = _.map(body.rows, function(doc) { return doc.value});
-              console.log("cards", docs);
-              
-              var learnedCards = 0;
-              _.each(docs, function(doc){
-                console.log("...", doc);
-                if(doc.times_learned >= 1) learnedCards++;
-              });
-              console.log(learnedCards);
-
-
-            }
-          });
-      }
-    });
-
-
-  });
-
-
-/*
-
-  var setId = "bd34e966bc588a4ea90622f22100c3f9";
-  var setId2 = "1022c1d601b17da25b07e6bec40029d7";
-
-
-*/
 });
 
 app.delete('/set/:setid', ensureAuthenticated, function(req, res){
@@ -1762,7 +1694,83 @@ var checkBadgeKritikerLiebling = function(owner, sessionID) {
   });
 }
 
+var checkBadgeStreber = function(owner, sessionID) {
+  var badge = "badge/streber";
+  var username = owner;
 
+  db.get(badge, function(err, body) {
+    if (!err) {
+      var rank = body.rank;
+
+      db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+        var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
+        var setIds = new Array();
+        _.each(cards, function(card){      
+          var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+
+          if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
+            setIds.push(card.value.setId);
+          }
+        }, this);
+        setIds = _.uniq(setIds);
+
+        var setKeys = new Array();
+        _.each(setIds, function(id){
+          setKeys.push(new Array(id));
+        })
+
+        db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
+          if (!err) {
+            var docs = _.map(body.rows, function(doc) { return doc.value});
+
+            var cards = _.groupBy(docs, "setId");
+            var cardIds = _.pluck(docs, "_id");
+
+            var learnedCards = 0;
+            var keys = new Array();
+
+            _.each(cardIds, function(id){
+              keys.push(new Array(id));
+            });
+
+            db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
+              if (!err) {
+                var docs = _.map(body.rows, function(doc) { return doc.value});
+                
+                var learnedCards = new Array();
+                _.each(docs, function(doc){
+                  if(doc.times_learned >= 1) learnedCards.push(doc);
+                });
+
+                var sets = _.groupBy(learnedCards, "setId");
+
+                if(_.has(sets, "undefined")) delete sets.undefined;
+
+                var completeLearnedSets = 0;
+                _.each(_.keys(sets), function(set){
+                  if(_.size(sets[set]) == _.size(cards[set])) completeLearnedSets++;
+                });
+
+                console.log(completeLearnedSets);
+
+                var rankValue = rank[2];
+                var nextRank = 0;
+                _.each(rank, function(r){
+                  if(completeLearnedSets >= r) {
+                    if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
+                    rankValue = _.indexOf(_.values(rank), r)+1;
+                    issueBadge(badge, owner, sessionID, rankValue, cntRatedSets);
+                  }
+                });
+                setBadgeProgress(badge, owner, cntRatedSets, nextRank);
+              }
+            });
+          }
+        });
+      }); 
+    }
+  }); 
+}
 
 var checkBadgeKritiker = function(owner, sessionID) {
     var badge = "badge/kritiker";
