@@ -98,8 +98,8 @@ Cards.module('Set.Details', function(Details, App) {
 		turnCardtoFront: function(ev) {
 			ev.preventDefault();
 
-			var front = this.$el.find("div.cardContent.front");
-			var back = this.$el.find("div.cardContent.back");
+			var front = $("div.item.active").find("div.centered.front")
+			var back = $("div.item.active").find("div.centered.back")
 
 			if(back.hasClass('active')){
 				console.log("togglme");
