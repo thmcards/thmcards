@@ -44,25 +44,13 @@ Cards.module('Set.Learn', function(Learn, App) {
 			"click button.card-fail": "answeredCard"
 		},
 		cycleCarousel: function(ev) {
-		ev.preventDefault();
-		console.log($(ev.currentTarget));
+			ev.preventDefault();
 
 			if($(ev.currentTarget).hasClass("left")) {
 				this.$el.find(":first-child").carousel("prev");
 			} else if($(ev.currentTarget).hasClass("right")) {
 				this.$el.find(":first-child").carousel("next");
 			}
-		},
-		giveAnswer: function(ev) {
-		ev.preventDefault();
-
-
-			if($(ev.currentTarget).hasClass("left")) {
-				this.$el.find(":first-child").carousel("prev");
-			} else if($(ev.currentTarget).hasClass("right")) {
-				this.$el.find(":first-child").carousel("next");
-			}
-
 		},
 		answeredCard: function(ev) {
 			if (ev.target.title === "success") {
