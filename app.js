@@ -1626,7 +1626,7 @@ var checkBadgeAutor = function(owner, sessionID) {
         sets = _.filter(sets, function(set){ return set.cardCnt >= 5 && set.visibility == 'public' });
 
         var rankValue = 3;
-        var nextRank = rank[2];
+        var nextRank = rank[3];
         _.each(rank, function(r){
           if(sets.length >= r) {
             if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
@@ -1676,7 +1676,7 @@ var checkBadgeKritikerLiebling = function(owner, sessionID) {
                 });
 
                 var rankValue = rank[2];
-                var nextRank = 0;
+                var nextRank = rank[3];
                 _.each(rank, function(r){
                   if(cntRatedSets >= r) {
                     if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
@@ -1753,8 +1753,10 @@ var checkBadgeStreber = function(owner, sessionID) {
 
                 console.log(completeLearnedSets);
 
+                console.log("rank", rank);
+
                 var rankValue = rank[2];
-                var nextRank = 0;
+                var nextRank = rank[3];
                 _.each(rank, function(r){
                   if(completeLearnedSets >= r) {
                     if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
@@ -1762,7 +1764,7 @@ var checkBadgeStreber = function(owner, sessionID) {
                     issueBadge(badge, owner, sessionID, rankValue, cntRatedSets);
                   }
                 });
-                setBadgeProgress(badge, owner, cntRatedSets, nextRank);
+                setBadgeProgress(badge, owner, completeLearnedSets, nextRank);
               }
             });
           }
@@ -1785,7 +1787,7 @@ var checkBadgeKritiker = function(owner, sessionID) {
         });
 
         var nextRank = rank[2];
-        var rankValue = 3;
+        var nextRank = rank[3];
         _.each(rank, function(r){
           if(sets.length >= r) {
             if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
