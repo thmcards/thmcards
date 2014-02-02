@@ -694,6 +694,78 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 
 });
 
+app.get('/blabla', function(req, res){
+
+
+  var username = "dan.knapp@web.de";
+
+  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+    var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
+    var setIds = new Array();
+    _.each(cards, function(card){      
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+
+      if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
+        setIds.push(card.value.setId);
+      }
+    }, this);
+    setIds = _.uniq(setIds);
+
+    var setKeys = new Array();
+    _.each(setIds, function(id){
+      setKeys.push(new Array(id));
+    })
+
+
+
+
+    db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
+      if (!err) {
+        var docs = _.map(body.rows, function(doc) { return doc.value});
+        var cardIds = _.pluck(docs, "_id");
+
+        console.log(cardIds);
+        
+        var learnedCards = 0;
+
+
+        var keys = new Array();
+
+        _.each(cardIds, function(id){
+          keys.push(new Array(id));
+        });
+
+          db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
+            if (!err) {
+              var docs = _.map(body.rows, function(doc) { return doc.value});
+              console.log("cards", docs);
+              
+              var learnedCards = 0;
+              _.each(docs, function(doc){
+                console.log("...", doc);
+                if(doc.times_learned >= 1) learnedCards++;
+              });
+              console.log(learnedCards);
+
+
+            }
+          });
+      }
+    });
+
+
+  });
+
+
+/*
+
+  var setId = "bd34e966bc588a4ea90622f22100c3f9";
+  var setId2 = "1022c1d601b17da25b07e6bec40029d7";
+
+
+*/
+});
+
 app.delete('/set/:setid', ensureAuthenticated, function(req, res){
   checkOwner(req.params.setid, req.session["passport"]["user"][0].username, function(){
     db.view('cards', 'by_set', { key: new Array(req.params.setid)}, function(err, body) {
