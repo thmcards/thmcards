@@ -100,9 +100,9 @@ Cards.module('Set.Details', function(Details, App) {
 			var actualCard = this.collection.get(cardId);
 			var cardContent = null;
 
-			if(this.$el.find("div.cardContent.front").hasClass('active')){
+			if($("div.item.active").find("div.centered.front").hasClass('active')){
 				cardContent = actualCard.get("front");
-			} else if(this.$el.find("div.cardContent.back").hasClass('active')) {
+			} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
 				cardContent = actualCard.get("back");
 			}
 
@@ -111,8 +111,6 @@ Cards.module('Set.Details', function(Details, App) {
 			imgElem.attr('title', cardContent.text);
 			imgElem.attr('alt', cardContent.text);
 			imgElem.attr('width', "538px");
-
-			console.log(imgElem);
 
 			$("#setdetails-pictureModal-body").empty();
 			$("#setdetails-pictureModal-body").append(imgElem);

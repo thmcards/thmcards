@@ -1596,9 +1596,10 @@ var checkBadgeStammgast = function(owner, sessionID) {
       
       checkDaysInRow(days, owner, function(result){
         var rank = _.indexOf(_.values(body.rank), days)+1;
-        
+        var nextRank = _.indexOf(_.values(body.rank), days);
         if(result) {
           issueBadge(badge, owner, sessionID, rank, result);
+          setBadgeProgress(badge, owner, result, body.rank[nextRank]);
         }
       })
     });
