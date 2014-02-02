@@ -9,8 +9,6 @@ Cards.module('Set.Details', function(Details, App) {
 		cardClicked: function(ev) {
 			ev.preventDefault();
 
-			console.log(ev.target.nodeName);
-
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
 
@@ -88,6 +86,7 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		cycleCarousel: function(ev) {
 			ev.preventDefault();
+			this.turnCardtoFront(ev);
 
 			if($(ev.currentTarget).hasClass("left")) {
 				this.$el.find(":first-child").carousel("prev");
@@ -95,6 +94,22 @@ Cards.module('Set.Details', function(Details, App) {
 				this.$el.find(":first-child").carousel("next");
 			}
 		},
+
+		turnCardtoFront: function(ev) {
+			ev.preventDefault();
+
+			var front = this.$el.find("div.cardContent.front");
+			var back = this.$el.find("div.cardContent.back");
+
+			if(back.hasClass('active')){
+				console.log("togglme");
+				front.toggle();
+				back.toggle();
+				front.toggleClass('active');
+				back.toggleClass('active');
+			}		
+		},
+
 		showPictureModal: function() {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var actualCard = this.collection.get(cardId);
