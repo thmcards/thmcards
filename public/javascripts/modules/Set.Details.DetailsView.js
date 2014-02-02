@@ -9,14 +9,18 @@ Cards.module('Set.Details', function(Details, App) {
 		cardClicked: function(ev) {
 			ev.preventDefault();
 
+			console.log(ev.target.nodeName);
+
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
 
-			front.toggle();
-			back.toggle();
+			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN") {
+				front.toggle();
+				back.toggle();
+				this.$el.find("div.cardContent.back").toggleClass('active');
+				this.$el.find("div.cardContent.front").toggleClass('active');				
+			}
 
-			this.$el.find("div.cardContent.back").toggleClass('active');
-			this.$el.find("div.cardContent.front").toggleClass('active');
 
 			console.log(this.$el.find("div.cardContent.front"));
 		},
@@ -53,7 +57,6 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		showModal: function(ev) {
 			ev.preventDefault();
-			console.log("modal!!!!!!");
 
 			this.showPictureModal();
 		},
@@ -93,7 +96,6 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		showPictureModal: function() {
-			var that = this;
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var actualCard = this.collection.get(cardId);
 			var cardContent = null;
@@ -103,8 +105,6 @@ Cards.module('Set.Details', function(Details, App) {
 			} else if(this.$el.find("div.cardContent.back").hasClass('active')) {
 				cardContent = actualCard.get("back");
 			}
-			
-			console.log(cardContent.picture);
 
 			var imgElem = $(document.createElement('img'));
 			imgElem.attr('src', cardContent.picture);
@@ -112,6 +112,7 @@ Cards.module('Set.Details', function(Details, App) {
 			imgElem.attr('alt', cardContent.text);
 			imgElem.attr('width', "538px");
 
+			console.log(imgElem);
 
 			$("#setdetails-pictureModal-body").empty();
 			$("#setdetails-pictureModal-body").append(imgElem);
@@ -152,7 +153,12 @@ Cards.module('Set.Details', function(Details, App) {
 			this.$el.find("div.cardContent.front").addClass('active');
 
 			//...
-			this.$el.find("a.btn-showPictureModal").show();
+			if(this.collection.length !== 0) {
+				var cardId = $("div.item.active").children(".box").attr("data-id");
+				var actualCard = this.collection.get(cardId);
+				//if(actualCard.)
+				this.$el.find("a.btn-showPictureModal").show();
+			}
 
 			var usr = $.cookie('usr');
 			$("#usr-name").text();
