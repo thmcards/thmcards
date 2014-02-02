@@ -157,6 +157,7 @@ Cards.module('Set.Details', function(Details, App) {
 				var cardId = $("div.item.active").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
 				//if(actualCard.)
+				//console.log(actualCard.get("front"));
 				this.$el.find("a.btn-showPictureModal").show();
 			}
 
