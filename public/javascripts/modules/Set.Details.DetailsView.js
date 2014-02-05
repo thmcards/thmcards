@@ -216,7 +216,22 @@ Cards.module('Set.Details', function(Details, App) {
 
 	Details.ListItem = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
-	    template: "#set-details-listitem"
+	    template: "#set-details-listitem",
+	    onRender: function(ev) {
+	    	/** ++ add display:none in template
+	    	if(this.collection.length !== 0) {
+				var cardId = this.$el.find("a.btn-showPictureModalList").attr("data-id");
+				var actualCard = this.collection.get(cardId);
+
+				if(actualCard.get('front').picture !== null){
+					this.$el.find("a.btn-showPictureModalList").show();
+				}
+				if(actualCard.get('back').picture !== null){
+					this.$el.find("a.btn-showPictureModalList").show();
+				}
+			}**/
+	    }
+
 	});
 
 	Details.ListEmptyView = Backbone.Marionette.ItemView.extend({
@@ -234,7 +249,16 @@ Cards.module('Set.Details', function(Details, App) {
 		template: "#set-details-list",
 		events: {
 			"click a.btn-listEditCard": "editClicked",
-			"click a.btn-listDeleteCard": "deleteClicked"
+			"click a.btn-listDeleteCard": "deleteClicked",
+			"click a.btn-showPictureModalList": "showModal"
+		},
+		ui: {
+			modalView: "#pictureModalList"
+		},
+		showModal: function(ev) {
+			ev.preventDefault();
+
+			this.showPictureModal(ev);
 		},
 		editClicked: function(ev) {
 			ev.preventDefault();
@@ -256,6 +280,30 @@ Cards.module('Set.Details', function(Details, App) {
 			        console.log(err);
 				}
 			});
+		},
+		showPictureModal: function(ev) {
+			var cardId = $(ev.currentTarget).attr("data-id");
+			var actualCard = this.collection.get(cardId);
+			var cardContent = null;
+
+			if($(ev.currentTarget).hasClass('card-front')){
+				cardContent = actualCard.get("front");
+				console.log("front");
+			} else if($(ev.currentTarget).hasClass('card-back')) {
+				cardContent = actualCard.get("back");
+				console.log("back");
+			}
+
+			var imgElem = $(document.createElement('img'));
+			imgElem.attr('src', cardContent.picture);
+			imgElem.attr('title', cardContent.text);
+			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('width', "538px");
+
+			$("#setdetails-pictureModalList-body").empty();
+			$("#setdetails-pictureModalList-body").append(imgElem);
+
+			this.ui.modalView.modal('show');
 		},
 		onRender: function(ev) {
 			$('#btnToListLayout').addClass("active");

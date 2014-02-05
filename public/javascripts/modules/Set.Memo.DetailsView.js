@@ -95,8 +95,11 @@ Cards.module('Set.Memo', function(Memo, App) {
 				type: type,
 				success: function(){
 					console.log("success" + cardId);
-					//that.collection.remove(that.collection.get(cardId));
-					
+
+					if(parseInt(rating) >= 4){
+						console.log("remove card");
+						that.collection.remove(that.collection.get(cardId));
+					}					
 					that.$el.find("div.cardcontent-back").hide();
 					that.$el.find("div.rating-controls").hide();
 					that.$el.find("button.show-answer").removeClass("disabled");
@@ -105,6 +108,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 						App.trigger("cardModel:saved");
 						that.$el.find(":first-child").carousel("next");					
 					} else {
+						App.trigger("cardModel:saved");
 						that.$el.find("div.carousel").hide();
 						that.$el.find("button.show-answer").hide();
 						that.$el.find("div.learn-endscreen").show();
