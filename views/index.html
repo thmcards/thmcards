@@ -194,13 +194,13 @@
     <script type="text/template" id="set-details-listitem">
         <td>
           <span style="font-family:'Georgia'"><%= front.text %></span>
-          <a class="card-front btn-showPictureModalList btn btn-default btn-xs" data-id="<%= _id %>" href="#showPictureModalList" >
+          <a class="card-front btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
             <i class="glyphicon glyphicon-picture"></i>
           </a>
         </td>
         <td>
           <span style="font-family:'Georgia'"><%= back.text %></span>
-          <a class="card-back btn-showPictureModalList btn btn-default btn-xs" data-id="<%= _id %>" href="#showPictureModalList" >
+          <a class="card-back btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
             <i class="glyphicon glyphicon-picture"></i>
           </a>
         </td>
@@ -857,12 +857,28 @@
       <div class="learn-cardHelptext" style="display:none">
             <span>Klicke auf die Karte um Sie zu drehen</span>
       </div>
+
+      <div class="modal fade" id="pictureModalLearn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body" id="setdetails-pictureModal-body"></div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
     </script>
 
     <script type="text/template" id="set-learn-item">
       <div class="box" data-id="<%= _id %>">
         <span class="clicktoflip">Click to flip</span>
-        <div class="block"><div class="centered front"><%= front.text %></div><div class="centered back" style="display:none"><%= back.text %></div>
+        <a class="btn-showPictureModal btn btn-default btn-xs" href="#showPictureModal" style="display:none">
+          <i class="glyphicon glyphicon-picture"></i>
+          <small>Bild anzeigen</small>
+        </a>
+        <div class="block"><div class="cardContent centered front active"><%= front.text %></div><div class="cardContent centered back" style="display:none"><%= back.text %></div>
       </div>
     </script>
 
@@ -879,17 +895,6 @@
           <div id="set-memo-region"></div>
         </div>
       </div>
-    </script>
-
-    <script type="text/template" id="set-memo-sideBar"> 
-      <h4 style="margin:0">Memo</h4>
-      <hr />
-      <span style="font-family:'Georgia'; font-style:italic">echt jetzt...</span>
-      <hr />
-    </script>
-
-    <script type="text/template" id="set-memo-controls">
-
     </script>
 
 
@@ -928,6 +933,18 @@
         </div>
       </div>
 
+      <div class="modal fade" id="pictureModalMemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body" id="setdetails-pictureModal-body"></div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
 
     </script>
 
@@ -936,17 +953,26 @@
       <div class="col-md-6">
         <div class="box">
           <span class="clicktoflip">Vorderseite</span>
+          <a class="cardcontent-front btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
+            <i class="glyphicon glyphicon-picture"></i>
+            <small>Bild anzeigen</small>
+          </a>
           <div class="block"><div class="double cardcontent-front"><%= front.text %></div></div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="box">
           <span class="clicktoflip">Rückseite</span>
+          <a class="cardcontent-back btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
+            <i class="glyphicon glyphicon-picture"></i>
+            <small>Bild anzeigen</small>
+          </a>
           <div class="block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
         </div>
       </div>
     </div>
     </script>
+
 
     <script type="text/template" id="set-memo-item-empty">
       <div class="box">

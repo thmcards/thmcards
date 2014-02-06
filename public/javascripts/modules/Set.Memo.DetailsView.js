@@ -22,9 +22,13 @@ Cards.module('Set.Memo', function(Memo, App) {
 		itemView: Memo.ItemView,
 		itemViewContainer: "div.carousel-inner",
 		template: "#set-memo-collection",
+		ui: {
+			modalView: "#pictureModalMemo"
+		},
 		events: {
 			"click button.show-answer": "showAnswer",
-			"click button.rate-answer": "rateAnswer"
+			"click button.rate-answer": "rateAnswer",
+			"click a.btn-showPictureModal": "showModal",
 		},
 		cycleCarousel: function(ev) {
 		this.collection.fetch();
@@ -37,6 +41,11 @@ Cards.module('Set.Memo', function(Memo, App) {
 				this.$el.find(":first-child").carousel("next");
 			}
 		},
+		showModal: function(ev) {
+			ev.preventDefault();
+
+			this.showPictureModal(ev);
+		},
 		showAnswer: function(ev) {
 			
 			ev.preventDefault();
@@ -44,7 +53,16 @@ Cards.module('Set.Memo', function(Memo, App) {
 			this.$el.find("div.rating-controls").show();
 			this.$el.find("button.show-answer").addClass("disabled");
 
+			if(this.collection.length !== 0) {
+				var cardId = $("div.item.active").children(".twosided").attr("data-id");
+				var actualCard = this.collection.get(cardId);
 
+				if($("div.item.active").hasClass('active')){
+					if(actualCard.get('back').picture !== null){
+						this.$el.find("a.cardcontent-back").show();
+					}
+				}
+			}	
 		},
 		rateAnswer: function(ev) {
 			var rating = ev.target.title;
@@ -116,14 +134,56 @@ Cards.module('Set.Memo', function(Memo, App) {
 				}
 			});
 		},
+		showPictureModal: function(ev) {
+			var cardId = $("div.item.active").children(".twosided").attr("data-id");	
+			var actualCard = this.collection.get(cardId);
+			var cardContent = null;
+
+			if($(ev.currentTarget).hasClass("cardcontent-front")) {
+				cardContent = actualCard.get("front");
+			} else if($(ev.currentTarget).hasClass("cardcontent-back")) {
+				cardContent = actualCard.get("back");
+			}
+
+			var imgElem = $(document.createElement('img'));
+			imgElem.attr('src', cardContent.picture);
+			imgElem.attr('title', cardContent.text);
+			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('width', "538px");
+
+			$("#setdetails-pictureModal-body").empty();
+			$("#setdetails-pictureModal-body").append(imgElem);
+
+			this.ui.modalView.modal('show');
+		},
+		checkForPicture: function(ev) {
+
+			if(this.collection.length !== 0) {
+				var cardId = $("div.item.active").children(".twosided").attr("data-id");
+				var actualCard = this.collection.get(cardId);
+
+				console.log("check picture" + cardId);
+
+				if($("div.item.active").hasClass('active')){
+					this.$el.find("a.cardcontent-back").hide();
+					
+					if(actualCard.get('front').picture !== null){
+						this.$el.find("a.cardcontent-front").show();
+					} else {
+						this.$el.find("a.cardcontent-front").hide();
+					}
+				}	
+			}
+		},
 		initialize: function() {
 
 		},
 		onRender: function() {	
+			var that = this;
+
 			$("div.learn-startscreen").hide();
 			$("div.learn-endscreen").hide();
 			$("div.carousel").show();
-
 
 			this.$el.find("div.item").first().addClass("active");
 			if (this.collection.length != 0) {
@@ -131,6 +191,18 @@ Cards.module('Set.Memo', function(Memo, App) {
 			}
 
 			this.$el.find(':first-child').carousel({ interval: false });
+
+			this.$el.find(':first-child').on('slid.bs.carousel', function () {
+				that.checkForPicture() });
+
+			if(this.collection.length !== 0) {
+				var cardId = this.$el.find("div.item").children(".twosided").attr("data-id");
+				console.log(cardId);
+				var actualCard = this.collection.get(cardId);
+				if(actualCard.get('front').picture !== null){
+					this.$el.find("a.cardcontent-front").show();
+				}		
+			}
 		}
 	});
 });

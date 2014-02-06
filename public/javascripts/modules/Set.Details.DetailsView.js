@@ -94,9 +94,6 @@ Cards.module('Set.Details', function(Details, App) {
 			} else if($(ev.currentTarget).hasClass("right")) {
 				this.$el.find(":first-child").carousel("next");
 			}
-
-			//event aftercycle?
-			//this.checkForPicture(ev);
 		},
 
 		turnCardtoFront: function(ev) {
