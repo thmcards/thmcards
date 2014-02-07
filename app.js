@@ -1453,24 +1453,26 @@ app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
   var setId = req.params.setId;
   var owner = req.session["passport"]["user"][0].username;
 
-  db.insert({
-    type: "rating",
-    value: value,
-    comment: comment,
-    setId: setId,
-    owner: owner
-  },    
-  function(err, body) {
-    if(!err && body.ok) {
-      redeemXPoints('rating', 1, owner);
-      checkBadgeKritiker(req.session["passport"]["user"][0].username, req.sessionID);
-      res.json(body);
-    } else {
-      res.send(404);
-    }
-  });
-
-
+  if(comment.length >= 60) {
+    db.insert({
+        type: "rating",
+        value: value,
+        comment: comment,
+        setId: setId,
+        owner: owner
+      },    
+      function(err, body) {
+        if(!err && body.ok) {
+          redeemXPoints('rating', 1, owner);
+          checkBadgeKritiker(req.session["passport"]["user"][0].username, req.sessionID);
+          res.json(body);
+        } else {
+          res.send(404);
+        }
+      });
+  } else {
+    res.send(403);
+  }   
 });
 
 app.get('/badge/:username', ensureAuthenticated, function(req, res){
@@ -1862,8 +1864,9 @@ var checkBadgeKritiker = function(owner, sessionID) {
         var rank = body.rank;
         db.view('rating', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
         var sets = _.pluck(body.rows, "value");
-
+        console.log(sets);
         sets = _.filter(sets, function(set){ 
+          console.log(set);
           return set.comment.length >= 60;
         });
 

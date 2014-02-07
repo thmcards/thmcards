@@ -64,24 +64,30 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 							$('#ratingModal').find('button.btn-primary'),off('click');
 						});
 
+						$('#ratingModal').find('button.btn-primary').off("click");
 						$('#ratingModal').find('button.btn-primary').click(function(ev){
+							ev.preventDefault();
 							var lgth = $.trim($('#ratingModal').find('textarea').val()).length;
 							if(lgth >= 60) {
 								$('#ratingModal').find('button.btn-primary').button('loading');
 								var ratingObj = { 	
-												value: rating, 
-												comment: $('#ratingModal').find('textarea').val()
-											 };
-								console.log(that.model);
+													value: rating, 
+													comment: $('#ratingModal').find('textarea').val()
+											 	};
 
-								$.post('/set/rating/'+that.model.get('setId'), ratingObj, function(res){
-									if(_.has(res, 'ok') && res.ok == true) {
-										$('#ratingModal').modal('hide');
-										$('#ratingModal').find('button.btn-primary').button('reset');
-										App.trigger("set:rating", that.model.get('setId'));
-									}
-								}).fail(function(){
-
+								$.ajax({
+									type: "POST",
+									url: '/set/rating/'+that.model.get('setId'),
+									data: JSON.stringify(ratingObj),
+									contentType: "application/json",
+									success: function(res){
+										if(_.has(res, 'ok') && res.ok == true) {
+											$('#ratingModal').modal('hide');
+											$('#ratingModal').find('button.btn-primary').button('reset');
+											App.trigger("set:rating", that.model.get('setId'));
+										}
+									},
+									dataType: "json"
 								});
 							}
 						});
