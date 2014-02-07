@@ -269,12 +269,12 @@ ul.nav-list li.active {
 .btn-editCard {
   position: absolute; 
   left: 47px; 
-  top: 12px; 
+  top: 9px; 
 }
 
 .btn-showPictureModal {
   position: absolute; 
-  left: 75px; 
+  left: 77px; 
   top: 9px; 
 }
 

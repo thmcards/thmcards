@@ -942,11 +942,28 @@ app.post('/card', ensureAuthenticated, function(req, res){
 });
 
 app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
-  var time = new Date().getTime();
-  var username = req.session["passport"]["user"][0].username;
-  console.log("creating new personalcard");
+    var time = new Date().getTime();
+    var username = req.session["passport"]["user"][0].username;
+    console.log("creating new personalcard");
+    var smTimesLearned;
+    var smLastLearned;
+    var smIntervalDays;
+    var currentDate = Date.today();;
+    var nextDate;
 
-  //unterscheidung sm und leitner für smtimeslearned 0 oder 1 und sm last_learned
+    //set sm_next_date
+
+    if (_.has(req.body.persCard.value, "last_rated")){
+      smTimesLearned = 1;
+      smLastLearned = Date.today();
+      smIntervalDays = 1;
+      nextDate = Date.tomorrow();
+    } else {
+      smTimesLearned = 0;
+      smLastLearned = 0;
+      smIntervalDays = 0;
+      nextDate = 0;
+    }
     db.insert(
       { 
         "created": time,
@@ -956,13 +973,13 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         "box": req.body.persCard.value.box || "1",
         "type": "personal_card",
         "times_learned": "1",
-        "sm_times_learned": "0",
+        "sm_times_learned": smTimesLearned,
         "sm_interval": "0",
         "sm_ef": "2.5",
         "sm_instant_repeat": "0",
         "sm_interval_days": "0",
-        "sm_last_learned": "0",
-        "sm_next_date": "0"
+        "sm_last_learned": smLastLearned,
+        "sm_next_date": nextDate
       }, 
       function(err, body, header){
         if(err) {
@@ -986,7 +1003,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
-  var today = Date.today();
+  var today = Date.today(); //1 stunde addieren
   var username = req.session["passport"]["user"][0].username;
   console.log(req.body.persCard.value);
   console.log("heute: " + today);

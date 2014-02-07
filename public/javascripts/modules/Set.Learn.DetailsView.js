@@ -14,12 +14,14 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var back = $(ev.currentTarget).find('div.back');
 			var answerButtons = $("button.answer");
 
-
-			$("div.learn-cardHelptext").toggle();	
-
-			front.toggle();
-			back.toggle();
-			answerButtons.toggle();
+			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN") {
+				$("div.learn-cardHelptext").toggle();
+				this.$el.find("div.cardContent.back").toggleClass('active');
+				this.$el.find("div.cardContent.front").toggleClass('active');		
+				front.toggle();
+				back.toggle();
+				answerButtons.toggle();
+			}
 		},
 		linkClicked: function(ev) {
 			ev.preventDefault();
@@ -38,14 +40,18 @@ Cards.module('Set.Learn', function(Learn, App) {
 		itemView: Learn.ItemView,
 		itemViewContainer: "div.carousel-inner",
 		template: "#set-learn-collection",
+		ui: {
+			modalView: "#pictureModalLearn"
+		},
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.card-success": "answeredCard",
-			"click button.card-fail": "answeredCard"
+			"click button.card-fail": "answeredCard",
+			"click a.btn-showPictureModal": "showModal",
+			"click div.box": "checkForPicture"
 		},
 		cycleCarousel: function(ev) {
-		ev.preventDefault();
-		console.log($(ev.currentTarget));
+			ev.preventDefault();
 
 			if($(ev.currentTarget).hasClass("left")) {
 				this.$el.find(":first-child").carousel("prev");
@@ -53,16 +59,10 @@ Cards.module('Set.Learn', function(Learn, App) {
 				this.$el.find(":first-child").carousel("next");
 			}
 		},
-		giveAnswer: function(ev) {
-		ev.preventDefault();
+		showModal: function(ev) {
+			ev.preventDefault();
 
-
-			if($(ev.currentTarget).hasClass("left")) {
-				this.$el.find(":first-child").carousel("prev");
-			} else if($(ev.currentTarget).hasClass("right")) {
-				this.$el.find(":first-child").carousel("next");
-			}
-
+			this.showPictureModal();
 		},
 		answeredCard: function(ev) {
 			if (ev.target.title === "success") {
@@ -235,7 +235,51 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 			this.render();
 		},
+		showPictureModal: function() {
+			var cardId = $("div.item.active").children(".box").attr("data-id");
+			var actualCard = this.collection.get(cardId);
+			var cardContent = null;
+
+			if($("div.item.active").find("div.centered.front").hasClass('active')){
+				cardContent = actualCard.get("front");
+			} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
+				cardContent = actualCard.get("back");
+			}
+
+			var imgElem = $(document.createElement('img'));
+			imgElem.attr('src', cardContent.picture);
+			imgElem.attr('title', cardContent.text);
+			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('width', "538px");
+
+			$("#setdetails-pictureModal-body").empty();
+			$("#setdetails-pictureModal-body").append(imgElem);
+
+			this.ui.modalView.modal('show');
+		},
+		checkForPicture: function(ev) {
+			console.log("check picture");
+			if(this.collection.length !== 0) {
+				var cardId = $("div.item.active").children(".box").attr("data-id");
+				var actualCard = this.collection.get(cardId);
+
+				if($("div.item.active").find("div.centered.front").hasClass('active')){
+					if(actualCard.get('front').picture !== null){
+						this.$el.find("a.btn-showPictureModal").show();
+					} else if(actualCard.get('front').picture == null){
+						this.$el.find("a.btn-showPictureModal").hide();
+					}
+				} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
+					if(actualCard.get('back').picture !== null){
+						this.$el.find("a.btn-showPictureModal").show();
+					} else if(actualCard.get('back').picture == null){
+						this.$el.find("a.btn-showPictureModal").hide();
+					}
+				}		
+			}
+		},
 		onRender: function() {	
+			var that = this;
 			$("div.learn-startscreen").hide();
 			$("div.learn-endscreen").hide();
 			$("div.carousel").show();
@@ -248,6 +292,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			this.$el.find("div.item").first().addClass("active");
 
+			this.$el.find("div.cardContent.back").removeClass('active');
+			this.$el.find("div.cardContent.front").addClass('active');
+
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
 			for(var i = 0; i < this.collection.length; i++) {
 				var indicatorElem = $("<li></li>").attr("data-slide-to", i);
@@ -255,6 +302,19 @@ Cards.module('Set.Learn', function(Learn, App) {
 				pickerContainer.append(indicatorElem);
 			}
 			this.$el.find(':first-child').carousel({ interval: false });
+
+			this.$el.find(':first-child').on('slid.bs.carousel', function () {
+				that.checkForPicture() });
+
+			if(this.collection.length !== 0) {
+				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
+				console.log(cardId);
+				var actualCard = this.collection.get(cardId);
+				if(actualCard.get('front').picture !== null){
+					this.$el.find("a.btn-showPictureModal").show();
+				}
+				console.log(actualCard);			
+			}
 		}
 	});
 });

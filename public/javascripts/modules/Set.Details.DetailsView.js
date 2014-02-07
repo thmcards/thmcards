@@ -48,7 +48,8 @@ Cards.module('Set.Details', function(Details, App) {
 			"click button.play-meteor": "playMeteor",
 			"click a.btn-editCard": "editClicked",
 			"click a.btn-showPictureModal": "showModal",
-			"click a.btn-deleteCard": "deleteClicked"
+			"click a.btn-deleteCard": "deleteClicked",
+			"click div.box": "checkForPicture"
 		},
 		playMeteor: function(ev) {
 			App.trigger("play:meteor", this.model.get("id"));
@@ -98,8 +99,8 @@ Cards.module('Set.Details', function(Details, App) {
 		turnCardtoFront: function(ev) {
 			ev.preventDefault();
 
-			var front = this.$el.find("div.cardContent.front");
-			var back = this.$el.find("div.cardContent.back");
+			var front = $("div.item.active").find("div.centered.front")
+			var back = $("div.item.active").find("div.centered.back")
 
 			if(back.hasClass('active')){
 				console.log("togglme");
@@ -109,7 +110,26 @@ Cards.module('Set.Details', function(Details, App) {
 				back.toggleClass('active');
 			}		
 		},
+		checkForPicture: function(ev) {
+			if(this.collection.length !== 0) {
+				var cardId = $("div.item.active").children(".box").attr("data-id");
+				var actualCard = this.collection.get(cardId);
 
+				if($("div.item.active").find("div.centered.front").hasClass('active')){
+					if(actualCard.get('front').picture !== null){
+						this.$el.find("a.btn-showPictureModal").show();
+					} else if(actualCard.get('front').picture == null){
+						this.$el.find("a.btn-showPictureModal").hide();
+					}
+				} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
+					if(actualCard.get('back').picture !== null){
+						this.$el.find("a.btn-showPictureModal").show();
+					} else if(actualCard.get('back').picture == null){
+						this.$el.find("a.btn-showPictureModal").hide();
+					}
+				}		
+			}
+		},
 		showPictureModal: function() {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 			var actualCard = this.collection.get(cardId);
@@ -139,6 +159,7 @@ Cards.module('Set.Details', function(Details, App) {
 			App.trigger("set:memo", this.model.get("_id"));
 		},
 		onRender: function() {
+			var that = this;
 
 			if(this.collection.length == 0) {
 				this.$el.find("a.carousel-control").hide();
@@ -158,21 +179,14 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 
 			this.$el.find(':first-child').carousel({ interval: false });
+			this.$el.find(':first-child').on('slid.bs.carousel', function () {
+				that.checkForPicture() });
 
 			$('#btnToCardLayout').addClass("active");
 			$('#btnToListLayout').removeClass("active");
 
 			this.$el.find("div.cardContent.back").removeClass('active');
 			this.$el.find("div.cardContent.front").addClass('active');
-
-			//...
-			if(this.collection.length !== 0) {
-				var cardId = $("div.item.active").children(".box").attr("data-id");
-				var actualCard = this.collection.get(cardId);
-				//if(actualCard.)
-				//console.log(actualCard.get("front"));
-				this.$el.find("a.btn-showPictureModal").show();
-			}
 
 			var usr = $.cookie('usr');
 			$("#usr-name").text();
@@ -181,37 +195,40 @@ Cards.module('Set.Details', function(Details, App) {
 			}).fail(function(){
 				console.log("yeah");
 			});
+
+			if(this.collection.length !== 0) {
+				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
+				console.log(cardId);
+				var actualCard = this.collection.get(cardId);
+				if(actualCard.get('front').picture !== null){
+					this.$el.find("a.btn-showPictureModal").show();
+				}
+				console.log(actualCard);			
+			}
 		},
 		onShow: function() {
-		var that = this;
-		var tweak = 200;
 
-		    $.fn.resizeText = function(){
-		      var size = parseInt($(this).css("fontSize"));
-		      var html = $(this).html();
-		      var textLength = html.length;
-		      var span = "<span style='display:none'>" + html + "</span>";
-		      that.$el.append(span);
-		      var width = that.$el.find('span:last').width();
-		      console.log(that.$el.find('span:last'));
-		      console.log(width);
-		      console.log($(this).width());
-		      var newSize = ($(this).width()-tweak)/(width)*size;
-		      console.log(newSize);
-		      if (newSize < "45"){
-		      	console.log("edited size enabled");
-		      	$(this).css("fontSize", newSize);
-		      }
-		      return width;
-		    };
-
-		    this.$el.find("div.front").resizeText();
 		}
 	});
 
 	Details.ListItem = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
-	    template: "#set-details-listitem"
+	    template: "#set-details-listitem",
+	    onRender: function(ev) {
+	    	/** ++ add display:none in template
+	    	if(this.collection.length !== 0) {
+				var cardId = this.$el.find("a.btn-showPictureModalList").attr("data-id");
+				var actualCard = this.collection.get(cardId);
+
+				if(actualCard.get('front').picture !== null){
+					this.$el.find("a.btn-showPictureModalList").show();
+				}
+				if(actualCard.get('back').picture !== null){
+					this.$el.find("a.btn-showPictureModalList").show();
+				}
+			}**/
+	    }
+
 	});
 
 	Details.ListEmptyView = Backbone.Marionette.ItemView.extend({
@@ -229,7 +246,16 @@ Cards.module('Set.Details', function(Details, App) {
 		template: "#set-details-list",
 		events: {
 			"click a.btn-listEditCard": "editClicked",
-			"click a.btn-listDeleteCard": "deleteClicked"
+			"click a.btn-listDeleteCard": "deleteClicked",
+			"click a.btn-showPictureModalList": "showModal"
+		},
+		ui: {
+			modalView: "#pictureModalList"
+		},
+		showModal: function(ev) {
+			ev.preventDefault();
+
+			this.showPictureModal(ev);
 		},
 		editClicked: function(ev) {
 			ev.preventDefault();
@@ -248,12 +274,33 @@ Cards.module('Set.Details', function(Details, App) {
 			    	console.log("card deleted");
 			    },
 			    error : function(err) {
-			        console.log('error callback');
-			        // this error message for dev only
-			        alert('There was an error. See console for details');
 			        console.log(err);
 				}
 			});
+		},
+		showPictureModal: function(ev) {
+			var cardId = $(ev.currentTarget).attr("data-id");
+			var actualCard = this.collection.get(cardId);
+			var cardContent = null;
+
+			if($(ev.currentTarget).hasClass('card-front')){
+				cardContent = actualCard.get("front");
+				console.log("front");
+			} else if($(ev.currentTarget).hasClass('card-back')) {
+				cardContent = actualCard.get("back");
+				console.log("back");
+			}
+
+			var imgElem = $(document.createElement('img'));
+			imgElem.attr('src', cardContent.picture);
+			imgElem.attr('title', cardContent.text);
+			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('width', "538px");
+
+			$("#setdetails-pictureModalList-body").empty();
+			$("#setdetails-pictureModalList-body").append(imgElem);
+
+			this.ui.modalView.modal('show');
 		},
 		onRender: function(ev) {
 			$('#btnToListLayout').addClass("active");
