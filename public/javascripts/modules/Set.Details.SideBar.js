@@ -54,6 +54,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 							$('#ratingModal').find('small.char-cnt').text(lgth);
 							if(lgth >= 60) {
 								$('#ratingModal').find('button.btn-primary').prop("disabled", false);
+							} else {
+								$('#ratingModal').find('button.btn-primary').prop("disabled", true);
 							}
 						});
 						$('#ratingModal').modal('show');
@@ -63,22 +65,25 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 						});
 
 						$('#ratingModal').find('button.btn-primary').click(function(ev){
-							$('#ratingModal').find('button.btn-primary').button('loading');
-							var ratingObj = { 	
-											value: rating, 
-											comment: $('#ratingModal').find('textarea').val()
-										 };
-							console.log(that.model);
+							var lgth = $.trim($('#ratingModal').find('textarea').val()).length;
+							if(lgth >= 60) {
+								$('#ratingModal').find('button.btn-primary').button('loading');
+								var ratingObj = { 	
+												value: rating, 
+												comment: $('#ratingModal').find('textarea').val()
+											 };
+								console.log(that.model);
 
-							$.post('/set/rating/'+that.model.get('setId'), ratingObj, function(res){
-								if(_.has(res, 'ok') && res.ok == true) {
-									$('#ratingModal').modal('hide');
-									$('#ratingModal').find('button.btn-primary').button('reset');
-									App.trigger("set:rating", that.model.get('setId'));
-								}
-							}).fail(function(){
+								$.post('/set/rating/'+that.model.get('setId'), ratingObj, function(res){
+									if(_.has(res, 'ok') && res.ok == true) {
+										$('#ratingModal').modal('hide');
+										$('#ratingModal').find('button.btn-primary').button('reset');
+										App.trigger("set:rating", that.model.get('setId'));
+									}
+								}).fail(function(){
 
-							});
+								});
+							}
 						});
 
 						$('#ratingModal').find('button.btn-default').on('click', function(ev){
