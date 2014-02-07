@@ -367,8 +367,10 @@ app.get('/auth/twitter',
 app.get('/auth/twitter/callback', 
   passport.authenticate('twitter', { failureRedirect: '/login' }),
   function(req, res) {
-    redeemLoginXPoints(_.first(res.req.user).username);
-    checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
+    if(_.has(res.req, "user")) {
+      redeemLoginXPoints(_.first(res.req.user).username);
+      checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
+    }
     res.redirect('/');
   }
 );
@@ -378,8 +380,10 @@ app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email, us
 app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
-    redeemLoginXPoints(_.first(res.req.user).username);
-    checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
+    if(_.has(res.req, "user")) {
+      redeemLoginXPoints(_.first(res.req.user).username);
+      checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
+    }
     res.redirect('/');
   }
 );
@@ -389,8 +393,10 @@ app.get('/auth/google', passport.authenticate('google'));
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    redeemLoginXPoints(_.first(res.req.user).username);
-    checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);
+    if(_.has(res.req, "user")) {
+      redeemLoginXPoints(_.first(res.req.user).username);
+      checkBadgeStammgast(_.first(res.req.user).username, res.sessionID);  
+    }
     res.redirect('/');
   }
 );
@@ -695,7 +701,64 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 });
 
 app.get('/blabla', function(req, res){
+  var username = "dan.knapp@web.de";
+db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+        var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
+        var setIds = new Array();
+        _.each(cards, function(card){      
+          var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
 
+          if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
+            setIds.push(card.value.setId);
+          }
+        }, this);
+        setIds = _.uniq(setIds);
+
+        var setKeys = new Array();
+        _.each(setIds, function(id){
+          setKeys.push(new Array(id));
+        })
+
+        db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
+          if (!err) {
+            var docs = _.map(body.rows, function(doc) { return doc.value});
+
+            var cards = _.groupBy(docs, "setId");
+            var cardIds = _.pluck(docs, "_id");
+
+            var learnedCards = 0;
+            var keys = new Array();
+
+            _.each(cardIds, function(id){
+              keys.push(new Array(id));
+            });
+
+            db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
+              if (!err) {
+                var docs = _.map(body.rows, function(doc) { return doc.value});
+                
+                var learnedCards = new Array();
+                _.each(docs, function(doc){
+                  if(doc.times_learned >= 1) learnedCards.push(doc);
+                });
+
+                var sets = _.groupBy(learnedCards, "setId");
+
+                if(_.has(sets, "undefined")) delete sets.undefined;
+
+                console.log(sets);
+
+                var completeLearnedSets = 0;
+                _.each(_.keys(sets), function(set){
+                  if(_.size(sets[set]) == _.size(cards[set])) completeLearnedSets++;
+                });
+
+                console.log(completeLearnedSets);
+              }
+            });
+          }
+        });
+      }); 
 });
 
 app.delete('/set/:setid', ensureAuthenticated, function(req, res){
