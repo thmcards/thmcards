@@ -187,6 +187,25 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$("#front-textarea").wysihtml5(editorConfig);
 			$("#back-textarea").wysihtml5(editorConfig);
+
+			$('.wysihtml5-sandbox').contents().find('body').on("keyup",function(ev) {
+		        var frontlength = $.trim($('.wysihtml5-sandbox').contents().find('body.fronttext').text()).length;
+		        var backlength = $.trim($('.wysihtml5-sandbox').contents().find('body.backtext').text()).length;
+
+		        if($(ev.currentTarget).hasClass("fronttext")) {
+		        	$('td.fronttext').find('small.char-cnt').text(frontlength);
+		        }
+
+		        if($(ev.currentTarget).hasClass("backtext")) {
+		        	$('td.backtext').find('small.char-cnt').text(backlength);
+		        }
+
+		        if(frontlength<=100 && backlength<=100) {
+		        	$('button.save').prop("disabled", false);
+		        } else {
+		        	$('button.save').prop("disabled", true);
+		        }
+		    });
 		}
 	});
 });

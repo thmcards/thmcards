@@ -300,14 +300,16 @@
         <tbody>
           <tr>
             <td class="cardtext fronttext">
-              <input class="form-control" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control fronttext" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block fronttext"></span>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
             </td> 
             <td class="cardtext backtext">
-              <input class="form-control" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control backtext" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block backtext"></span>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
             </td> 
           </tr>
           <tr>
@@ -330,7 +332,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-default btn-large cancel" style="width:200px">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large" data-loading-text="Speichere Karte...">Karte speichern</button></div></td>
+            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-default btn-large cancel" style="width:200px">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large save" data-loading-text="Speichere Karte...">Karte speichern</button></div></td>
           </tr>
         </tbody>
       </table>
@@ -357,14 +359,16 @@
         <tbody>
           <tr>
             <td class="cardtext fronttext">
-              <input class="form-control" id="editcard-front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control fronttext" id="editcard-front-textarea" placeholder="Vorderseite" type="text" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block fronttext"></span>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt"><%= front.text_plain.length %></small>
             </td> 
-            <td frclass="cardtext backtext">
-              <input class="form-control backtext" id="editcard-back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0;">
+            <td class="cardtext backtext">
+              <input class="form-control backtext" id="editcard-back-textarea" placeholder="Rückseite" type="text" style="width:440px; height:200px; margin:10px auto 0;">
               </input>
               <span class="help-block backtext"></span>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt"><%= back.text_plain.length %></small>
             </td> 
           </tr>
           <tr>
