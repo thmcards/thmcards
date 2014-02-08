@@ -321,6 +321,21 @@ img.memoback {
   font-family: 'Georgia', serif;
 }
 
+.emptyCellList {
+  padding-top: 33px!important;
+}
+
+.emptyTextList {
+  color: #666;
+  font-style: italic;
+  font-family: 'Georgia', serif;
+}
+
+.btn-newSet{
+  margin-top: 20px;
+  margin-bottom: 27px;
+}
+
 #google-imagesearch-result {
   width: 770px;
   text-align: center;
