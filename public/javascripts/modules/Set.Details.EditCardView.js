@@ -205,8 +205,6 @@ Cards.module('Set.Details', function(Details, App) {
     		} else {
     			$(ev.target).next().removeAttr('disabled');
     		}
-
-    		console.log("keyup");
 		},
 		focusInput: function(ev) {
 			var loadSearch = function() {
@@ -215,17 +213,13 @@ Cards.module('Set.Details', function(Details, App) {
 			
 			google.load('search', '1', {callback: loadSearch });
 		},
-		onShow: function() {
-			console.log($("a.btn-card-delete"));
-			
+		onShow: function() {			
 			var editorConfig = {
 				"font-styles": false,
 				"color": false,
 				"lists": false,
 				"image": false
 			}
-
-			console.log(this.model.attributes);
 
 			$("#editcard-front-textarea").wysihtml5(editorConfig);
 			$("#editcard-back-textarea").wysihtml5(editorConfig);
@@ -248,7 +242,7 @@ Cards.module('Set.Details', function(Details, App) {
 		        	$('td.backtext').find('small.char-cnt').text(backlength);
 		        }
 
-		        if(frontlength<=100 && backlength<=100) {
+		        if(frontlength<=120 && backlength<=120) {
 		        	$('button.save').prop("disabled", false);
 		        } else {
 		        	$('button.save').prop("disabled", true);
@@ -256,7 +250,6 @@ Cards.module('Set.Details', function(Details, App) {
 		    });
 		},
 		onClose: function(){
-			console.log("asd");
 			$(".btn-cardDelete").off('clickout');
 		},
 		onRender: function(){

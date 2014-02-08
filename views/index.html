@@ -304,13 +304,13 @@
               <input class="form-control fronttext" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block fronttext"></span>
-              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 120 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
             </td> 
             <td class="cardtext backtext">
               <input class="form-control backtext" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block backtext"></span>
-              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 120 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
             </td> 
           </tr>
           <tr>
@@ -363,13 +363,13 @@
               <input class="form-control fronttext" id="editcard-front-textarea" placeholder="Vorderseite" type="text" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block fronttext"></span>
-              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt"><%= front.text_plain.length %></small>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 120 Zeichen</small> <small class="text-muted pull-right char-cnt"><%= front.text_plain.length %></small>
             </td> 
             <td class="cardtext backtext">
               <input class="form-control backtext" id="editcard-back-textarea" placeholder="Rückseite" type="text" style="width:440px; height:200px; margin:10px auto 0;">
               </input>
               <span class="help-block backtext"></span>
-              <small class="text-muted pull-right" style="margin-left:3px">/ 100 Zeichen</small> <small class="text-muted pull-right char-cnt"><%= back.text_plain.length %></small>
+              <small class="text-muted pull-right" style="margin-left:3px">/ 120 Zeichen</small> <small class="text-muted pull-right char-cnt"><%= back.text_plain.length %></small>
             </td> 
           </tr>
           <tr>
@@ -967,7 +967,7 @@
             <i class="glyphicon glyphicon-picture"></i>
             <small>Bild anzeigen</small>
           </a>
-          <div class="block"><div class="double cardcontent-front"><%= front.text %></div></div>
+          <div class="block memocontent-block"><div class="double cardcontent-front"><%= front.text %></div></div>
         </div>
       </div>
       <div class="col-md-6">
@@ -978,7 +978,7 @@
             <i class="glyphicon glyphicon-picture"></i>
             <small>Bild anzeigen</small>
           </a>
-          <div class="block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
+          <div class="block memocontent-block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
         </div>
       </div>
     </div>

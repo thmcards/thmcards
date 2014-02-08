@@ -201,7 +201,10 @@ code {
   text-align: center;
   height: 100%;
 }
- 
+.memocontent-block {
+  width: 380px;
+  margin-left: -0.9em;
+}
 /* The ghost, nudged to maintain perfect centering */
 .block:before {
   content: '';
@@ -217,13 +220,14 @@ code {
   display: inline-block;
   vertical-align: middle;
   width: 580px;
-  font-size: 2em
+  font-size: 2em;
 }
 .double {
   display: inline-block;
   vertical-align: middle;
-  width: 350px;
-  font-size: 2em
+  width: 380px;
+  font-size: 1.4em;
+  line-height: 1.3em;
 }
 .navbar .navbar-brand {
   padding: 10px 20px;
@@ -249,12 +253,9 @@ text-transform: uppercase;
 ul.nav-list li.active {
   font-weight: bold;
 }
-.front {
-  font-size:3em;
-}
-
 .back, .front {
-  line-height: 1.4em;
+  line-height: 1.3em;
+  word-wrap: break-word;
 }
 .clicktoflip {
   color:#666; 
