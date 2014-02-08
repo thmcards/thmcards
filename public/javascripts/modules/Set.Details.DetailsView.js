@@ -170,17 +170,17 @@ Cards.module('Set.Details', function(Details, App) {
 			
 			this.$el.find("div.item").first().addClass("active");
 
-			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
-			for(var i = 0; i < this.collection.length; i++) {
-				var indicatorElem = $("<li></li>").attr("data-slide-to", i);
-				if(i === 0) indicatorElem.addClass("active");	
-
-				pickerContainer.append(indicatorElem);
-			}
+			var cardCount = this.$('.item').length;
+			var currentIndex = this.$('div.item.active').index() + 1;
+			this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
 
 			this.$el.find(':first-child').carousel({ interval: false });
+			
 			this.$el.find(':first-child').on('slid.bs.carousel', function () {
-				that.checkForPicture() });
+				that.checkForPicture() 
+				currentIndex = that.$('div.item.active').index() + 1;
+				that.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
+			});
 
 			$('#btnToCardLayout').addClass("active");
 			$('#btnToListLayout').removeClass("active");

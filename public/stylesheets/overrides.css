@@ -165,12 +165,8 @@ code {
   transform: skew(5deg) rotate(5deg);
 }
 
-#cardCarousel .carousel-indicators .active {
-  background-color: #000;
-}
-#cardCarousel .carousel-indicators li {
-  border: 1px solid #000;
-  border-radius: 10px 10px 10px 10px;
+#cardCarousel .carousel-indicators{
+  bottom: 0px;
 }
 
 .carousel-control.left, .carousel-control.right {
