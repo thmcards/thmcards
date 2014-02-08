@@ -1,6 +1,7 @@
 Cards.module('Profile', function(Profile, App){
 	Profile.Controller = {
 		showLayout: function(username){
+
 			var profileLayout = new Cards.Profile.Layout();
 			Cards.mainRegion.show(profileLayout);
 
@@ -27,20 +28,33 @@ Cards.module('Profile', function(Profile, App){
 				}
 			});
 
-			var score = new Cards.Entities.Score({username: username});
-			score.fetch({
-				success: function(){
-					var scoreView = new Cards.Profile.ScoreItemView({ model: score });
-					profileLayout.scoreRegion.show(scoreView);
-				},
-				error: function(){
+			if(username == JSON.parse($.cookie('usr')).username) {
+				var score = new Cards.Entities.Score({username: username});
+				score.fetch({
+					success: function(){
+						var scoreView = new Cards.Profile.ScoreItemView({ model: score });
+						profileLayout.scoreRegion.show(scoreView);
+					},
+					error: function(){
 
-				}
-			});
+					}
+				});
+			}
 
-			var badges = new Cards.Entities.BadgeCollection([], { username:username});
-			var badgeView = new Cards.Profile.BadgeView({ collection: badges });
-			profileLayout.badgeRegion.show(badgeView);
+			if(username == JSON.parse($.cookie('usr')).username) {
+				var badges = new Cards.Entities.BadgeCollection([], { username:username});
+				var badgeView = new Cards.Profile.BadgeView({ collection: badges });
+				profileLayout.badgeRegion.show(badgeView);
+			}
+
+			if(username != JSON.parse($.cookie('usr')).username) {
+				$.get("/set/user/"+username, function(data){
+					var setCollection = new Backbone.Collection(data, { model: App.Entities.Set });
+					var setView = new Cards.Profile.SetView({ collection: setCollection });
+					profileLayout.setRegion.show(setView);
+					
+				})
+			}
 		}
 	}
 });

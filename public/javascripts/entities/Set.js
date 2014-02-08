@@ -33,11 +33,6 @@ Cards.module('Entities', function(Entities, App, Backbone){
 		}
 	});
 
-	Entities.SetCollection = Backbone.Collection.extend({
-		model: Entities.Set,
-		url: "/set"
-	});
-
 	Entities.SetLearnedCollection = Backbone.Collection.extend({
 		model: Entities.Set,
 		url: "/set/learned"

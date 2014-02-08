@@ -1,7 +1,7 @@
 Cards.module('Profile', function(Profile, App) {
 	Profile.ScoreItemView = Backbone.Marionette.ItemView.extend({
 		template: "#profile-score-item",
-		className: "panel panel-info",
+		className: "panel panel-default",
 		events: {
 			"click a": "linkClicked",
 			"click a.set-link": "setClicked"

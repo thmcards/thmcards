@@ -632,6 +632,31 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
   }
 });
 
+app.get('/set/user/:username', ensureAuthenticated, function(req, res){
+
+  var username = req.params.username;
+  if(!_.isUndefined(username)) {
+    db.view('sets', 'by_id_with_cards', function(err, body) {
+      var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( row.value.owner == username )); })
+
+      _.each(sets, function(set){      
+        var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
+        set.value.cardCnt = cardCnt.length;
+
+        if(!_.has(set.value, "category") && _.isUndefined(set.value.category)) set.value.category = "";
+      }, this);
+      sets = _.pluck(sets, "value");
+
+      sets = _.filter(sets, function(set){
+        return set.visibility == 'public' && set.cardCnt > 0;
+      });
+
+      res.json(_.sortBy(sets, function(set){ return set.name }));
+    });
+  }
+
+});
+
 app.get('/set', ensureAuthenticated, function(req, res){
   setTimeout(function(){
 
