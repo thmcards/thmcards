@@ -171,6 +171,8 @@ code {
 
 .carousel-control.left, .carousel-control.right {
     background-image: none;
+    height: 150px;
+    margin-top: 65px;
 }
 
 .carousel-inner {
@@ -264,13 +266,13 @@ ul.nav-list li.active {
 
 .btn-editCard {
   position: absolute; 
-  left: 47px; 
+  left: 10px; 
   top: 9px; 
 }
 
 .btn-showPictureModal {
   position: absolute; 
-  left: 77px; 
+  left: 44px; 
   top: 9px; 
 }
 
