@@ -22,6 +22,9 @@
        "highscore_by_game": {
            "map": "function(doc) { if (doc.type == 'score') { emit(doc.game, doc.points); } }",
            "reduce": "function(keys, values) {  return sum(values); }"
+       },
+       "game_by_game_user": {
+           "map": "function(doc) { if (doc.type == 'score') { emit([doc.game, doc.owner], doc); } }"
        }
    }
 }
