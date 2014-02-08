@@ -550,6 +550,20 @@ div.meteor-playcard {
   font-size: 0.8em;
 }
 
+.meteorBox {
+  line-height:32px; 
+  font-family:'Georgia', serif; 
+  margin:12px 0 12px; 
+  display:inline-table; 
+  width:100%
+}
+
+.setWell {
+  margin-bottom:0; 
+  height:160px; 
+  overflow:hidden
+}
+
 table.table-bordered .progress {
   margin: 0;
 }
