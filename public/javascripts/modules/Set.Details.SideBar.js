@@ -133,9 +133,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		showEditSetModal: function() {
 			var that = this;
 
-			this.ui.modalInputName.val(this.model.get("name"));
-			this.ui.modalInputDescription.val(this.model.get("description"));
-			this.ui.modalInputCategory.val(this.model.get("category"));
+			this.ui.modalInputName.val(_.unescape(this.model.get("name")));
+			this.ui.modalInputDescription.val(_.unescape(this.model.get("description")));
+			this.ui.modalInputCategory.val(_.unescape(this.model.get("category")));
 			
 			if (this.model.get("visibility") === "public") {
 					$("#editSetModal .btn-group > label.private").removeClass("active");
@@ -164,11 +164,11 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 
 			this.ui.modalBtnSave.button('loading');
 
-			var name = this.ui.modalInputName.val();
-			var description = this.ui.modalInputDescription.val();
-			var category = this.ui.modalInputCategory.val();
-			var visibility = $("#editSetModal .btn-group > label.active > input").val();
-			var rating = $("#editSetModal .btn-group-rating > label.active > input").val();
+			var name = _.escape(this.ui.modalInputName.val());
+			var description = _.escape(this.ui.modalInputDescription.val());
+			var category = _.escape(this.ui.modalInputCategory.val());
+			var visibility = _.escape($("#editSetModal .btn-group > label.active > input").val());
+			var rating = _.escape($("#editSetModal .btn-group-rating > label.active > input").val());
 
 			this.model.set({
 					name: name, 
