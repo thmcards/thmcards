@@ -54,8 +54,6 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			var newSetName = this.ui.inputSetName.val().trim();
 			this.ui.inputSetName.val('');
 			var newSet = new Cards.Entities.Set({ name: newSetName, created: new Date().getTime(), count: Math.round(Math.random()*50) });
-			console.log(newSet);
-
 			
 			this.ui.modalView.on('show.bs.modal', function () {
     			that.ui.modalInputName.val(newSetName);
@@ -81,11 +79,11 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 
 			this.ui.modalBtnSave.button('loading');
 
-			var name = this.ui.modalInputName.val();
-			var description = this.ui.modalInputDescription.val();
-			var category = this.ui.modalInputCategory.val();
-			var visibility = $("#newSetModal .btn-group > label.active > input").val();
-			var rating = $("#newSetModal .btn-group-rating > label.active > input").val();
+			var name = _.escape(this.ui.modalInputName.val());
+			var description = _.escape(this.ui.modalInputDescription.val());
+			var category = _.escape(this.ui.modalInputCategory.val());
+			var visibility = _.escape($("#newSetModal .btn-group > label.active > input").val());
+			var rating = _.escape($("#newSetModal .btn-group-rating > label.active > input").val());
 
 			var newSet = new Cards.Entities.Set({ 
 								name: name, 
@@ -98,17 +96,12 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 
 			if(newSet.isValid()) {
 				this.collection.create(newSet, {
-				    wait : true,    // waits for server to respond with 200 before adding newly created model to collection
-
+				    wait : true, 
 				    success : function(resp){
 				        that.ui.modalView.modal('hide');
 				    },
 				    error : function(err) {
 				    	that.ui.modalBtnSave.button('reset');
-				        console.log('error callback');
-				        // this error message for dev only
-				        alert('There was an error. See console for details');
-				        console.log(err);
 					}
 				});
 			} else {
@@ -117,7 +110,6 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			}
 		},
 		showErrors: function(errors) {
-			console.log("showerrors");
 			this.$('.help-block').text('');
 			this.$('.setdetails').removeClass('has-error');
 		    _.each(errors, function (error) {
@@ -129,7 +121,6 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		},
  
 		hideErrors: function () {
-			console.log("hideerrors");
 			this.$('.help-block').text('');
 			this.$('.setdetails').removeClass('has-error');
 		},
