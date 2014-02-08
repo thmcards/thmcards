@@ -37,6 +37,9 @@ Cards.module('Profile', function(Profile, App) {
 					console.log(errors, successes);
 			 	});
 			});
+		},
+		onRender: function(){
+			$("#profileName").text(this.model.escape("username"));
 		}
 	});
 });
