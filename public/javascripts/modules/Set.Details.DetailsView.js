@@ -160,7 +160,8 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		onRender: function() {
 			var that = this;
-
+			var cardCarousel = this.$el.find('div#cardCarousel');
+			
 			if(this.collection.length == 0) {
 				this.$el.find("a.carousel-control").hide();
 				this.$el.find("button.play-meteor").prop('disabled', true);
@@ -174,20 +175,16 @@ Cards.module('Set.Details', function(Details, App) {
 			var currentIndex = this.$('div.item.active').index() + 1;
 			this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
 
-			this.$el.find(':first-child').carousel({ interval: false });
-			
-			this.$el.find(':first-child').on('slid.bs.carousel', function () {
-				that.checkForPicture() 
-				currentIndex = that.$('div.item.active').index() + 1;
-				that.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
+			cardCarousel.carousel({ interval: false });
+
+			cardCarousel.on('slid.bs.carousel', function (ev) {
+				ev.stopPropagation();
+				if($(ev.target).hasClass( "carousel" )) {
+					that.checkForPicture(); 
+					currentIndex = that.$('div.item.active').index() + 1;
+					that.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
+				}
 			});
-
-			$('#btnToCardLayout').addClass("active");
-			$('#btnToListLayout').removeClass("active");
-
-			this.$el.find("div.cardContent.back").removeClass('active');
-			this.$el.find("div.cardContent.front").addClass('active');
-
 			var usr = $.cookie('usr');
 			$("#usr-name").text();
 			$.get("/score/"+usr.username+"/"+this.model.get("_id"), function( data ) {
