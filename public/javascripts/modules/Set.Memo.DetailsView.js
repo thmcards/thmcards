@@ -147,8 +147,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 
 			var imgElem = $(document.createElement('img'));
 			imgElem.attr('src', cardContent.picture);
-			imgElem.attr('title', cardContent.text);
-			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('alt', cardContent.text_plain);
 			imgElem.attr('width', "538px");
 
 			$("#setdetails-pictureModal-body").empty();
@@ -166,7 +165,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 
 				if($("div.item.active").hasClass('active')){
 					this.$el.find("a.cardcontent-back").hide();
-					
+
 					if(actualCard.get('front').picture !== null){
 						this.$el.find("a.cardcontent-front").show();
 					} else {

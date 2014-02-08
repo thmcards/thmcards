@@ -152,6 +152,8 @@
     <script type="text/template" id="set-details-item">
       <div class="box" data-id="<%= _id %>">
         <span class="clicktoflip">Click to flip</span>
+        <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
+        <img class="cardside cardback-symbol" src="/img/icon_back.png" style="display:none"/>
         <a class="btn-editCard btn btn-default btn-xs" href="#editCard">
           <i class="glyphicon glyphicon-pencil"></i>
         </a>
@@ -881,6 +883,8 @@
     <script type="text/template" id="set-learn-item">
       <div class="box" data-id="<%= _id %>">
         <span class="clicktoflip">Click to flip</span>
+        <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
+        <img class="cardside cardback-symbol" src="/img/icon_back.png" style="display:none"/>
         <a class="btn-showPictureModal btn btn-default btn-xs" href="#showPictureModal" style="display:none">
           <i class="glyphicon glyphicon-picture"></i>
           <small>Bild anzeigen</small>
@@ -960,6 +964,7 @@
       <div class="col-md-6">
         <div class="box">
           <span class="clicktoflip">Vorderseite</span>
+          <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
           <a class="cardcontent-front btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
             <i class="glyphicon glyphicon-picture"></i>
             <small>Bild anzeigen</small>
@@ -970,6 +975,7 @@
       <div class="col-md-6">
         <div class="box">
           <span class="clicktoflip">Rückseite</span>
+          <img class="cardside cardback-symbol memoback" src="/img/icon_back.png" />
           <a class="cardcontent-back btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
             <i class="glyphicon glyphicon-picture"></i>
             <small>Bild anzeigen</small>

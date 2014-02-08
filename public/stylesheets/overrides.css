@@ -263,7 +263,16 @@ ul.nav-list li.active {
   top: 13px; 
   font-style: italic;
 }
-
+img.cardside {
+  position: absolute; 
+  right: 88px; 
+  top: 13px; 
+}
+img.memoback {
+  position: absolute; 
+  right: 78px; 
+  top: 13px; 
+}
 .btn-editCard {
   position: absolute; 
   left: 10px; 

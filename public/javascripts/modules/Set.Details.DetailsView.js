@@ -11,20 +11,20 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
+			var frontSymbol = $("div.item.active").find("img.cardfront-symbol")
+			var backSymbol = $("div.item.active").find("img.cardback-symbol")
 
 			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN") {
 				front.toggle();
 				back.toggle();
 				this.$el.find("div.cardContent.back").toggleClass('active');
-				this.$el.find("div.cardContent.front").toggleClass('active');				
+				this.$el.find("div.cardContent.front").toggleClass('active');
+				frontSymbol.toggle();
+				backSymbol.toggle();				
 			}
-
-
-			console.log(this.$el.find("div.cardContent.front"));
 		},
 		linkClicked: function(ev) {
 			ev.preventDefault();
-			console.log("link");
 		}
 	});	
 
@@ -62,7 +62,6 @@ Cards.module('Set.Details', function(Details, App) {
 		editClicked: function(ev) {
 			ev.preventDefault();
 
-			//cardid holen
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 
 			App.trigger("set:details:edit", this.model.get("_id"), cardId);
@@ -72,7 +71,6 @@ Cards.module('Set.Details', function(Details, App) {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
 
 			var actualCard = this.collection.get(cardId);
-			console.log(this.collection);
 			actualCard.destroy({
 			    success : function(resp){
 			    	console.log("card deleted");
@@ -101,13 +99,17 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var front = $("div.item.active").find("div.centered.front")
 			var back = $("div.item.active").find("div.centered.back")
+			var frontSymbol = $("div.item.active").find("img.cardfront-symbol")
+			var backSymbol = $("div.item.active").find("img.cardback-symbol")
 
 			if(back.hasClass('active')){
-				console.log("togglme");
 				front.toggle();
 				back.toggle();
 				front.toggleClass('active');
 				back.toggleClass('active');
+				frontSymbol.toggle();
+				backSymbol.toggle();
+
 			}		
 		},
 		checkForPicture: function(ev) {
@@ -144,8 +146,7 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var imgElem = $(document.createElement('img'));
 			imgElem.attr('src', cardContent.picture);
-			imgElem.attr('title', cardContent.text);
-			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('alt', cardContent.text_plain);
 			imgElem.attr('width', "538px");
 
 			$("#setdetails-pictureModal-body").empty();
@@ -178,7 +179,6 @@ Cards.module('Set.Details', function(Details, App) {
 
 			cardCarousel.carousel({ interval: false });
 
-
 			cardCarousel.on('slid.bs.carousel', function (ev) {
 				ev.stopPropagation();
 				if($(ev.target).hasClass( "carousel" )) {
@@ -197,7 +197,6 @@ Cards.module('Set.Details', function(Details, App) {
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
-				console.log(cardId);
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture !== null){
 					this.$el.find("a.btn-showPictureModal").show();
@@ -251,7 +250,6 @@ Cards.module('Set.Details', function(Details, App) {
 			var cardId = $(ev.currentTarget).attr("data-id")
 
 			var actualCard = this.collection.get(cardId);
-			console.log(this.collection);
 			actualCard.destroy({
 			    success : function(resp){
 			    	console.log("card deleted");
@@ -268,10 +266,8 @@ Cards.module('Set.Details', function(Details, App) {
 
 			if($(ev.currentTarget).hasClass('card-front')){
 				cardContent = actualCard.get("front");
-				console.log("front");
 			} else if($(ev.currentTarget).hasClass('card-back')) {
 				cardContent = actualCard.get("back");
-				console.log("back");
 			}
 
 			var imgElem = $(document.createElement('img'));

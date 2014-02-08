@@ -13,6 +13,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
 			var answerButtons = $("button.answer");
+			var frontSymbol = $("div.item.active").find("img.cardfront-symbol")
+			var backSymbol = $("div.item.active").find("img.cardback-symbol")
 
 			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN") {
 				$("div.learn-cardHelptext").toggle();
@@ -21,6 +23,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 				front.toggle();
 				back.toggle();
 				answerButtons.toggle();
+				frontSymbol.toggle();
+				backSymbol.toggle();	
 			}
 		},
 		linkClicked: function(ev) {
@@ -248,8 +252,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			var imgElem = $(document.createElement('img'));
 			imgElem.attr('src', cardContent.picture);
-			imgElem.attr('title', cardContent.text);
-			imgElem.attr('alt', cardContent.text);
+			imgElem.attr('alt', cardContent.text_plain);
 			imgElem.attr('width', "538px");
 
 			$("#setdetails-pictureModal-body").empty();
@@ -315,6 +318,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			this.$el.find(':first-child').on('slid.bs.carousel', function () {
 				that.checkForPicture() 
+				console.log("sliiiiide");
 				if(cardCount==1){
 					that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
 				} else if(cardCount>1){
