@@ -120,8 +120,9 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 					$('#meteor-answer-modal').modal('hide');
 				})
 
-				$('#meteor-answer-modal').on('hidden.bs.modal', function () {
+				$('#meteor-answer-modal').on('hidden.bs.modal', function (ev) {
 					that.runGame = true;
+					that.resumeGame(ev);
 				});
 
 				$('#meteor-answer-modal').on('hide.bs.modal', function () {
@@ -146,7 +147,14 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 			if(!_.isUndefined(answeredCard)) {
 
-				this.addPoints(5);
+				console.log(answeredCard.div.css('top').slice(0, -2), $(this.pitch).height() / 2);
+
+				if(answeredCard.div.css('top').slice(0, -2) <= ($(this.pitch).height() / 2)) {
+					this.addPoints(5);	
+				} else {
+					this.addPoints(3);
+				}
+				
 
 				this.addLife();
 
@@ -221,32 +229,32 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 						that.cardsQueue = _.shuffle(that.cardsQueue);
 						var card = _.findWhere(that.cardsQueue, {onPitch: false})
-						card.onPitch = true;
 
+						if(!_.isUndefined(card)) {
+							card.onPitch = true;
 
-						card.div.appendTo("#meteor-pitch");
-						
+							card.div.appendTo("#meteor-pitch");
 
-						card.div.css("left", Math.floor((Math.random()*800)+20));
+							card.div.css("left", Math.floor((Math.random()*800)+20));
 
-						card.div.animate({
-							top: $(this.pitch).height()-card.div.height()+500
-						}, {
-							duration: that.itemspeed,
-							easing: "linear",
-							complete: function(){
-							 	this.animationStarted = 0;
-								$(this).removeAttr("style");
-								console.log("complete", card.identifier);
-								card.onPitch = false;
-								that.runGame = false;
-								$(this).hide();
+							card.div.animate({
+								top: $(this.pitch).height()-card.div.height()+500
+							}, {
+								duration: that.itemspeed,
+								easing: "linear",
+								complete: function(){
+								 	this.animationStarted = 0;
+									$(this).removeAttr("style");
+									console.log("complete", card.identifier);
+									card.onPitch = false;
+									that.runGame = false;
+									$(this).hide();
 
-								that.noCorrectAnswer($(this).attr("data-id"));
-							}
-						});
-						card.div.show();
-						console.log(that.runGame);
+									that.noCorrectAnswer($(this).attr("data-id"));
+								}
+							});
+							card.div.show();
+						}
 					}
 				} else {
 					that.pauseCards();
@@ -340,29 +348,43 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			if(this.points > 5) this.nextLevel();
 		},
 		nextLevel: function(){
-			var currentLevel = this.level;
-			var nextLevel = currentLevel+1;
+			//calculate actions here
+			var actions = Math.floor(this.points / 5);
 
+			var currentLevel = this.level;
+			var nextLevel = currentLevel;
+
+			if(actions * 5 >= this.points)
+				nextLevel = currentLevel+1;
+
+			this.level = nextLevel;
+			console.log(currentLevel * 0.3);
+			this.itemcnt = Math.floor(this.itemcnt + (currentLevel * 0.3));
+			console.log("itemcnt", this.itemcnt);
 			this.level = nextLevel;
 			console.info(this.level, nextLevel);
 			$("#meteor-level-cnt").text(nextLevel);
 		},
 		gameOver: function(){
 			var that = this;
-			var usr = $.cookie('usr').username;
+			var usr = JSON.parse($.cookie('usr')).username;
 
 			this.runGame = false;
+
+			var score = {
+					type: 'score',
+					game: 'meteor',
+					setId: this.collection.setId,
+					level: that.level,
+					points: that.points,
+					owner: usr
+				};
 
 			$.ajax({
 				type: "POST",
 				url: "/score/"+usr,
-				data: {
-					type: 'score',
-					game: 'meteor',
-					setId: this.collection.setId,
-					points: that.points,
-					owner: usr
-				},
+				data: JSON.stringify(score),
+				contentType: "application/json",
 				success: function(data, status, xhr){
 					$('#meteor-gameover-modal .modal-body strong').first().text(that.points);
 					var panel = $('#meteor-gameover-modal .modal-body div.panel');

@@ -1230,73 +1230,76 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
     var owner = req.body.owner;
     var setId = req.body.setId;
     var points = req.body.points;
+    var level = req.body.level;
 
     if(points > 0) {
       db.insert({
         type: "score",
         game: game,
+        level: level,
         owner: owner,
         setId: setId,
         owner: owner
       },    
       function(err, body) {
-              
+        if(!err) {
+          checkBadgeMeteor(req.session["passport"]["user"][0].username, req.sessionID);  
+        }
       });  
     }
 
     db.view('score', 'score_by_game_set', { key: new Array(game, setId) }, function(err, body) {
-            var scores = new Array();
+      var scores = new Array();
 
-            _.each(body.rows, function(score){
-              var player = false;
-              if(score.value.owner == owner) { player = true; }
-              scores.push({
-                setId: score.value.setId,
-                points: score.value.points,
-                owner: score.value.owner,
-                isPlayer: player
-              });
-            });
+      _.each(body.rows, function(score){
+        var player = false;
+        if(score.value.owner == owner) { player = true; }
+        scores.push({
+          setId: score.value.setId,
+          points: score.value.points,
+          owner: score.value.owner,
+          isPlayer: player
+        });
+      });
 
-            scores = _.sortBy(scores, "points").reverse();
+      scores = _.sortBy(scores, "points").reverse();
 
-            var highscores = {};
-            _.each(scores, function(score){
-              if(_.has(highscores, score.owner)) {
-                if(highscores[score.owner].points < score.points) 
-                  highscores[score.owner] = score;
-              } else {
-                highscores[score.owner] = score;
-              }
-              
-            });
+      var highscores = {};
+      _.each(scores, function(score){
+        if(_.has(highscores, score.owner)) {
+          if(highscores[score.owner].points < score.points) 
+            highscores[score.owner] = score;
+        } else {
+          highscores[score.owner] = score;
+        }
+        
+      });
 
-            highscores = _.flatten(highscores);
-            var ownerScore = _.findWhere(highscores, {owner: owner})
-            highscores = _.toArray(highscores);
-            var idx = _.indexOf(highscores, ownerScore);
+      highscores = _.flatten(highscores);
+      var ownerScore = _.findWhere(highscores, {owner: owner})
+      highscores = _.toArray(highscores);
+      var idx = _.indexOf(highscores, ownerScore);
 
-            var x = new Array();
+      var x = new Array();
 
-            if(highscores.length == idx+1) {
-              x.push(highscores[idx-2]);
-              x.push(highscores[idx-1]);
-              x.push(highscores[idx]);
-            } else if(0 == idx) {
-              x.push(highscores[idx]);
-              x.push(highscores[idx+1]);
-              x.push(highscores[idx+2]);
-            } else {
-              x.push(highscores[idx-1]);
-              x.push(highscores[idx]);
-              x.push(highscores[idx+1]);
-            }
+      if(highscores.length == idx+1) {
+        x.push(highscores[idx-2]);
+        x.push(highscores[idx-1]);
+        x.push(highscores[idx]);
+      } else if(0 == idx) {
+        x.push(highscores[idx]);
+        x.push(highscores[idx+1]);
+        x.push(highscores[idx+2]);
+      } else {
+        x.push(highscores[idx-1]);
+        x.push(highscores[idx]);
+        x.push(highscores[idx+1]);
+      }
 
-            x = _.compact(x);
+      x = _.compact(x);
 
-            res.json(x);
-          });
-
+      res.json(x);
+    });
 });
 
 app.get('/xp/:username', ensureAuthenticated, function(req, res){
@@ -1512,9 +1515,7 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
             console.log("body", body);
             if(!err && !_.isEmpty(body.rows)) {
               var badgeProgress = _.pluck(body.rows, "value");
-              console.log("progresssadasd", badgeProgress);
               var badges = new Array();
-              
               
                 _.each(badgeProgress, function(progress){
                   _.each(results, function(badge){
@@ -1531,7 +1532,6 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
                       badge.user.rank = 3;
                       badge.user.nextRank = badge.rank[2];  
                     }
-                    
                   }
                 });
               });
@@ -1687,6 +1687,63 @@ var checkBadgeStammgast = function(owner, sessionID) {
     });
   }
 });
+}
+
+var checkBadgeMeteor = function(owner, sessionID) {
+  var badge = "badge/meteor";
+  db.get(badge, function(err, body) {
+    if (!err) {
+      var rank = body.rank;
+      db.view('score', 'game_by_game_user', { keys: new Array(new Array("meteor", owner)) }, function(err, body) {
+        var scores = _.pluck(body.rows, "value");
+
+        var level = _.filter(scores, function(score) { return score.level >= 10 });
+
+        var levels = _.groupBy(level, "setId");
+
+        var maxLevels = new Array();
+        _.each(levels, function(level) {
+          maxLevels.push(_.max(level, function(lvl){ return lvl.level }));
+        });
+
+        maxLevels = _.groupBy(maxLevels, "setId");
+
+        var xo = _.groupBy(_.flatten(maxLevels), function(lvl){
+                    if(lvl.level >= 30) return "thirty";
+                    if(lvl.level >= 20 && lvl.level < 30) return "twenty";
+                    if(lvl.level < 20) return "ten";
+                  })
+        var rankValue = rank[2];
+        var nextRank = rank[3];
+
+
+        console.log("x", xo.ten);
+        console.log()
+
+        if(_.has(xo, "ten")){
+          if(xo.ten.length >= 2) {
+            issueBadge(badge, owner, sessionID, 3, xo.ten.length);
+          } else  {
+            setBadgeProgress(badge, owner, 5-xo.ten.length, 10);
+          }
+        }
+        if(_.has(xo, "twenty")){
+          if(xo.twenty.length >= 2) {
+            issueBadge(badge, owner, sessionID, 3, xo.twenty.length);
+          } else  {
+            setBadgeProgress(badge, owner, 5-xo.twenty.length, 20);
+          }
+        }
+        if(_.has(xo, "thirty")){
+          if(xo.thirty.length >= 2) {
+            issueBadge(badge, owner, sessionID, 3, xo.thirty.length);
+          } else  {
+            setBadgeProgress(badge, owner, 5-xo.thirty.length, 30);
+          }
+        }
+      });
+    }
+  });
 }
 
 var checkBadgeAutor = function(owner, sessionID) {
@@ -1895,7 +1952,6 @@ app.get('/badges/issuer', function(req, res) {
 });
 
 app.get('/badges/badge/:badge/:rank.json', function(req, res) {
-  //res.json({ everything: "cool json" });
   var badge = "badge/"+req.params.badge;
   var rank = req.params.rank;
   var badgeUrl = nconf.get("badge_url");
@@ -1929,61 +1985,40 @@ app.get('/syncbadges', function(req, res) {
   var owner = "dan.knapp@web.de";
   var badgesToIssue = new Array();
   var badgeUrl = nconf.get("badge_url");
-db.view("issuedBadge", "by_owner", { keys: new Array(owner) }, function(err, body) {
-          if(!_.isUndefined(body.rows) && !err && _.size(body.rows) > 0) {
-            var issuedBadges = _.sortBy(_.pluck(body.rows, "value"), function(badge) {
-              return badge.rank;
+  db.view("issuedBadge", "by_owner", { keys: new Array(owner) }, function(err, body) {
+    if(!_.isUndefined(body.rows) && !err && _.size(body.rows) > 0) {
+      var issuedBadges = _.sortBy(_.pluck(body.rows, "value"), function(badge) {
+        return badge.rank;
+      });
+      
+      db.view("users", "by_username", { keys: new Array(owner) }, function(err, body) {
+        if(!err && _.size(body.rows) > 0) {
+          var user = _.first(body.rows).value;
+
+          _.each(issuedBadges, function(badge){
+            var data = {};
+
+            data.uid = badge._id;
+            data.recipient = { type: "email", hashed: false, identity: user.username };
+            data.image = badgeUrl + badge.badge + "_" + badge.rank + ".png";
+            data.evidence = badgeUrl + badge.badge + ".html";
+            data.issuedOn = badge.issuedOn;
+            data.badge = badgeUrl + badge.badge + "/" + badge.rank + ".json";
+            data.verify = { type: "signed", url: badgeUrl + "public.pem" };
+
+            var signature = jws.sign({
+              header: { alg: 'rs256'},
+              payload: data,
+              secret: fs.readFileSync('private.pem')
             });
 
-            //res.json(issuedBadges);
-            
-            db.view("users", "by_username", { keys: new Array(owner) }, function(err, body) {
-              if(!err && _.size(body.rows) > 0) {
-                var user = _.first(body.rows).value;
-                
-
-
-                _.each(issuedBadges, function(badge){
-                  var data = {};
-
-                  data.uid = badge._id;
-                  data.recipient = { type: "email", hashed: false, identity: user.username };
-                  data.image = badgeUrl + badge.badge + "_" + badge.rank + ".png";
-                  data.evidence = badgeUrl + badge.badge + ".html";
-                  data.issuedOn = badge.issuedOn;
-                  data.badge = badgeUrl + badge.badge + "/" + badge.rank + ".json";
-                  data.verify = { type: "signed", url: badgeUrl + "public.pem" };
-
-                  var signature = jws.sign({
-                    header: { alg: 'rs256'},
-                    payload: data,
-                    secret: fs.readFileSync('private.pem')
-                  });
-
-                  badgesToIssue.push(signature);
-                });
-
-
-
-
-
-
-                res.json(badgesToIssue);
-              }
-            });
-
-
-
-
-
-          } else {  
-
-          }
-        });
-
-
-
-
+            badgesToIssue.push(signature);
+          });
+          res.json(badgesToIssue);
+        }
+      });
+    }
+  });
 /*
   var data = { 
   "uid": "f2c20",
@@ -2013,16 +2048,18 @@ db.view("issuedBadge", "by_owner", { keys: new Array(owner) }, function(err, bod
 });
 
 app.get('/progress', function(req, res) {
+  var badge = "badge/kritiker";
+  var owner = "dan.knapp@web.de";
+  var score = 10;
+  var rank = 3;
 
-var badge = "badge/kritiker";
-var owner = "dan.knapp@web.de";
-var score = 10;
-var rank = 3;
-
-setBadgeProgress(badge, owner, score, rank);
-
+  setBadgeProgress(badge, owner, score, rank);
 });
 
+app.get('/xoxo', function(req, res){
+    var username = "dan.knapp@web.de";
+checkBadgeMeteor(username, res.sessionID);
+});
 
 
 srv.listen(app.get('port'), function(){
