@@ -161,8 +161,6 @@ Cards.module('Set.Memo', function(Memo, App) {
 				var cardId = $("div.item.active").children(".twosided").attr("data-id");
 				var actualCard = this.collection.get(cardId);
 
-				console.log("check picture" + cardId);
-
 				if($("div.item.active").hasClass('active')){
 					this.$el.find("a.cardcontent-back").hide();
 
@@ -191,8 +189,12 @@ Cards.module('Set.Memo', function(Memo, App) {
 
 			this.$el.find(':first-child').carousel({ interval: false });
 
-			this.$el.find(':first-child').on('slid.bs.carousel', function () {
-				that.checkForPicture() });
+			this.$el.find(':first-child').on('slid.bs.carousel', function (ev) {
+				ev.stopPropagation();
+				if($(ev.target).hasClass( "carousel" )) {
+					that.checkForPicture();
+				}
+			});
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".twosided").attr("data-id");

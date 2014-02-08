@@ -8,7 +8,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		cardClicked: function(ev) {
 			ev.preventDefault();
-			console.log(ev.currentTarget);
 
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
@@ -83,8 +82,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 			//zuletzt aktive lernkarte
 			var lastActiveItem = this.$el.find("div.item").index(this.$el.find("div.item.active"));
 
-			console.info("LAI", lastActiveItem);
-
 			var that = this;
 	  		App.on("cardModel:saved", function(val){				
 				that.$el.find("div.item").removeClass("active");
@@ -129,7 +126,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 					} else {
 						var lastCard = true;
 						this.saveCard(cardId, boxId, failed, lastCard);
-						console.log("letzte karte weg");
 					}
 
 				}
@@ -157,7 +153,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 					} else {
 						var lastCard = true;
 						this.saveCard(cardId, boxId, failed, lastCard);
-						console.log("letzte karte weg");
 					}
 
 				}
@@ -183,7 +178,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			//perscard holen/anlegen und mit neuer boxid aktualisieren
 			var model = this.collection.get(cardId);
-			console.log(model);
 			var persCard;
 			if(!_.isEmpty(model.get("persCard"))) {	
 				if(_.isArray(model.get("persCard"))) {
@@ -195,7 +189,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 				model['persCard'] = persCard;
 				model.set({persCard: persCard});
 				type = 'put';
-				console.log("vorhandene perscard");
 			} else {
 					persCard = {};
 					persCard.value = {
@@ -205,7 +198,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 					model['persCard'] = persCard;
 					model.set({persCard: persCard});
 					type = 'post';
-					console.log("neue perscard");
 			}
 			//speichern und in aktueller box bleiben
 			console.log("save");
@@ -261,7 +253,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 			this.ui.modalView.modal('show');
 		},
 		checkForPicture: function(ev) {
-			console.log("check picture");
 			if(this.collection.length !== 0) {
 				var cardId = $("div.item.active").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
@@ -283,6 +274,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 		},
 		onRender: function() {	
 			var that = this;
+			var cardIndicator = this.$el.find("small.card-indicator");
+
 			$("div.learn-startscreen").hide();
 			$("div.learn-endscreen").hide();
 			$("div.carousel").show();
@@ -308,32 +301,32 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var cardCount = this.$('.item').length;
 
 			if(cardCount==1){
-				this.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
+				cardIndicator.html('Noch '+cardCount+' Karte im aktuellen Fach');
 			} else if(cardCount>1){
-				this.$el.find("small.card-indicator").html('Noch '+cardCount+' Karten im aktuellen Fach');
+				cardIndicator.html('Noch '+cardCount+' Karten im aktuellen Fach');
 			}
 			
 
 			this.$el.find(':first-child').carousel({ interval: false });
 
-			this.$el.find(':first-child').on('slid.bs.carousel', function () {
-				that.checkForPicture() 
-				console.log("sliiiiide");
-				if(cardCount==1){
-					that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
-				} else if(cardCount>1){
-					that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karten im aktuellen Fach');
+			this.$el.find(':first-child').on('slid.bs.carousel', function (ev) {
+				ev.stopPropagation();
+				if($(ev.target).hasClass( "carousel" )) {
+					that.checkForPicture() 
+					if(cardCount==1){
+						that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
+					} else if(cardCount>1){
+						that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karten im aktuellen Fach');
+					}
 				}
 			});
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
-				console.log(cardId);
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture !== null){
 					this.$el.find("a.btn-showPictureModal").show();
-				}
-				console.log(actualCard);			
+				}		
 			}
 		}
 	});

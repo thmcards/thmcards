@@ -244,7 +244,6 @@ function FilteredCollection(collection, options){
             	}
 
 				if (pcard) {
-					console.log(pcard.value.box, criteria);
            			return pcard.value.box == criteria;
            		} else {
            			console.log("no card");
@@ -261,11 +260,9 @@ function FilteredCollection(collection, options){
         filtered.reset(items);
     };
     collection.on("change", function(model){
-    	console.log("change", collection.models);
         filtered.reset(collection.models);
     });
     collection.on("reset", function(){
-    	console.log("reset");
         filtered.reset(collection.models);
     });          
         
