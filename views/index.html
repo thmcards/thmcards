@@ -194,19 +194,15 @@
     <script type="text/template" id="set-details-listitem">
         <td>
           <span style="font-family:'Georgia'"><%= front.text %></span>
-          <% if( front.picture != null) { %>
           <a class="card-front btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
             <i class="glyphicon glyphicon-picture"></i>
           </a>
-          <% } %>
         </td>
         <td>
           <span style="font-family:'Georgia'"><%= back.text %></span>
-          <% if( back.picture != null) { %>
           <a class="card-back btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
             <i class="glyphicon glyphicon-picture"></i>
           </a>
-          <% } %>
         </td>
         <td>
           <a class="btn btn-xs btn-default btn-listEditCard" data-id="<%= _id %>" href="#editCard" style="margin-left:5px">
@@ -723,10 +719,10 @@
       </div>
       <div class="playcardcontainer" style="display: none"></div>
       
-      <!--a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
+      <a href="#" class="btn btn-default btn-danger pull-right">Stop</a>
       <a href="#" class="btn btn-default btn-info pull-right">Resume</a>
       <input type="text" class="form-control" id="itemcnt" placeholder="3" />
-      <input type="text" class="form-control" id="itemspeed" placeholder="1000" /-->
+      <input type="text" class="form-control" id="itemspeed" placeholder="1000" />
 
 
       
@@ -832,7 +828,9 @@
 
     <script type="text/template" id="set-learn-collection">
       <div id="cardCarousel" class="carousel slide" style="display:none">
-        <ol class="carousel-indicators"></ol>
+        <div class="carousel-indicators">
+          <small class="text-muted card-indicator"></small>
+        </div>
         <div class="carousel-inner"></div>
       </div>
 

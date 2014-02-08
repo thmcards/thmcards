@@ -114,18 +114,19 @@ Cards.module('Set.Details', function(Details, App) {
 			if(this.collection.length !== 0) {
 				var cardId = $("div.item.active").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
+				var button = this.$el.find("a.btn-showPictureModal");
 
 				if($("div.item.active").find("div.centered.front").hasClass('active')){
 					if(actualCard.get('front').picture !== null){
-						this.$el.find("a.btn-showPictureModal").show();
+						button.show();
 					} else if(actualCard.get('front').picture == null){
-						this.$el.find("a.btn-showPictureModal").hide();
+						button.hide();
 					}
 				} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
 					if(actualCard.get('back').picture !== null){
-						this.$el.find("a.btn-showPictureModal").show();
+						button.show();
 					} else if(actualCard.get('back').picture == null){
-						this.$el.find("a.btn-showPictureModal").hide();
+						button.hide();
 					}
 				}		
 			}
@@ -177,6 +178,7 @@ Cards.module('Set.Details', function(Details, App) {
 
 			cardCarousel.carousel({ interval: false });
 
+
 			cardCarousel.on('slid.bs.carousel', function (ev) {
 				ev.stopPropagation();
 				if($(ev.target).hasClass( "carousel" )) {
@@ -199,8 +201,7 @@ Cards.module('Set.Details', function(Details, App) {
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture !== null){
 					this.$el.find("a.btn-showPictureModal").show();
-				}
-				console.log(actualCard);			
+				}		
 			}
 		},
 		onShow: function() {
@@ -210,22 +211,7 @@ Cards.module('Set.Details', function(Details, App) {
 
 	Details.ListItem = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
-	    template: "#set-details-listitem",
-	    onRender: function(ev) {
-	    	/** ++ add display:none in template
-	    	if(this.collection.length !== 0) {
-				var cardId = this.$el.find("a.btn-showPictureModalList").attr("data-id");
-				var actualCard = this.collection.get(cardId);
-
-				if(actualCard.get('front').picture !== null){
-					this.$el.find("a.btn-showPictureModalList").show();
-				}
-				if(actualCard.get('back').picture !== null){
-					this.$el.find("a.btn-showPictureModalList").show();
-				}
-			}**/
-	    }
-
+	    template: "#set-details-listitem"
 	});
 
 	Details.ListEmptyView = Backbone.Marionette.ItemView.extend({

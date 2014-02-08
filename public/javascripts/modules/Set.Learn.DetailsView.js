@@ -301,10 +301,26 @@ Cards.module('Set.Learn', function(Learn, App) {
 				if(i === 0) indicatorElem.addClass("active");	
 				pickerContainer.append(indicatorElem);
 			}
+
+			var cardCount = this.$('.item').length;
+
+			if(cardCount==1){
+				this.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
+			} else if(cardCount>1){
+				this.$el.find("small.card-indicator").html('Noch '+cardCount+' Karten im aktuellen Fach');
+			}
+			
+
 			this.$el.find(':first-child').carousel({ interval: false });
 
 			this.$el.find(':first-child').on('slid.bs.carousel', function () {
-				that.checkForPicture() });
+				that.checkForPicture() 
+				if(cardCount==1){
+					that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
+				} else if(cardCount>1){
+					that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karten im aktuellen Fach');
+				}
+			});
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
