@@ -131,7 +131,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 						App.trigger("cardModel:saved");
 						that.$el.find("div.carousel").hide();
 						that.$el.find("button.show-answer").hide();
-						that.$el.find("div.learn-endscreen").show();
+						that.$el.find("div.memo-endscreen").show();
 					}
 				}
 			});
@@ -150,7 +150,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				if(that.collection.length == 0) {
 						that.$el.find("div.carousel").hide();
 						that.$el.find("button.show-answer").hide();
-						that.$el.find("div.learn-endscreen").show();
+						that.$el.find("div.memo-endscreen").show();
 				}
 
 			});
@@ -200,7 +200,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			var that = this;
 
 			$("div.learn-startscreen").hide();
-			$("div.learn-endscreen").hide();
+			$("div.memo-endscreen").hide();
 			$("div.carousel").show();
 
 			this.$el.find("div.item").first().addClass("active");

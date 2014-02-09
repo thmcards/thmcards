@@ -941,28 +941,16 @@
         </div>
       </div>
 
-      <div class="box learn-endscreen" style="display:none">
-        <div class="row twosided" data-id="<%= _id %>">
+      <div class="memo-endscreen" style="display:none">
+        <div class="row twosided">
           <div class="col-md-6">
             <div class="box">
-              <span class="clicktoflip">Vorderseite</span>
-              <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
-              <a class="cardcontent-front btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
-                <i class="glyphicon glyphicon-picture"></i>
-                <small>Bild anzeigen</small>
-              </a>
-              <div class="block memocontent-block"><div class="double cardcontent-front"><%= front.text %></div></div>
+              <div class="block memocontent-block"><div class="double">Lerneinheit erfolgreich beendet</div></div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="box">
-              <span class="clicktoflip">Rückseite</span>
-              <img class="cardside cardback-symbol memoback" src="/img/icon_back.png" />
-              <a class="cardcontent-back btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
-                <i class="glyphicon glyphicon-picture"></i>
-                <small>Bild anzeigen</small>
-              </a>
-              <div class="block memocontent-block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
+              <div class="block memocontent-block"><div class="double">Wähle einen weiteren Kartensatz oder einen anderen Lernmodus</div></div>
             </div>
           </div>
         </div>
@@ -1012,9 +1000,18 @@
 
 
     <script type="text/template" id="set-memo-item-empty">
-      <div class="box">
-        <div class="block"><div class="double front" style="font-size:2em">Aktuell keine nach Lernplan zu lernenden Karten</div>
-      </div>
+        <div class="row twosided">
+          <div class="col-md-6">
+            <div class="box">
+              <div class="block memocontent-block"><div class="double">Aktuell keine nach Lernplan zu lernenden Karten</div></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="box">
+              <div class="block memocontent-block"><div class="double">Wähle einen weiteren Kartensatz oder einen anderen Lernmodus</div></div>
+            </div>
+          </div>
+        </div>
     </script> 
 
     <script type="text/template" id="profile-layout">
