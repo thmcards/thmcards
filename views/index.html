@@ -301,13 +301,13 @@
         <tbody>
           <tr>
             <td class="cardtext fronttext">
-              <input class="form-control fronttext newcard-editor" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control fronttext" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block fronttext"></span>
               <small class="text-muted pull-right" style="margin-left:3px">/ 120 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
             </td> 
             <td class="cardtext backtext">
-              <input class="form-control backtext newcard-editor" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control backtext" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
               <span class="help-block backtext"></span>
               <small class="text-muted pull-right" style="margin-left:3px">/ 120 Zeichen</small> <small class="text-muted pull-right char-cnt">0</small>
@@ -942,12 +942,28 @@
       </div>
 
       <div class="box learn-endscreen" style="display:none">
-        <div class="block">
-          <div class="centered front" style="font-size:2em">
-                Lerneinheit erfolgreich beendet
+        <div class="row twosided" data-id="<%= _id %>">
+          <div class="col-md-6">
+            <div class="box">
+              <span class="clicktoflip">Vorderseite</span>
+              <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
+              <a class="cardcontent-front btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
+                <i class="glyphicon glyphicon-picture"></i>
+                <small>Bild anzeigen</small>
+              </a>
+              <div class="block memocontent-block"><div class="double cardcontent-front"><%= front.text %></div></div>
+            </div>
           </div>
-          <div class="centered front" style="font-size:1.2em; width:500px">
-                Wähle ein weiteres Fach oder gehe zurück zur Hauptseite</div>
+          <div class="col-md-6">
+            <div class="box">
+              <span class="clicktoflip">Rückseite</span>
+              <img class="cardside cardback-symbol memoback" src="/img/icon_back.png" />
+              <a class="cardcontent-back btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
+                <i class="glyphicon glyphicon-picture"></i>
+                <small>Bild anzeigen</small>
+              </a>
+              <div class="block memocontent-block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
+            </div>
           </div>
         </div>
       </div>
