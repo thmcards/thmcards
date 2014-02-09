@@ -546,7 +546,7 @@ app.get('/set/:id/card', function(req, res){
 app.get('/set/:id/memo/card', function(req, res){
   console.log("using memo api!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   var username = req.session["passport"]["user"][0].username;
-  var today = Date.today();
+  var today = new Date.today();
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
 
     var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
@@ -567,12 +567,13 @@ app.get('/set/:id/memo/card', function(req, res){
         var lastLearned = new Date(card.persCard[0].value.sm_last_learned);
         var nextDate = new Date(card.persCard[0].value.sm_next_date);
         console.log("nicht leer");
-        console.log("last learned: " + card.persCard[0].value.sm_last_learned);
-        console.log("next date: " + card.persCard[0].value.sm_next_date);
-        console.log("to learn or not: " + Date.compare(lastLearned, nextDate));
+        console.log("last learned: " + lastLearned);
+        console.log("next date: " + nextDate);
+        console.log("today: " + today);
+        console.log("to learn or not: " + Date.compare(today, nextDate));
         //wenn personalcard vorhancen, filtere nach datum (last learned + intervaldays >= today)
         //if(lastLearned.add(intervalDays) >= today){ return card};
-        if(Date.compare(lastLearned, nextDate) >= 0){ return card};
+        if(Date.compare(today, nextDate) >= 0){ return card};
       };
 
       if(!_.isEmpty(card.persCard)){
