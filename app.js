@@ -1927,7 +1927,7 @@ var checkBadgeStreber = function(owner, sessionID) {
                   if(completeLearnedSets >= r) {
                     if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
                     rankValue = _.indexOf(_.values(rank), r)+1;
-                    issueBadge(badge, owner, sessionID, rankValue, cntRatedSets);
+                    issueBadge(badge, owner, sessionID, rankValue, completeLearnedSets);
                   }
                 });
                 setBadgeProgress(badge, owner, completeLearnedSets, nextRank);
