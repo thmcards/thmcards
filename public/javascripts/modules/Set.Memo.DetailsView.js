@@ -65,14 +65,14 @@ Cards.module('Set.Memo', function(Memo, App) {
 			}	
 		},
 		rateAnswer: function(ev) {
-			var rating = ev.target.title;
+			var rating = _.escape($(ev.currentTarget).attr("data-id"));
+			console.log(rating);
 			var items = this.$el.find("div.item").length;
 			var cardId = this.$el.find("div.item.active").children(".twosided").attr("data-id");
-			console.log(cardId);
+			console.log(this.$el.find("div.item.active").children(".twosided"));
 			var that = this;
 
 			var lastActiveItem = this.$el.find("div.item").index(this.$el.find("div.item.active"));
-			console.log(lastActiveItem);
 			App.on("cardModel:saved", function(val){				
 				that.$el.find("div.item").removeClass("active");
 				var activeCard = that.$el.find("div.item").get(lastActiveItem);
@@ -216,6 +216,8 @@ Cards.module('Set.Memo', function(Memo, App) {
 					that.checkForPicture();
 				}
 			});
+
+			this.$el.find("button.rate-answer").tooltip();
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".twosided").attr("data-id");

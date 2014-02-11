@@ -976,18 +976,22 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
     var smIntervalDays;
     var currentDate = Date.today();;
     var nextDate;
-
-    //set sm_next_date
+    var instantRepeat = "0";
 
     if (_.has(req.body.persCard.value, "last_rated")){
       smTimesLearned = 1;
       smLastLearned = Date.today();
       smIntervalDays = 1;
+      smInterval = 1;
       nextDate = Date.tomorrow();
+      if (parseInt(req.body.persCard.value.last_rated) < 4) {
+        instantRepeat = "1"
+      }
     } else {
       smTimesLearned = 0;
       smLastLearned = 0;
       smIntervalDays = 0;
+      smInterval = 0;
       nextDate = 0;
     }
     db.insert(
@@ -1000,10 +1004,10 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         "type": "personal_card",
         "times_learned": "1",
         "sm_times_learned": smTimesLearned,
-        "sm_interval": "0",
+        "sm_interval": smInterval,
         "sm_ef": "2.5",
-        "sm_instant_repeat": "0",
-        "sm_interval_days": "0",
+        "sm_instant_repeat": instantRepeat,
+        "sm_interval_days": smIntervalDays,
         "sm_last_learned": smLastLearned,
         "sm_next_date": nextDate
       }, 

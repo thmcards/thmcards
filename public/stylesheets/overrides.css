@@ -321,6 +321,49 @@ img.memoback {
   font-family: 'Georgia', serif;
 }
 
+.memo-cardHelptext {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  margin-top: 30px;
+  margin-left: -120px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  font-family: 'Georgia', serif;
+}
+
+.memo-toolbar {
+  margin-top: 50px;
+  margin-left: 5px;
+  float: left;
+}
+
+div.memo-rating {
+  margin-top:20px;
+  margin-left:453px;
+  position:absolute;
+}
+
+button.show-answer {
+  width:40%;
+  margin-top:20px;
+  margin-left:280px;
+  display:none;
+  position:absolute;
+  align:center;
+}
+
+button.rate-answer.wrong {
+  color: #DF0101;
+}
+
+.tooltip-inner {
+  background-color: #F8F8F8;
+  color: #666;
+  border: 1px solid #D3D6DD;
+}
+
 .emptyCellList {
   padding-top: 33px!important;
 }

@@ -920,24 +920,22 @@
     <script type="text/template" id="set-memo-collection">
       <div id="cardCarousel" class="carousel slide">
         <ol class="carousel-indicators"></ol>
-        <div class="carousel-inner"></div>
-      </div>
-      <button class="btn btn-primary answer show-answer" title="success" style="width:30%; margin-top:10px; display:none;">Zeige Antwort</button>
-      <div class="rating-controls" style="display:none">
-        <div class="btn-toolbar" style="margin-top:10px">
-          <div class="btn-group">
-            <button class="btn btn-default rate-answer" title="0">0</button>
-            <button class="btn btn-default rate-answer" title="1">1</button>
+        <div class="carousel-inner"></div>     
+        <button class="btn btn-primary answer show-answer" title="success">Zeige Antwort</button>
+        <div class="rating-controls" style="display:none">
+          <div class="btn-toolbar memo-toolbar">
+            <div class="memo-cardHelptext">
+              <span>Bewerte deine Antwort</span>
+            </div>
+            <div class="btn-group memo-rating">
+              <button class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="0" title="Blackout">0</button>
+              <button class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="1" title="Falsche Antwort, aber an die Richtige erinnert">1</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="2" title="Falsche Antwort, aber leicht an die Richtige erinnert">2</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="3" title="Richtige Antwort nach längerem Überlegen">3</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="4" title="Richtige Antwort nach kurzem Zögern">4</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="5" title="Perfekte Antwort">5</button>
+            </div>
           </div>
-          <div class="btn-group">
-            <button class="btn btn-default rate-answer" title="2">2</button>
-            <button class="btn btn-default rate-answer" title="3">3</button>
-            <button class="btn btn-default rate-answer" title="4">4</button>
-            <button class="btn btn-default rate-answer" title="5">5</button>
-          </div>
-        </div>
-        <div class="learn-cardHelptext" style="width:150px">
-            <span>Bewerte deine Antwort</span>
         </div>
       </div>
 
