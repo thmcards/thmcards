@@ -945,7 +945,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
       { 
         "created": time,
         "owner": owner,
-        "setId": req.body.setId,
+        "setId": _.escape(req.body.setId),
         "front": req.body.front,
         "back": req.body.back,
         "type": "card"
@@ -994,13 +994,14 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
       smInterval = 0;
       nextDate = 0;
     }
+
     db.insert(
       { 
         "created": time,
         "owner": req.session["passport"]["user"][0].username,
-        "cardId": req.body._id,
-        "setId": req.body.setId,
-        "box": req.body.persCard.value.box || "1",
+        "cardId": _.escape(req.body._id),
+        "setId": _.escape(req.body.setId),
+        "box": _.escape(req.body.persCard.value.box) || "1",
         "type": "personal_card",
         "times_learned": "1",
         "sm_times_learned": smTimesLearned,
@@ -1033,7 +1034,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
-  var today = Date.today(); //1 stunde addieren
+  var today = Date.today();
   var username = req.session["passport"]["user"][0].username;
   console.log(req.body.persCard.value);
   console.log("heute: " + today);
@@ -1051,8 +1052,8 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
         if (_.has(req.body.persCard.value, "last_rated")){
           console.log("personalcard --> supermemo");
-          calcInterval(_.first(docs).sm_interval, req.body.persCard.value.last_rated, function(interval){
-            calcEF(_.first(docs).sm_ef, req.body.persCard.value.last_rated, function(ef){
+          calcInterval(_.first(docs).sm_interval, _.escape(req.body.persCard.value.last_rated), function(interval){
+            calcEF(_.first(docs).sm_ef, _.escape(req.body.persCard.value.last_rated), function(ef){
               var intervalDays = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);
               var currentDate = today.clone();
               var nextDate = currentDate.addDays(parseInt(intervalDays));
@@ -1112,7 +1113,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
                 "cardId": docs[0].cardId,
                 "setId": docs[0].setId,
                 "type": docs[0].type,
-                "box": req.body.persCard.value.box  || docs[0].box,
+                "box": _.escape(req.body.persCard.value.box)  || docs[0].box,
                 "times_learned": parseInt(docs[0].times_learned) + 1,
                 "sm_times_learned": docs[0].sm_times_learned,
                 "sm_interval": docs[0].sm_interval,
@@ -1481,9 +1482,9 @@ app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
 });
 
 app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
-  var value = parseInt(req.body.value);
-  var comment = req.body.comment;
-  var setId = req.params.setId;
+  var value = parseInt(_.escape(req.body.value));
+  var comment = _.escape(req.body.comment);
+  var setId = _.escape(req.params.setId);
   var owner = req.session["passport"]["user"][0].username;
 
   if(comment.length >= 60) {

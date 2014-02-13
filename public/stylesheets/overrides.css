@@ -326,7 +326,7 @@ img.memoback {
   position: absolute;
   width: 100%;
   margin-top: 30px;
-  margin-left: -120px;
+  margin-left: -135px;
   text-align: center;
   color: #666;
   font-style: italic;
@@ -335,23 +335,23 @@ img.memoback {
 
 .memo-toolbar {
   margin-top: 50px;
-  margin-left: 5px;
+  margin-left: 3px;
   float: left;
 }
 
 div.memo-rating {
   margin-top:20px;
-  margin-left:453px;
+  margin-left:433px;
   position:absolute;
 }
 
 button.show-answer {
-  width:40%;
-  margin-top:20px;
-  margin-left:280px;
-  display:none;
-  position:absolute;
-  align:center;
+  width: 413px;
+  margin-top: 20px;
+  margin-left: 260px;
+  display: none;
+  position: absolute;
+  align: center;
 }
 
 button.rate-answer.wrong {
@@ -362,6 +362,11 @@ button.rate-answer.wrong {
   background-color: #F8F8F8;
   color: #666;
   border: 1px solid #D3D6DD;
+}
+
+.popover-content {
+  display: block;
+  width: 300px!important;
 }
 
 .emptyCellList {

@@ -217,7 +217,10 @@ Cards.module('Set.Memo', function(Memo, App) {
 				}
 			});
 
-			this.$el.find("button.rate-answer").tooltip();
+			this.$el.find(".rate-answer").tooltip();
+			this.$el.find("a.memo-helptext").popover();
+
+
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".twosided").attr("data-id");
