@@ -1,5 +1,5 @@
 {
-	"couchdb": "https://thmcards.iriscouch.com",
+	"couchdb": "https://thmcards:thmcards123@thmcards.cloudant.com/",
 	"twitter_callback": "http://thmcards.nodejitsu.com/auth/twitter/callback",
 	"facebook_callback": "http://thmcards.nodejitsu.com/auth/facebook/callback",
 	"google_callback": "http://thmcards.nodejitsu.com/auth/google/callback",

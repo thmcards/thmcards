@@ -14,6 +14,9 @@
        "by_id": {
            "map": "function(doc) { if (doc.type == 'set') { emit([doc._id], doc); }}"
        },
+       "by_category": {
+           "map": "function(doc) { if (doc.type == 'set' && doc.category) { emit([doc.category, doc.name, doc.created], doc); }}"
+       },
        "by_id_with_cards": {
            "map": "function(doc) { if (doc.type == 'set') { emit([doc._id, 0], doc); } else if (doc.type == 'card') { emit([doc.setId, 1], doc); } }"
        }
