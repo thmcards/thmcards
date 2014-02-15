@@ -629,6 +629,11 @@ div.meteor-playcard {
   overflow:hidden
 }
 
+.well {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 table.table-bordered .progress {
   margin: 0;
 }
