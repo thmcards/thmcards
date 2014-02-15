@@ -427,6 +427,7 @@ app.get('/set/category', function(req, res){
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
+      res.send(404);
     }
   });
 });
@@ -447,6 +448,7 @@ app.get('/typeahead/set/category', function(req, res){
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
+      res.send(404);
     }
   });
 });
@@ -465,6 +467,7 @@ app.get('/typeahead/set/visibility', function(req, res){
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
+      res.send(404);
     }
   });
 });
@@ -479,13 +482,13 @@ app.get('/set/category/:category', function(req, res){
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
+      res.send(404);
     }
   });
 });
 
 app.get('/set/:id/personalcard', function(req, res){
   var username = req.session["passport"]["user"][0].username;
-  console.log("personalcard api");
 
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
 
@@ -530,8 +533,6 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
 });
 
 app.get('/set/:id/card', function(req, res){
-  console.log("using normal api!");
-  console.log(req.params);
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
@@ -544,7 +545,6 @@ app.get('/set/:id/card', function(req, res){
 });
 
 app.get('/set/:id/memo/card', function(req, res){
-  console.log("using memo api!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   var username = req.session["passport"]["user"][0].username;
   var today = Date.today();
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
@@ -581,8 +581,6 @@ app.get('/set/:id/memo/card', function(req, res){
       };
         
     })
-    
-    console.log("....................");
 
     res.json(_.sortBy(cardsFiltered, function(card){ return card.created }));
   });
@@ -975,8 +973,6 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
     var smIntervalDays;
     var currentDate = Date.today();;
     var nextDate;
-
-    //set sm_next_date
 
     if (_.has(req.body.persCard.value, "last_rated")){
       smTimesLearned = 1;
@@ -1527,10 +1523,7 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
                 idxBadges[badgeType].user = usrBadge;
               }
             });
-            //7res.json(_.flatten(idxBadges));
-          }/* else {
-            res.json(_.flatten(idxBadges));      
-          }*/
+          }
           var results = _.flatten(idxBadges);
           console.log("------");
           console.log(results);
@@ -1566,7 +1559,7 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
           });
         });
     } else {
-
+      res.send(404);
     }
   });
 });
@@ -2070,20 +2063,6 @@ app.get('/syncbadges', function(req, res) {
   
   res.set('Content-Type', 'text/plain');
   res.send(signature);*/
-});
-
-app.get('/progress', function(req, res) {
-  var badge = "badge/kritiker";
-  var owner = "dan.knapp@web.de";
-  var score = 10;
-  var rank = 3;
-
-  setBadgeProgress(badge, owner, score, rank);
-});
-
-app.get('/xoxo', function(req, res){
-    var username = "dan.knapp@web.de";
-checkBadgeMeteor(username, res.sessionID);
 });
 
 
