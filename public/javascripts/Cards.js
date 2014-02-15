@@ -133,7 +133,7 @@ Cards.on("initialize:after", function() {
 
 	$("#input-search").on("typeahead:selected", function(ev, datum, name) {
 		if(name == "category") Cards.trigger("pool:details", datum.value);
-		if(name == "sets") Cards.trigger("set:details", datum.value, datum.id);
+		if(name == "sets") Cards.trigger("set:details", datum.id);
 
 		$("#input-search").blur();
 	})
