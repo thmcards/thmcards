@@ -65,14 +65,14 @@ Cards.module('Set.Memo', function(Memo, App) {
 			}	
 		},
 		rateAnswer: function(ev) {
-			var rating = ev.target.title;
+			var rating = _.escape($(ev.currentTarget).attr("data-id"));
+			console.log(rating);
 			var items = this.$el.find("div.item").length;
 			var cardId = this.$el.find("div.item.active").children(".twosided").attr("data-id");
-			console.log(cardId);
+			console.log(this.$el.find("div.item.active").children(".twosided"));
 			var that = this;
 
 			var lastActiveItem = this.$el.find("div.item").index(this.$el.find("div.item.active"));
-			console.log(lastActiveItem);
 			App.on("cardModel:saved", function(val){				
 				that.$el.find("div.item").removeClass("active");
 				var activeCard = that.$el.find("div.item").get(lastActiveItem);
@@ -113,25 +113,46 @@ Cards.module('Set.Memo', function(Memo, App) {
 				type: type,
 				success: function(){
 					console.log("success" + cardId);
-
-					if(parseInt(rating) >= 4){
-						console.log("remove card");
-						that.collection.remove(that.collection.get(cardId));
-					}					
+				
 					that.$el.find("div.cardcontent-back").hide();
 					that.$el.find("div.rating-controls").hide();
 					that.$el.find("button.show-answer").removeClass("disabled");
 
-					if(items > 1) {
-						App.trigger("cardModel:saved");
-						that.$el.find(":first-child").carousel("next");					
+					if(items >= 1) {
+						if(parseInt(rating) >= 4){
+							console.log("remove card");
+							console.log("collectionlength" + that.collection.length)
+							that.collection.remove(that.collection.get(cardId));
+						} else {
+							App.trigger("cardModel:saved");
+							that.$el.find(":first-child").carousel("next");									
+						}
 					} else {
 						App.trigger("cardModel:saved");
 						that.$el.find("div.carousel").hide();
 						that.$el.find("button.show-answer").hide();
-						that.$el.find("div.learn-endscreen").show();
+						that.$el.find("div.memo-endscreen").show();
 					}
 				}
+			});
+
+			this.collection.on("remove", function(model, collection, options) {
+				console.log("index: " + JSON.stringify(options));
+
+				if(options.index+1 > that.collection.length){
+					var activeCard = that.$el.find("div.item").get(0);
+					$(activeCard).addClass("active");
+				} else {
+					var activeCard = that.$el.find("div.item").get(options.index);
+					$(activeCard).addClass("active");
+				}
+
+				if(that.collection.length == 0) {
+						that.$el.find("div.carousel").hide();
+						that.$el.find("button.show-answer").hide();
+						that.$el.find("div.memo-endscreen").show();
+				}
+
 			});
 		},
 		showPictureModal: function(ev) {
@@ -179,7 +200,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			var that = this;
 
 			$("div.learn-startscreen").hide();
-			$("div.learn-endscreen").hide();
+			$("div.memo-endscreen").hide();
 			$("div.carousel").show();
 
 			this.$el.find("div.item").first().addClass("active");
@@ -195,6 +216,11 @@ Cards.module('Set.Memo', function(Memo, App) {
 					that.checkForPicture();
 				}
 			});
+
+			this.$el.find(".rate-answer").tooltip();
+			this.$el.find("a.memo-helptext").popover();
+
+
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".twosided").attr("data-id");

@@ -212,7 +212,6 @@ var calcInterval = function(current_interval, last_rated, callback) {
   else {
     interval = parseInt(current_interval) + 1;
   }
-  console.log("Interval(number): " + interval);
 
   if(_.isUndefined(callback)) return interval;
   callback(interval);
@@ -225,8 +224,6 @@ var calcEF = function(ef_old, last_rated, callback) {
   if(ef<1.3) {
     ef = 1.3;
   }
-
-  console.log("EF: " + ef);
 
   if(_.isUndefined(callback)) return ef;
   callback(ef);
@@ -247,9 +244,6 @@ var calcIntervalDays = function(interval, interval_days_before, ef) {
 
     interval_days = Math.ceil(parseInt(interval_days_before) * parseFloat(ef));
   }
-
-  console.log("Interval in days before: " + interval_days_before)
-  console.log("Interval in days after: " + interval_days)
   return interval_days;
 }
 
@@ -533,6 +527,7 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
 });
 
 app.get('/set/:id/card', function(req, res){
+  console.log(req.params);
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
@@ -540,13 +535,14 @@ app.get('/set/:id/card', function(req, res){
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
+      res.send(404);
     }
   });
 });
 
 app.get('/set/:id/memo/card', function(req, res){
   var username = req.session["passport"]["user"][0].username;
-  var today = Date.today();
+  var today = new Date.today();
   db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
 
     var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
@@ -557,8 +553,6 @@ app.get('/set/:id/memo/card', function(req, res){
     cards = _.pluck(cards, "value");
     
     var cardsFiltered = _.filter(cards, function(card){
-      console.log(JSON.stringify(card));
-            
       //console.log(JSON.stringify(card.persCard[0].value.sm_ef));
       //wenn keine personalcard vorhanden nicht rausfiltern zeile 1205 (if xy return...)
       if(_.isEmpty(card.persCard)){ return card};
@@ -567,12 +561,13 @@ app.get('/set/:id/memo/card', function(req, res){
         var lastLearned = new Date(card.persCard[0].value.sm_last_learned);
         var nextDate = new Date(card.persCard[0].value.sm_next_date);
         console.log("nicht leer");
-        console.log("last learned: " + card.persCard[0].value.sm_last_learned);
-        console.log("next date: " + card.persCard[0].value.sm_next_date);
-        console.log("to learn or not: " + Date.compare(lastLearned, nextDate));
+        console.log("last learned: " + lastLearned);
+        console.log("next date: " + nextDate);
+        console.log("today: " + today);
+        console.log("to learn or not: " + Date.compare(today, nextDate));
         //wenn personalcard vorhancen, filtere nach datum (last learned + intervaldays >= today)
         //if(lastLearned.add(intervalDays) >= today){ return card};
-        if(Date.compare(lastLearned, nextDate) >= 0){ return card};
+        if(Date.compare(today, nextDate) >= 0){ return card};
       };
 
       if(!_.isEmpty(card.persCard)){
@@ -581,7 +576,6 @@ app.get('/set/:id/memo/card', function(req, res){
       };
         
     })
-
     res.json(_.sortBy(cardsFiltered, function(card){ return card.created }));
   });
 });
@@ -593,6 +587,7 @@ app.get('/set/:id', function(req, res){
       res.json(docs[0]);
     } else {
       console.log("[db.sets/by_id]", err.message);
+      res.send(404);
     }
   });
 });
@@ -605,6 +600,7 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
       res.json(userInfo);
     } else {
       console.log("user/username", body);
+      res.send(404);
     }
     
   });
@@ -623,6 +619,7 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
             res.json(body); 
           } else {
             console.log("[db.users/by_username]", err.message);
+            res.send(404);
           }
           
         });
@@ -651,8 +648,9 @@ app.get('/set/user/:username', ensureAuthenticated, function(req, res){
 
       res.json(_.sortBy(sets, function(set){ return set.name }));
     });
+  } else {
+    res.send(404);  
   }
-
 });
 
 app.get('/set', ensureAuthenticated, function(req, res){
@@ -718,70 +716,10 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
       });
     } else {
       console.log("[db.sets/by_id]", err.message);
+      res.send(404);
     }
    });
 
-});
-
-app.get('/blabla', function(req, res){
-  var username = "dan.knapp@web.de";
-db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
-        var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
-        var setIds = new Array();
-        _.each(cards, function(card){      
-          var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
-
-          if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
-            setIds.push(card.value.setId);
-          }
-        }, this);
-        setIds = _.uniq(setIds);
-
-        var setKeys = new Array();
-        _.each(setIds, function(id){
-          setKeys.push(new Array(id));
-        })
-
-        db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
-          if (!err) {
-            var docs = _.map(body.rows, function(doc) { return doc.value});
-
-            var cards = _.groupBy(docs, "setId");
-            var cardIds = _.pluck(docs, "_id");
-
-            var learnedCards = 0;
-            var keys = new Array();
-
-            _.each(cardIds, function(id){
-              keys.push(new Array(id));
-            });
-
-            db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
-              if (!err) {
-                var docs = _.map(body.rows, function(doc) { return doc.value});
-                
-                var learnedCards = new Array();
-                _.each(docs, function(doc){
-                  if(doc.times_learned >= 1) learnedCards.push(doc);
-                });
-
-                var sets = _.groupBy(learnedCards, "setId");
-
-                if(_.has(sets, "undefined")) delete sets.undefined;
-
-                console.log(sets);
-
-                var completeLearnedSets = 0;
-                _.each(_.keys(sets), function(set){
-                  if(_.size(sets[set]) == _.size(cards[set])) completeLearnedSets++;
-                });
-
-                console.log(completeLearnedSets);
-              }
-            });
-          }
-        });
-      }); 
 });
 
 app.delete('/set/:setid', ensureAuthenticated, function(req, res){
@@ -914,16 +852,14 @@ app.delete('/card/:id', ensureAuthenticated, function(req, res) {
                    }
                    personal.push(doc)
                 }, this);
-                db.bulk({"docs": personal}, function(err, body) {               
-                  console.log("personalcard" + err);
-                  console.log("personalcard" + body);
+                db.bulk({"docs": personal}, function(err, body) {    
                 });               
-                console.log("card deleted");
                 res.json(body);   
               }    
             });
           } else {
-                console.log('[db.delete] ', err.message);            
+            console.log('[db.delete] ', err.message);
+            res.send(404);            
           }
         });
       }
@@ -942,7 +878,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
       { 
         "created": time,
         "owner": owner,
-        "setId": req.body.setId,
+        "setId": _.escape(req.body.setId),
         "front": req.body.front,
         "back": req.body.back,
         "type": "card"
@@ -967,38 +903,44 @@ app.post('/card', ensureAuthenticated, function(req, res){
 app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
     var time = new Date().getTime();
     var username = req.session["passport"]["user"][0].username;
-    console.log("creating new personalcard");
     var smTimesLearned;
     var smLastLearned;
     var smIntervalDays;
     var currentDate = Date.today();;
     var nextDate;
+    var instantRepeat = "0";
 
     if (_.has(req.body.persCard.value, "last_rated")){
       smTimesLearned = 1;
       smLastLearned = Date.today();
       smIntervalDays = 1;
+      smInterval = 1;
       nextDate = Date.tomorrow();
+      if (parseInt(req.body.persCard.value.last_rated) < 4) {
+        instantRepeat = "1"
+      }
     } else {
       smTimesLearned = 0;
       smLastLearned = 0;
       smIntervalDays = 0;
+      smInterval = 0;
       nextDate = 0;
     }
+
     db.insert(
       { 
         "created": time,
         "owner": req.session["passport"]["user"][0].username,
-        "cardId": req.body._id,
-        "setId": req.body.setId,
-        "box": req.body.persCard.value.box || "1",
+        "cardId": _.escape(req.body._id),
+        "setId": _.escape(req.body.setId),
+        "box": _.escape(req.body.persCard.value.box) || "1",
         "type": "personal_card",
         "times_learned": "1",
         "sm_times_learned": smTimesLearned,
-        "sm_interval": "0",
+        "sm_interval": smInterval,
         "sm_ef": "2.5",
-        "sm_instant_repeat": "0",
-        "sm_interval_days": "0",
+        "sm_instant_repeat": instantRepeat,
+        "sm_interval_days": smIntervalDays,
         "sm_last_learned": smLastLearned,
         "sm_next_date": nextDate
       }, 
@@ -1016,6 +958,8 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
                 body.persCard = persCard;
                 res.json(body);
             });
+          } else {
+            res.send(404);
           }
         });
     });
@@ -1024,10 +968,8 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   var time = new Date().getTime();
-  var today = Date.today(); //1 stunde addieren
+  var today = Date.today();
   var username = req.session["passport"]["user"][0].username;
-  console.log(req.body.persCard.value);
-  console.log("heute: " + today);
 
   db.view('cards', 'personal_card_by_cardId', { key: new Array(req.body._id)}, function(err, body) {
     if (!err){  
@@ -1036,14 +978,10 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         return doc.value
       });
       if (body.rows.length){
-        console.log("sm_times_learned: " + docs[0].sm_times_learned);
-        console.log(today);
-        console.log(req.body.persCard.value);
 
         if (_.has(req.body.persCard.value, "last_rated")){
-          console.log("personalcard --> supermemo");
-          calcInterval(_.first(docs).sm_interval, req.body.persCard.value.last_rated, function(interval){
-            calcEF(_.first(docs).sm_ef, req.body.persCard.value.last_rated, function(ef){
+          calcInterval(_.first(docs).sm_interval, _.escape(req.body.persCard.value.last_rated), function(interval){
+            calcEF(_.first(docs).sm_ef, _.escape(req.body.persCard.value.last_rated), function(ef){
               var intervalDays = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);
               var currentDate = today.clone();
               var nextDate = currentDate.addDays(parseInt(intervalDays));
@@ -1094,7 +1032,6 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
         }
 
         if (!_.has(req.body.persCard.value, "last_rated")){
-          console.log("personalcard --> leitner");
               db.insert(
               { 
                 "_rev": docs[0]._rev,
@@ -1103,7 +1040,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
                 "cardId": docs[0].cardId,
                 "setId": docs[0].setId,
                 "type": docs[0].type,
-                "box": req.body.persCard.value.box  || docs[0].box,
+                "box": _.escape(req.body.persCard.value.box)  || docs[0].box,
                 "times_learned": parseInt(docs[0].times_learned) + 1,
                 "sm_times_learned": docs[0].sm_times_learned,
                 "sm_interval": docs[0].sm_interval,
@@ -1135,6 +1072,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
       }
     } else {
       console.log("[db.personalcard/by_cardId]", err.message);
+      res.send(404);
     }
   });
 });
@@ -1452,6 +1390,7 @@ app.get('/rating/permission/:setId', ensureAuthenticated, function(req, res){
       }
     } else {
       console.log("[rating/by_set_owner]", err);
+      res.send(404);
     }
   });  
   
@@ -1472,9 +1411,9 @@ app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
 });
 
 app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
-  var value = parseInt(req.body.value);
-  var comment = req.body.comment;
-  var setId = req.params.setId;
+  var value = parseInt(_.escape(req.body.value));
+  var comment = _.escape(req.body.comment);
+  var setId = _.escape(req.params.setId);
   var owner = req.session["passport"]["user"][0].username;
 
   if(comment.length >= 60) {
@@ -1525,9 +1464,7 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
             });
           }
           var results = _.flatten(idxBadges);
-          console.log("------");
           console.log(results);
-          console.log("------");
 
           db.view('badgeProgress', 'by_owner', { keys: new Array(user) }, function(err, body) {
             console.log("body", body);
@@ -1601,7 +1538,6 @@ var checkDaysInRow = function(daysInRow, username, callback) {
 }
 
 var sendMessageToUser = function(sessionID, messageType, messageObject) {
-  console.log(sessionID, messageType, messageObject);
   setTimeout(function(){
     var socket = getSocketBySessionID(sessionID);
     if(socket != null) {
@@ -1646,9 +1582,6 @@ var setBadgeProgress = function(badge, owner, score, nextRank) {
 
   db.view('badgeProgress', 'by_owner_badge', { startkey: new Array(owner, badge), endkey: new Array(owner, badge) }, function(err, body) {
     if(!err) {
-      console.log("badge progress", badge, owner, score, nextRank);
-      
-
       if(_.isEmpty(body.rows)) {
         var badgeProgress = {};
         badgeProgress.badge = badge;
@@ -1681,8 +1614,6 @@ var setBadgeProgress = function(badge, owner, score, nextRank) {
           }
         });          
       }
-
-      
     }
   });
 }
@@ -1733,10 +1664,6 @@ var checkBadgeMeteor = function(owner, sessionID) {
                   })
         var rankValue = rank[2];
         var nextRank = rank[3];
-
-
-        console.log("x", xo.ten);
-        console.log()
 
         if(_.has(xo, "ten")){
           if(xo.ten.length >= 2) {
@@ -1815,20 +1742,17 @@ var checkBadgeKritikerLiebling = function(owner, sessionID) {
         db.view('sets', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
           if(!err && _.size(body.rows) > 0) {
             var setIds = _.pluck(body.rows, "id");
-            console.log(setIds);
             setIds = _.map(setIds, function(set) { return new Array(set)});
 
             db.view('rating', 'by_set', { keys: setIds }, function(err, body) {
               if(!err && _.size(body.rows) > 0) {
                 var ratings = _.groupBy(_.pluck(body.rows, "value"), "setId");
-                console.log(ratings);
 
                 var cntRatedSets = 0;
                 _.each(ratings, function(rating) {
                   if(rating.length >= 5) {
                     var values = _.pluck(rating, "value");
                     var avg = average(values);
-                    console.log(avg);
                     if(avg >= 4.5) cntRatedSets++;
                   }
                 });
@@ -1908,11 +1832,6 @@ var checkBadgeStreber = function(owner, sessionID) {
                 _.each(_.keys(sets), function(set){
                   if(_.size(sets[set]) == _.size(cards[set])) completeLearnedSets++;
                 });
-
-                console.log(completeLearnedSets);
-
-                console.log("rank", rank);
-
                 var rankValue = rank[2];
                 var nextRank = rank[3];
                 _.each(rank, function(r){
@@ -1939,9 +1858,7 @@ var checkBadgeKritiker = function(owner, sessionID) {
         var rank = body.rank;
         db.view('rating', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
         var sets = _.pluck(body.rows, "value");
-        console.log(sets);
         sets = _.filter(sets, function(set){ 
-          console.log(set);
           return set.comment.length >= 60;
         });
 
@@ -1950,7 +1867,6 @@ var checkBadgeKritiker = function(owner, sessionID) {
         _.each(rank, function(r){
           if(sets.length >= r) {
             if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
-            console.log("next", nextRank, rank[_.indexOf(_.values(rank), r)], _.values(rank));
             rankValue = _.indexOf(_.values(rank), r)+1;
             issueBadge(badge, owner, sessionID, rankValue, sets.length);
           }
@@ -1973,7 +1889,6 @@ app.get('/badges/badge/:badge/:rank.json', function(req, res) {
   var badge = "badge/"+req.params.badge;
   var rank = req.params.rank;
   var badgeUrl = nconf.get("badge_url");
-  console.log(badge);
   db.get(badge, function(err, badge){
     if(!err) {
 
@@ -1991,6 +1906,7 @@ app.get('/badges/badge/:badge/:rank.json', function(req, res) {
       res.json(badgeClass);
     } else {
       console.log(err);
+      res.send(404);
     }
   });
 
@@ -2064,7 +1980,6 @@ app.get('/syncbadges', function(req, res) {
   res.set('Content-Type', 'text/plain');
   res.send(signature);*/
 });
-
 
 srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
