@@ -300,7 +300,15 @@ Cards.module('Set.Details', function(Details, App) {
 			$('#btnToListLayout').addClass("active");
 			$('#btnToCardLayout').removeClass("active");
 
-			console.log(this.collection);
+			var setOwner = this.collection.at(0).get('owner');
+
+			if(JSON.parse($.cookie('usr')).username == setOwner) {
+				this.$el.find("a.btn-listEditCard").show();
+				this.$el.find("a.btn-listDeleteCard").show();
+			} else {
+				this.$el.find("a.btn-listEditCard").hide();
+				this.$el.find("a.btn-listDeleteCard").hide();
+			}
 		}
 	});
 });
