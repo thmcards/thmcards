@@ -343,27 +343,49 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			}
 
 		},
+		actionsPerLevel: function(level) {
+			if(level < 5) return 3;
+			var cos = Math.cos(level);
+			if(cos < 0) {
+				cos = (cos+0.5)*4.5;
+			} else {
+				cos = (cos-0.5)*4.5;
+			}
+			var value = Math.ceil((Math.log(Math.pow((level-0.1), 2))+4) + cos);
+			if(value < 0) value = 3;
+				return Math.floor((value+level/2)/2);
+		},
 		checkLevel: function(){
 			console.info("check level", this.points);
-			if(this.points > 5) this.nextLevel();
+			if(this.points > 4) this.nextLevel();
 		},
-		nextLevel: function(){
-			//calculate actions here
+		nextLevel: function() {
 			var actions = Math.floor(this.points / 5);
 
 			var currentLevel = this.level;
 			var nextLevel = currentLevel;
 
-			if(actions * 5 >= this.points)
-				nextLevel = currentLevel+1;
 
-			this.level = nextLevel;
-			console.log(currentLevel * 0.3);
-			this.itemcnt = Math.floor(this.itemcnt + (currentLevel * 0.3));
-			console.log("itemcnt", this.itemcnt);
-			this.level = nextLevel;
-			console.info(this.level, nextLevel);
-			$("#meteor-level-cnt").text(nextLevel);
+			console.log("actions", actions);
+			var a = 0;
+
+			var i = 0;
+			var apl = 0;
+			while(actions >= 0) {
+				apl = this.actionsPerLevel(i);
+				actions = actions - apl;
+				i++;
+			}
+			console.log(apl);
+			this.level = i;
+			$("#meteor-level-cnt").text(i);
+
+			apl = apl - 2;
+			if(apl < 1) apl = 1;
+			if(apl > 5) apl = 5;
+
+			this.itemcnt = apl;
+			this.itemspeed = this.itemspeed + (apl*100);
 		},
 		gameOver: function(){
 			var that = this;
