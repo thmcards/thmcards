@@ -567,8 +567,6 @@ app.get('/set/:id/memo/card', function(req, res){
     cards = _.pluck(cards, "value");
     
     var cardsFiltered = _.filter(cards, function(card){
-      //console.log(JSON.stringify(card.persCard[0].value.sm_ef));
-      //wenn keine personalcard vorhanden nicht rausfiltern zeile 1205 (if xy return...)
       if(_.isEmpty(card.persCard)){ return card};
 
       if(!_.isEmpty(card.persCard)){
@@ -579,16 +577,11 @@ app.get('/set/:id/memo/card', function(req, res){
         console.log("next date: " + nextDate);
         console.log("today: " + today);
         console.log("to learn or not: " + Date.compare(today, nextDate));
-        //wenn personalcard vorhancen, filtere nach datum (last learned + intervaldays >= today)
-        //if(lastLearned.add(intervalDays) >= today){ return card};
-        if(Date.compare(today, nextDate) >= 0){ return card};
-      };
 
-      if(!_.isEmpty(card.persCard)){
-        //filtere nach instantrepeat=1
+        if(Date.compare(today, nextDate) >= 0){ return card};
+
         if(parseInt(card.persCard[0].value.sm_instant_repeat) == 1) { return card};
-      };
-        
+      };        
     })
     res.json(_.sortBy(cardsFiltered, function(card){ return card.created }));
   });

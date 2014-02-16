@@ -219,6 +219,7 @@ Cards.module('Set.Details', function(Details, App) {
 			$("#set-details-editcard-input-pic-front-search").val(this.model.attributes.front.picture);
 			$("#set-details-editcard-input-pic-back-search").val(this.model.attributes.back.picture);
 
+			/**
 			$('.wysihtml5-sandbox').contents().find('body').on("keyup",function(ev) {
 		        var frontlength = $.trim($('.wysihtml5-sandbox').contents().find('body.fronttext').text()).length;
 		        var backlength = $.trim($('.wysihtml5-sandbox').contents().find('body.backtext').text()).length;
@@ -237,6 +238,7 @@ Cards.module('Set.Details', function(Details, App) {
 		        	$('button.save').prop("disabled", true);
 		        }
 		    });
+			**/
 		},
 		onClose: function(){
 			$(".btn-cardDelete").off('clickout');

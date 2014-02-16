@@ -293,6 +293,8 @@ Cards.module('Set.Details', function(Details, App) {
 		onRender: function(ev) {
 			$('#btnToListLayout').addClass("active");
 			$('#btnToCardLayout').removeClass("active");
+
+			console.log(this.collection);
 		}
 	});
 });
