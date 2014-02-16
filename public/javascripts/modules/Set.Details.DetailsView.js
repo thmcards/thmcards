@@ -201,7 +201,13 @@ Cards.module('Set.Details', function(Details, App) {
 			$('#btnToListLayout').removeClass("active");
 			$('#btnToCardLayout').addClass("active");
 
-			console.log
+			var setOwner = this.collection.at(0).get('owner');
+
+			if(JSON.parse($.cookie('usr')).username == setOwner) {
+				this.$el.find("a.btn-editCard").show();
+			} else {
+				this.$el.find("a.btn-editCard").hide();
+			}
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
