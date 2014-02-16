@@ -106,7 +106,7 @@ io.sockets.on('connection', function(socket) {
   socket.set('sessionID', socket.handshake.sessionID);
 
   socket.on('disconnect', function() {
-    console.log("DISCONNECT: ", socket);
+    
   });
 });
 
@@ -404,6 +404,7 @@ app.get('/auth/google/callback',
 app.get('/logout', function(req, res){
   req.logout();
   res.clearCookie('usr');
+  res.clearCookie('csrf.token');
   res.redirect('/');
 });
 
@@ -482,7 +483,7 @@ app.get('/set/category/:category', function(req, res){
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
-      res.send(404);
+      res.json({});
     }
   });
 });
@@ -1515,7 +1516,6 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
             });
           }
           var results = _.flatten(idxBadges);
-          console.log(results);
 
           db.view('badgeProgress', 'by_owner', { keys: new Array(user) }, function(err, body) {
             console.log("body", body);
@@ -1560,31 +1560,30 @@ var checkDaysInRow = function(daysInRow, username, callback) {
     var dates = _.pluck(keys, "gained");
     dates =  _.map(dates, function(date) {
       var d = new Date(date);
-      return new Array(d.getFullYear(),(d.getMonth()+1),d.getDate());
-    })
-    var next = 0;
+      return d;
+    });
 
-    var sequentialDays = 0;
-    var daysInARow = false;
-    for(var i=0; i < dates.length; i++) {
-      
-      if(i < dates.length-1) {
-        next = i+1;
-      } else {
-        next = i;
-      }
-      try {
-        if(dates[i][0] == dates[next][0] && dates[i][1] == dates[next][1] && (dates[i][2]-1) == dates[next][2]) {
-          sequentialDays++;
-          if(sequentialDays >= daysInRow) daysInARow = true;
-        } else {
-          sequentialDays = 0;
+    var row = 1;
+    for(var i = 0; i < _.size(dates); i++) {
+      if(i == 0) continue;
+      var current = dates[i];
+      var prev = dates[i-1];
+
+      if(current.isBefore(prev)) {
+        var daysBetween = current.getDaysBetween(prev);
+        if(daysBetween == 1) { 
+          row++;
+        } else if(daysBetween > 1) {
+          break;
         }
-      } catch (e) {
-        break;
       }
     }
-    callback(daysInARow);
+
+    if(row >= daysInRow) {
+      callback(true, row)
+    } else {
+      callback(false, row);
+    }
   });
 }
 
@@ -1631,40 +1630,42 @@ var issueBadge = function(badge, owner, sessionID, rank, score, callback) {
 var setBadgeProgress = function(badge, owner, score, nextRank) {
   var badgeShort = badge.split("/")[1];
 
-  db.view('badgeProgress', 'by_owner_badge', { startkey: new Array(owner, badge), endkey: new Array(owner, badge) }, function(err, body) {
-    if(!err) {
-      if(_.isEmpty(body.rows)) {
-        var badgeProgress = {};
-        badgeProgress.badge = badge;
-        badgeProgress.owner = owner;
-        badgeProgress.score = score;
-        badgeProgress.nextRank = nextRank;
-        badgeProgress.type = "badgeProgress";
+  var keys = new Array(owner, badge);
 
-        db.insert(badgeProgress,
-        function(err, body){
-          if(!err && body.ok) {
-            console.log("new score update");
-          } else {
-            console.log("new score fail");
-          }
-        });
+  db.get(owner+'/'+badge, function(err, body){
+    if(err) {
+      var badgeProgress = {};
+      badgeProgress._id = owner+'/'+badge;
+      badgeProgress.badge = badge;
+      badgeProgress.owner = owner;
+      badgeProgress.score = score;
+      badgeProgress.nextRank = nextRank;
+      badgeProgress.type = "badgeProgress";
 
-      } else {
-        var badgeProgress = _.first(body.rows).value;
-        console.log(badgeProgress);
-        badgeProgress.score = score;
-        badgeProgress.nextRank = nextRank;
+      db.insert(badgeProgress,
+      function(err, body){
+        if(!err && body.ok) {
+          console.log("new score update");
+        } else {
+          console.log("new score fail");
+        }
+      }); 
+    } else {
+      console.log("NOT EMPTY");
+      console.log(body);
+      var badgeProgress = body;
+      console.log(badgeProgress);
+      badgeProgress.score = score;
+      badgeProgress.nextRank = nextRank;
 
-        db.insert(badgeProgress,    
-        function(err, body) {
-          if(!err && body.ok) {
-            console.log("score update");
-          } else {
-            console.log("score error");
-          }
-        });          
-      }
+      db.insert(badgeProgress,    
+      function(err, body) {
+        if(!err && body.ok) {
+          console.log("score update");
+        } else {
+          console.log("score error");
+        }
+      });  
     }
   });
 }
@@ -1676,12 +1677,14 @@ var checkBadgeStammgast = function(owner, sessionID) {
   if (!err) {
     _.each(body.rank, function(days) {
       
-      checkDaysInRow(days, owner, function(result){
+      checkDaysInRow(days, owner, function(result, days){
+
         var rank = _.indexOf(_.values(body.rank), days)+1;
         var nextRank = _.indexOf(_.values(body.rank), days);
+
         if(result) {
-          issueBadge(badge, owner, sessionID, rank, result);
-          setBadgeProgress(badge, owner, result, body.rank[nextRank]);
+          issueBadge(badge, owner, sessionID, rank, days);
+          setBadgeProgress(badge, owner, days, body.rank[nextRank]);
         }
       })
     });
