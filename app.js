@@ -204,9 +204,10 @@ var levelForXp = function(pts) {
     return lvl;
 }
 
-var calcInterval = function(current_interval, last_rated, callback) {
+var calcInterval = function(current_interval, last_rated, repeat, callback) {
   var interval;
-  if(last_rated < 3) {
+  console.log("repeatyesno: " + repeat);
+  if((last_rated < 3) || (repeat == 1)) {
     interval = 1;
   }
   else {
@@ -573,7 +574,6 @@ app.get('/set/:id/memo/card', function(req, res){
       if(!_.isEmpty(card.persCard)){
         var lastLearned = new Date(card.persCard[0].value.sm_last_learned);
         var nextDate = new Date(card.persCard[0].value.sm_next_date);
-        console.log("nicht leer");
         console.log("last learned: " + lastLearned);
         console.log("next date: " + nextDate);
         console.log("today: " + today);
@@ -945,7 +945,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
       smLastLearned = Date.today();
       smIntervalDays = 1;
       smInterval = 1;
-      nextDate = Date.tomorrow();
+      nextDate = currentDate.addDays(1);
       if (parseInt(req.body.persCard.value.last_rated) < 4) {
         instantRepeat = "1"
       }
@@ -1012,16 +1012,19 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
       if (body.rows.length){
 
         if (_.has(req.body.persCard.value, "last_rated")){
-          calcInterval(_.first(docs).sm_interval, _.escape(req.body.persCard.value.last_rated), function(interval){
+          var instantRepeat = "0";
+          if (parseInt(req.body.persCard.value.last_rated) < 4) {
+            instantRepeat = "1"
+          }
+          calcInterval(_.first(docs).sm_interval, _.escape(req.body.persCard.value.last_rated), parseInt(docs[0].sm_instant_repeat), function(interval){
             calcEF(_.first(docs).sm_ef, _.escape(req.body.persCard.value.last_rated), function(ef){
               var intervalDays = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);
               var currentDate = today.clone();
               var nextDate = currentDate.addDays(parseInt(intervalDays));
 
-              var instantRepeat = "0";
-              if (parseInt(req.body.persCard.value.last_rated) < 4) {
-                instantRepeat = "1"
-              }
+              console.log("intervalnumber: " + interval);
+              console.log("intervaldays: " + intervalDays);
+              console.log("nextdate: " + nextDate)
 
               db.insert(
               { 
