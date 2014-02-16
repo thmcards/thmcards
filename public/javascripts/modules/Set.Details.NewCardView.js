@@ -118,6 +118,7 @@ Cards.module('Set.Details', function(Details, App) {
 							}
 
 							var result = results[i];
+							console.log(result);
 
 							var td = $(document.createElement('td'));
 
@@ -125,7 +126,6 @@ Cards.module('Set.Details', function(Details, App) {
 							imgElem.attr('src', result.tbUrl);
 							imgElem.attr('height', result.tbHeight*1.5);
 							imgElem.attr('width', result.tbWidth*1.5);
-							imgElem.attr('title', result.title);
 							imgElem.attr('alt', result.url);
 							imgElem.addClass('img-polaroid');
 
