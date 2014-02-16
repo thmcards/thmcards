@@ -263,7 +263,8 @@ function ensureAuthenticated(req, res, next) {
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
     var cookie = req.cookies.usr;
-    if (cookie === undefined)
+    console.log(req.cookies.usr);
+    if (cookie === undefined || req.cookies.usr.username !== user)
     {
       var usr = JSON.stringify({
         //"id": user._id,
