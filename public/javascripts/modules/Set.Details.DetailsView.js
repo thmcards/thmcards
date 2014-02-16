@@ -163,12 +163,16 @@ Cards.module('Set.Details', function(Details, App) {
 		onRender: function() {
 			var that = this;
 			var cardCarousel = this.$el.find('div#cardCarousel');
+
 			
 			if(this.collection.length == 0) {
-				this.$el.find("a.carousel-control").hide();
 				this.$el.find("button.play-meteor").prop('disabled', true);
 				this.$el.find("button.learn").prop('disabled', true);
 				this.$el.find("button.memo").prop('disabled', true);
+			}
+
+			if(this.collection.length <= 1) {
+				this.$el.find("a.carousel-control").hide();
 			}
 			
 			this.$el.find("div.item").first().addClass("active");
@@ -196,6 +200,8 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$('#btnToListLayout').removeClass("active");
 			$('#btnToCardLayout').addClass("active");
+
+			console.log
 
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
