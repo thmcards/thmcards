@@ -17,6 +17,13 @@ Cards.module('Set.Details', function(Details, App) {
 		cancel: function(ev) {
 			history.back();
 		},
+		onKeypress: function(ev) {
+			var ENTER_KEY = 13;
+
+			if(ev.which === ENTER_KEY && $("#new-set-input").is(":focus")) {
+				this.showSetModal();
+			}
+		},
 		saveCard: function(ev) {
 			this.ui.saveBtn.button('loading');
 			var that = this;
@@ -77,9 +84,9 @@ Cards.module('Set.Details', function(Details, App) {
 			var that = this;
 
 			var searchInput = $(ev.target).parent().prev();
-			var searchString = searchInput.val();
+			var searchString = searchInput.val().trim();
 
-			if (searchString.trim() != '') {
+			if (searchString != '') {
 				setTimeout(function(){
 					var imageSearch = new google.search.ImageSearch();
 					imageSearch.setResultSetSize(8);
@@ -160,6 +167,12 @@ Cards.module('Set.Details', function(Details, App) {
     		} else {
     			$(ev.target).next().removeAttr('disabled');
     		}
+
+    		var ENTER_KEY = 13;
+
+			if(ev.which === ENTER_KEY && $("#set-details-newcard-input-pic-front-search").is(":focus")) {
+				this.pictureSearch(ev);
+			}
 		},
 		focusInput: function(ev) {
 			var loadSearch = function() {

@@ -175,7 +175,6 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var cardCount = this.$('.item').length;
 			var currentIndex = this.$('div.item.active').index() + 1;
-			this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
 
 			cardCarousel.carousel({ interval: false });
 
@@ -203,7 +202,8 @@ Cards.module('Set.Details', function(Details, App) {
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture !== null){
 					this.$el.find("a.btn-showPictureModal").show();
-				}		
+				}	
+				this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);	
 			}
 		},
 		onShow: function() {

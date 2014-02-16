@@ -113,8 +113,8 @@ Cards.module('Set.Details', function(Details, App) {
 			var that = this;
 
 			var searchInput = $(ev.target).parent().prev();
-			var searchString = searchInput.val();
-			if (searchString.trim() != '') {
+			var searchString = searchInput.val().trim();
+			if (searchString != '') {
 				setTimeout(function(){
 					var imageSearch = new google.search.ImageSearch();
 					imageSearch.setResultSetSize(8);
