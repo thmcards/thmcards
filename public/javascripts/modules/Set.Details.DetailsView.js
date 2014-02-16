@@ -201,21 +201,21 @@ Cards.module('Set.Details', function(Details, App) {
 			$('#btnToListLayout').removeClass("active");
 			$('#btnToCardLayout').addClass("active");
 
-			var setOwner = this.collection.at(0).get('owner');
-
-			if(JSON.parse($.cookie('usr')).username == setOwner) {
-				this.$el.find("a.btn-editCard").show();
-			} else {
-				this.$el.find("a.btn-editCard").hide();
-			}
-
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
+				var setOwner = this.collection.at(0).get('owner');
+
 				if(actualCard.get('front').picture !== null){
 					this.$el.find("a.btn-showPictureModal").show();
 				}	
 				this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);	
+
+				if(JSON.parse($.cookie('usr')).username == setOwner) {
+					this.$el.find("a.btn-editCard").show();
+				} else {
+					this.$el.find("a.btn-editCard").hide();
+				}
 			}
 		},
 		onShow: function() {
@@ -300,7 +300,17 @@ Cards.module('Set.Details', function(Details, App) {
 			$('#btnToListLayout').addClass("active");
 			$('#btnToCardLayout').removeClass("active");
 
-			console.log(this.collection);
+			if(this.collection.length !== 0) {
+				var setOwner = this.collection.at(0).get('owner');
+
+				if(JSON.parse($.cookie('usr')).username == setOwner) {
+					this.$el.find("a.btn-listEditCard").show();
+					this.$el.find("a.btn-listDeleteCard").show();
+				} else {
+					this.$el.find("a.btn-listEditCard").hide();
+					this.$el.find("a.btn-listDeleteCard").hide();
+				}
+			}
 		}
 	});
 });
