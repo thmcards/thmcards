@@ -1678,8 +1678,8 @@ var checkBadgeStammgast = function(owner, sessionID) {
 
         if(result) {
           issueBadge(badge, owner, sessionID, rank, days);
-          setBadgeProgress(badge, owner, days, body.rank[nextRank]);
         }
+        setBadgeProgress(badge, owner, days, body.rank[nextRank]);
       })
     });
   }
