@@ -195,6 +195,9 @@ Cards.module('Set.Details', function(Details, App) {
 				console.log("yeah");
 			});
 
+			$('#btnToListLayout').removeClass("active");
+			$('#btnToCardLayout').addClass("active");
+
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
