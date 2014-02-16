@@ -17,13 +17,6 @@ Cards.module('Set.Details', function(Details, App) {
 		cancel: function(ev) {
 			history.back();
 		},
-		onKeypress: function(ev) {
-			var ENTER_KEY = 13;
-
-			if(ev.which === ENTER_KEY && $("#new-set-input").is(":focus")) {
-				this.showSetModal();
-			}
-		},
 		saveCard: function(ev) {
 			this.ui.saveBtn.button('loading');
 			var that = this;
@@ -167,12 +160,6 @@ Cards.module('Set.Details', function(Details, App) {
     		} else {
     			$(ev.target).next().removeAttr('disabled');
     		}
-
-    		var ENTER_KEY = 13;
-
-			if(ev.which === ENTER_KEY && $("#set-details-newcard-input-pic-front-search").is(":focus")) {
-				this.pictureSearch(ev);
-			}
 		},
 		focusInput: function(ev) {
 			var loadSearch = function() {
@@ -192,6 +179,8 @@ Cards.module('Set.Details', function(Details, App) {
 
 			$("#front-textarea").wysihtml5(editorConfig);
 			$("#back-textarea").wysihtml5(editorConfig);
+
+			/**
 
 			var frontEditor = $('#front-textarea').data("wysihtml5").editor;
 			var backEditor = $('#back-textarea').data("wysihtml5").editor;
@@ -217,7 +206,7 @@ Cards.module('Set.Details', function(Details, App) {
 			        that.$('td.backtext').find('small.char-cnt').text(backlength);
 			    });
 			});
-
+			**/
 
 
 			/**
