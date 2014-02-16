@@ -79,84 +79,75 @@ Cards.module('Set.Details', function(Details, App) {
 			var searchInput = $(ev.target).parent().prev();
 			var searchString = searchInput.val();
 
-			console.log("searching for", searchString);
+			if (searchString.trim() != '') {
+				setTimeout(function(){
+					var imageSearch = new google.search.ImageSearch();
+					imageSearch.setResultSetSize(8);
+					imageSearch.setNoHtmlGeneration();
+					imageSearch.setRestriction(
+					  google.search.Search.RESTRICT_SAFESEARCH,
+					  google.search.Search.SAFESEARCH_STRICT
+					);
 
-			
-			/*var loadSearch = function() {
-				console.log("search loaded");
-			}
-			
-			google.load('search', '1', {callback: loadSearch });
-*/
-			setTimeout(function(){
-				var imageSearch = new google.search.ImageSearch();
-				imageSearch.setResultSetSize(8);
-				imageSearch.setNoHtmlGeneration();
-				imageSearch.setRestriction(
-				  google.search.Search.RESTRICT_SAFESEARCH,
-				  google.search.Search.SAFESEARCH_STRICT
-				);
+					imageSearch.setSearchCompleteCallback(this, function(){
+						console.log("results", imageSearch.results);
+						if (imageSearch.results && imageSearch.results.length > 0) {
 
-				imageSearch.setSearchCompleteCallback(this, function(){
-					console.log("results", imageSearch.results);
-					if (imageSearch.results && imageSearch.results.length > 0) {
+							var results = imageSearch.results;
 
-						var results = imageSearch.results;
+							var table = $(document.createElement('table'));
+							table.attr('id', 'google-imagesearch-result');
+							var tbody = $(document.createElement('tbody'));
 
-						var table = $(document.createElement('table'));
-						table.attr('id', 'google-imagesearch-result');
-						var tbody = $(document.createElement('tbody'));
+							table.append(tbody);
+							$("#pictureSearchModal-body").empty();
+							$("#pictureSearchModal-body").append(table);
 
-						table.append(tbody);
-						$("#pictureSearchModal-body").empty();
-						$("#pictureSearchModal-body").append(table);
+							var tr;
+							for(var i = 0; i < results.length; i++) {
+								if(!(i % 2)) {
+									tr = $(document.createElement('tr'));
+								}
 
-						var tr;
-						for(var i = 0; i < results.length; i++) {
-							if(!(i % 2)) {
-								tr = $(document.createElement('tr'));
+								var result = results[i];
+
+								var td = $(document.createElement('td'));
+
+								var imgElem = $(document.createElement('img'));
+								imgElem.attr('src', result.tbUrl);
+								imgElem.attr('height', result.tbHeight*1.5);
+								imgElem.attr('width', result.tbWidth*1.5);
+								imgElem.attr('alt', result.url);
+								imgElem.addClass('img-polaroid');
+
+								imgElem.bind('click', function(ev){
+									searchInput.val($(ev.target).attr('alt'));
+									that.ui.pictureSearchModal.modal('hide');
+									$("#pictureSearchModal-body").empty();
+								});
+								td.append(imgElem);
+								console.log(imgElem);
+								tr.append(td);
+
+								if(i % 2) {
+									tbody.append(tr);
+								}
 							}
-
-							var result = results[i];
-							console.log(result);
-
-							var td = $(document.createElement('td'));
-
-							var imgElem = $(document.createElement('img'));
-							imgElem.attr('src', result.tbUrl);
-							imgElem.attr('height', result.tbHeight*1.5);
-							imgElem.attr('width', result.tbWidth*1.5);
-							imgElem.attr('alt', result.url);
-							imgElem.addClass('img-polaroid');
-
-							imgElem.bind('click', function(ev){
-								searchInput.val($(ev.target).attr('alt'));
-								that.ui.pictureSearchModal.modal('hide');
-								$("#pictureSearchModal-body").empty();
-							});
-							td.append(imgElem);
-							console.log(imgElem);
-							tr.append(td);
-
-							if(i % 2) {
-								tbody.append(tr);
-							}
+						} else {
+							alert("no results");
+							this.ui.pictureSearchModal.modal('hide');
 						}
-					} else {
-						alert("no results");
-						this.ui.pictureSearchModal.modal('hide');
-					}
-		        }, null);
+			        }, null);
 
-		        imageSearch.execute(searchString);
-		        $("#pictureSearchModal-footer").empty();
-		        $("#pictureSearchModal-footer").append(google.search.Search.getBranding());
+			        imageSearch.execute(searchString);
+			        $("#pictureSearchModal-footer").empty();
+			        $("#pictureSearchModal-footer").append(google.search.Search.getBranding());
 
-			}, 100);
-		        
-			$("#pictureSearchModal-body").scrollTop();
-			this.ui.pictureSearchModal.modal('show');
-
+				}, 100);
+			        
+				$("#pictureSearchModal-body").scrollTop();
+				this.ui.pictureSearchModal.modal('show');
+			}
 			this.ui.pictureSearchModal.on('hide', function() {
 				$("#pictureSearchModal-body").empty();
 			})

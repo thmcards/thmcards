@@ -114,85 +114,74 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var searchInput = $(ev.target).parent().prev();
 			var searchString = searchInput.val();
+			if (searchString.trim() != '') {
+				setTimeout(function(){
+					var imageSearch = new google.search.ImageSearch();
+					imageSearch.setResultSetSize(8);
+					imageSearch.setNoHtmlGeneration();
+					imageSearch.setRestriction(
+					  google.search.Search.RESTRICT_SAFESEARCH,
+					  google.search.Search.SAFESEARCH_STRICT
+					);
 
-			console.log("searching for", searchString);
+					imageSearch.setSearchCompleteCallback(this, function(){
+						if (imageSearch.results && imageSearch.results.length > 0) {
 
-			
-			/*var loadSearch = function() {
-				console.log("search loaded");
-			}
-			
-			google.load('search', '1', {callback: loadSearch });
-*/
-			setTimeout(function(){
-				var imageSearch = new google.search.ImageSearch();
-				imageSearch.setResultSetSize(8);
-				imageSearch.setNoHtmlGeneration();
-				imageSearch.setRestriction(
-				  google.search.Search.RESTRICT_SAFESEARCH,
-				  google.search.Search.SAFESEARCH_STRICT
-				);
+							var results = imageSearch.results;
 
-				imageSearch.setSearchCompleteCallback(this, function(){
-					console.log("results", imageSearch.results);
-					if (imageSearch.results && imageSearch.results.length > 0) {
+							var table = $(document.createElement('table'));
+							table.attr('id', 'google-imagesearch-result');
+							var tbody = $(document.createElement('tbody'));
 
-						var results = imageSearch.results;
+							table.append(tbody);
+							$("#editcard-pictureSearchModal-body").empty();
+							$("#editcard-pictureSearchModal-body").append(table);
 
-						var table = $(document.createElement('table'));
-						table.attr('id', 'google-imagesearch-result');
-						var tbody = $(document.createElement('tbody'));
+							var tr;
+							for(var i = 0; i < results.length; i++) {
+								if(!(i % 2)) {
+									tr = $(document.createElement('tr'));
+								}
 
-						table.append(tbody);
-						$("#editcard-pictureSearchModal-body").empty();
-						$("#editcard-pictureSearchModal-body").append(table);
+								var result = results[i];
 
-						var tr;
-						for(var i = 0; i < results.length; i++) {
-							if(!(i % 2)) {
-								tr = $(document.createElement('tr'));
+								var td = $(document.createElement('td'));
+
+								var imgElem = $(document.createElement('img'));
+								imgElem.attr('src', result.tbUrl);
+								imgElem.attr('height', result.tbHeight*1.5);
+								imgElem.attr('width', result.tbWidth*1.5);
+								imgElem.attr('alt', result.url);
+								imgElem.addClass('img-polaroid');
+
+								imgElem.bind('click', function(ev){
+									searchInput.val($(ev.target).attr('alt'));
+									that.ui.pictureSearchModal.modal('hide');
+									$("#editcard-pictureSearchModal-body").empty();
+								});
+								td.append(imgElem);
+								console.log(imgElem);
+								tr.append(td);
+
+								if(i % 2) {
+									tbody.append(tr);
+								}
 							}
-
-							var result = results[i];
-
-							var td = $(document.createElement('td'));
-
-							var imgElem = $(document.createElement('img'));
-							imgElem.attr('src', result.tbUrl);
-							imgElem.attr('height', result.tbHeight*1.5);
-							imgElem.attr('width', result.tbWidth*1.5);
-							imgElem.attr('title', result.title);
-							imgElem.attr('alt', result.url);
-							imgElem.addClass('img-polaroid');
-
-							imgElem.bind('click', function(ev){
-								searchInput.val($(ev.target).attr('alt'));
-								that.ui.pictureSearchModal.modal('hide');
-								$("#editcard-pictureSearchModal-body").empty();
-							});
-							td.append(imgElem);
-							console.log(imgElem);
-							tr.append(td);
-
-							if(i % 2) {
-								tbody.append(tr);
-							}
+						} else {
+							alert("no results");
+							this.ui.pictureSearchModal.modal('hide');
 						}
-					} else {
-						alert("no results");
-						this.ui.pictureSearchModal.modal('hide');
-					}
-		        }, null);
+			        }, null);
 
-		        imageSearch.execute(searchString);
-		        $("#editcard-pictureSearchModal-footer").empty();
-		        $("#editcard-pictureSearchModal-footer").append(google.search.Search.getBranding());
+			        imageSearch.execute(searchString);
+			        $("#editcard-pictureSearchModal-footer").empty();
+			        $("#editcard-pictureSearchModal-footer").append(google.search.Search.getBranding());
 
-			}, 100);
-		        
-			$("#editcard-pictureSearchModal-body").scrollTop();
-			this.ui.pictureSearchModal.modal('show');
-
+				}, 100);
+			        
+				$("#editcard-pictureSearchModal-body").scrollTop();
+				this.ui.pictureSearchModal.modal('show');
+			}
 			this.ui.pictureSearchModal.on('hide', function() {
 				$("#editcard-pictureSearchModal-body").empty();
 			})
