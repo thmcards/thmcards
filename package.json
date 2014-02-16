@@ -1,6 +1,6 @@
 {
   "name": "thmcards",
-  "version": "1.0.0-4",
+  "version": "1.0.0-7",
   "private": true,
   "scripts": {
     "start": "node app.js"

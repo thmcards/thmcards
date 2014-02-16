@@ -134,7 +134,7 @@ Cards.module('Set.Details', function(Details, App) {
 								}
 							}
 						} else {
-							alert("no results");
+							alert("Es wurden keine passenden Ergebnisse gefunden");
 							this.ui.pictureSearchModal.modal('hide');
 						}
 			        }, null);
@@ -171,8 +171,8 @@ Cards.module('Set.Details', function(Details, App) {
 		onShow: function() {
 			var editorConfig = {
 				"font-styles": false,
-				"color": false,
-				"lists": false,
+				"color": true,
+				"lists": true,
 				"image": false
 			}
 			var that = this;

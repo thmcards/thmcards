@@ -135,6 +135,11 @@ code {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
 }
 
+.box ul, .box ol {
+  padding:0;
+  margin:0;
+}
+
 .box:before, .box:after
 {
   position: absolute;
@@ -220,7 +225,7 @@ code {
   display: inline-block;
   vertical-align: middle;
   width: 580px;
-  font-size: 2em;
+  font-size: 1.5em;
 }
 .double {
   display: inline-block;

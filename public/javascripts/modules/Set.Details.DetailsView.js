@@ -14,7 +14,7 @@ Cards.module('Set.Details', function(Details, App) {
 			var frontSymbol = $("div.item.active").find("img.cardfront-symbol")
 			var backSymbol = $("div.item.active").find("img.cardback-symbol")
 
-			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN") {
+			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN" || ev.target.nodeName == "UL" || ev.target.nodeName == "OL" || ev.target.nodeName == "LI") {
 				front.toggle();
 				back.toggle();
 				this.$el.find("div.cardContent.back").toggleClass('active');
