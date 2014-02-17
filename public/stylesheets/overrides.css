@@ -135,11 +135,6 @@ code {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
 }
 
-.box ul, .box ol {
-  padding:0;
-  margin:0;
-}
-
 .box:before, .box:after
 {
   position: absolute;
@@ -225,7 +220,7 @@ code {
   display: inline-block;
   vertical-align: middle;
   width: 580px;
-  font-size: 1.5em;
+  font-size: 2em;
 }
 .double {
   display: inline-block;
@@ -371,7 +366,7 @@ button.rate-answer.wrong {
 
 .popover-content {
   display: block;
-  width: 300px!important;
+  width: 280px!important;
 }
 
 .emptyCellList {
@@ -432,7 +427,6 @@ div.meteor-playcard {
   padding: 5px;
   width: 100px;
 }
-
 
 #meteor-countdown {
   overflow: hidden;
