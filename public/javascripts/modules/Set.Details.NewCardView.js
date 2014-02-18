@@ -175,62 +175,18 @@ Cards.module('Set.Details', function(Details, App) {
 				"lists": true,
 				"image": false
 			}
-			var that = this;
 
 			$("#front-textarea").wysihtml5(editorConfig);
 			$("#back-textarea").wysihtml5(editorConfig);
 
-			/**
+			var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
+			var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
 
-			var frontEditor = $('#front-textarea').data("wysihtml5").editor;
-			var backEditor = $('#back-textarea').data("wysihtml5").editor;
-			var frontlength = 0;
-			var backlength = 0;
-
-			frontEditor.on("load", function() {
-			    var $doc = $(editor.composer.doc);
-			    $doc.keyup(function(evt){
-			    	console.log("front");
-			    	frontlength = $doc.find('body.wysihtml5-editor').text().length;
-			        console.log($doc.find('body.wysihtml5-editor').text().length);
-			        that.$('td.fronttext').find('small.char-cnt').text(frontlength);
-			    });
-			});
-
-			backEditor.on("load", function() {
-			    var $doc = $(editor.composer.doc);
-			    $doc.keyup(function(evt){
-			    	console.log("back");
-			    	backlength = $doc.find('body.wysihtml5-editor').text().length;
-			        console.log($doc.find('body.wysihtml5-editor').text().length);
-			        that.$('td.backtext').find('small.char-cnt').text(backlength);
-			    });
-			});
-			**/
+			$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
+			$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
 
 
-			/**
 
-			$('.wysihtml5-sandbox').contents().find('body').on("keyup",function(ev) {
-		        var frontlength = $.trim($('.wysihtml5-sandbox').contents().find('body.fronttext').text()).length;
-		        var backlength = $.trim($('.wysihtml5-sandbox').contents().find('body.backtext').text()).length;
-
-		        if($(ev.currentTarget).hasClass("fronttext")) {
-		        	$('td.fronttext').find('small.char-cnt').text(frontlength);
-		        }
-
-		        if($(ev.currentTarget).hasClass("backtext")) {
-		        	$('td.backtext').find('small.char-cnt').text(backlength);
-		        }
-
-		        if(frontlength<=100 && backlength<=100) {
-		        	$('button.save').prop("disabled", false);
-		        } else {
-		        	$('button.save').prop("disabled", true);
-		        }
-		    });
-
-			**/
 		}
 	});
 });
