@@ -8,6 +8,8 @@
 
     <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
 
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
 
@@ -155,7 +157,9 @@
           <i class="glyphicon glyphicon-picture"></i>
           <small>Bild anzeigen</small>
         </a>
-        <div class="block"><div class="cardContent centered front active"><%= front.text %></div><div class="cardContent centered back" style="display:none"><%= back.text %></div>
+        <div class="block"><div class="cardContent centered front active">
+          <%= front.text %>
+        </div><div class="cardContent centered back" style="display:none"><%= back.text %></div>
       </div>
     </script>
 
@@ -189,7 +193,7 @@
 
     <script type="text/template" id="set-details-listitem">
         <td>
-          <span style="font-family:'Georgia'"><%= front.text %></span>
+          <span style="font-family:'Georgia'"><cardcode><%= front.text %></cardcode></span>
           <% if(front.picture) { %>
             <a class="card-front btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
               <i class="glyphicon glyphicon-picture"></i>
@@ -197,7 +201,7 @@
           <% } %>
         </td>
         <td>
-          <span style="font-family:'Georgia'"><%= back.text %></span>
+          <span style="font-family:'Georgia'"><cardcode><%= back.text %></cardcode></span>
           <% if(back.picture) { %>
             <a class="card-back btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
               <i class="glyphicon glyphicon-picture"></i>
@@ -1334,6 +1338,8 @@
     <script type="text/javascript" src="/javascripts/lib/jquery.raty.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/jquery.clickout.js"></script>
 
+    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+
     <script src="https://backpack.openbadges.org/issuer.js"></script>
 
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -1348,6 +1354,9 @@
       MathJax.Hub.Config({
         tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
       });
+
+      hljs.initHighlightingOnLoad();
+      //$('cardcode').each(function(i, e) {hljs.highlightBlock(e)});
 
       var socket = io.connect('http://localhost:3000');
       socket.on('set', function (data) {

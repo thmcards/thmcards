@@ -220,13 +220,13 @@ code {
   display: inline-block;
   vertical-align: middle;
   width: 580px;
-  font-size: 2em;
+  font-size: 1.2em;
 }
 .double {
   display: inline-block;
   vertical-align: middle;
   width: 380px;
-  font-size: 1.4em;
+  font-size: 1.1em;
   line-height: 1.3em;
 }
 .navbar .navbar-brand {
@@ -367,6 +367,10 @@ button.rate-answer.wrong {
 .popover-content {
   display: block;
   width: 280px!important;
+}
+
+.hljs {
+  background: none;
 }
 
 .emptyCellList {
