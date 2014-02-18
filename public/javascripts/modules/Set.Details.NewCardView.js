@@ -175,10 +175,17 @@ Cards.module('Set.Details', function(Details, App) {
 				"lists": true,
 				"image": false
 			}
-			var that = this;
 
 			$("#front-textarea").wysihtml5(editorConfig);
 			$("#back-textarea").wysihtml5(editorConfig);
+
+			var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
+			var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
+
+			$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
+			$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
+
+
 
 		}
 	});

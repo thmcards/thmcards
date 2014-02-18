@@ -218,6 +218,12 @@ Cards.module('Set.Details', function(Details, App) {
 			$("#set-details-editcard-input-pic-front-search").val(this.model.attributes.front.picture);
 			$("#set-details-editcard-input-pic-back-search").val(this.model.attributes.back.picture);
 
+			var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
+			var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
+
+			$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
+			$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
+
 		},
 		onClose: function(){
 			$(".btn-cardDelete").off('clickout');
