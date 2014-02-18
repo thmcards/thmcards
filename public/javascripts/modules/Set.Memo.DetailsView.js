@@ -230,6 +230,9 @@ Cards.module('Set.Memo', function(Memo, App) {
 					this.$el.find("a.cardcontent-front").show();
 				}		
 			}
+		},
+		onShow: function() {
+			$('div.double').each(function(i, e) {hljs.highlightBlock(e)});
 		}
 	});
 });

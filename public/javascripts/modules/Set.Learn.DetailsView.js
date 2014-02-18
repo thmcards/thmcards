@@ -286,6 +286,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 				$("div.learn-cardHelptext").show();				
 			}
 
+			$('div.cardContent').each(function(i, e) {hljs.highlightBlock(e)});
+
 			this.$el.find("div.item").first().addClass("active");
 
 			this.$el.find("div.cardContent.back").removeClass('active');
