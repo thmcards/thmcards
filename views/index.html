@@ -1213,7 +1213,7 @@
         if(typeof(user) != "undefined") {
       %>
         <div style="float:left; width:75px; height:75px; margin-right:10px;">
-        <img src="/badges/<%= _id %>_<%= user.rank %><% if(user.issuedOn == 0) { %>_gray<% } %>.png" alt="<%= name %>" width="75" height="75" />
+        <img src="/badges/<%= _id %>_<%= user.rank %><% if(user.issuedOn == 0 || _.isUndefined(user.issuedOn)) { %>_gray<% } %>.png" alt="<%= name %>" width="75" height="75" />
         </div>
         <div>
         <p>
