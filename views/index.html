@@ -1171,11 +1171,6 @@
       <p class="pull-left; width:50%">Du hast die Möglichkeit, deine gesammelten Badges mit dem Mozilla Badge Backpack synchronisieren. Um deine Badges der <a href="http://openbadges.org/" target="_blank">OpenBadges Plattform</a> hinzuzufügen, klicke auf den folgenden Button:</p><p class="pull-right; width:50%" ><a class="btn btn-default issueBadge"><img src="http://openbadges.org/wp-content/uploads/2013/02/OpenBadges_Insignia_EarnOur.png" /></a></p>
       </div>
         <table class="table">
-          <thead>
-            <tr>
-              <th>Beschreibung</th>
-            </tr>
-          </thead>
           <tbody></tbody>
         </table>
     </script>
@@ -1191,21 +1186,13 @@
       <table class="table table-bordered" style="margin-bottom:0; position:relative; bottom:5px; float:left;width:100%">
         <tbody>
           <tr>
-          <td colspan="5"><strong><%= name %></strong></td>
-          </tr>
-          <tr>
-            <td align="center"><img src="/badges/<%= _id %>_1.png" height="60" /><br /><strong>Gold</strong></td>
-            <td align="center"><img src="/badges/<%= _id %>_2.png" height="60" /><br /><strong>Silber</strong></td>
-            <td align="center"><img src="/badges/<%= _id %>_3.png" height="60" /><br /><strong>Bronze</strong></td>
-            <td rowspan="2" width="40%"><%= description %></p></td>
-            <td rowspan="2" width="30%">
+          <td colspan="4"><strong><%= name %></strong></td><td rowspan="3" width="20%" align="center">
       <%
         if(typeof(user) != "undefined") {
       %>
-        <div style="float:left; width:75px; height:75px; margin-right:10px;">
+        
         <img src="/badges/<%= _id %>_<%= user.rank %><% if(user.issuedOn == 0 || _.isUndefined(user.issuedOn)) { %>_gray<% } %>.png" alt="<%= name %>" width="75" height="75" />
-        </div>
-        <div>
+        
         <p>
           <strong><%= name %> 
           <% if(user.rank == 3) { %> (Bronze) <% } %>
@@ -1228,11 +1215,17 @@
         <div class="progress">
           <div class="progress-bar" role="progressbar"  style="width: <%= user.progress/user.nextRank*100 %>%">
           </div>
-          </div>
         </div>
       <%
         }
       %></td>
+          </tr>
+          <tr>
+            <td align="center"><img src="/badges/<%= _id %>_1.png" height="60" /><br /><strong>Gold</strong></td>
+            <td align="center"><img src="/badges/<%= _id %>_2.png" height="60" /><br /><strong>Silber</strong></td>
+            <td align="center"><img src="/badges/<%= _id %>_3.png" height="60" /><br /><strong>Bronze</strong></td>
+            <td rowspan="2" width="40%"><%= description %></p></td>
+            
           </tr>
           <tr>
             <td class="active" align="center"><%= rank["1"] %> <%= unit %></td>
