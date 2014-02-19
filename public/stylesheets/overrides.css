@@ -216,6 +216,7 @@ code {
 
 /* The element to be centered, can
    also be of any width and height */ 
+
 .centered {
   display: inline-block;
   vertical-align: middle;
