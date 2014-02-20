@@ -230,6 +230,7 @@ code {
   font-size: 1.1em;
   line-height: 1.3em;
 }
+
 .navbar .navbar-brand {
   padding: 10px 20px;
 }
@@ -320,6 +321,10 @@ img.memoback {
   color: #666;
   font-style: italic;
   font-family: 'Georgia', serif;
+}
+
+.box-indicator {
+  margin-top: 2px;
 }
 
 .memo-cardHelptext {

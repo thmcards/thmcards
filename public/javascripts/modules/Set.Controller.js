@@ -119,7 +119,7 @@ Cards.module('Set', function(Set, App){
 							var controlsView = new Cards.Set.Learn.SideBar.ControlsView({ collection: personalCollection });
 							learnLayout.controlsRegion.show(controlsView);
 
-							var sideBarView = new Cards.Set.Learn.SideBar.SideBarView({ model: set});
+							var sideBarView = new Cards.Set.Learn.SideBar.SideBarView({ model: set });
 							learnLayout.sideBarRegion.show(sideBarView);
 						},
 						error: function(){

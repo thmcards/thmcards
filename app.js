@@ -515,11 +515,11 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
 
-  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+  db.view('cards', 'personal_card', { startkey: new Array(req.params.id), endkey: new Array(req.params.id, {}) }, function(err, body) {
     var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
     var setIds = new Array();
     _.each(cards, function(card){      
-      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id) && (row.value.owner == username)); });
 
       if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
         setIds.push(card.value.setId);
