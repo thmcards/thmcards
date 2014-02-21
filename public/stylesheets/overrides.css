@@ -123,6 +123,7 @@ code {
 
 .box
 {
+  border: 1px solid #DDDDDD;
   font-family:'Georgia', serif;
   position: relative;
   height: 278px;
@@ -294,7 +295,7 @@ img.memoback {
 }
 
 .carousel-inner {
-  border: 1px solid #DDDDDD;
+  /** border: 1px solid #DDDDDD; **/
   border-radius: 4px;
 }
 
