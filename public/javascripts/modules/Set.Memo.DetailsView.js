@@ -193,7 +193,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			}
 		},
 		initialize: function() {
-
+			
 		},
 		onRender: function() {	
 			var that = this;
