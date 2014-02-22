@@ -358,6 +358,12 @@ app.get('/login', function(req, res) {
   });
 });
 
+app.get('/impressum', function(req, res) {
+  fs.readFile(__dirname + '/views/impressum.html', 'utf8', function(err, text){
+    res.send(text);
+  });
+});
+
 app.get('/auth/twitter',
   passport.authenticate('twitter'));
 
@@ -1123,6 +1129,7 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
   user = user.username;
 
   db.view('score', 'highscore_by_game_user', { startkey: new Array(game, user), endkey: new Array(game, user), group: true }, function(err, body) {
+    console.log("1126", body, err);
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
 
       var gameHighscore = _.first(body.rows).value;
@@ -1218,12 +1225,15 @@ app.get('/score/:username/:set', function(req, res){
   var result = { score: 0, badges: 0, badgesTotal: 0 };
 
   db.view('score', 'score_by_game_user_set', { key: new Array(game, user, setId) }, function(err, body) {
-    if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
-      var score = _.first(body.rows);
-      result.score = score.value;
-      res.json(result);
-    } else {
-      res.json(result);
+    if(!err) {
+      if(!_.isUndefined(body.rows) && _.has(body, "rows") && !_.isEmpty(body.rows)) {
+        console.log(body);
+        var score = _.first(body.rows);
+        result.score = score.value;
+        res.json(result);
+      } else {
+        res.json(result);
+      }
     }
   });
 });
@@ -1231,6 +1241,7 @@ app.get('/score/:username/:set', function(req, res){
 
 app.post('/score/:username', ensureAuthenticated, function(req, res){
     var game = 'meteor';
+    console.log(req.body);
     var owner = req.body.owner;
     var setId = req.body.setId;
     var points = req.body.points;
@@ -1255,6 +1266,7 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
     }
 
     db.view('score', 'score_by_game_set', { key: new Array(game, setId) }, function(err, body) {
+      if(!err && !_.isUndefined(body) && _.has(body, "rows")) {
       var scores = new Array();
 
       _.each(body.rows, function(score){
@@ -1305,6 +1317,7 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
       x = _.compact(x);
 
       res.json(x);
+      }
     });
 });
 
@@ -1655,9 +1668,9 @@ var setBadgeProgress = function(badge, owner, score, nextRank) {
       db.insert(badgeProgress,    
       function(err, body) {
         if(!err && body.ok) {
-          console.log("score update");
+          console.log(badge, "score update");
         } else {
-          console.log("score error");
+          console.log(badge, "score error");
         }
       });  
     }
@@ -1693,50 +1706,53 @@ var checkBadgeMeteor = function(owner, sessionID) {
     if (!err) {
       var rank = body.rank;
       db.view('score', 'game_by_game_user', { keys: new Array(new Array("meteor", owner)) }, function(err, body) {
-        var scores = _.pluck(body.rows, "value");
+        if(!_.isUndefined(body) && _.has(body, "rows")) {
+          console.log(body);
+          var scores = _.pluck(body.rows, "value");
 
-        var level = _.filter(scores, function(score) { return score.level >= 10 });
+          var level = _.filter(scores, function(score) { return score.level >= 10 });
 
-        var levels = _.groupBy(level, "setId");
+          var levels = _.groupBy(level, "setId");
 
-        var maxLevels = new Array();
-        _.each(levels, function(level) {
-          maxLevels.push(_.max(level, function(lvl){ return lvl.level }));
-        });
+          var maxLevels = new Array();
+          _.each(levels, function(level) {
+            maxLevels.push(_.max(level, function(lvl){ return lvl.level }));
+          });
 
-        maxLevels = _.groupBy(maxLevels, "setId");
+          maxLevels = _.groupBy(maxLevels, "setId");
 
-        var xo = _.groupBy(_.flatten(maxLevels), function(lvl){
-                    if(lvl.level >= 30) return "thirty";
-                    if(lvl.level >= 20 && lvl.level < 30) return "twenty";
-                    if(lvl.level < 20) return "ten";
-                  })
-        var rankValue = rank[2];
-        var nextRank = rank[3];
+          var xo = _.groupBy(_.flatten(maxLevels), function(lvl){
+                      if(lvl.level >= 30) return "thirty";
+                      if(lvl.level >= 20 && lvl.level < 30) return "twenty";
+                      if(lvl.level < 20) return "ten";
+                    })
+          var rankValue = rank[2];
+          var nextRank = rank[3];
 
-        if(_.has(xo, "ten")){
-          if(xo.ten.length >= 2) {
-            issueBadge(badge, owner, sessionID, 3, xo.ten.length);
-          } else  {
-            setBadgeProgress(badge, owner, 5-xo.ten.length, 10);
+          if(_.has(xo, "ten")){
+            if(xo.ten.length >= 2) {
+              issueBadge(badge, owner, sessionID, 3, xo.ten.length);
+            } else  {
+              setBadgeProgress(badge, owner, 5-xo.ten.length, 10);
+            }
           }
-        }
-        if(_.has(xo, "twenty")){
-          if(xo.twenty.length >= 2) {
-            issueBadge(badge, owner, sessionID, 3, xo.twenty.length);
-          } else  {
-            setBadgeProgress(badge, owner, 5-xo.twenty.length, 20);
+          if(_.has(xo, "twenty")){
+            if(xo.twenty.length >= 2) {
+              issueBadge(badge, owner, sessionID, 3, xo.twenty.length);
+            } else  {
+              setBadgeProgress(badge, owner, 5-xo.twenty.length, 20);
+            }
           }
-        }
-        if(_.has(xo, "thirty")){
-          if(xo.thirty.length >= 2) {
-            issueBadge(badge, owner, sessionID, 3, xo.thirty.length);
-          } else  {
-            setBadgeProgress(badge, owner, 5-xo.thirty.length, 30);
+          if(_.has(xo, "thirty")){
+            if(xo.thirty.length >= 2) {
+              issueBadge(badge, owner, sessionID, 3, xo.thirty.length);
+            } else  {
+              setBadgeProgress(badge, owner, 5-xo.thirty.length, 30);
+            }
           }
-        }
-        if(!_.has(xo, "ten") && !_.has(xo, "twenty") && !_.has(xo, "thirty")) {
-          setBadgeProgress(badge, owner, 0, 10);
+          if(!_.has(xo, "ten") && !_.has(xo, "twenty") && !_.has(xo, "thirty")) {
+            setBadgeProgress(badge, owner, 0, 10);
+          }
         }
       });
     }
