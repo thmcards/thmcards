@@ -220,15 +220,16 @@ Cards.module('Set.Memo', function(Memo, App) {
 			this.$el.find("a.memo-helptext").popover();
 
 
-
+			var card = this.$el.find("div.item").children(".twosided");
 			if(this.collection.length !== 0) {
-				var cardId = this.$el.find("div.item").children(".twosided").attr("data-id");
+				var cardId = card.attr("data-id");
 				console.log(cardId);
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture !== null){
 					this.$el.find("a.cardcontent-front").show();
 				}		
 			}
+			card.find("span.memo-setname").text(this.model.get("name"));
 		},
 		onShow: function() {
 			$('div.double').each(function(i, e) {hljs.highlightBlock(e)});

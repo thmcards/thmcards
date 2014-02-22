@@ -1133,6 +1133,21 @@
               <p class="form-control-static"><%= _.str.capitalize(provider) %></p>
             </div>
           </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-4 control-label">Email</label>
+            <div class="col-md-7">
+              <input type="email" class="form-control" id="inputEmail3" placeholder="Email" value="<%= email %>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Profil öffentlich</label>
+            <div class="col-md-8">
+              <div class="btn-group">
+                <button type="button" class="btn btn-default active">Ja</button>
+                <button type="button" class="btn btn-default">Nein</button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     </script>
@@ -1185,7 +1200,8 @@
         <h3 class="panel-title">Badges</h3>
       </div>
       <div class="panel-body">
-      <p class="pull-left; width:50%">Du hast die Möglichkeit, deine gesammelten Badges mit dem Mozilla Badge Backpack synchronisieren. Um deine Badges der <a href="http://openbadges.org/" target="_blank">OpenBadges Plattform</a> hinzuzufügen, klicke auf den folgenden Button:</p><p class="pull-right; width:50%" ><a class="btn btn-default issueBadge"><img src="http://openbadges.org/wp-content/uploads/2013/02/OpenBadges_Insignia_EarnOur.png" /></a></p>
+      <a href="http://openbadges.org" target="_blank"><img alt="We Issue OpenBadges" src="http://openbadges.org/wp-content/uploads/2013/02/OpenBadges_Insignia_WeIssue.png" style="position:absolute; top:19px; right:30px"></a>
+      <p>Du hast die Möglichkeit, deine gesammelten Badges mit dem Mozilla Badge Backpack zu syncronisieren.<br />Um deine Badges der <a href="http://openbadges.org/" target="_blank">OpenBadges Plattform</a> hinzuzufügen, klicke auf den folgenden Button:</p><p class="" style="text-align:center; margin-top:15px" ><a class="btn btn-success issueBadge">Jetzt syncronisieren</a></p>
       </div>
         <table class="table">
           <tbody></tbody>
