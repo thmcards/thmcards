@@ -195,7 +195,7 @@ Cards.module('Set.Details', function(Details, App) {
 			$.get("/score/"+usr.username+"/"+this.model.get("_id"), function( data ) {
 				$("#meteor-set-points").text(data.score);
 			}).fail(function(){
-				console.log("yeah");
+				
 			});
 
 			$('#btnToListLayout').removeClass("active");

@@ -26,15 +26,22 @@ Cards.module('Profile', function(Profile, App) {
 		issueBadge: function(ev){
 			ev.preventDefault();
 
-			$.get("/syncbadges", function(assertions){
+			if($("#inputEmail3").val() !== '') {
+				$.get("/syncbadges", function(assertions){
 				OpenBadges.issue(assertions, function(errors, successes){
 					console.log("badge errors", errors);
 					console.log("badge successes", successes);
-				});	
-			})
-			.fail(function() {
-			    alert( "error" );
-			})
+					});	
+				})
+				.fail(function() {
+				    alert( "Fehler bei Syncronisation mit OpenBadges. Bitte später erneut versuchen." );
+				})
+			} else {
+				alert("Bitte trage eine Emailadresse ein");
+				$(window).scrollTop(0);
+				$("#inputEmail3").focus();
+			}
+			
 		}
 	});
 });
