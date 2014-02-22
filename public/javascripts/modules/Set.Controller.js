@@ -119,7 +119,7 @@ Cards.module('Set', function(Set, App){
 							var controlsView = new Cards.Set.Learn.SideBar.ControlsView({ collection: personalCollection });
 							learnLayout.controlsRegion.show(controlsView);
 
-							var sideBarView = new Cards.Set.Learn.SideBar.SideBarView({ model: set});
+							var sideBarView = new Cards.Set.Learn.SideBar.SideBarView({ model: set });
 							learnLayout.sideBarRegion.show(sideBarView);
 						},
 						error: function(){
@@ -144,7 +144,7 @@ Cards.module('Set', function(Set, App){
 					personalCollection.fetch({
 						success: function(){
 							
-							var memoView = new Cards.Set.Memo.DetailsView({ collection: personalCollection });
+							var memoView = new Cards.Set.Memo.DetailsView({collection: personalCollection, model: set });
 							memoLayout.detailsRegion.show(memoView);
 						},
 						error: function(){

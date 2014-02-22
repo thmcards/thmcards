@@ -219,7 +219,7 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		onShow: function() {
-
+			$('div.cardContent').each(function(i, e) {hljs.highlightBlock(e)});
 		}
 	});
 
@@ -311,6 +311,9 @@ Cards.module('Set.Details', function(Details, App) {
 					this.$el.find("a.btn-listDeleteCard").hide();
 				}
 			}
+		},
+		onShow: function() {
+			$('cardcode').each(function(i, e) {hljs.highlightBlock(e)});
 		}
 	});
 });

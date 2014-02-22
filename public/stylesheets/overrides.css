@@ -123,6 +123,7 @@ code {
 
 .box
 {
+  border: 1px solid #DDDDDD;
   font-family:'Georgia', serif;
   position: relative;
   height: 278px;
@@ -216,19 +217,21 @@ code {
 
 /* The element to be centered, can
    also be of any width and height */ 
+
 .centered {
   display: inline-block;
   vertical-align: middle;
   width: 580px;
-  font-size: 2em;
+  font-size: 1.2em;
 }
 .double {
   display: inline-block;
   vertical-align: middle;
   width: 380px;
-  font-size: 1.4em;
+  font-size: 1.1em;
   line-height: 1.3em;
 }
+
 .navbar .navbar-brand {
   padding: 10px 20px;
 }
@@ -292,7 +295,7 @@ img.memoback {
 }
 
 .carousel-inner {
-  border: 1px solid #DDDDDD;
+  /** border: 1px solid #DDDDDD; **/
   border-radius: 4px;
 }
 
@@ -319,6 +322,10 @@ img.memoback {
   color: #666;
   font-style: italic;
   font-family: 'Georgia', serif;
+}
+
+.box-indicator {
+  margin-top: 2px;
 }
 
 .memo-cardHelptext {
@@ -367,6 +374,10 @@ button.rate-answer.wrong {
 .popover-content {
   display: block;
   width: 280px!important;
+}
+
+.hljs {
+  background: none;
 }
 
 .emptyCellList {
