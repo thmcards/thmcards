@@ -229,7 +229,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 					this.$el.find("a.cardcontent-front").show();
 				}		
 			}
-			card.find("span.memo-setname").text(this.model.get("name"));
+			card.find("div span.setname").text(this.model.get("name"));
 		},
 		onShow: function() {
 			$('div.double').each(function(i, e) {hljs.highlightBlock(e)});

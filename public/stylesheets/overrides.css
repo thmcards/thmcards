@@ -267,6 +267,14 @@ ul.nav-list li.active {
   top: 13px; 
   font-style: italic;
 }
+.memo-setname {
+  color:#666; 
+  position: absolute; 
+  left: 111px; 
+  top: 13px;
+  width: 220px;
+  text-align: center;
+}
 img.cardside {
   position: absolute; 
   right: 88px; 
@@ -285,8 +293,8 @@ img.memoback {
 
 .btn-showPictureModal {
   position: absolute; 
-  left: 44px; 
-  top: 9px; 
+  left: 10px; 
+  top: 11px; 
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
