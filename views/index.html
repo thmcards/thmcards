@@ -1385,7 +1385,7 @@
 
     <script src="https://backpack.openbadges.org/issuer.js"></script>
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
@@ -1397,9 +1397,6 @@
       MathJax.Hub.Config({
         tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
       });
-
-      //hljs.initHighlightingOnLoad();
-      $('code').each(function(i, e) {hljs.highlightBlock(e)});
 
       var socket = io.connect('http://localhost:3000');
       socket.on('set', function (data) {

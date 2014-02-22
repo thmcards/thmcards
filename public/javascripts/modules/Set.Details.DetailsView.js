@@ -219,7 +219,7 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		onShow: function() {
-			$('div.cardContent').each(function(i, e) {hljs.highlightBlock(e)});
+			$('code').each(function(i, e) {hljs.highlightBlock(e)});
 		}
 	});
 
