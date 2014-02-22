@@ -220,6 +220,7 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		onShow: function() {
 			$('code').each(function(i, e) {hljs.highlightBlock(e)});
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 		}
 	});
 
