@@ -498,15 +498,16 @@ app.get('/set/category/:category', function(req, res){
 });
 
 app.get('/set/:id/personalcard', function(req, res){
+  console.log("get personalcard");
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
 
-  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+  db.view('cards', 'personal_card', { startkey: new Array(req.params.id), endkey: new Array(req.params.id, {}) }, function(err, body) {
 
-    var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
+    var cards = _.filter(body.rows, function(row){ return (row.key[2] == 0); })
     _.each(cards, function(card){      
-      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id) && (row.value.owner == username)); });
       card.value.persCard = persCard;
     }, this);
     cards = _.pluck(cards, "value");
@@ -520,11 +521,11 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
 
-  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+  db.view('cards', 'personal_card', { startkey: new Array(req.params.id), endkey: new Array(req.params.id, {}) }, function(err, body) {
     var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
     var setIds = new Array();
     _.each(cards, function(card){      
-      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id) && (row.value.owner == username)); });
 
       if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
         setIds.push(card.value.setId);
@@ -548,6 +549,7 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
 
 app.get('/set/:id/card', function(req, res){
   console.log(req.params);
+  console.log("get card");
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
@@ -561,16 +563,17 @@ app.get('/set/:id/card', function(req, res){
 });
 
 app.get('/set/:id/memo/card', function(req, res){
+  console.log("memo - get cards");
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
 
   var today = new Date.today();
-  db.view('cards', 'personal_card', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
+  db.view('cards', 'personal_card', { startkey: new Array(req.params.id), endkey: new Array(req.params.id, {}) }, function(err, body) {
 
-    var cards = _.filter(body.rows, function(row){ return ((row.key[2] == 0) && row.value.setId == req.params.id); })
+    var cards = _.filter(body.rows, function(row){ return (row.key[2] == 0); })
     _.each(cards, function(card){      
-      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id) && (row.value.owner == username)); });
       card.value.persCard = persCard;
     }, this);
     cards = _.pluck(cards, "value");
@@ -938,6 +941,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
 });
 
 app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+  console.log("new personalcard");
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -1007,6 +1011,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
 
 
 app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+  console.log("using existing personalcard");
   var time = new Date().getTime();
   var today = Date.today();
   var user = req.session.passport.user;

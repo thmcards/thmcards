@@ -305,10 +305,12 @@
             <td class="cardtext fronttext">
               <input class="form-control fronttext" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
+              <span class="help-block fronttext"></span>
             </td> 
             <td class="cardtext backtext">
               <input class="form-control backtext" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
               </input>
+              <span class="help-block backtext"></span>
             </td> 
           </tr>
           <tr>
@@ -360,10 +362,12 @@
             <td class="cardtext fronttext">
               <input class="form-control fronttext" id="editcard-front-textarea" placeholder="Vorderseite" type="text" style="width:440px; height:200px; margin:10px auto 0">
               </input>
+              <span class="help-block fronttext"></span>
             </td> 
             <td class="cardtext backtext">
               <input class="form-control backtext" id="editcard-back-textarea" placeholder="Rückseite" type="text" style="width:440px; height:200px; margin:10px auto 0;">
               </input>
+              <span class="help-block backtext"></span>
             </td> 
           </tr>
           <tr>
@@ -817,11 +821,26 @@
     </script>
 
     <script type="text/template" id="set-learn-controls">
-      <button class="btn btn-default learn-box" title="1" style="width:100%;">Fach 1</button>
-      <button class="btn btn-default learn-box" title="2" style="width:100%; margin-top:10px">Fach 2</button>
-      <button class="btn btn-default learn-box" title="3" style="width:100%; margin-top:10px">Fach 3</button>
-      <button class="btn btn-default learn-box" title="4" style="width:100%; margin-top:10px">Fach 4</button>
-      <button class="btn btn-default learn-box" title="5" style="width:100%; margin-top:10px">Fach 5</button>
+      <button class="btn btn-default learn-box" title="1" style="width:100%;">
+        Fach 1
+        <span class="badge pull-right box-indicator one" title="1">0</span>
+      </button>
+      <button class="btn btn-default learn-box" title="2" style="width:100%; margin-top:10px">
+        Fach 2
+        <span class="badge pull-right box-indicator two" title="2">0</span>
+      </button>
+      <button class="btn btn-default learn-box" title="3" style="width:100%; margin-top:10px">
+        Fach 3
+        <span class="badge pull-right box-indicator three" title="3">0</span>
+      </button>
+      <button class="btn btn-default learn-box" title="4" style="width:100%; margin-top:10px">
+        Fach 4
+        <span class="badge pull-right box-indicator four" title="4">0</span>
+      </button>
+      <button class="btn btn-default learn-box" title="5" style="width:100%; margin-top:10px">
+        Fach 5
+        <span class="badge pull-right box-indicator five" title="5">0</span>
+      </button>
     </script>
 
 
@@ -853,9 +872,6 @@
         <div class="block">
           <div class="centered front" style="font-size:2em">
                 Wähle ein Fach auf der linken Seite
-          </div>
-          <div class="centered front" style="font-size:1.2em">
-                Mehr Infos</div>
           </div>
         </div>
       </div>
@@ -971,6 +987,7 @@
     <div class="row twosided" data-id="<%= _id %>">
       <div class="col-md-6">
         <div class="box">
+          <div class="memo-setname"><span class="setname"></span></div>
           <span class="clicktoflip">Vorderseite</span>
           <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
           <a class="cardcontent-front btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
@@ -1117,6 +1134,21 @@
               <p class="form-control-static"><%= _.str.capitalize(provider) %></p>
             </div>
           </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-md-4 control-label">Email</label>
+            <div class="col-md-7">
+              <input type="email" class="form-control" id="inputEmail3" placeholder="Email" value="<%= email %>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Profil öffentlich</label>
+            <div class="col-md-8">
+              <div class="btn-group">
+                <button type="button" class="btn btn-default active">Ja</button>
+                <button type="button" class="btn btn-default">Nein</button>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     </script>
@@ -1169,7 +1201,8 @@
         <h3 class="panel-title">Badges</h3>
       </div>
       <div class="panel-body">
-      <p class="pull-left; width:50%">Du hast die Möglichkeit, deine gesammelten Badges mit dem Mozilla Badge Backpack synchronisieren. Um deine Badges der <a href="http://openbadges.org/" target="_blank">OpenBadges Plattform</a> hinzuzufügen, klicke auf den folgenden Button:</p><p class="pull-right; width:50%" ><a class="btn btn-default issueBadge"><img src="http://openbadges.org/wp-content/uploads/2013/02/OpenBadges_Insignia_EarnOur.png" /></a></p>
+      <a href="http://openbadges.org" target="_blank"><img alt="We Issue OpenBadges" src="http://openbadges.org/wp-content/uploads/2013/02/OpenBadges_Insignia_WeIssue.png" style="position:absolute; top:19px; right:30px"></a>
+      <p>Du hast die Möglichkeit, deine gesammelten Badges mit dem Mozilla Badge Backpack zu syncronisieren.<br />Um deine Badges der <a href="http://openbadges.org/" target="_blank">OpenBadges Plattform</a> hinzuzufügen, klicke auf den folgenden Button:</p><p class="" style="text-align:center; margin-top:15px" ><a class="btn btn-success issueBadge">Jetzt syncronisieren</a></p>
       </div>
         <table class="table">
           <tbody></tbody>

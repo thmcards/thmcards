@@ -130,6 +130,7 @@ code {
 
 .box
 {
+  border: 1px solid #DDDDDD;
   font-family:'Georgia', serif;
   position: relative;
   height: 278px;
@@ -223,6 +224,7 @@ code {
 
 /* The element to be centered, can
    also be of any width and height */ 
+
 .centered {
   display: inline-block;
   vertical-align: middle;
@@ -236,6 +238,7 @@ code {
   font-size: 1.1em;
   line-height: 1.3em;
 }
+
 .navbar .navbar-brand {
   padding: 10px 20px;
 }
@@ -271,6 +274,14 @@ ul.nav-list li.active {
   top: 13px; 
   font-style: italic;
 }
+.memo-setname {
+  color:#666; 
+  position: absolute; 
+  left: 111px; 
+  top: 13px;
+  width: 220px;
+  text-align: center;
+}
 img.cardside {
   position: absolute; 
   right: 88px; 
@@ -289,8 +300,8 @@ img.memoback {
 
 .btn-showPictureModal {
   position: absolute; 
-  left: 44px; 
-  top: 9px; 
+  left: 10px; 
+  top: 11px; 
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
@@ -299,7 +310,7 @@ img.memoback {
 }
 
 .carousel-inner {
-  border: 1px solid #DDDDDD;
+  /** border: 1px solid #DDDDDD; **/
   border-radius: 4px;
 }
 
@@ -326,6 +337,10 @@ img.memoback {
   color: #666;
   font-style: italic;
   font-family: 'Georgia', serif;
+}
+
+.box-indicator {
+  margin-top: 2px;
 }
 
 .memo-cardHelptext {

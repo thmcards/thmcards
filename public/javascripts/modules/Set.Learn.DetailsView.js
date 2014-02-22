@@ -205,6 +205,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				type: type,
 				success: function(){
 					console.log("success");
+					App.trigger("update:cardcount");
 					App.trigger("filter:box", actualBox);
 					App.trigger("cardModel:saved");
 
@@ -221,15 +222,37 @@ Cards.module('Set.Learn', function(Learn, App) {
 			App.on('filter:box', function(boxId) {
 				that.filterBox(boxId);
 			})
-
+			App.on('update:cardcount', function() {
+				that.updateCardcount();
+			})
 		},
-		filterBox: function(boxId) {
+		filterBox: function(boxId) {			
 			if(boxId != null) {
 				this.collection.filter(boxId);
 			} else {
 				this.collection.filter();
 			}
 			this.render();
+		},
+		updateCardcount: function() {
+			this.collection.filter();
+			var unfiltered = _.clone(this.collection);
+			var sorted = unfiltered.groupBy( function(model){
+				if(!_.isEmpty(model.get("persCard"))) {	
+					if(_.isArray(model.get("persCard"))) {
+						persCard = _.first(model.get("persCard"));
+					} else {
+						persCard = model.get("persCard");
+					}
+					return persCard.value.box;
+				} else return 1;				
+			});
+
+			$(".box-indicator.one").text(_.size(sorted[1]));
+			$(".box-indicator.two").text(_.size(sorted[2]));
+			$(".box-indicator.three").text(_.size(sorted[3]));
+			$(".box-indicator.four").text(_.size(sorted[4]));
+			$(".box-indicator.five").text(_.size(sorted[5]));
 		},
 		showPictureModal: function() {
 			var cardId = $("div.item.active").children(".box").attr("data-id");
