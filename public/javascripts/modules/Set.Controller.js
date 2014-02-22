@@ -144,7 +144,7 @@ Cards.module('Set', function(Set, App){
 					personalCollection.fetch({
 						success: function(){
 							
-							var memoView = new Cards.Set.Memo.DetailsView({collection: personalCollection, model: set });
+							var memoView = new Cards.Set.Memo.DetailsView({collection: personalCollection , model: set});
 							memoLayout.detailsRegion.show(memoView);
 						},
 						error: function(){
