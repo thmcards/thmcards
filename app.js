@@ -293,12 +293,18 @@ User.findOrCreate = function(profile, done) {
         var user = _.map(body.rows, function(doc) { return doc.value});
         return done(err, user);
       } else {
+        var email = null;
+        if(_.isArray(profile.emails)) {
+          email = _.first(profile.emails);
+          if(_.has(email, "value")) email = email.value;
+        }
+
         db.insert(
           { 
             "provider": profile.provider,
             "username": profile.username || null,
-            "name": profile.displayName || null,
-            "email": _.first(profile.emails) || null,
+            "email": email,
+            "profile": "public",
             "type": "user"
           }, 
           function(err, body, header){
@@ -627,23 +633,30 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
 app.put('/user/:username', ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
-
+  console.log("u", user.username);
   if(req.params.username === user.username) {
-      db.view('users', 'by_username', { key: new Array(req.params.username) }, function(err, body) {
-        var user = body.rows[0].value;
-        var name = req.body.name;
+      db.view('users', 'by_username', { key: user.username }, function(err, body) {
+        if(!err) {
+          console.log(body);
+          var user = body.rows[0].value;
 
-        user.name = name;  
+          user.name = req.body.name;
+          user.email = req.body.email;
+          user.profile = req.body.profile;
 
-        db.insert(user, body.rows[0].id, function(err, body){
-          if(!err) {
-            res.json(body); 
-          } else {
-            console.log("[db.users/by_username]", err.message);
-            res.send(404);
-          }
-          
-        });
+          db.insert(user, body.rows[0].id, function(err, body){
+            if(!err) {
+              res.json(body); 
+            } else {
+              console.log("[db.users/by_username]", err.message);
+              res.send(404);
+            }
+            
+          });
+        } else {
+          console.log(err);
+        }
+
       });
   }
 });
@@ -1990,17 +2003,21 @@ app.get('/badges/badge/:badge:rank.html', function(req, res) {
   res.json({ everything: "cool html" });
 });
 
-app.get('/syncbadges', function(req, res) {
-  var owner = "dan.knapp@web.de";
+app.get('/syncbadges', ensureAuthenticated, function(req, res) {
+  var user = req.session.passport.user;
+  if(_.isArray(user)) user = _.first(req.session.passport.user);
+
   var badgesToIssue = new Array();
   var badgeUrl = nconf.get("badge_url");
-  db.view("issuedBadge", "by_owner", { keys: new Array(owner) }, function(err, body) {
-    if(!_.isUndefined(body.rows) && !err && _.size(body.rows) > 0) {
+
+  db.view("issuedBadge", "by_owner", { keys: new Array(user.username) }, function(err, body) {
+    if(!_.isUndefined(body.rows) && !err && _.size(body.rows) > 0 && user.email != null) {
       var issuedBadges = _.sortBy(_.pluck(body.rows, "value"), function(badge) {
         return badge.rank;
       });
       
-      db.view("users", "by_username", { keys: new Array(owner) }, function(err, body) {
+      db.view("users", "by_username", { keys: new Array(user.username) }, function(err, body) {
+        console.log(body);
         if(!err && _.size(body.rows) > 0) {
           var user = _.first(body.rows).value;
 
@@ -2008,7 +2025,7 @@ app.get('/syncbadges', function(req, res) {
             var data = {};
 
             data.uid = badge._id;
-            data.recipient = { type: "email", hashed: false, identity: user.username };
+            data.recipient = { type: "email", hashed: false, identity: user.email };
             data.image = badgeUrl + badge.badge + "_" + badge.rank + ".png";
             data.evidence = badgeUrl + badge.badge + ".html";
             data.issuedOn = badge.issuedOn;
@@ -2026,6 +2043,9 @@ app.get('/syncbadges', function(req, res) {
           res.json(badgesToIssue);
         }
       });
+    } else {
+      console.log(body);
+      res.send(404);
     }
   });
 /*

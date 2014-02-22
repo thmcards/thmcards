@@ -3,6 +3,7 @@ Cards.module('Profile', function(Profile, App) {
 		template: "#profile-layout",
 		regions: {
 			infoRegion: "#profile-info-region",
+			privateRegion: "#profile-private-region",
 			xpRegion: "#profile-xp-region",
 			setRegion: "#profile-set-region",
 			badgeRegion: "#profile-badge-region",

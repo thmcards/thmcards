@@ -1040,6 +1040,9 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-md-12" id="profile-private-region"></div>
+      </div>
+      <div class="row">
         <div class="col-md-6" id="profile-info-region"></div>
         <div class="col-md-6" id="profile-xp-region"></div>
       </div>
@@ -1054,6 +1057,12 @@
 
       <div class="row">
         <div class="col-md-12" id="profile-set-region"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="profile-private-item">
+      <div class="well" style="width:50%; margin:20px auto; text-align:center;">
+        <h4>Dieses Profil ist nicht öffentlich.</h4>
       </div>
     </script>
 
@@ -1134,6 +1143,7 @@
               <p class="form-control-static"><%= _.str.capitalize(provider) %></p>
             </div>
           </div>
+          <% if(JSON.parse($.cookie('usr')).username == username) { %>
           <div class="form-group">
             <label for="inputEmail3" class="col-md-4 control-label">Email</label>
             <div class="col-md-7">
@@ -1143,12 +1153,17 @@
           <div class="form-group">
             <label class="col-md-4 control-label">Profil öffentlich</label>
             <div class="col-md-8">
-              <div class="btn-group">
-                <button type="button" class="btn btn-default active">Ja</button>
-                <button type="button" class="btn btn-default">Nein</button>
+              <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default <% if(profile == 'public') { %>active<% } %>" style="width:117px">
+                  <input type="radio" name="options" value="private"> Ja
+                </label>
+                <label class="btn btn-default <% if(profile == 'private') { %>active<% } %>" style="width:118px">
+                  <input type="radio" name="options" value="public"> Nein
+                </label>
               </div>
             </div>
           </div>
+          <% } %>
         </form>
       </div>
     </script>
@@ -1351,6 +1366,7 @@
     <script type="text/javascript" src="/javascripts/modules/Profile.XpView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.BadgeView.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Profile.SetView.js"></script>
+    <script type="text/javascript" src="/javascripts/modules/Profile.PrivateView.js"></script>
 
     <script type="text/javascript" src="/javascripts/modules/Game.Meteor.Layout.js"></script>
     <script type="text/javascript" src="/javascripts/modules/Game.Controller.js"></script>
