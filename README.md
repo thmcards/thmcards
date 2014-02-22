@@ -15,11 +15,13 @@ Die benötigten Datenbankviews können über das Python-Script *createviews.py* 
 
 Die Installation von THMcards erfolgt über den Node Package Manager (NPM). Dieser wird automatisch zusammen mit node.js installiert. Im Verzeichnis der Applikation ist der folgende Befehl abzusetzen:
 
-`<npm install>`
+`npm install`
 
 Alle Modulabhängigkeiten, welche in der Datei package.json aufgeführt sind, werden aufgelöst und die Module installiert. Je nach aktuellem Systembenutzer sind für diesen Schritt gegebenenfalls Administratorrechte notwendig.
 Nach erfolgreicher Installation kann die Applikation über den Befehl
 
-`<node app.js>`
+`node app.js`
 
-gestartet werden. Als Standardeinstellung kann THMcards auf Port 3000 unter der Adresse localhost im Browser aufgerufen werden.
+gestartet werden.
+
+Als Standardeinstellung kann THMcards auf Port 3000 unter der Adresse localhost im Browser aufgerufen werden.
