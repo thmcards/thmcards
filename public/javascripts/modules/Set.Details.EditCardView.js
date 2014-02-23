@@ -209,11 +209,7 @@ Cards.module('Set.Details', function(Details, App) {
 				"image": false,
 				toolbar: { code:  function(locale, options) {
 				    return '<li><a class="btn btn-default btn-sm" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
-				   } },
-				parserRules: {
-				    tags: {
-				        code: {}
-				        }
+				   } 
 				}
 			}
 
