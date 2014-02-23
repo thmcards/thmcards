@@ -76,8 +76,8 @@ def view_process(conn, db, view):
 host = "localhost"
 port = "5984"
 db = "thmcards"
-username = "admin"
-password = "admin"
+username = ""
+password = ""
 
 viewpath = "couchviews"
 
