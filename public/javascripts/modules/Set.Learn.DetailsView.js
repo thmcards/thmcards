@@ -298,6 +298,9 @@ Cards.module('Set.Learn', function(Learn, App) {
 		onRender: function() {	
 			var that = this;
 			var cardIndicator = this.$el.find("small.card-indicator");
+			
+			$('code').each(function(i, e) {hljs.highlightBlock(e)});
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 
 			$("div.learn-startscreen").hide();
 			$("div.learn-endscreen").hide();
@@ -308,8 +311,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 			} else {
 				$("div.learn-cardHelptext").show();				
 			}
-
-			$('div.cardContent').each(function(i, e) {hljs.highlightBlock(e)});
 
 			this.$el.find("div.item").first().addClass("active");
 
@@ -355,8 +356,6 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 		},
 		onShow: function() {
-			$('code').each(function(i, e) {hljs.highlightBlock(e)});
-			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 		}
 	});
 });
