@@ -1245,12 +1245,12 @@ app.get('/score/:username/:set', function(req, res){
   db.view('score', 'score_by_game_user_set', { key: new Array(game, user, setId) }, function(err, body) {
     if(!err) {
       if(!_.isUndefined(body.rows) && _.has(body, "rows") && !_.isEmpty(body.rows)) {
-        console.log(body);
-        var score = _.first(body.rows);
+        var scores = _.sortBy(body.rows, function(score){ return -score.value });
+        var score = _.first(scores);
         result.score = score.value;
         res.json(result);
       } else {
-        res.json(result);
+        res.json({ score: 0 });
       }
     }
   });
@@ -1259,11 +1259,11 @@ app.get('/score/:username/:set', function(req, res){
 
 app.post('/score/:username', ensureAuthenticated, function(req, res){
     var game = 'meteor';
-    console.log(req.body);
     var owner = req.body.owner;
     var setId = req.body.setId;
     var points = req.body.points;
     var level = req.body.level;
+
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -1274,7 +1274,8 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
         level: level,
         owner: owner,
         setId: setId,
-        owner: owner
+        owner: owner,
+        points: points
       },    
       function(err, body) {
         if(!err) {
@@ -2076,10 +2077,12 @@ app.get('/syncbadges', ensureAuthenticated, function(req, res) {
   res.send(signature);*/
 });
 
-process.on('uncaughtException', function (err) {
-  console.log(err);
-  process.exit(1); 
-});
+if(process.env.NODE_ENV != 'development') {
+  process.on('uncaughtException', function (err) {
+    console.log(err);
+    process.exit(1); 
+  });
+}
 
 srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

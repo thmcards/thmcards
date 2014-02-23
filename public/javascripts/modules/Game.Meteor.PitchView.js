@@ -409,24 +409,6 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				contentType: "application/json",
 				success: function(data, status, xhr){
 					$('#meteor-gameover-modal .modal-body strong').first().text(that.points);
-					var panel = $('#meteor-gameover-modal .modal-body div.panel');
-
-					if(data.length > 0) panel.show();
-
-					var tbody = $('#meteor-gameover-modal .modal-body tbody');
-					tbody.empty();
-
-					_.each(data, function(row) {
-						console.log(row);
-						var tr = $("<tr>");
-						if(row.isPlayer) tr.addClass('active');
-
-						tr.append("<td>"+row.owner+"</td>");
-						tr.append("<td>"+row.points+"</td>");
-						tbody.append(tr);
-					})
-
-
 					$('#meteor-gameover-modal').modal('show');
 				},
 				dataType: "json"

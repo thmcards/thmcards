@@ -190,7 +190,7 @@ Cards.module('Set.Details', function(Details, App) {
 					that.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
 				}
 			});
-			var usr = $.cookie('usr');
+			var usr = JSON.parse($.cookie('usr'));
 			$("#usr-name").text();
 			$.get("/score/"+usr.username+"/"+this.model.get("_id"), function( data ) {
 				$("#meteor-set-points").text(data.score);
