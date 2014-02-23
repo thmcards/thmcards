@@ -227,7 +227,6 @@ code {
 
 .centered {
   display: inline-block;
-  vertical-align: middle;
   width: 580px;
   font-size: 1.2em;
 }
@@ -340,6 +339,21 @@ img.memoback {
   color: #666;
   font-style: italic;
   font-family: 'Georgia', serif;
+}
+
+div.learnbox-success {
+  font-size: 2em;
+  margin-top:- 50px
+}
+
+div.learnbox-choose-message {
+  font-size: 1.2em;
+  width: 500px;
+  margin-top: -95px;
+}
+
+a.learn-back {
+  margin-top: -38px
 }
 
 .box-indicator {
