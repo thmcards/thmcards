@@ -26,13 +26,13 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var card = new Cards.Entities.Card({
 				front: {
-					text: $("#front-textarea").val(),
+					text: $("#front-textarea").val().replace(/(<br>\s*)+$/,''),
 					text_plain: $("#front-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-newcard-input-pic-front-search").val() || null,
 					video: null
 				},
 				back: {
-					text: $("#back-textarea").val(),
+					text: $("#back-textarea").val().replace(/(<br>\s*)+$/,''),
 					text_plain: $("#back-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-newcard-input-pic-back-search").val() || null,
 					video: null

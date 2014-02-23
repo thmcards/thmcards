@@ -159,9 +159,13 @@
           <i class="glyphicon glyphicon-picture"></i>
           <small>Bild anzeigen</small>
         </a>
-        <div class="block"><div class="cardContent centered front active">
-          <%= front.text %>
-        </div><div class="cardContent centered back" style="display:none"><%= back.text %></div>
+        <div class="block">
+          <div class="cardContent centered front active">
+            <%= front.text.replace(/(<br>\s*)+$/,'') %>
+          </div>
+          <div class="cardContent centered back" style="display:none">
+            <%= back.text.replace(/(<br>\s*)+$/,'') %>
+          </div>
       </div>
     </script>
 
