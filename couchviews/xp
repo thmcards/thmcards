@@ -2,14 +2,14 @@
    "_id": "_design/xp",
    "language": "javascript",
    "views": {
-       "by_id": {
-           "map": "function(doc) { if (doc.type == 'xp') { emit([doc._id], doc); }}"
-       },
        "by_owner_name_gained": {
            "map": "function(doc) { if(doc.type == 'xp') { emit([doc.owner, doc.name, doc.gained], doc) }}"
        },
        "by_owner": {
            "map": "function(doc) { if(doc.type == 'xp') { emit([doc.owner], doc) }}"
+       },
+       "by_id": {
+           "map": "function(doc) { if (doc.type == 'xp') { emit([doc._id], doc); }}"
        },
        "by_name_owner": {
            "map": "function(doc) { if(doc.type == 'xp') { emit([doc.name, doc.owner], doc) }}"

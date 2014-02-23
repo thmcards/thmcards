@@ -1,0 +1,10 @@
+[{
+   "_id": "_design/misc",
+   "language": "javascript",
+   "views": {
+       "all_set_categories": {
+           "map": "function(doc) { if (doc.type == 'set' && doc.category && doc.visibility == 'public') { emit([doc.category], 1); }}",
+           "reduce": "_sum"
+       }
+   }
+}]

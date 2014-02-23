@@ -2,20 +2,20 @@
    "_id": "_design/sets",
    "language": "javascript",
    "views": {
-       "by_name": {
-           "map": "function(doc) { if (doc.type == 'set') { emit([doc.name], doc); }}"
+       "by_category": {
+           "map": "function(doc) { if (doc.type == 'set' && doc.category) { emit([doc.category, doc.name, doc.created], doc); }}"
        },
        "by_owner": {
            "map": "function(doc) { if (doc.type == 'set') { emit([doc.owner], doc); }}"
        },
-       "by_visibility": {
-           "map": "function(doc) { if (doc.type == 'set') { emit([doc.visibility], doc); }}"
-       },
        "by_id": {
            "map": "function(doc) { if (doc.type == 'set') { emit([doc._id], doc); }}"
        },
-       "by_category": {
-           "map": "function(doc) { if (doc.type == 'set' && doc.category) { emit([doc.category, doc.name, doc.created], doc); }}"
+       "by_visibility": {
+           "map": "function(doc) { if (doc.type == 'set') { emit([doc.visibility], doc); }}"
+       },
+       "by_name": {
+           "map": "function(doc) { if (doc.type == 'set') { emit([doc.name], doc); }}"
        },
        "by_id_with_cards": {
            "map": "function(doc) { if (doc.type == 'set') { emit([doc._id, 0], doc); } else if (doc.type == 'card') { emit([doc.setId, 1], doc); } }"

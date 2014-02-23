@@ -5,14 +5,14 @@
        "by_provider": {
            "map": "function(doc) { if (doc.type == 'user') { emit([doc.provider], doc); }}"
        },
-       "by_provider_and_username": {
-           "map": "function(doc) { if (doc.type == 'user') { emit([doc.provider, doc.username], doc); }}"
+       "by_id": {
+           "map": "function(doc) { if (doc.type == 'user') { emit([doc._id], doc); }}"
        },
        "by_username": {
            "map": "function(doc) { if (doc.type == 'user') { emit(doc.username, doc); }}"
        },
-       "by_id": {
-           "map": "function(doc) { if (doc.type == 'user') { emit([doc._id], doc); }}"
+       "by_provider_and_username": {
+           "map": "function(doc) { if (doc.type == 'user') { emit([doc.provider, doc.username], doc); }}"
        }
    }
 }
