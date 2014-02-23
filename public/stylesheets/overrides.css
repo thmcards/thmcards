@@ -666,6 +666,10 @@ table.table-bordered .progress {
   margin: 0;
 }
 
+.hljs {
+  display:inline-block;
+}
+
 .wysiwyg-color-black {
   color: black;
 }

@@ -1,12 +1,12 @@
 {
-	"couchdb": "https://thmcards:thmcards123@thmcards.cloudant.com/",
-	"twitter_callback": "http://thmcards.nodejitsu.com/auth/twitter/callback",
-	"facebook_callback": "http://thmcards.nodejitsu.com/auth/facebook/callback",
-	"google_callback": "http://thmcards.nodejitsu.com/auth/google/callback",
-	"google_realm": "http://thmcards.nodejitsu.com",
+	"couchdb": "http://localhost:5984/",
+	"twitter_callback": "http://cards.thm.de/auth/twitter/callback",
+	"facebook_callback": "http://cards.thm.de/auth/facebook/callback",
+	"google_callback": "http://cards.thm.de/auth/google/callback",
+	"google_realm": "http://cards.thm.de",
 	"facebook_clientid": "479179358837571",
 	"facebook_clientsecret": "9af20c0ab66f8c5ba6f8d714b339be23",
 	"twitter_key": "1Icj0eY0NYmUoMSiGA",
 	"twitter_secret": "wsgFgVlT2p1R41rr1EYeUm6PqBwfqA3DIgtgC0h6c",
-	"badge_url": "http://thmcards.jit.su/badges/"
+	"badge_url": "http://cards.thm.de/badges/"
 }
