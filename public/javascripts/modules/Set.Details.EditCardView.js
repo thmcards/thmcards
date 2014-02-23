@@ -27,13 +27,13 @@ Cards.module('Set.Details', function(Details, App) {
 
 
 			var	front = {
-					text: $("#editcard-front-textarea").val(),
+					text: $("#editcard-front-textarea").val().replace(/(<br>\s*)+$/,''),
 					text_plain: $("#editcard-front-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-front-search").val() || null,
 					video: null
 				};
 			var	back = {
-					text: $("#editcard-back-textarea").val(),
+					text: $("#editcard-back-textarea").val().replace(/(<br>\s*)+$/,''),
 					text_plain: $("#editcard-back-textarea").val().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-back-search").val() || null,
 					video: null
