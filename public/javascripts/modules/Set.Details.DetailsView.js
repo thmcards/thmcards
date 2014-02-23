@@ -314,7 +314,8 @@ Cards.module('Set.Details', function(Details, App) {
 			}
 		},
 		onShow: function() {
-			$('cardcode').each(function(i, e) {hljs.highlightBlock(e)});
+			$('code').each(function(i, e) {hljs.highlightBlock(e)});
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 		}
 	});
 });

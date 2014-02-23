@@ -355,7 +355,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 		},
 		onShow: function() {
-			MathJax.Hub.Typeset()
+			$('code').each(function(i, e) {hljs.highlightBlock(e)});
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 		}
 	});
 });

@@ -24,7 +24,7 @@ Nach erfolgreicher Installation kann die Applikation über den Befehl
 
 gestartet werden.
 
-Als Standardeinstellung kann THMcards auf Port 3000 unter der Adresse localhost im Browser aufgerufen werden. Der Port kann in der Datei *app.js* geändert werden.
+Als Standardeinstellung kann THMcards auf Port 3000 unter der Adresse localhost im Browser aufgerufen werden.
 
 Um THMcards dauerhaft zu betreiben, kann die Applikation mit forever als Daemon gestartet werden.
 
@@ -49,5 +49,5 @@ Verwendete OpenSource-Projekte:
 
 Danke für die Unterstützung an:
 
-AGQLS
 F112a (M.Sc. Christoph Thelen, M.Sc. Paul-Christian Volkmer)
+AGQLS
