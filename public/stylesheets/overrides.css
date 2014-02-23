@@ -293,8 +293,8 @@ img.memoback {
 }
 .btn-editCard {
   position: absolute; 
-  left: 10px; 
-  top: 9px; 
+  left: 12px; 
+  top: 11px; 
 }
 
 .btn-showPictureModal {
@@ -302,6 +302,10 @@ img.memoback {
   left: 10px; 
   top: 11px; 
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.btn-showPictureDetails {
+  left: 45px!important; 
 }
 
 .carousel-control {
