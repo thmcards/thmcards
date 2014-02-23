@@ -2,24 +2,27 @@
    "_id": "_design/cards",
    "language": "javascript",
    "views": {
-       "personal_card": {
-           "map": "function(doc) { if (doc.type == 'card') { emit( [doc.setId, doc._id,  0], doc); } else if(doc.type == 'personal_card') { emit([doc.setId, doc.cardId, 1], doc)}}"
-       },
-       "personal_card_by_cardId": {
-           "map": "function(doc) { if (doc.type == 'personal_card') { emit([doc.cardId], doc); }}"
-       },
-       "by_owner": {
-           "map": "function(doc) { if (doc.type == 'card') { emit([doc.owner], doc); }}"
+       "by_set": {
+           "map": "function(doc) { if (doc.type == 'card') { emit([doc.setId], doc); }}"
        },
        "by_id": {
            "map": "function(doc) { if (doc.type == 'card') { emit([doc._id], doc); }}"
+       },
+       "by_owner": {
+           "map": "function(doc) { if (doc.type == 'card') { emit([doc.owner], doc); }}"
        },
        "count_by_setid": {
            "map": "function(doc) { if (doc.type == 'card') { emit( [doc.setId], 1); }}",
            "reduce": "function(key, values, reduce) { return sum(values); }"
        },
-       "by_set": {
-           "map": "function(doc) { if (doc.type == 'card') { emit([doc.setId], doc); }}"
+       "personal_card_by_cardId": {
+           "map": "function(doc) { if (doc.type == 'personal_card') { emit([doc.cardId], doc); }}"
+       },
+       "personal_card": {
+           "map": "function(doc) { if (doc.type == 'card') { emit( [doc.setId, doc._id,  0], doc); } else if(doc.type == 'personal_card') { emit([doc.setId, doc.cardId, 1], doc)}}"
+       },
+       "personal_card_by_owner": {
+           "map": "function(doc) { if (doc.type == 'card') { emit( [doc.owner, doc._id,  0], doc); } else if(doc.type == 'personal_card') { emit([doc.owner, doc.cardId, 1], doc)}}"
        }
    }
 }
