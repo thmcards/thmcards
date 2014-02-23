@@ -32,6 +32,12 @@ Um THMcards dauerhaft zu betreiben, kann die Applikation mit forever als Daemon 
 `forever start app.js`
 
 
+Umschalten zwischen Entwicklungs- und Produktivumgebung erfolgt über die Umgebungsvariable NODE_ENV (default ist development):
+
+NODE_ENV=production forever start app.js
+
+
+
 Credits
 ---------------------
 
