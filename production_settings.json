@@ -1,5 +1,5 @@
 {
-	"couchdb": "https://localhost/",
+	"couchdb": "http://localhost:5984/",
 	"twitter_callback": "http://cards.thm.de/auth/twitter/callback",
 	"facebook_callback": "http://cards.thm.de/auth/facebook/callback",
 	"google_callback": "http://cards.thm.de/auth/google/callback",
