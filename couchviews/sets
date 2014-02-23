@@ -3,7 +3,7 @@
    "language": "javascript",
    "views": {
        "by_category": {
-           "map": "function(doc) { if (doc.type == 'set' && doc.category) { emit([doc.category, doc.name, doc.created], doc); }}"
+           "map": "function(doc) { if (doc.type == 'set' && doc.category && doc.visibility == 'public') { emit([doc.category, doc.name, doc.created], doc); }}"
        },
        "by_owner": {
            "map": "function(doc) { if (doc.type == 'set') { emit([doc.owner], doc); }}"
