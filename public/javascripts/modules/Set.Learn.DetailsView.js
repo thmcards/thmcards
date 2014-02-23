@@ -353,6 +353,10 @@ Cards.module('Set.Learn', function(Learn, App) {
 					this.$el.find("a.btn-showPictureModal").show();
 				}		
 			}
+		},
+		onShow: function() {
+			$('code').each(function(i, e) {hljs.highlightBlock(e)});
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 		}
 	});
 });

@@ -265,7 +265,6 @@ ul.nav-list li.active {
 }
 .back, .front {
   line-height: 1.3em;
-  word-wrap: break-word;
 }
 .clicktoflip {
   color:#666; 

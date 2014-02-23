@@ -232,7 +232,8 @@ Cards.module('Set.Memo', function(Memo, App) {
 			card.find("div span.setname").text(this.model.get("name"));
 		},
 		onShow: function() {
-			$('div.double').each(function(i, e) {hljs.highlightBlock(e)});
+			$('code').each(function(i, e) {hljs.highlightBlock(e)});
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 		}
 	});
 });

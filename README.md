@@ -17,7 +17,7 @@ Die Installation von THMcards erfolgt über den Node Package Manager (NPM). Dies
 
 `npm install`
 
-Alle Modulabhängigkeiten, welche in der Datei package.json aufgeführt sind, werden aufgelöst und die Module installiert. Je nach aktuellem Systembenutzer sind für diesen Schritt gegebenenfalls Administratorrechte notwendig.
+Alle Modulabhängigkeiten, welche in der Datei *package.json* aufgeführt sind, werden aufgelöst und die Module installiert. Je nach aktuellem Systembenutzer sind für diesen Schritt gegebenenfalls Administratorrechte notwendig.
 Nach erfolgreicher Installation kann die Applikation über den Befehl
 
 `node app.js`
@@ -25,3 +25,29 @@ Nach erfolgreicher Installation kann die Applikation über den Befehl
 gestartet werden.
 
 Als Standardeinstellung kann THMcards auf Port 3000 unter der Adresse localhost im Browser aufgerufen werden.
+
+Um THMcards dauerhaft zu betreiben, kann die Applikation mit forever als Daemon gestartet werden.
+
+`npm -g install forever`
+`forever start app.js`
+
+
+Credits
+---------------------
+
+Entwicklung: Daniel Knapp, Jan Kammer
+Projektleitung: Prof. Dr. Klaus Quibeldey-Cirkel
+
+Verwendete OpenSource-Projekte:
+
+[node.js](http://nodejs.org)
+[Backbone](http://backbonejs.org)
+[Marionette](http://marionettejs.com)
+[Underscore](http://underscorejs.org)
+[Bootstrap](http://getbootstrap.com)
+[jQuery](http://jquery.com)
+
+Danke für die Unterstützung an:
+
+F112a (M.Sc. Christoph Thelen, M.Sc. Paul-Christian Volkmer)
+AGQLS
