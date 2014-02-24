@@ -34,7 +34,7 @@ Um THMcards dauerhaft zu betreiben, kann die Applikation mit forever als Daemon 
 
 Umschalten zwischen Entwicklungs- und Produktivumgebung erfolgt über die Umgebungsvariable NODE_ENV (default ist development):
 
-NODE_ENV=production forever start app.js
+`NODE_ENV=production forever start app.js`
 
 
 
@@ -57,3 +57,5 @@ Danke für die Unterstützung an:
 
 F112a (M.Sc. Christoph Thelen, M.Sc. Paul-Christian Volkmer)
 AGQLS
+
+THMcards is powered by Technische Hochschule Mittelhessen - University of Applied Sciences.
