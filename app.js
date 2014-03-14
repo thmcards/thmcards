@@ -575,7 +575,7 @@ app.get('/set/:id/card', function(req, res){
       var docs = _.map(body.rows, function(doc) { 
         doc.value._id = sanitizer.sanitize(doc.value._id);
         doc.value._rev = sanitizer.sanitize(doc.value._rev);
-        doc.value.created = sanitizer.sanitize(doc.value.created);
+        doc.value.created = parseInt(sanitizer.sanitize(doc.value.created));
         doc.value.owner = sanitizer.sanitize(doc.value.owner);
         doc.value.setId = sanitizer.sanitize(doc.value.setId);
         doc.value.front.text = sanitizer.sanitize(doc.value.front.text);
@@ -801,7 +801,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
   data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt)),
   data.rating = (req.body.rating === 'true')
   data.type = "set";
-  data.created = sanitizer.sanitize(time);
+  data.created = parseInt(sanitizer.sanitize(time));
 
   db.insert(
     data, 
@@ -829,7 +829,7 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
       data._id = sanitizer.sanitize(req.body._id);
       data._rev = sanitizer.sanitize(req.body._rev);
       data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt));
-      data.created = sanitizer.sanitize(req.body.created);
+      data.created = parseInt(sanitizer.sanitize(req.body.created));
       data.type = "set";
       data.name = sanitizer.sanitize(req.body.name);
       data.description = sanitizer.sanitize(req.body.description);
@@ -943,7 +943,7 @@ app.get('/card/:id', ensureAuthenticated, function(req, res){
 
       card._id = sanitizer.sanitize(card._id);
       card._rev = sanitizer.sanitize(card._rev);
-      card.created = sanitizer.sanitize(card.created);
+      card.created = parseInt(sanitizer.sanitize(card.created));
       card.owner = sanitizer.sanitize(card.owner);
       card.setId = sanitizer.sanitize(card.setId);
       card.front.text = sanitizer.sanitize(card.front.text);
@@ -976,7 +976,7 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
 
       card._id = sanitizer.sanitize(card._id);
       card._rev = sanitizer.sanitize(card._rev);
-      card.created = sanitizer.sanitize(card.created);
+      card.created = parseInt(sanitizer.sanitize(card.created));
       card.owner = sanitizer.sanitize(card.owner);
       card.setId = sanitizer.sanitize(card.setId);
       card.front.text = sanitizer.sanitize(card.front.text);
