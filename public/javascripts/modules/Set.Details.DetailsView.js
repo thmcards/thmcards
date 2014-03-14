@@ -119,15 +119,15 @@ Cards.module('Set.Details', function(Details, App) {
 				var button = this.$el.find("a.btn-showPictureModal");
 
 				if($("div.item.active").find("div.centered.front").hasClass('active')){
-					if(actualCard.get('front').picture !== null){
+					if(actualCard.get('front').picture){
 						button.show();
-					} else if(actualCard.get('front').picture == null){
+					} else if(!actualCard.get('front').picture){
 						button.hide();
 					}
 				} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
-					if(actualCard.get('back').picture !== null){
+					if(actualCard.get('back').picture){
 						button.show();
-					} else if(actualCard.get('back').picture == null){
+					} else if(!actualCard.get('back').picture){
 						button.hide();
 					}
 				}		
@@ -206,7 +206,7 @@ Cards.module('Set.Details', function(Details, App) {
 				var actualCard = this.collection.get(cardId);
 				var setOwner = this.collection.at(0).get('owner');
 
-				if(actualCard.get('front').picture !== null){
+				if(actualCard.get('front').picture){
 					this.$el.find("a.btn-showPictureModal").show();
 				}	
 				this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);	

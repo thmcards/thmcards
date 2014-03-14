@@ -281,15 +281,15 @@ Cards.module('Set.Learn', function(Learn, App) {
 				var actualCard = this.collection.get(cardId);
 
 				if($("div.item.active").find("div.centered.front").hasClass('active')){
-					if(actualCard.get('front').picture !== null){
+					if(actualCard.get('front').picture){
 						this.$el.find("a.btn-showPictureModal").show();
-					} else if(actualCard.get('front').picture == null){
+					} else if(!actualCard.get('front').picture){
 						this.$el.find("a.btn-showPictureModal").hide();
 					}
 				} else if($("div.item.active").find("div.centered.back").hasClass('active')) {
-					if(actualCard.get('back').picture !== null){
+					if(actualCard.get('back').picture){
 						this.$el.find("a.btn-showPictureModal").show();
-					} else if(actualCard.get('back').picture == null){
+					} else if(!actualCard.get('back').picture){
 						this.$el.find("a.btn-showPictureModal").hide();
 					}
 				}		
@@ -350,7 +350,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			if(this.collection.length !== 0) {
 				var cardId = this.$el.find("div.item").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
-				if(actualCard.get('front').picture !== null){
+				if(actualCard.get('front').picture){
 					this.$el.find("a.btn-showPictureModal").show();
 				}		
 			}
