@@ -1,0 +1,39 @@
+div.intro {
+	position:absolute; 
+	left:50%; 
+	top:20%; 
+	width:512px; 
+	height: 300px; 
+	margin-left:-256px; 
+	border:0px solid #000; 
+	text-align:center; 
+	color: #555554
+}
+
+span.slogan {
+	display:inline-block; 
+	margin-top: 25px;
+}
+
+h2.lmargin {
+	margin-left: 25px;
+}
+div.login {
+	display:block; 
+	margin: 50px 0;
+}
+a.btn-login {
+	width:190px;
+}
+a.btn-login > img {
+	float:left;
+}
+a.btn-login > span {
+	font-size:1.2em; 
+	margin:0 20px; 
+	display:inline-block;
+}
+a.btn-about {
+	width:190px; 
+	background-color:#76b910;
+}

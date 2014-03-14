@@ -60,8 +60,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 						});
 						$('#ratingModal').modal('show');
 
-						$('#ratingModal').on('hide', function(){
-							$('#ratingModal').find('button.btn-primary'),off('click');
+						$('#ratingModal').on('hidden.bs.modal', function(){
+							$('#raty').raty('score', 0);
 						});
 
 						$('#ratingModal').find('button.btn-primary').off("click");

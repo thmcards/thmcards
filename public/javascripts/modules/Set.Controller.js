@@ -10,7 +10,6 @@ Cards.module('Set', function(Set, App){
 
 			var sideBarView = new Cards.Set.List.SideBar.SideBarView({ collection: sets });
 			setLayout.sideBarRegion.show(sideBarView);
-
 		},
 		showDetailsLayout: function(id){
 
@@ -39,8 +38,6 @@ Cards.module('Set', function(Set, App){
 
 						}
 					});
-
-					
 					var sideBarView = new Cards.Set.Details.SideBar.SideBarView({ model: set});
 					detailsLayout.sideBarRegion.show(sideBarView);
 
@@ -70,25 +67,21 @@ Cards.module('Set', function(Set, App){
 							detailsLayout.detailsRegion.show(detailsListView);
 							
 							if(set.get("rating") === true) {
-								var rating = new Cards.Entities.Rating({ setId: set.get("id")});
-								rating.fetch({
-									success: function(rating){
-										var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
-										detailsLayout.ratingRegion.show(ratingsView);
-									}
-								})
+								$.get("/rating/avg/"+set.get("id"), function(data){
+									var rating = new Cards.Entities.Rating(data);
+									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
+									detailsLayout.ratingRegion.show(ratingsView);
+								});	
 							}
 						},
 						error: function(){
 
 						}
 					});
-
-					
 					var sideBarView = new Cards.Set.Details.SideBar.SideBarView({ model: set});
 					detailsLayout.sideBarRegion.show(sideBarView);
 
-					if(set.get("owner") === $.cookie('usr').username) {
+					if(set.get("owner") === $.parseJSON($.cookie('usr')).username) {
 						var constrolsView = new Cards.Set.Details.SideBar.ControlsView({ model: set});
 						detailsLayout.controlsRegion.show(constrolsView);
 					}

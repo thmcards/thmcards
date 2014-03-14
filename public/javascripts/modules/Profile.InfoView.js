@@ -43,14 +43,19 @@ Cards.module('Profile', function(Profile, App) {
 			}
 		},
 		changeProfileVisib: function(ev) {
-			var visibility = _.escape($("div.btn-group > label.active > input").val());
+			if($(ev.currentTarget).hasClass('active')) return;
+
+			var visibility = 'private';
+			if($(ev.currentTarget).hasClass('profile-public')) {
+				visibility = 'public';
+			}
 
 			if(visibility === "public" || visibility === "private") {
 				var model = this.model.save({
 							profile: visibility
 						}, {
 							success: function(){
-								
+												
 							},
 							error: function(){
 								alert("Fehler beim Speichern");
