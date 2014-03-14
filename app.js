@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -46,7 +45,12 @@ if(process.env.NODE_ENV === 'production') {
   io = require('socket.io').listen(http_server);
 }
 
-
+function forceSSL(req, res, next) {
+  if (!req.secure && process.env.NODE_ENV === 'production') {
+    return res.redirect('https://' + req.get('host') + req.url);
+  }
+  return next(null);
+}
 
 
 app.configure(function(){
@@ -82,22 +86,10 @@ app.configure(function(){
       csrf(req, res, onCsrfCalled);
     }
   })());
-    app.use((function() {
-    return function(req, res, next) {
-      if (!req.secure) {
-        console.log(req.url);
-        return res.redirect('https://' + req.get('host') + req.url);
-      }
-      next();
-    }
-  })());
   app.use(app.router);
   app.use(express.compress());
   app.use(express.staticCache());
   app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }));
-});
-app.configure('production', function(){
-
 });
 
 io.set('authorization', function(handshake, cb) {
@@ -121,6 +113,7 @@ io.set('authorization', function(handshake, cb) {
       });
     }
     else cb('Session cookie could not be found', false);
+
 
     });
   }
@@ -376,7 +369,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-app.get('/login', function(req, res) {
+app.get('/login', forceSSL, function(req, res) {
   if(req.isAuthenticated()) res.redirect('/'); 
 
   fs.readFile(__dirname + '/views/welcome.html', 'utf8', function(err, text){
@@ -384,7 +377,7 @@ app.get('/login', function(req, res) {
   });
 });
 
-app.get('/impressum', function(req, res) {
+app.get('/impressum', forceSSL, function(req, res) {
   fs.readFile(__dirname + '/views/impressum.html', 'utf8', function(err, text){
     res.send(text);
   });
@@ -436,7 +429,7 @@ app.get('/auth/google/callback',
   }
 );
 
-app.get('/logout', function(req, res){
+app.get('/logout', forceSSL, function(req, res){
   req.logout();
   res.clearCookie('usr');
   res.clearCookie('csrf.token');
@@ -451,13 +444,13 @@ app.get('/whoami', ensureAuthenticated, function(req, res) {
 
 //------------------------------------------------------------------------------------
 
-app.get('/', ensureAuthenticated, function(req, res){
+app.get('/', forceSSL, ensureAuthenticated, function(req, res){
   fs.readFile(__dirname + '/views/index.html', 'utf8', function(err, text){
         res.send(text);
     });
 });
 
-app.get('/set/category', function(req, res){
+app.get('/set/category', forceSSL, ensureAuthenticated, function(req, res){
   db.view('misc', 'all_set_categories', { group: true }, function(err, body) {
     
     if (!err) {
@@ -470,7 +463,7 @@ app.get('/set/category', function(req, res){
   });
 });
 
-app.get('/typeahead/set/category', function(req, res){
+app.get('/typeahead/set/category', forceSSL, function(req, res){
   var query = '';
   if(!_.isUndefined(req.query.q)) query = req.query.q;
 
@@ -490,7 +483,7 @@ app.get('/typeahead/set/category', function(req, res){
   });
 });
 
-app.get('/typeahead/set/visibility', function(req, res){
+app.get('/typeahead/set/visibility', forceSSL, function(req, res){
   var query = '';
   if(!_.isUndefined(req.query.q)) query = req.query.q;
 
@@ -508,7 +501,7 @@ app.get('/typeahead/set/visibility', function(req, res){
   });
 });
 
-app.get('/set/category/:category', function(req, res){
+app.get('/set/category/:category', forceSSL, function(req, res){
   var category = sanitizer.sanitize(req.params.category);
 
   db.view('sets', 'by_category', { startkey: new Array(category), endkey: new Array(category, {}) }, function(err, body) {
@@ -524,7 +517,7 @@ app.get('/set/category/:category', function(req, res){
   });
 });
 
-app.get('/set/:id/personalcard', function(req, res){
+app.get('/set/:id/personalcard', forceSSL, function(req, res){
   console.log("get personalcard");
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
@@ -543,7 +536,7 @@ app.get('/set/:id/personalcard', function(req, res){
   });
 });
 
-app.get('/set/learned', ensureAuthenticated, function(req, res){
+app.get('/set/learned', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
@@ -580,14 +573,14 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/set/:id/card', function(req, res){
+app.get('/set/:id/card', forceSSL, function(req, res){
   db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { 
         doc.value._id = sanitizer.sanitize(doc.value._id);
         doc.value._rev = sanitizer.sanitize(doc.value._rev);
-        doc.value.created = parseInt(sanitizer.sanitize(doc.value.created));
+        doc.value.created = sanitizer.sanitize(doc.value.created);
         doc.value.owner = sanitizer.sanitize(doc.value.owner);
         doc.value.setId = sanitizer.sanitize(doc.value.setId);
         doc.value.front.text = sanitizer.sanitize(doc.value.front.text);
@@ -609,7 +602,7 @@ app.get('/set/:id/card', function(req, res){
   });
 });
 
-app.get('/set/:id/memo/card', function(req, res){
+app.get('/set/:id/memo/card', forceSSL, function(req, res){
   console.log("memo - get cards");
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
@@ -645,7 +638,7 @@ app.get('/set/:id/memo/card', function(req, res){
   });
 });
 
-app.get('/set/:id', function(req, res){
+app.get('/set/:id', forceSSL, function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!err) {
       var docs = _.map(body.rows, function(doc) { 
@@ -667,7 +660,7 @@ app.get('/set/:id', function(req, res){
   });
 });
 
-app.get('/user/:username', ensureAuthenticated, function(req, res){
+app.get('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
   db.view('users', 'by_username', { key: req.params.username }, function(err, body) {
     if(!_.isUndefined(body.rows) && _.size(body.rows) > 0) {
 
@@ -691,7 +684,7 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
   });
 });
 
-app.put('/user/:username', ensureAuthenticated, function(req, res){
+app.put('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   console.log("u", user.username);
@@ -722,7 +715,7 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
   }
 });
 
-app.get('/set/user/:username', ensureAuthenticated, function(req, res) {
+app.get('/set/user/:username', forceSSL, ensureAuthenticated, function(req, res) {
   var username = req.params.username;
   if(!_.isUndefined(username)) {
     db.view('sets', 'by_id_with_cards', function(err, body) {
@@ -759,7 +752,7 @@ app.get('/set/user/:username', ensureAuthenticated, function(req, res) {
   }
 });
 
-app.get('/set', ensureAuthenticated, function(req, res){
+app.get('/set', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   setTimeout(function(){
@@ -798,7 +791,7 @@ app.get('/set', ensureAuthenticated, function(req, res){
   });
 });
 
-app.post('/set', ensureAuthenticated, function(req, res){
+app.post('/set', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -813,7 +806,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
   data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt)),
   data.rating = (req.body.rating === 'true')
   data.type = "set";
-  data.created = parseInt(sanitizer.sanitize(time));
+  data.created = sanitizer.sanitize(time);
 
   db.insert(
     data, 
@@ -830,7 +823,7 @@ app.post('/set', ensureAuthenticated, function(req, res){
   });  
 });
 
-app.put('/set/:setid', ensureAuthenticated, function(req, res){
+app.put('/set/:setid', forceSSL, ensureAuthenticated, function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});
@@ -841,7 +834,7 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
       data._id = sanitizer.sanitize(req.body._id);
       data._rev = sanitizer.sanitize(req.body._rev);
       data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt));
-      data.created = parseInt(sanitizer.sanitize(req.body.created));
+      data.created = sanitizer.sanitize(req.body.created);
       data.type = "set";
       data.name = sanitizer.sanitize(req.body.name);
       data.description = sanitizer.sanitize(req.body.description);
@@ -869,7 +862,7 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 
 });
 
-app.delete('/set/:setid', ensureAuthenticated, function(req, res){
+app.delete('/set/:setid', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -945,7 +938,7 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/card/:id', ensureAuthenticated, function(req, res){
+app.get('/card/:id', forceSSL, ensureAuthenticated, function(req, res){
   db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
 
@@ -955,7 +948,7 @@ app.get('/card/:id', ensureAuthenticated, function(req, res){
 
       card._id = sanitizer.sanitize(card._id);
       card._rev = sanitizer.sanitize(card._rev);
-      card.created = parseInt(sanitizer.sanitize(card.created));
+      card.created = sanitizer.sanitize(card.created);
       card.owner = sanitizer.sanitize(card.owner);
       card.setId = sanitizer.sanitize(card.setId);
       card.front.text = sanitizer.sanitize(card.front.text);
@@ -976,7 +969,7 @@ app.get('/card/:id', ensureAuthenticated, function(req, res){
    });
 });
 
-app.put('/card/:id', ensureAuthenticated, function(req, res){
+app.put('/card/:id', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -988,7 +981,7 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
 
       card._id = sanitizer.sanitize(card._id);
       card._rev = sanitizer.sanitize(card._rev);
-      card.created = parseInt(sanitizer.sanitize(card.created));
+      card.created = sanitizer.sanitize(card.created);
       card.owner = sanitizer.sanitize(card.owner);
       card.setId = sanitizer.sanitize(card.setId);
       card.front.text = sanitizer.sanitize(card.front.text);
@@ -1014,7 +1007,7 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
   });
 });
 
-app.delete('/card/:id', ensureAuthenticated, function(req, res) {
+app.delete('/card/:id', forceSSL, ensureAuthenticated, function(req, res) {
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -1055,7 +1048,7 @@ app.delete('/card/:id', ensureAuthenticated, function(req, res) {
   });
 });
 
-app.post('/card', ensureAuthenticated, function(req, res){
+app.post('/card', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -1099,7 +1092,7 @@ app.post('/card', ensureAuthenticated, function(req, res){
   });
 });
 
-app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+app.post('/personalcard/:cardid', forceSSL, ensureAuthenticated, function(req, res){
   console.log("new personalcard");
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
@@ -1169,7 +1162,7 @@ app.post('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   });
 
 
-app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
+app.put('/personalcard/:cardid', forceSSL, ensureAuthenticated, function(req, res){
   console.log("using existing personalcard");
   var time = new Date().getTime();
   var today = Date.today();
@@ -1286,7 +1279,7 @@ app.put('/personalcard/:cardid', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/score/:username', ensureAuthenticated, function(req, res){
+app.get('/score/:username', forceSSL, ensureAuthenticated, function(req, res){
   var game = "meteor";
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
@@ -1377,7 +1370,7 @@ app.get('/score/:username', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/score/:username/:set', function(req, res){
+app.get('/score/:username/:set', forceSSL, function(req, res){
   var game = "meteor";
 
   var user = req.session.passport.user;
@@ -1403,7 +1396,7 @@ app.get('/score/:username/:set', function(req, res){
 });
 
 
-app.post('/score/:username', ensureAuthenticated, function(req, res){
+app.post('/score/:username', forceSSL, ensureAuthenticated, function(req, res){
     var game = 'meteor';
     var owner = sanitizer.sanitize(req.body.owner);
     var setId = sanitizer.sanitize(req.body.setId);
@@ -1485,7 +1478,7 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
     });
 });
 
-app.get('/xp/:username', ensureAuthenticated, function(req, res){
+app.get('/xp/:username', forceSSL, ensureAuthenticated, function(req, res){
   var msPerDay = 86400 * 1000;
   var now = new Date().getTime();
 
@@ -1566,7 +1559,7 @@ app.get('/xp/:username', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/rating/avg/:setId', ensureAuthenticated, function(req, res){
+app.get('/rating/avg/:setId', forceSSL, ensureAuthenticated, function(req, res){
   var result = {
     totalValutations: 0,
     avgValutation: 0,
@@ -1590,7 +1583,7 @@ app.get('/rating/avg/:setId', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/rating/permission/:setId', ensureAuthenticated, function(req, res){
+app.get('/rating/permission/:setId', forceSSL, ensureAuthenticated, function(req, res){
   var setId = req.params.setId;
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
@@ -1617,11 +1610,9 @@ app.get('/rating/permission/:setId', ensureAuthenticated, function(req, res){
       res.send(404);
     }
   });  
-  
-
 });
 
-app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
+app.get('/set/rating/:setId', forceSSL, ensureAuthenticated, function(req, res){
   db.view("rating", "by_set", { key: new Array(req.params.setId)}, function(err, body) {
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
       var ratings = _.pluck(body.rows, "value");
@@ -1634,7 +1625,7 @@ app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
   });
 });
 
-app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
+app.post('/set/rating/:setId', forceSSL, ensureAuthenticated, function(req, res){
   var value = parseInt(sanitizer.sanitize(req.body.value));
   var comment = sanitizer.sanitize(req.body.comment);
   var setId = sanitizer.sanitize(req.params.setId);
@@ -1666,7 +1657,7 @@ app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
   }   
 });
 
-app.get('/badge/:username', ensureAuthenticated, function(req, res){
+app.get('/badge/:username', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   user = user.username;
@@ -2214,7 +2205,6 @@ if(process.env.NODE_ENV === 'production') {
 }
 
 
-http_server.listen(80, function(){
-  console.log("http_server listening on port " + 80);
+http_server.listen(app.get("port"), function(){
+  console.log("http_server listening on port " + app.get("port"));
 });
-
