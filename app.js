@@ -562,8 +562,8 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/set/:setId/card', function(req, res){
-  db.view('cards', 'by_set', { key: new Array(req.params.setId) }, function(err, body) {
+app.get('/set/:id/card', function(req, res){
+  db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { 
@@ -633,14 +633,13 @@ app.get('/set/:id', function(req, res){
       var docs = _.map(body.rows, function(doc) { 
         doc.value._id = sanitizer.sanitize(doc.value._id);
         doc.value._rev = sanitizer.sanitize(doc.value._rev);
-        doc.value.id = sanitizer.sanitize(doc.value.id);
         doc.value.name = sanitizer.sanitize(doc.value.name);
         doc.value.description = sanitizer.sanitize(doc.value.description);
         doc.value.visibility =  sanitizer.sanitize(doc.value.visibility);
         doc.value.category = sanitizer.sanitize(doc.value.category);
         doc.value.owner =  sanitizer.sanitize(doc.value.owner);
         doc.value.type = 'set';
-        return doc.value
+        return doc.value;
       });
       res.json(docs[0]);
     } else {
@@ -726,7 +725,6 @@ app.get('/set/user/:username', ensureAuthenticated, function(req, res) {
       sets = _.map(sets, function(set){
         set._id = sanitizer.sanitize(set._id);
         set._rev = sanitizer.sanitize(set._rev);
-        set.id = sanitizer.sanitize(set.id);
         set.owner =  sanitizer.sanitize(set.owner);
         set.name =  sanitizer.sanitize(set.name);;
         set.description =  sanitizer.sanitize(set.description);;
@@ -768,7 +766,6 @@ app.get('/set', ensureAuthenticated, function(req, res){
     sets = _.map(sets, function(set){
       set._id = sanitizer.sanitize(set._id);
       set._rev = sanitizer.sanitize(set._rev);
-      set.id = sanitizer.sanitize(set.id);
       set.owner =  sanitizer.sanitize(set.owner);
       set.name =  sanitizer.sanitize(set.name);;
       set.description =  sanitizer.sanitize(set.description);;
@@ -824,7 +821,6 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
 
       var data = {};
       data._id = sanitizer.sanitize(req.body._id);
-      data.id = sanitizer.sanitize(req.body.id);
       data._rev = sanitizer.sanitize(req.body._rev);
       data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt));
       data.created = sanitizer.sanitize(req.body.created);
