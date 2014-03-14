@@ -537,28 +537,33 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
   var username = user.username;
 
   db.view('cards', 'personal_card_by_owner', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
-    var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
-    var setIds = new Array();
-    _.each(cards, function(card){      
-      var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+    if(!err && !_.isEmpty(body.rows)) {
+      var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
+      var setIds = new Array();
+      _.each(cards, function(card){      
+        var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
 
-      if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
-        setIds.push(card.value.setId);
-      }
-    }, this);
-    setIds = _.uniq(setIds);
+        if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
+          setIds.push(card.value.setId);
+        }
+      }, this);
+      setIds = _.uniq(setIds);
 
-    db.get("_all_docs", { keys: setIds, include_docs: true } , function(err, body) {
-      if(!err) {
-        var docs = _.pluck(body.rows, "doc");
-        _.each(docs, function(doc){
-          doc.cardCnt = "-";
+      db.get("_all_docs", { keys: setIds, include_docs: true } , function(err, body) {
+        if(!err) {
+          var docs = _.pluck(body.rows, "doc");
+          _.each(docs, function(doc){
+            doc.cardCnt = "-";
 
-          if(!_.has(doc, "category") && _.isUndefined(doc.category)) doc.category = "";
-        })
-        res.json(docs);
-      }
-    });
+            if(!_.has(doc, "category") && _.isUndefined(doc.category)) doc.category = "";
+          })
+          res.json(docs);
+        }
+      });
+    } else {
+      console.log(err);
+    } 
+    
   });
 });
 
