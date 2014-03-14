@@ -8,6 +8,7 @@ var express = require('express')
   , crypto = require('crypto')
   , jws = require('jws')
   , http = require('http')
+  , https = require('https')
   , path = require('path')
   , fs = require('fs')
   , date = require('date-utils')
@@ -29,8 +30,20 @@ var secret = 'some secret';
 var sessionKey = 'express.sid';
 var cookieParser = express.cookieParser(secret);
 var sessionStore = new express.session.MemoryStore()
+var srv;
 
-var srv = http.createServer(app);
+if(process.env.NODE_ENV === 'production') {
+  var options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.crt')
+  };
+  srv = http.createServer(options, app);
+} else {
+  srv = http.createServer(app);
+}
+
+
+
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -2177,13 +2190,6 @@ if(process.env.NODE_ENV != 'development') {
   });
 }
 
-app.get('/test', function(req, res){
-
-  var x = "<script>hello</script><b>asdasd</b><a onclick='alert(\"\");'><i>asd</i></a>";
-  console.log(x);
-  var y = sanitizer.sanitize(x);
-  console.log(x, y);
-});
 
 srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
