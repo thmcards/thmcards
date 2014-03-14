@@ -175,7 +175,7 @@ Cards.module('Set.Details', function(Details, App) {
 				"lists": true,
 				"image": false,
 				toolbar: { code:  function(locale, options) {
-				    return '<li><a class="btn btn-default btn-sm" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
+				    return '<li><a class="btn btn-default btn-sm" title="Code" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
 				   } 
 				}
 			}
@@ -187,7 +187,7 @@ Cards.module('Set.Details', function(Details, App) {
 
 				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];			
 				$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
-			}, 10);
+			}, 50);
 			$("#back-textarea").wysihtml5(editorConfig);
 
 		}
