@@ -827,23 +827,23 @@
 
     <script type="text/template" id="set-learn-controls">
       <button class="btn btn-default learn-box" title="1" style="width:100%;">
-        Fach 1
+        <span class="pull-left">Fach 1</span>
         <span class="badge pull-right box-indicator one" title="1">0</span>
       </button>
       <button class="btn btn-default learn-box" title="2" style="width:100%; margin-top:10px">
-        Fach 2
+        <span class="pull-left">Fach 2</span>
         <span class="badge pull-right box-indicator two" title="2">0</span>
       </button>
       <button class="btn btn-default learn-box" title="3" style="width:100%; margin-top:10px">
-        Fach 3
+        <span class="pull-left">Fach 3</span>
         <span class="badge pull-right box-indicator three" title="3">0</span>
       </button>
       <button class="btn btn-default learn-box" title="4" style="width:100%; margin-top:10px">
-        Fach 4
+        <span class="pull-left">Fach 4</span>
         <span class="badge pull-right box-indicator four" title="4">0</span>
       </button>
       <button class="btn btn-default learn-box" title="5" style="width:100%; margin-top:10px">
-        Fach 5
+        <span class="pull-left">Fach 5</span>
         <span class="badge pull-right box-indicator five" title="5">0</span>
       </button>
     </script>
@@ -864,18 +864,22 @@
 
       <div class="box learn-endscreen" style="display:none">
         <div class="block">
-          <div class="centered front" style="font-size:2em">
+          <div class="centered front learnbox-success">
                 Lerneinheit erfolgreich beendet
           </div>
-          <div class="centered front" style="font-size:1.2em; width:500px">
-                Wähle ein weiteres Fach oder gehe zurück zur Hauptseite</div>
+          <div class="centered front learnbox-choose-message">
+                Wähle ein weiteres Fach oder gehe zurück zum Kartensatz</div>
+          <br />
+          <a class="btn-back btn btn-default btn-s learn-back" onclick="history.go(-1)">
+            <span>Zurück zum Kartensatz</span>
+          </a>
           </div>
         </div>
       </div>
 
       <div class="box learn-startscreen">
         <div class="block">
-          <div class="centered front" style="font-size:2em">
+          <div class="centered front" style="font-size:1.8em">
                 Wähle ein Fach auf der linken Seite
           </div>
         </div>
