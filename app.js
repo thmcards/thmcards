@@ -7,8 +7,6 @@ if(!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 var express = require('express')
   , crypto = require('crypto')
   , jws = require('jws')
-  , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , fs = require('fs')
@@ -42,6 +40,7 @@ app.configure(function(){
   app.use(helmet.iexss());
   app.use(helmet.contentTypeOptions());
   app.use(helmet.hsts());
+  app.use(helmet.hidePoweredBy());
   app.use(cookieParser);
   app.use(express.json());
   app.use(express.methodOverride());
@@ -495,6 +494,7 @@ app.get('/set/category/:category', function(req, res){
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value });
+      console.log(docs);
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
@@ -1874,67 +1874,69 @@ var checkBadgeStreber = function(owner, sessionID) {
       var rank = body.rank;
 
       db.view('cards', 'personal_card_by_owner', { startkey: new Array(username), endkey: new Array(username, {}) }, function(err, body) {
-        var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
-        var setIds = new Array();
-        _.each(cards, function(card){      
-          var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
+        if(!err && !_.isUndefined(body.rows) && _.size(body.rows) > 0) {
+          var cards = _.filter(body.rows, function(row){ return row.key[2] == 0; });
+          var setIds = new Array();
+          _.each(cards, function(card){      
+            var persCard = _.filter(body.rows, function(row){ return ((row.key[2] == 1) && (row.value.cardId == card.value._id)); });
 
-          if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
-            setIds.push(card.value.setId);
-          }
-        }, this);
-        setIds = _.uniq(setIds);
+            if(!_.isUndefined(persCard) && !_.isEmpty(persCard)) {
+              setIds.push(card.value.setId);
+            }
+          }, this);
+          setIds = _.uniq(setIds);
 
-        var setKeys = new Array();
-        _.each(setIds, function(id){
-          setKeys.push(new Array(id));
-        })
+          var setKeys = new Array();
+          _.each(setIds, function(id){
+            setKeys.push(new Array(id));
+          })
 
-        db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
-          if (!err) {
-            var docs = _.map(body.rows, function(doc) { return doc.value});
+          db.view('cards', 'by_set', { keys: setKeys }, function(err, body) {
+            if (!err) {
+              var docs = _.map(body.rows, function(doc) { return doc.value});
 
-            var cards = _.groupBy(docs, "setId");
-            var cardIds = _.pluck(docs, "_id");
+              var cards = _.groupBy(docs, "setId");
+              var cardIds = _.pluck(docs, "_id");
 
-            var learnedCards = 0;
-            var keys = new Array();
+              var learnedCards = 0;
+              var keys = new Array();
 
-            _.each(cardIds, function(id){
-              keys.push(new Array(id));
-            });
+              _.each(cardIds, function(id){
+                keys.push(new Array(id));
+              });
 
-            db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
-              if (!err) {
-                var docs = _.map(body.rows, function(doc) { return doc.value});
-                
-                var learnedCards = new Array();
-                _.each(docs, function(doc){
-                  if(doc.times_learned >= 1) learnedCards.push(doc);
-                });
+              db.view('cards', 'personal_card_by_cardId', { keys: keys}, function(err, body) {
+                if (!err) {
+                  var docs = _.map(body.rows, function(doc) { return doc.value});
+                  
+                  var learnedCards = new Array();
+                  _.each(docs, function(doc){
+                    if(doc.times_learned >= 1) learnedCards.push(doc);
+                  });
 
-                var sets = _.groupBy(learnedCards, "setId");
+                  var sets = _.groupBy(learnedCards, "setId");
 
-                if(_.has(sets, "undefined")) delete sets.undefined;
+                  if(_.has(sets, "undefined")) delete sets.undefined;
 
-                var completeLearnedSets = 0;
-                _.each(_.keys(sets), function(set){
-                  if(_.size(sets[set]) == _.size(cards[set])) completeLearnedSets++;
-                });
-                var rankValue = rank[2];
-                var nextRank = rank[3];
-                _.each(rank, function(r){
-                  if(completeLearnedSets >= r) {
-                    if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
-                    rankValue = _.indexOf(_.values(rank), r)+1;
-                    issueBadge(badge, owner, sessionID, rankValue, completeLearnedSets);
-                  }
-                });
-                setBadgeProgress(badge, owner, completeLearnedSets, nextRank);
-              }
-            });
-          }
-        });
+                  var completeLearnedSets = 0;
+                  _.each(_.keys(sets), function(set){
+                    if(_.size(sets[set]) == _.size(cards[set])) completeLearnedSets++;
+                  });
+                  var rankValue = rank[2];
+                  var nextRank = rank[3];
+                  _.each(rank, function(r){
+                    if(completeLearnedSets >= r) {
+                      if(rank[_.indexOf(_.values(rank), r)] > nextRank) nextRank = rank[_.indexOf(_.values(rank), r)];
+                      rankValue = _.indexOf(_.values(rank), r)+1;
+                      issueBadge(badge, owner, sessionID, rankValue, completeLearnedSets);
+                    }
+                  });
+                  setBadgeProgress(badge, owner, completeLearnedSets, nextRank);
+                }
+              });
+            }
+          });
+        } 
       }); 
     }
   }); 
