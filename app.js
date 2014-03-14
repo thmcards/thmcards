@@ -666,7 +666,7 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
       userInfo.provider = sanitizer.sanitize(userInfo.provider);
       userInfo.username = sanitizer.sanitize(userInfo.username);
       userInfo.name = sanitizer.sanitize(userInfo.name);
-      userInfo.email = sanitizer.sanitize(userInfo.email);
+      userInfo.email = (userInfo.email) ? sanitizer.sanitize(userInfo.email) : '';
       userInfo.profile = sanitizer.sanitize(userInfo.profile);
       userInfo.type = 'user';
 
