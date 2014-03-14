@@ -2082,7 +2082,12 @@ var checkBadgeKritiker = function(owner, sessionID) {
         db.view('rating', 'by_owner', { startkey: new Array(owner), endkey: new Array(owner) }, function(err, body) {
         var sets = _.pluck(body.rows, "value");
         sets = _.filter(sets, function(set){ 
-          return set.comment.length >= 60;
+          if(_.has(set, "comment")) {
+            return set.comment.length >= 60;
+          } else {
+            return false;  
+          }
+          
         });
 
         var nextRank = rank[2];
