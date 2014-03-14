@@ -13,10 +13,10 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		className: "well well-sm sidebar-nav",
 		events: {
 			"click a.btn-primary": "startGame",
-			"click a.btn-danger": "stopGame",
 			"click a.btn-info": "resumeGame",
 			"click button.back": "backToList",
 			"click button.newGame": "startNewGame",
+			"click button.btn-danger": "stopGame",
 			"keyup input.meteor-answer": "onKeypress",
 			"blur #itemcnt": "changeItemCnt",
 			"blur #itemspeed": "changeItemSpeed"
@@ -299,8 +299,15 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		},
 		stopGame: function(ev) {
 			ev.preventDefault();
-
 			this.runGame = false;
+
+			var check = confirm("Wollen Sie das Spiel wirklich beenden?");
+			if (check == true) {
+  				history.back();
+			} else {
+				this.runGame = true;
+				this.resumeGame(ev);
+			}
 		},
 		resumeGame: function(ev) {
 			ev.preventDefault();
