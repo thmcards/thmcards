@@ -179,17 +179,16 @@ Cards.module('Set.Details', function(Details, App) {
 				   } 
 				}
 			}
+			setTimeout(function(){
+				$("#front-textarea").wysihtml5(editorConfig).focus();
 
-			$("#front-textarea").wysihtml5(editorConfig);
+				var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
+				$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
+
+				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];			
+				$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
+			}, 10);
 			$("#back-textarea").wysihtml5(editorConfig);
-
-			var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
-			var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
-
-			$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
-			$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
-
-
 
 		}
 	});
