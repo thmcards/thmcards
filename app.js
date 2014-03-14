@@ -37,7 +37,7 @@ if(process.env.NODE_ENV === 'production') {
     key: fs.readFileSync('server.key'),
     cert: fs.readFileSync('server.crt')
   };
-  srv = http.createServer(options, app);
+  srv = https.createServer(options, app);
 } else {
   srv = http.createServer(app);
 }
