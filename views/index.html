@@ -1433,9 +1433,19 @@
           $("#notificationContainer").fadeOut();
         });
       });
-
-
     </script>
+    <script type="text/javascript"> 
+      var $buoop = {vs:{i:10,f:20,o:15,s:5.1,n:9}}; 
+      $buoop.ol = window.onload; 
+      window.onload=function(){ 
+        try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
+        var e = document.createElement("script"); 
+        e.setAttribute("type", "text/javascript"); 
+        e.setAttribute("src", "//browser-update.org/update.js"); 
+        document.body.appendChild(e); 
+      } 
+    </script> 
+
     <div id="notificationContainer" style="padding:10px 15px 15px; position: absolute; display:none; width:350px; right: 10px; top: 10px; z-index: 10000; opacity: 0.9; border:1px solid #777; background-color:#fff; border-radius:5px">
       <button type="button" class="close" aria-hidden="true" style="float:right">&times;</button>
       <div style="float:left; margin-right:20px;">
