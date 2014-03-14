@@ -42,11 +42,10 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 				var that = this;
 				var learnedCollection = new Cards.Entities.SetLearnedCollection().fetch({
 					success: function(collection) {
-						that.collection.reset(collection.models);
+						that.collection.reset(collection.models, { learned: true });
 					}
 				});
 			}
-
 		},
 		showSetModal: function() {
 			var that = this;

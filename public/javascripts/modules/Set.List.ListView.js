@@ -4,6 +4,11 @@ Cards.module('Set.List', function(List, App) {
 		template: "#set-list-empty",
 		className: "empty-list"
 	});
+	List.SetLearnedEmptyView = Backbone.Marionette.ItemView.extend({
+		tagName: "tr",
+		template: "#set-list-learned-empty",
+		className: "empty-list"
+	});
 	List.SetItemView = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
 		template: "#set-list-item",
@@ -30,6 +35,14 @@ Cards.module('Set.List', function(List, App) {
 			"click .btn-newSet": "newSet"
 		},
 		initialize: function() {
+			var that = this;
+			this.collection.bind("reset", function(col, opt) {
+				if(!_.isUndefined(opt) && _.has(opt, "learned")) {
+					that.emptyView = List.SetLearnedEmptyView;
+				} else {
+					that.emptyView = List.SetEmptyView;
+				}
+			});			
 			this.collection.fetch();
 		},
 		newSet: function() {

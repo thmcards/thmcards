@@ -562,6 +562,7 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
       });
     } else {
       console.log(err);
+      res.json([]);
     } 
     
   });
