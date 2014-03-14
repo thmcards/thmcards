@@ -16,6 +16,7 @@ var express = require('express')
   , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
   , _ = require('underscore')
+  , sanitizer = require('sanitizer')
   , passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
@@ -104,10 +105,6 @@ io.set('authorization', function(handshake, cb) {
 io.sockets.on('connection', function(socket) {
   console.log('Socket connected with SID: ' + socket.handshake.sessionID, socket.store.id);
   socket.set('sessionID', socket.handshake.sessionID);
-
-  socket.on('disconnect', function() {
-    
-  });
 });
 
 function getSocketBySessionID(sessionID) {
@@ -116,7 +113,6 @@ function getSocketBySessionID(sessionID) {
   _.each(io.sockets.clients(), function(socket) {
     if(sessionID == socket.store.data.sessionID) skt = socket;
   })
-
   return skt;
 }
 
@@ -488,7 +484,7 @@ app.get('/typeahead/set/visibility', function(req, res){
 });
 
 app.get('/set/category/:category', function(req, res){
-  var category = req.params.category;
+  var category = sanitizer.sanitize(req.params.category);
 
   db.view('sets', 'by_category', { startkey: new Array(category), endkey: new Array(category, {}) }, function(err, body) {
     
@@ -553,13 +549,27 @@ app.get('/set/learned', ensureAuthenticated, function(req, res){
   });
 });
 
-app.get('/set/:id/card', function(req, res){
-  console.log(req.params);
-  console.log("get card");
-  db.view('cards', 'by_set', { key: new Array(req.params.id) }, function(err, body) {
+app.get('/set/:setId/card', function(req, res){
+  db.view('cards', 'by_set', { key: new Array(req.params.setId) }, function(err, body) {
     
     if (!err) {
-      var docs = _.map(body.rows, function(doc) { return doc.value});
+      var docs = _.map(body.rows, function(doc) { 
+        doc.value._id = sanitizer.sanitize(doc.value._id);
+        doc.value._rev = sanitizer.sanitize(doc.value._rev);
+        doc.value.created = sanitizer.sanitize(doc.value.created);
+        doc.value.owner = sanitizer.sanitize(doc.value.owner);
+        doc.value.setId = sanitizer.sanitize(doc.value.setId);
+        doc.value.front.text = sanitizer.sanitize(doc.value.front.text);
+        doc.value.front.text_plain = sanitizer.sanitize(doc.value.front.text_plain);
+        doc.value.front.picture = (doc.value.front.picture) ? sanitizer.sanitize(doc.value.front.picture) : '';
+        doc.value.front.video = sanitizer.sanitize(doc.value.front.video);
+        doc.value.back.text = sanitizer.sanitize(doc.value.back.text);
+        doc.value.back.text_plain = sanitizer.sanitize(doc.value.back.text_plain);
+        doc.value.back.picture = (doc.value.back.picture) ? sanitizer.sanitize(doc.value.back.picture) : '';
+        doc.value.back.video = sanitizer.sanitize(doc.value.back.video);
+        doc.value.type = "card";
+        return doc.value;
+      });
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
@@ -607,7 +617,18 @@ app.get('/set/:id/memo/card', function(req, res){
 app.get('/set/:id', function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!err) {
-      var docs = _.map(body.rows, function(doc) { return doc.value});
+      var docs = _.map(body.rows, function(doc) { 
+        doc.value._id = sanitizer.sanitize(doc.value._id);
+        doc.value._rev = sanitizer.sanitize(doc.value._rev);
+        doc.value.id = sanitizer.sanitize(doc.value.id);
+        doc.value.name = sanitizer.sanitize(doc.value.name);
+        doc.value.description = sanitizer.sanitize(doc.value.description);
+        doc.value.visibility =  sanitizer.sanitize(doc.value.visibility);
+        doc.value.category = sanitizer.sanitize(doc.value.category);
+        doc.value.owner =  sanitizer.sanitize(doc.value.owner);
+        doc.value.type = 'set';
+        return doc.value
+      });
       res.json(docs[0]);
     } else {
       console.log("[db.sets/by_id]", err.message);
@@ -621,6 +642,16 @@ app.get('/user/:username', ensureAuthenticated, function(req, res){
     if(!_.isUndefined(body.rows) && _.size(body.rows) > 0) {
 
       var userInfo = _.first(body.rows).value;
+
+      userInfo._id = sanitizer.sanitize(userInfo._id);
+      userInfo._rev = sanitizer.sanitize(userInfo._rev);
+      userInfo.provider = sanitizer.sanitize(userInfo.provider);
+      userInfo.username = sanitizer.sanitize(userInfo.username);
+      userInfo.name = sanitizer.sanitize(userInfo.name);
+      userInfo.email = sanitizer.sanitize(userInfo.email);
+      userInfo.profile = sanitizer.sanitize(userInfo.profile);
+      userInfo.type = 'user';
+
       res.json(userInfo);
     } else {
       console.log("user/username", body);
@@ -661,8 +692,7 @@ app.put('/user/:username', ensureAuthenticated, function(req, res){
   }
 });
 
-app.get('/set/user/:username', ensureAuthenticated, function(req, res){
-
+app.get('/set/user/:username', ensureAuthenticated, function(req, res) {
   var username = req.params.username;
   if(!_.isUndefined(username)) {
     db.view('sets', 'by_id_with_cards', function(err, body) {
@@ -680,6 +710,19 @@ app.get('/set/user/:username', ensureAuthenticated, function(req, res){
         return set.visibility == 'public' && set.cardCnt > 0;
       });
 
+      sets = _.map(sets, function(set){
+        set._id = sanitizer.sanitize(set._id);
+        set._rev = sanitizer.sanitize(set._rev);
+        set.id = sanitizer.sanitize(set.id);
+        set.owner =  sanitizer.sanitize(set.owner);
+        set.name =  sanitizer.sanitize(set.name);;
+        set.description =  sanitizer.sanitize(set.description);;
+        set.visibility =  sanitizer.sanitize(set.visibility);;
+        set.category =  sanitizer.sanitize(set.category);;
+        set.rating = (set.rating) ? set.rating : false;
+        set.type = "set";
+        return set;
+      });
       res.json(_.sortBy(sets, function(set){ return set.name }));
     });
   } else {
@@ -709,6 +752,20 @@ app.get('/set', ensureAuthenticated, function(req, res){
     }, this);
     sets = _.pluck(sets, "value");
 
+    sets = _.map(sets, function(set){
+      set._id = sanitizer.sanitize(set._id);
+      set._rev = sanitizer.sanitize(set._rev);
+      set.id = sanitizer.sanitize(set.id);
+      set.owner =  sanitizer.sanitize(set.owner);
+      set.name =  sanitizer.sanitize(set.name);;
+      set.description =  sanitizer.sanitize(set.description);;
+      set.visibility =  sanitizer.sanitize(set.visibility);;
+      set.category =  sanitizer.sanitize(set.category);;
+      set.rating = (set.rating) ? set.rating : false;
+      set.type = "set";
+      return set;
+    });
+
     res.json(_.sortBy(sets, function(set){ return set.name }));
   });
 });
@@ -719,11 +776,16 @@ app.post('/set', ensureAuthenticated, function(req, res){
 
   var time = new Date().getTime();
 
-  var data = req.body;
+  var data = {};
   data.owner = user.username;
+  data.name = sanitizer.sanitize(req.body.name),
+  data.description = sanitizer.sanitize(req.body.description),
+  data.visibility = sanitizer.sanitize(req.body.visibility),
+  data.category = sanitizer.sanitize(req.body.category),
+  data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt)),
+  data.rating = (req.body.rating === 'true')
   data.type = "set";
-  data.created = time;
-  data.rating = (req.body.rating === 'true');
+  data.created = sanitizer.sanitize(time);
 
   db.insert(
     data, 
@@ -744,6 +806,23 @@ app.put('/set/:setid', ensureAuthenticated, function(req, res){
   db.view('sets', 'by_id', { key: new Array(req.body._id)}, function(err, body) {
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});
+
+      console.log(req.body);
+
+      var data = {};
+      data._id = sanitizer.sanitize(req.body._id);
+      data.id = sanitizer.sanitize(req.body.id);
+      data._rev = sanitizer.sanitize(req.body._rev);
+      data.cardCnt = parseInt(sanitizer.sanitize(req.body.cardCnt));
+      data.created = sanitizer.sanitize(req.body.created);
+      data.type = "set";
+      data.name = sanitizer.sanitize(req.body.name);
+      data.description = sanitizer.sanitize(req.body.description);
+      data.visibility = sanitizer.sanitize(req.body.visibility);
+      data.category = sanitizer.sanitize(req.body.category);
+      data.rating = (req.body.rating === 'true');      
+
+      console.log(data);
 
       db.insert(req.body, doc[0]._id, function(err, body, header){
           if(err) {
@@ -842,7 +921,26 @@ app.delete('/set/:setid', ensureAuthenticated, function(req, res){
 app.get('/card/:id', ensureAuthenticated, function(req, res){
   db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
     if (!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
-      var card = body.rows[0].value;
+
+      var card = _.first(body.rows).value;
+
+      if(!(card.front.text && card.back.text)) res.send(400);
+
+      card._id = sanitizer.sanitize(card._id);
+      card._rev = sanitizer.sanitize(card._rev);
+      card.created = sanitizer.sanitize(card.created);
+      card.owner = sanitizer.sanitize(card.owner);
+      card.setId = sanitizer.sanitize(card.setId);
+      card.front.text = sanitizer.sanitize(card.front.text);
+      card.front.text_plain = sanitizer.sanitize(card.front.text_plain);
+      card.front.picture = (card.front.picture) ? sanitizer.sanitize(card.front.picture) : '';
+      card.front.video = sanitizer.sanitize(card.front.video);
+      card.back.text = sanitizer.sanitize(card.back.text);
+      card.back.text_plain = sanitizer.sanitize(card.back.text_plain);
+      card.back.picture = (card.back.picture) ? sanitizer.sanitize(card.back.picture) : '';
+      card.back.video = sanitizer.sanitize(card.back.video);
+      card.type = "card";
+
       res.json(card);
     } else {
       console.log("[db.cards/by_id]", err.message);
@@ -857,12 +955,24 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
 
   checkOwner(req.body._id, user.username, function(){
     db.view('cards', 'by_id', { key: new Array(req.params.id) }, function(err, body) {
-      var card = body.rows[0].value;
-      var front = req.body.front;
-      var back = req.body.back;
+      var card = req.body;
 
-      card.front = front;
-      card.back = back;  
+      if(!(card.front.text && card.back.text)) res.send(400);
+
+      card._id = sanitizer.sanitize(card._id);
+      card._rev = sanitizer.sanitize(card._rev);
+      card.created = sanitizer.sanitize(card.created);
+      card.owner = sanitizer.sanitize(card.owner);
+      card.setId = sanitizer.sanitize(card.setId);
+      card.front.text = sanitizer.sanitize(card.front.text);
+      card.front.text_plain = sanitizer.sanitize(card.front.text_plain);
+      card.front.picture = (card.front.picture) ? sanitizer.sanitize(card.front.picture) : '';
+      card.front.video = sanitizer.sanitize(card.front.video);
+      card.back.text = sanitizer.sanitize(card.back.text);
+      card.back.text_plain = sanitizer.sanitize(card.back.text_plain);
+      card.back.picture = (card.back.picture) ? sanitizer.sanitize(card.back.picture) : '';
+      card.back.video = sanitizer.sanitize(card.back.video);
+      card.type = "card";
 
       db.insert(card, req.params.id, function(err, body){
         if(!err) {
@@ -870,7 +980,6 @@ app.put('/card/:id', ensureAuthenticated, function(req, res){
         } else {
           console.log("[db.users/by_username]", err.message);
         }
-        
       });
     });
   }, function(){
@@ -927,15 +1036,25 @@ app.post('/card', ensureAuthenticated, function(req, res){
   checkOwner(req.body.setId, owner, function(){
     var time = new Date().getTime();
 
+    var card = req.body;
+
+    if(!(card.front.text && card.back.text)) res.send(400);
+
+    card.created = time;
+    card.owner = owner;
+    card.setId = sanitizer.sanitize(card.setId);
+    card.front.text = sanitizer.sanitize(card.front.text);
+    card.front.text_plain = sanitizer.sanitize(card.front.text_plain);
+    card.front.picture = (card.front.picture) ? sanitizer.sanitize(card.front.picture) : '';
+    card.front.video = sanitizer.sanitize(card.front.video);
+    card.back.text = sanitizer.sanitize(card.back.text);
+    card.back.text_plain = sanitizer.sanitize(card.back.text_plain);
+    card.back.picture = (card.back.picture) ? sanitizer.sanitize(card.back.picture) : '';
+    card.back.video = sanitizer.sanitize(card.back.video);
+    card.type = "card";
+
     db.insert(
-      { 
-        "created": time,
-        "owner": owner,
-        "setId": _.escape(req.body.setId),
-        "front": req.body.front,
-        "back": req.body.back,
-        "type": "card"
-      }, 
+      card, 
       function(err, body, header){
         if(err) {
           console.log('[db.insert] ', err.message);
@@ -1259,10 +1378,10 @@ app.get('/score/:username/:set', function(req, res){
 
 app.post('/score/:username', ensureAuthenticated, function(req, res){
     var game = 'meteor';
-    var owner = req.body.owner;
-    var setId = req.body.setId;
-    var points = req.body.points;
-    var level = req.body.level;
+    var owner = sanitizer.sanitize(req.body.owner);
+    var setId = sanitizer.sanitize(req.body.setId);
+    var points = parseInt(req.body.points);
+    var level = parseInt(sanitizer.sanitize(req.body.level));
 
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
@@ -1274,7 +1393,6 @@ app.post('/score/:username', ensureAuthenticated, function(req, res){
         level: level,
         owner: owner,
         setId: setId,
-        owner: owner,
         points: points
       },    
       function(err, body) {
@@ -1415,8 +1533,6 @@ app.get('/xp/:username', ensureAuthenticated, function(req, res){
       }
 
       
-    } else {
-
     }
     res.json(result);
     
@@ -1492,12 +1608,14 @@ app.get('/set/rating/:setId', ensureAuthenticated, function(req, res){
 });
 
 app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
-  var value = parseInt(_.escape(req.body.value));
-  var comment = _.escape(req.body.comment);
-  var setId = _.escape(req.params.setId);
+  var value = parseInt(sanitizer.sanitize(req.body.value));
+  var comment = sanitizer.sanitize(req.body.comment);
+  var setId = sanitizer.sanitize(req.params.setId);
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
-  var owner = user.username;
+  var owner = sanitizer.sanitize(user.username);
+
+  if(!comment && !value) res.send(400);
 
   if(comment.length >= 60) {
     db.insert({
@@ -1517,7 +1635,7 @@ app.post('/set/rating/:setId', ensureAuthenticated, function(req, res){
         }
       });
   } else {
-    res.send(403);
+    res.send(400);
   }   
 });
 
@@ -1561,7 +1679,6 @@ app.get('/badge/:username', ensureAuthenticated, function(req, res){
                 if(_.has(b, "user")) {
                   b.user.progress = process.score;
                   b.user.nextRank = process.nextRank;
-                  //b.user.rank = 3;
                 } else {
                   b.user = {};
                   b.user.progress = process.score;
@@ -2051,32 +2168,6 @@ app.get('/syncbadges', ensureAuthenticated, function(req, res) {
       res.send(404);
     }
   });
-/*
-  var data = { 
-  "uid": "f2c20",
-  "recipient": {
-    "type": "email",
-    "hashed": false,
-    "identity": "dan.knapp@web.de"
-  },
-  "image": "http://thmcards.jit.su/badges/test-badge.png",
-  "evidence": "http://thmcards.jit.su/badges/beths-robot-work.html",
-  "issuedOn": 1359217910,
-  "badge": "http://thmcards.jit.su/badges/test-badge.json",
-  "verify": {
-    "type": "signed",
-    "url": "http://thmcards.jit.su/badges/public.pem"
-  }
-};
-
-  var signature = jws.sign({
-    header: { alg: 'rs256'},
-    payload: data,
-    secret: fs.readFileSync('private.pem')
-  });
-  
-  res.set('Content-Type', 'text/plain');
-  res.send(signature);*/
 });
 
 if(process.env.NODE_ENV != 'development') {
@@ -2085,6 +2176,14 @@ if(process.env.NODE_ENV != 'development') {
     process.exit(1); 
   });
 }
+
+app.get('/test', function(req, res){
+
+  var x = "<script>hello</script><b>asdasd</b><a onclick='alert(\"\");'><i>asd</i></a>";
+  console.log(x);
+  var y = sanitizer.sanitize(x);
+  console.log(x, y);
+});
 
 srv.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
