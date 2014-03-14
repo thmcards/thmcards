@@ -227,6 +227,7 @@ code {
 
 .centered {
   display: inline-block;
+  vertical-align: middle;
   width: 580px;
   font-size: 1.2em;
 }

@@ -175,21 +175,20 @@ Cards.module('Set.Details', function(Details, App) {
 				"lists": true,
 				"image": false,
 				toolbar: { code:  function(locale, options) {
-				    return '<li><a class="btn btn-default btn-sm" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
+				    return '<li><a class="btn btn-default btn-sm" title="Code" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
 				   } 
 				}
 			}
+			setTimeout(function(){
+				$("#front-textarea").wysihtml5(editorConfig).focus();
 
-			$("#front-textarea").wysihtml5(editorConfig);
+				var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
+				$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
+
+				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];			
+				$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
+			}, 50);
 			$("#back-textarea").wysihtml5(editorConfig);
-
-			var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
-			var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
-
-			$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
-			$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
-
-
 
 		}
 	});
