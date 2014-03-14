@@ -9,97 +9,91 @@
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/welcome.css" rel="stylesheet" />
   </head>
 
   <body>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:700px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><img src="/img/card_logo_welcome.png" height="45" /></h4>
+          </div>
+          <div class="modal-body">
+            
 
+            <div id="carousel-generic" class="carousel slide" data-ride="carousel">
+              <!-- Indicators -->
+              <ol class="carousel-indicators">
+                <li data-target="#carousel-generic" data-slide-to="0" class="active" style="color:#000"></li>
+                <li data-target="#carousel-generic" data-slide-to="1" style="color:#000"></li>
+                <li data-target="#carousel-generic" data-slide-to="2" style="color:#000"></li>
+                <li data-target="#carousel-generic" data-slide-to="3" style="color:#000"></li>
+              </ol>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:700px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title"><img src="/img/card_logo_welcome.png" height="45" /></h4>
-      </div>
-      <div class="modal-body">
-        
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                <div class="item active">
+                  <img alt="Second slide" src="img/carousel0.jpg">
+                  <div class="carousel-caption" style="color:#000">
+                    <h3>Deine digitalen Lernkarten</h3>
+                    <p>Lerne oder erstelle deine eigenen digitalen Lernkarten.</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <img alt="Second slide" src="img/carousel1.jpg">
+                  <div class="carousel-caption" style="color:#000">
+                    <h3>THMcards spricht TeX</h3>
+                    <p>Endlich ein einfacher Weg sperrige Matheformeln zu lernen</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <img alt="Second slide" src="img/carousel2.jpg">
+                  <div class="carousel-caption" style="color:#000">
+                    <h3>Hello World!</h3>
+                    <p>Lerne Programmcode einfacher - dank automatischem Syntaxhighlighting.</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <img alt="Second slide" src="img/carousel3.jpg">
+                  <div class="carousel-caption" style="color:#000; border:1px">
+                    <h3>Sammel Badges</h3>
+                    <p>Ausgewählte Aktionen und herausragende Leistungen werden mit Abzeichen belohnt. Hol' sie dir!</p>
+                  </div>
+                </div>
+              </div>
 
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active" style="color:#000"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1" style="color:#000"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="2" style="color:#000"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="3" style="color:#000"></li>
-          </ol>
-
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner">
-            <div class="item active">
-              <img alt="Second slide" src="img/carousel0.jpg">
-              <div class="carousel-caption" style="color:#000">
-                <h3>Deine digitalen Lernkarten</h3>
-                <p>Lerne oder erstelle deine eigenen digitalen Lernkarten.</p>
-              </div>
-            </div>
-            <div class="item">
-              <img alt="Second slide" src="img/carousel1.jpg">
-              <div class="carousel-caption" style="color:#000">
-                <h3>THMcards spricht TeX</h3>
-                <p>Endlich ein einfacher Weg sperrige Matheformeln zu lernen</p>
-              </div>
-            </div>
-            <div class="item">
-              <img alt="Second slide" src="img/carousel2.jpg">
-              <div class="carousel-caption" style="color:#000">
-                <h3>Hello World!</h3>
-                <p>Lerne Programmcode einfacher - dank automatischem Syntaxhighlighting.</p>
-              </div>
-            </div>
-            <div class="item">
-              <img alt="Second slide" src="img/carousel3.jpg">
-              <div class="carousel-caption" style="color:#000; border:1px">
-                <h3>Sammel Badges</h3>
-                <p>Ausgewählte Aktionen und herausragende Leistungen werden mit Abzeichen belohnt. Hol' sie dir!</p>
-              </div>
+              <!-- Controls -->
+              <a class="left carousel-control" href="#carousel-generic" data-slide="prev" style="color:#000;background-image:none">
+                <span class="glyphicon glyphicon-chevron-left" style=""></span>
+              </a>
+              <a class="right carousel-control" href="#carousel-generic" data-slide="next" style="color:#000;background-image:none">
+                <span class="glyphicon glyphicon-chevron-right" style="background-image:none"></span>
+              </a>
             </div>
           </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-          <!-- Controls -->
-          <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev" style="color:#000;background-image:none">
-            <span class="glyphicon glyphicon-chevron-left" style=""></span>
-          </a>
-          <a class="right carousel-control" href="#carousel-example-generic" data-slide="next" style="color:#000;background-image:none">
-            <span class="glyphicon glyphicon-chevron-right" style="background-image:none"></span>
-          </a>
-        </div>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
-    <div style="position:absolute; left:50%; top:20%; width:512px; height: 300px; margin-left:-256px; border:0px solid #000; text-align:center; color: #555554">
-      <img src="/img/card_logo_welcome.png" />
-
-      <span style="display:inline-block; margin-top: 25px;">
-      <h2 style="float:left;">Learn.</h2><h2 style="float:left; margin-left:25px">Share.</h2><h2 style="float:left; margin-left:25px">Create.</h2> 
-
+    <div class="intro">
+      <img src="/img/card_logo_welcome.png" alt="THMcards Logo" />
+      <span class="slogan">
+      <h2 class="pull-left">Learn.</h2><h2 class="pull-left lmargin">Share.</h2><h2 class="pull-left lmargin">Create.</h2> 
     </span>
 
-    <span style="display:inline-block; margin-top: 50px;">
-      <span style="color:#999">Wähle deinen Login</span><br /><br />
-      <a href="/auth/google" class="btn btn-default" style="width:190px"><img src="https://cdn0.iconfinder.com/data/icons/social-circle/512/google-24.png" style="float:left;" /><span style="font-size:1.2em; margin:0 20px; display:inline-block">Google</span></a> <br /><br />
-      <a href="/auth/twitter" class="btn btn-default" style="width:190px"><img src="https://cdn3.iconfinder.com/data/icons/social-circle/512/social_8-24.png" style="float:left;" /><span style="font-size:1.2em; margin:0 20px; display:inline-block">Twitter</span></a> <br /><br />
-      <a href="/auth/facebook" class="btn btn-default" style="width:190px"><img src="https://cdn3.iconfinder.com/data/icons/social-circle/512/social_3-24.png" style="float:left;" /><span style="font-size:1.2em; margin:0 20px; display:inline-block">Facebook</span></a>
+    <div class="login">
+      <span class="text-muted">Wähle deinen Login</span><br /><br />
+      <a href="/auth/google" class="btn btn-default btn-login"><img src="img/icon_google_24x24.png" /><span>Google</span></a> <br /><br />
+      <a href="/auth/twitter" class="btn btn-default btn-login"><img src="img/icon_twitter_24x24.png"/><span>Twitter</span></a> <br /><br />
+      <a href="/auth/facebook" class="btn btn-default btn-login"><img src="img/icon_facebook_24x24.png" /><span>Facebook</span></a>
       <hr />
-      <button class="btn btn-success" data-toggle="modal" data-target="#myModal" style="width:190px; background-color:#76b910">
+      <a class="btn btn-success btn-about" data-toggle="modal" data-target="#myModal">
         Was ist THMcards?
-      </button>
-    </span>
-    <br /><br />
-    <br /><br />
-    <a href="/impressum" style="color:#999">Impressum</a>
+      </a>
+    </div>
+    <a href="/impressum" class="text-muted">Impressum</a>
     </div>
     <script type="text/javascript" src="/javascripts/lib/jquery.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/jquery-ui.min.js"></script>
