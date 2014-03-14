@@ -30,16 +30,20 @@ var secret = 'some secret';
 var sessionKey = 'express.sid';
 var cookieParser = express.cookieParser(secret);
 var sessionStore = new express.session.MemoryStore()
-var srv;
+var https_server, http_server, io;
 
 if(process.env.NODE_ENV === 'production') {
   var options = {
     key: fs.readFileSync('server.key'),
     cert: fs.readFileSync('server.crt')
   };
-  srv = https.createServer(options, app);
+  https_server = https.createServer(options, app);
+  http_server = http.createServer(app);
+
+  io = require('socket.io').listen(https_server, {secure: true});
 } else {
-  srv = http.createServer(app);
+  http_server = http.createServer(app);
+  io = require('socket.io').listen(http_server);
 }
 
 
@@ -78,14 +82,23 @@ app.configure(function(){
       csrf(req, res, onCsrfCalled);
     }
   })());
+    app.use((function() {
+    return function(req, res, next) {
+      if (!req.secure) {
+        console.log(req.url);
+        return res.redirect('https://' + req.get('host') + req.url);
+      }
+      next();
+    }
+  })());
   app.use(app.router);
   app.use(express.compress());
   app.use(express.staticCache());
   app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }));
 });
+app.configure('production', function(){
 
-
-var io = require('socket.io').listen(srv);
+});
 
 io.set('authorization', function(handshake, cb) {
 
@@ -108,7 +121,6 @@ io.set('authorization', function(handshake, cb) {
       });
     }
     else cb('Session cookie could not be found', false);
-
 
     });
   }
@@ -2190,15 +2202,19 @@ app.get('/syncbadges', ensureAuthenticated, function(req, res) {
   });
 });
 
-if(process.env.NODE_ENV != 'development') {
+if(process.env.NODE_ENV === 'production') {
   process.on('uncaughtException', function (err) {
     console.log(err);
     process.exit(1); 
   });
+
+  https_server.listen(443, function(){
+    console.log("https_server listening on port " + 443);
+  });
 }
 
 
-srv.listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+http_server.listen(80, function(){
+  console.log("http_server listening on port " + 80);
 });
 
