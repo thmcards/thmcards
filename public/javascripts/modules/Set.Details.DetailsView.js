@@ -116,7 +116,6 @@ Cards.module('Set.Details', function(Details, App) {
 			if(this.collection.length !== 0) {
 				var cardId = $("div.item.active").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);
-				console.log(actualCard);
 				var button = this.$el.find("a.btn-showPictureModal");
 
 				if($("div.item.active").find("div.centered.front").hasClass('active')){

@@ -58,7 +58,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				var actualCard = this.collection.get(cardId);
 
 				if($("div.item.active").hasClass('active')){
-					if(actualCard.get('back').picture !== null){
+					if(actualCard.get('back').picture){
 						this.$el.find("a.cardcontent-back").show();
 					}
 				}
@@ -184,7 +184,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				if($("div.item.active").hasClass('active')){
 					this.$el.find("a.cardcontent-back").hide();
 
-					if(actualCard.get('front').picture !== null){
+					if(actualCard.get('front').picture){
 						this.$el.find("a.cardcontent-front").show();
 					} else {
 						this.$el.find("a.cardcontent-front").hide();
@@ -225,7 +225,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				var cardId = card.attr("data-id");
 				console.log(cardId);
 				var actualCard = this.collection.get(cardId);
-				if(actualCard.get('front').picture !== null){
+				if(actualCard.get('front').picture){
 					this.$el.find("a.cardcontent-front").show();
 				}		
 			}
