@@ -220,7 +220,6 @@ var levelForXp = function(pts) {
 
 var calcInterval = function(current_interval, last_rated, repeat, callback) {
   var interval;
-  console.log("repeatyesno: " + repeat);
   if((last_rated < 3) || (repeat == 1)) {
     interval = 1;
   }
@@ -278,7 +277,6 @@ function ensureAuthenticated(req, res, next) {
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
     var cookie = req.cookies.usr;
-    console.log(req.cookies.usr);
     if (cookie === undefined || req.cookies.usr.username !== user)
     {
       var usr = JSON.stringify({
@@ -508,7 +506,6 @@ app.get('/set/category/:category', forceSSL, function(req, res){
     
     if (!err) {
       var docs = _.map(body.rows, function(doc) { return doc.value });
-      console.log(docs);
       res.json(docs);
     } else {
       console.log("[db.cards/by_set]", err.message);
@@ -518,7 +515,6 @@ app.get('/set/category/:category', forceSSL, function(req, res){
 });
 
 app.get('/set/:id/personalcard', forceSSL, function(req, res){
-  console.log("get personalcard");
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
@@ -554,22 +550,46 @@ app.get('/set/learned', forceSSL, ensureAuthenticated, function(req, res){
       }, this);
       setIds = _.uniq(setIds);
 
-      db.get("_all_docs", { keys: setIds, include_docs: true } , function(err, body) {
-        if(!err) {
-          var docs = _.pluck(body.rows, "doc");
-          _.each(docs, function(doc){
-            doc.cardCnt = "-";
+      var setIdKeys = new Array();
 
-            if(!_.has(doc, "category") && _.isUndefined(doc.category)) doc.category = "";
-          })
-          res.json(docs);
-        }
+      _.each(setIds, function(setId) {
+      var s = new Array(setId, 0);
+      setIdKeys.push(s);
+      });
+
+      db.view('sets', 'by_id_with_cards', function(err, body) {
+        var sets = _.filter(body.rows, function(row){ return ((row.key[1] == 0) && ( _.contains(setIds,row.value._id)) )});
+
+        _.each(sets, function(set){      
+          var cardCnt = _.filter(body.rows, function(row){ return ((row.key[1] == 1) && (row.value.setId == set.value._id)); });
+          set.value.cardCnt = cardCnt.length;
+
+          if(!_.has(set.value, "category") && _.isUndefined(set.value.category)) set.value.category = "";
+        }, this);
+        sets = _.pluck(sets, "value");
+
+        sets = _.filter(sets, function(set){
+          return set.visibility == 'public' && set.cardCnt > 0;
+        });
+
+        sets = _.map(sets, function(set){
+          set._id = sanitizer.sanitize(set._id);
+          set._rev = sanitizer.sanitize(set._rev);
+          set.owner =  sanitizer.sanitize(set.owner);
+          set.name =  sanitizer.sanitize(set.name);;
+          set.description =  sanitizer.sanitize(set.description);;
+          set.visibility =  sanitizer.sanitize(set.visibility);;
+          set.category =  sanitizer.sanitize(set.category);;
+          set.rating = (set.rating) ? set.rating : false;
+          set.type = "set";
+          return set;
+        });
+        res.json(_.sortBy(sets, function(set){ return set.name }));
       });
     } else {
       console.log(err);
       res.json([]);
     } 
-    
   });
 });
 
@@ -603,7 +623,6 @@ app.get('/set/:id/card', forceSSL, function(req, res){
 });
 
 app.get('/set/:id/memo/card', forceSSL, function(req, res){
-  console.log("memo - get cards");
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
   var username = user.username;
@@ -624,11 +643,7 @@ app.get('/set/:id/memo/card', forceSSL, function(req, res){
       if(!_.isEmpty(card.persCard)){
         var lastLearned = new Date(card.persCard[0].value.sm_last_learned);
         var nextDate = new Date(card.persCard[0].value.sm_next_date);
-        console.log("last learned: " + lastLearned);
-        console.log("next date: " + nextDate);
-        console.log("today: " + today);
-        console.log("to learn or not: " + Date.compare(today, nextDate));
-
+        
         if(Date.compare(today, nextDate) >= 0){ return card};
 
         if(parseInt(card.persCard[0].value.sm_instant_repeat) == 1) { return card};
@@ -677,7 +692,6 @@ app.get('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
 
       res.json(userInfo);
     } else {
-      console.log("user/username", body);
       res.send(404);
     }
     
@@ -687,11 +701,9 @@ app.get('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
 app.put('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
   var user = req.session.passport.user;
   if(_.isArray(user)) user = _.first(req.session.passport.user);
-  console.log("u", user.username);
   if(req.params.username === user.username) {
       db.view('users', 'by_username', { key: user.username }, function(err, body) {
         if(!err) {
-          console.log(body);
           var user = body.rows[0].value;
 
           user.name = req.body.name;
@@ -828,8 +840,6 @@ app.put('/set/:setid', forceSSL, ensureAuthenticated, function(req, res){
     if (!err) {
       doc = _.map(body.rows, function(doc) { return doc.value});
 
-      console.log(req.body);
-
       var data = {};
       data._id = sanitizer.sanitize(req.body._id);
       data._rev = sanitizer.sanitize(req.body._rev);
@@ -841,8 +851,6 @@ app.put('/set/:setid', forceSSL, ensureAuthenticated, function(req, res){
       data.visibility = sanitizer.sanitize(req.body.visibility);
       data.category = sanitizer.sanitize(req.body.category);
       data.rating = (req.body.rating === 'true');      
-
-      console.log(data);
 
       db.insert(req.body, doc[0]._id, function(err, body, header){
           if(err) {
@@ -1093,7 +1101,6 @@ app.post('/card', forceSSL, ensureAuthenticated, function(req, res){
 });
 
 app.post('/personalcard/:cardid', forceSSL, ensureAuthenticated, function(req, res){
-  console.log("new personalcard");
     var user = req.session.passport.user;
     if(_.isArray(user)) user = _.first(req.session.passport.user);
 
@@ -1163,7 +1170,6 @@ app.post('/personalcard/:cardid', forceSSL, ensureAuthenticated, function(req, r
 
 
 app.put('/personalcard/:cardid', forceSSL, ensureAuthenticated, function(req, res){
-  console.log("using existing personalcard");
   var time = new Date().getTime();
   var today = Date.today();
   var user = req.session.passport.user;
@@ -1188,10 +1194,6 @@ app.put('/personalcard/:cardid', forceSSL, ensureAuthenticated, function(req, re
               var intervalDays = calcIntervalDays(interval, parseInt(docs[0].sm_interval_days), ef);
               var currentDate = today.clone();
               var nextDate = currentDate.addDays(parseInt(intervalDays));
-
-              console.log("intervalnumber: " + interval);
-              console.log("intervaldays: " + intervalDays);
-              console.log("nextdate: " + nextDate)
 
               db.insert(
               { 
@@ -1286,7 +1288,6 @@ app.get('/score/:username', forceSSL, ensureAuthenticated, function(req, res){
   user = user.username;
 
   db.view('score', 'highscore_by_game_user', { startkey: new Array(game, user), endkey: new Array(game, user), group: true }, function(err, body) {
-    console.log("1126", body, err);
     if(!_.isUndefined(body.rows) && !err && body.rows.length > 0) {
 
       var gameHighscore = _.first(body.rows).value;
@@ -1692,8 +1693,7 @@ app.get('/badge/:username', forceSSL, ensureAuthenticated, function(req, res){
 
               _.each(badgeProcess, function(process){
                 var b = _.findWhere(results, { _id: process.badge});
-                console.log(b);
-
+                
                 if(_.has(b, "user")) {
                   b.user.progress = process.score;
                   b.user.nextRank = process.nextRank;
@@ -1809,9 +1809,9 @@ var setBadgeProgress = function(badge, owner, score, nextRank) {
       db.insert(badgeProgress,
       function(err, body){
         if(!err && body.ok) {
-          console.log("new score update");
+          
         } else {
-          console.log("new score fail");
+          
         }
       }); 
     } else {
@@ -1822,9 +1822,9 @@ var setBadgeProgress = function(badge, owner, score, nextRank) {
       db.insert(badgeProgress,    
       function(err, body) {
         if(!err && body.ok) {
-          console.log(badge, "score update");
+          
         } else {
-          console.log(badge, "score error");
+          
         }
       });  
     }
@@ -1861,7 +1861,6 @@ var checkBadgeMeteor = function(owner, sessionID) {
       var rank = body.rank;
       db.view('score', 'game_by_game_user', { keys: new Array(new Array("meteor", owner)) }, function(err, body) {
         if(!_.isUndefined(body) && _.has(body, "rows")) {
-          console.log(body);
           var scores = _.pluck(body.rows, "value");
 
           var level = _.filter(scores, function(score) { return score.level >= 10 });
@@ -2160,7 +2159,6 @@ app.get('/syncbadges', ensureAuthenticated, function(req, res) {
       });
       
       db.view("users", "by_username", { keys: new Array(user.username) }, function(err, body) {
-        console.log(body);
         if(!err && _.size(body.rows) > 0) {
           var user = _.first(body.rows).value;
 
@@ -2187,7 +2185,6 @@ app.get('/syncbadges', ensureAuthenticated, function(req, res) {
         }
       });
     } else {
-      console.log(body);
       res.send(404);
     }
   });
