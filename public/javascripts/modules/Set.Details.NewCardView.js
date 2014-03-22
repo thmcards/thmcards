@@ -135,7 +135,7 @@ Cards.module('Set.Details', function(Details, App) {
 							}
 						} else {
 							alert("Es wurden keine passenden Ergebnisse gefunden");
-							this.ui.pictureSearchModal.modal('hide');
+							that.ui.pictureSearchModal.modal('hide');
 						}
 			        }, null);
 

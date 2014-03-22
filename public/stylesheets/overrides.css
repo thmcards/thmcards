@@ -429,7 +429,7 @@ button.rate-answer.wrong {
 }
 
 #google-imagesearch-result {
-  width: 770px;
+  width: 100%;
   text-align: center;
   margin-left:10px;
 }
