@@ -1422,7 +1422,8 @@
         tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
       });
 
-      var socket = io.connect('http://localhost:3000');
+      var url = window.location.href.toString().split(window.location.host)[0] + window.location.host;
+      var socket = io.connect(url);
       socket.on('set', function (data) {
         console.log(data);
       });
