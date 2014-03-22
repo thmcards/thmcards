@@ -1,7 +1,7 @@
 div.intro {
 	position:absolute; 
 	left:50%; 
-	top:20%; 
+	top:15%; 
 	width:512px; 
 	height: 300px; 
 	margin-left:-256px; 
@@ -20,7 +20,10 @@ h2.lmargin {
 }
 div.login {
 	display:block; 
-	margin: 50px 0;
+	margin: 0px 0;
+}
+div.login hr {
+	margin:10px 0 20px;
 }
 a.btn-login {
 	width:190px;
