@@ -34,7 +34,7 @@ Cards.module('Profile', function(Profile, App) {
 					});	
 				})
 				.fail(function() {
-				    alert( "Fehler bei Syncronisation mit OpenBadges. Bitte später erneut versuchen." );
+				    alert( "Fehler bei der Synchronisation mit OpenBadges. Bitte später erneut versuchen." );
 				})
 			} else {
 				alert("Bitte trage eine Emailadresse ein");
