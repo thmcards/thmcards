@@ -13,6 +13,9 @@ Cards.module('Pool', function(Pool, App) {
 		setOwnerClicked: function(ev) {
 			ev.preventDefault();
 			App.trigger("profile", this.model.get("owner"));
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 
@@ -26,6 +29,7 @@ Cards.module('Pool', function(Pool, App) {
 			this.collection.fetch();
 		},
 		onRender: function(){
+			i18ninit();
 			$("#pool-category-layout-headline").text(this.collection.category);
 		}
 	});

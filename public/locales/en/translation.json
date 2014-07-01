@@ -1,4 +1,4 @@
-{	
+{
   "intro": {
     "about": "About THMcards",
     "choose": "Select your login:",
@@ -18,7 +18,7 @@
   	"carousel-header-3": "Collect badges",
   	"carousel-paragraph-3": "Outstanding achievements are rewarded with Open Badges."
   },
-  
+
   "navbar-collapse": {
   	"carddecks": "My deck of cards",
   	"pool": "Pool",
@@ -137,7 +137,7 @@
     "highscore": "Highscore"
   },
 
-  "sidebar-nav": { 
+  "sidebar-nav": {
     "created": "Created by",
     "at": "on",
     "view": "Change view",
@@ -158,7 +158,7 @@
     "rateanswer": "Rate your answer",
     "rate0": "Blackout",
     "rate1": "Wrong answer, but reminds on the right one",
-    "rate2": "Wrong answer, but reminds on the right one easily", 
+    "rate2": "Wrong answer, but reminds on the right one easily",
     "rate3": "Right answer after thinking intently",
     "rate4": "Right answer after short hesitation",
     "rate5": "Perfect answer",
@@ -220,7 +220,7 @@
 
   "learn-endscreen": {
     "success": "Learn unit done successfully",
-    "back": "Choose another subject or go back to deck of cards",
+    "back": "Choose another box or go back to deck of cards",
     "back2": "Back to deck of cards"
   },
 
@@ -229,10 +229,10 @@
     "category": "Category",
     "description": "Rating"
   },
-  
+
   "nocards":"No cards available",
   "learn":"Learn",
-  "learnfile":"Learnfile",
+  "learnfile":"Leitner's learning box",
   "memo":"Memo",
   "meteor":"Meteor",
   "play":"Play",
@@ -259,27 +259,27 @@
   "pointslvl3": " to the next level",
 
   "meteortext": "You have not played a game yet",
-  
+
   "valuation": "Rating",
   "valuationtext": " Stars by ",
   "valuationtext2": " ratings",
-  
+
   "norating": "No ratings available",
   "createdof": "Created of",
   "backcarddecks": "Back to deck of cards",
   "createdof2": "Created of",
 
-  "subject1": "Subject 1",
-  "subject2": "Subject 2",
-  "subject3": "Subject 3",
-  "subject4": "Subject 4",
-  "subject5": "Subject 5",
+  "subject1": "Box 1",
+  "subject2": "Box 2",
+  "subject3": "Box 3",
+  "subject4": "Box 4",
+  "subject5": "Box 5",
 
   "know": "Known",
   "notknow": "Not known",
 
   "clickcart": "Click on the card to turn it",
-  "choosesubject": "Choose a subject on the left side",
+  "choosesubject": "Choose a box on the left side",
 
   "carddecks": "Deck of cards",
 

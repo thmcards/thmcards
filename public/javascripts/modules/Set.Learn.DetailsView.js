@@ -18,21 +18,21 @@ Cards.module('Set.Learn', function(Learn, App) {
 			if(ev.target.nodeName == "DIV" || ev.target.nodeName == "SPAN") {
 				$("div.learn-cardHelptext").toggle();
 				this.$el.find("div.cardContent.back").toggleClass('active');
-				this.$el.find("div.cardContent.front").toggleClass('active');		
+				this.$el.find("div.cardContent.front").toggleClass('active');
 				front.toggle();
 				back.toggle();
 				answerButtons.toggle();
 				frontSymbol.toggle();
-				backSymbol.toggle();	
+				backSymbol.toggle();
 			}
 		},
 		linkClicked: function(ev) {
 			ev.preventDefault();
 			console.log("link");
-			
+
 			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
 		}
-	});	
+	});
 	Learn.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-learn-item-empty",
 		className: "empty-item"
@@ -83,7 +83,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var lastActiveItem = this.$el.find("div.item").index(this.$el.find("div.item.active"));
 
 			var that = this;
-	  		App.on("cardModel:saved", function(val){				
+	  		App.on("cardModel:saved", function(val){
 				that.$el.find("div.item").removeClass("active");
 				var activeCard = that.$el.find("div.item").get(lastActiveItem);
 				$(activeCard).addClass("active");
@@ -107,22 +107,22 @@ Cards.module('Set.Learn', function(Learn, App) {
 			if (failed) {
 				if (boxId === 1) {
 					if(items > 1) {
-						this.$el.find(":first-child").carousel("next");	
+						this.$el.find(":first-child").carousel("next");
 
 						this.$el.find('div.front').show();
 						this.$el.find('div.back').hide();
 						$("button.answer").hide();
 						$("div.learn-cardHelptext").show();
 					}
-				} else {		
+				} else {
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
 					if(items > 1) {
-						this.$el.find(":first-child").carousel("next");				
+						this.$el.find(":first-child").carousel("next");
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
 
-							})				
+							})
 					} else {
 						var lastCard = true;
 						this.saveCard(cardId, boxId, failed, lastCard);
@@ -141,15 +141,15 @@ Cards.module('Set.Learn', function(Learn, App) {
 						$("button.answer").hide();
 						$("div.learn-cardHelptext").show();
 					}
-				} else {		
+				} else {
 					//aufruf zum speichern der lernkarte, wenn mehr als eine lernkarte vorher zur nächsten lernkarte wechseln
 					if(items > 1) {
-						this.$el.find(":first-child").carousel("next");				
+						this.$el.find(":first-child").carousel("next");
 						var that = this;
 						this.$el.find(":first-child").on('slid.bs.carousel', function () {
 				  				that.saveCard(cardId, boxId, failed);
 
-							})				
+							})
 					} else {
 						var lastCard = true;
 						this.saveCard(cardId, boxId, failed, lastCard);
@@ -179,13 +179,13 @@ Cards.module('Set.Learn', function(Learn, App) {
 			//perscard holen/anlegen und mit neuer boxid aktualisieren
 			var model = this.collection.get(cardId);
 			var persCard;
-			if(!_.isEmpty(model.get("persCard"))) {	
+			if(!_.isEmpty(model.get("persCard"))) {
 				if(_.isArray(model.get("persCard"))) {
 					persCard = _.first(model.get("persCard"));
 				} else {
 					persCard = model.get("persCard");
 				}
-				persCard.value.box = boxId;				
+				persCard.value.box = boxId;
 				model['persCard'] = persCard;
 				model.set({persCard: persCard});
 				type = 'put';
@@ -226,7 +226,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				that.updateCardcount();
 			})
 		},
-		filterBox: function(boxId) {			
+		filterBox: function(boxId) {
 			if(boxId != null) {
 				this.collection.filter(boxId);
 			} else {
@@ -238,14 +238,14 @@ Cards.module('Set.Learn', function(Learn, App) {
 			this.collection.filter();
 			var unfiltered = _.clone(this.collection);
 			var sorted = unfiltered.groupBy( function(model){
-				if(!_.isEmpty(model.get("persCard"))) {	
+				if(!_.isEmpty(model.get("persCard"))) {
 					if(_.isArray(model.get("persCard"))) {
 						persCard = _.first(model.get("persCard"));
 					} else {
 						persCard = model.get("persCard");
 					}
 					return persCard.value.box;
-				} else return 1;				
+				} else return 1;
 			});
 
 			$(".box-indicator.one").text(_.size(sorted[1]));
@@ -292,13 +292,13 @@ Cards.module('Set.Learn', function(Learn, App) {
 					} else if(!actualCard.get('back').picture){
 						this.$el.find("a.btn-showPictureModal").hide();
 					}
-				}		
+				}
 			}
 		},
-		onRender: function() {	
+		onRender: function() {
 			var that = this;
 			var cardIndicator = this.$el.find("small.card-indicator");
-			
+
 			$('code').each(function(i, e) {hljs.highlightBlock(e)});
 			MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.el]);
 
@@ -309,7 +309,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			if (this.collection.length == 0) {
 				$("div.learn-cardHelptext").hide();
 			} else {
-				$("div.learn-cardHelptext").show();				
+				$("div.learn-cardHelptext").show();
 			}
 
 			this.$el.find("div.item").first().addClass("active");
@@ -320,7 +320,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			var pickerContainer = this.$el.find("ol.carousel-indicators").first();
 			for(var i = 0; i < this.collection.length; i++) {
 				var indicatorElem = $("<li></li>").attr("data-slide-to", i);
-				if(i === 0) indicatorElem.addClass("active");	
+				if(i === 0) indicatorElem.addClass("active");
 				pickerContainer.append(indicatorElem);
 			}
 
@@ -331,14 +331,14 @@ Cards.module('Set.Learn', function(Learn, App) {
 			} else if(cardCount>1){
 				cardIndicator.html('Noch '+cardCount+' Karten im aktuellen Fach');
 			}
-			
+
 
 			this.$el.find(':first-child').carousel({ interval: false });
 
 			this.$el.find(':first-child').on('slid.bs.carousel', function (ev) {
 				ev.stopPropagation();
 				if($(ev.target).hasClass( "carousel" )) {
-					that.checkForPicture() 
+					that.checkForPicture()
 					if(cardCount==1){
 						that.$el.find("small.card-indicator").html('Noch '+cardCount+' Karte im aktuellen Fach');
 					} else if(cardCount>1){
@@ -352,7 +352,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture){
 					this.$el.find("a.btn-showPictureModal").show();
-				}		
+				}
 			}
 		},
 		onShow: function() {

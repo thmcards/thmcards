@@ -67,7 +67,7 @@ Cards.module('Set.Details', function(Details, App) {
 		        helptext.text(error.message);
 		    }, this);
 		},
- 
+
 		hideErrors: function () {
 			this.$('.help-block').text('');
 			this.$('.cardtext').removeClass('has-error');
@@ -144,7 +144,7 @@ Cards.module('Set.Details', function(Details, App) {
 			        $("#pictureSearchModal-footer").append(google.search.Search.getBranding());
 
 				}, 100);
-			        
+
 				$("#pictureSearchModal-body").scrollTop();
 				this.ui.pictureSearchModal.modal('show');
 			}
@@ -165,7 +165,7 @@ Cards.module('Set.Details', function(Details, App) {
 			var loadSearch = function() {
 				console.log("search loaded");
 			}
-			
+
 			google.load('search', '1', {callback: loadSearch });
 		},
 		onShow: function() {
@@ -176,7 +176,7 @@ Cards.module('Set.Details', function(Details, App) {
 				"image": false,
 				toolbar: { code:  function(locale, options) {
 				    return '<li><a class="btn btn-default btn-sm" title="Code" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
-				   } 
+				   }
 				}
 			}
 			setTimeout(function(){
@@ -185,7 +185,7 @@ Cards.module('Set.Details', function(Details, App) {
 				var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
 				$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
 
-				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];			
+				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
 				$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
 			}, 50);
 			$("#back-textarea").wysihtml5(editorConfig);

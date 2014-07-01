@@ -36,17 +36,17 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul id="navbar" class="nav navbar-nav">
-            <li id="navbar-ownsets"><a href="#set/list">Meine Kartensätze</a></li>
-            <li id="navbar-pool"><a href="#pool">Pool</a></li>
+            <li id="navbar-ownsets"><a href="#set/list" data-i18n="navbar-collapse.carddecks"></a></li>
+            <li id="navbar-pool"><a href="#pool" data-i18n="navbar-collapse.pool"></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><input type="text" class="form-control" placeholder="Suche" id="input-search" /></li>
+            <li><input type="text" class="form-control" placeholder="" id="input-search" data-i18n="[placeholder]navbar-collapse.search"/></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="usr-name"></span> <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="#" id="usr-profile">Mein Profil</a></li>
+                <li><a href="#" id="usr-profile" data-i18n="navbar-collapse.myprofile"></a></li>
                 <li class="divider"></li>
-                <li><a href="/logout" style="color:#D9534F">Logout</a></li>
+                <li><a href="/logout" style="color:#D9534F" data-i18n="navbar-collapse.logout"></a></li>
               </ul>
             </li>
           </ul>
@@ -60,10 +60,10 @@
       </div>
       <div id="push"></div>
     </div>
-    <div id="footer">
+    <div id="footer" class="footer">
       <div class="container">
         <p class="muted credit pull-left">&copy; 2014 THMcards</p>
-        <p class="muted credit pull-right"><a href="/impressum">Impressum</a></p>
+        <p class="muted credit pull-right"><a href="/impressum" data-i18n="footer.impressum"></a></p>
       </div>
     </div>
 
@@ -87,12 +87,12 @@
       <span class="badge"><%= count %></span> <a href="#pool/<%= name %>"><%= name %></a>
     </script>
 
-    <script type="text/template" id="pool-category-set-list">
+    <script type="text/template" id="pool-category-set-list" class="pool">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Beschreibung</th>
-          <th>Erstellt von</th>
+          <th data-i18n="pool.name"></th>
+          <th data-i18n="pool.description"></th>
+          <th data-i18n="pool.created"></th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -135,17 +135,17 @@
 
     <script type="text/template" id="set-details-newcard-layout">
       <div class="col-md-12">
-        <h3 style="margin-bottom:20px">Neue Karte</h3>
+        <h3 style="margin-bottom:20px" data-i18n="newcard"></h3>
       </div>
       <div class="col-md-12" id="set-newcard-region"></div>
-    </script> 
+    </script>
 
     <script type="text/template" id="set-details-editcard-layout">
       <div class="col-md-12">
-        <h3 style="margin-bottom:20px">Karte bearbeiten</h3>
+        <h3 style="margin-bottom:20px" data-i18n="editcard"></h3>
       </div>
       <div class="col-md-12" id="set-editcard-region"></div>
-    </script>       
+    </script>
 
     <script type="text/template" id="set-details-item">
       <div class="box" data-id="<%= _id %>">
@@ -157,7 +157,7 @@
         </a>
         <a class="btn-showPictureModal btn btn-default btn-xs btn-showPictureDetails" href="#showPictureModal" style="display:none">
           <i class="glyphicon glyphicon-picture"></i>
-          <small>Bild anzeigen</small>
+          <small data-i18n="showpicture"></small>
         </a>
         <div class="block">
           <div class="cardContent centered front active">
@@ -173,9 +173,9 @@
         <div class="listhead">
           <thead>
             <tr>
-              <th width="45%">Vorderseite</th>
-              <th width="45%">Rückseite</th>
-              <th width="10%">Optionen</th>
+              <th width="45%" data-i18n="foreside"></th>
+              <th width="45%" data-i18n="backside"></th>
+              <th width="10%" data-i18n="options"></th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -195,7 +195,7 @@
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
-    </script>  
+    </script>
 
     <script type="text/template" id="set-details-listitem">
         <td>
@@ -215,10 +215,10 @@
           <% } %>
         </td>
         <td>
-          <a class="btn btn-xs btn-default btn-listEditCard" title="Karte editieren" data-id="<%= _id %>" href="#editCard" style="margin-left:5px; display:none;">
+          <a class="btn btn-xs btn-default btn-listEditCard" title="" data-i18n="[title]editcard" data-id="<%= _id %>" href="#editCard" style="margin-left:5px; display:none;">
             <i class="glyphicon glyphicon-pencil"></i>
           </a>
-          <a class="btn btn-xs btn-default btn-listDeleteCard" title="Karte löschen" data-id="<%= _id %>" href="#deleteCard" style="display:none">
+          <a class="btn btn-xs btn-default btn-listDeleteCard" title="" data-i18n="[title]deletecard" data-id="<%= _id %>" href="#deleteCard" style="display:none">
             <i class="glyphicon glyphicon-ban-circle"></i>
           </a>
         </td>
@@ -226,13 +226,13 @@
 
     <script type="text/template" id="set-details-listitem-empty">
         <td colspan="3" align="center">
-          <span style="font-family:'Georgia'">Keine Karten vorhanden</span>
+          <span style="font-family:'Georgia'" data-i18n="nocards"></span>
         </td>
     </script>
 
     <script type="text/template" id="set-details-item-empty">
       <div class="box">
-        <div class="block"><div class="centered front" style="font-size:2em">Keine Karten vorhanden</div>
+        <div class="block"><div class="centered front" style="font-size:2em" data-i18n="nocards"></div>
       </div>
     </script>
 
@@ -274,21 +274,21 @@
       <div class="row">
         <div class="col-md-6">
           <div class="well well-sm setWell">
-            <h4>Lernen</h4>
+            <h4 data-i18n="learn"></h4>
             <hr />
-              
+
             <hr />
-            <button class="btn btn-default learn btn-block">Lernkartei</button>
-            <button class="btn btn-default memo btn-block" style="margin-top:10px;">Memo</button>
+            <button class="btn btn-default learn btn-block" data-i18n="learnfile"></button>
+            <button class="btn btn-default memo btn-block" style="margin-top:10px;" data-i18n="memo"></button>
           </div>
         </div>
         <div class="col-md-6">
           <div class="well well-sm setWell">
-            <h4>Meteor</h4>
+            <h4 data-i18n="meteor"></h4>
             <hr />
-            <div class="meteorBox"><span>Dein Highscore:</span><span class="pull-right"><span id="meteor-set-points">0</span> Punkte</span></div>
-            
-            <button class="btn btn-primary play-meteor btn-block">Spielen</button>
+            <div class="meteorBox"><span data-i18n="yourhighscore"></span><span class="pull-right"><span id="meteor-set-points">0</span><span> </span><span data-i18n="points"></span></span></div>
+
+            <button class="btn btn-primary play-meteor btn-block" data-i18n="play"></button>
           </div>
         </div>
       </div>
@@ -303,42 +303,42 @@
       <td><%= description %></td>
     </script>
 
-    <script type="text/template" id="set-details-newcard"> 
+    <script type="text/template" id="set-details-newcard">
       <table class="table table-bordered">
         <tbody>
           <tr>
             <td class="cardtext fronttext">
-              <input class="form-control fronttext" id="front-textarea" placeholder="Vorderseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control fronttext" id="front-textarea" placeholder="" style="width:440px; height:200px; margin:10px auto 0" data-i18n="[placeholder]foreside">
               </input>
               <span class="help-block fronttext"></span>
-            </td> 
+            </td>
             <td class="cardtext backtext">
-              <input class="form-control backtext" id="back-textarea" placeholder="Rückseite" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control backtext" id="back-textarea" placeholder="" style="width:440px; height:200px; margin:10px auto 0" data-i18n="[placeholder]backside">
               </input>
               <span class="help-block backtext"></span>
-            </td> 
+            </td>
           </tr>
           <tr>
             <td>
               <div class="input-append">
                 <div class="input-group">
-                <input class="span4 form-control pull-left front" style="" id="set-details-newcard-input-pic-front-search" type="text" placeholder="Link oder Suchbegriff eingeben">
-                  <span class="input-group-btn"><button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-newcard-btn-pic-front-seach">Bildsuche</button></span>
+                <input class="span4 form-control pull-left front" style="" id="set-details-newcard-input-pic-front-search" type="text" placeholder="" data-i18n="[placeholder]linkorsearchitem">
+                  <span class="input-group-btn"><button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-newcard-btn-pic-front-seach" data-i18n="searchpicture"></button></span>
                 </div>
               </div>
             </td>
             <td>
               <div class="input-append">
                 <div class="input-group">
-                <input class="span4 form-control pull-left back" id="set-details-newcard-input-pic-back-search" type="text" placeholder="Link oder Suchbegriff eingeben">
+                <input class="span4 form-control pull-left back" id="set-details-newcard-input-pic-back-search" type="text" placeholder="" data-i18n="[placeholder]linkorsearchitem">
                 <span class="input-group-btn">
-                <button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-newcard-btn-pic-back-seach">Bildsuche</button>
+                <button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-newcard-btn-pic-back-seach" data-i18n="searchpicture"></button>
                 </span>
               </div>
             </td>
           </tr>
           <tr>
-            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-default btn-large cancel" style="width:200px">Abbrechen</button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large save" data-loading-text="Speichere Karte...">Karte speichern</button></div></td>
+            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-default btn-large cancel" style="width:200px" data-i18n="declinecard"></button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large save" data-loading-text="Speichere Karte..." data-i18n="savecard"></button></div></td>
           </tr>
         </tbody>
       </table>
@@ -348,7 +348,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Bild einfügen</h4>
+              <h4 class="modal-title" data-i18n="insertpicture"></h4>
             </div>
             <div class="modal-body" id="pictureSearchModal-body">
 
@@ -360,46 +360,46 @@
       </div><!-- /.modal -->
     </script>
 
-    <script type="text/template" id="set-details-editcard"> 
+    <script type="text/template" id="set-details-editcard">
       <table class="table table-bordered">
         <tbody>
           <tr>
             <td class="cardtext fronttext">
-              <input class="form-control fronttext" id="editcard-front-textarea" placeholder="Vorderseite" type="text" style="width:440px; height:200px; margin:10px auto 0">
+              <input class="form-control fronttext" id="editcard-front-textarea" placeholder="" type="text" style="width:440px; height:200px; margin:10px auto 0" data-i18n="[placeholder]foreside">
               </input>
               <span class="help-block fronttext"></span>
-            </td> 
+            </td>
             <td class="cardtext backtext">
-              <input class="form-control backtext" id="editcard-back-textarea" placeholder="Rückseite" type="text" style="width:440px; height:200px; margin:10px auto 0;">
+              <input class="form-control backtext" id="editcard-back-textarea" placeholder="" type="text" style="width:440px; height:200px; margin:10px auto 0;" data-i18n="[placeholder]backside">
               </input>
               <span class="help-block backtext"></span>
-            </td> 
+            </td>
           </tr>
           <tr>
             <td>
               <div class="input-append">
                 <div class="input-group">
-                <input class="span4 form-control pull-left" style="" id="set-details-editcard-input-pic-front-search" type="text" placeholder="Link oder Suchbegriff eingeben">
-                  <span class="input-group-btn"><button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-editcard-btn-pic-front-seach">Bildsuche</button></span>
+                <input class="span4 form-control pull-left" style="" id="set-details-editcard-input-pic-front-search" type="text" placeholder="" data-i18n="[placeholder]linkorsearchitem">
+                  <span class="input-group-btn"><button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-editcard-btn-pic-front-seach" data-i18n="searchpicture"></button></span>
                 </div>
               </div>
             </td>
             <td>
               <div class="input-append">
                 <div class="input-group">
-                <input class="span4 form-control pull-left" id="set-details-editcard-input-pic-back-search" type="text" placeholder="Link oder Suchbegriff eingeben">
+                <input class="span4 form-control pull-left" id="set-details-editcard-input-pic-back-search" type="text" placeholder="" data-i18n="[placeholder]linkorsearchitem">
                 <span class="input-group-btn">
-                <button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-editcard-btn-pic-back-seach">Bildsuche</button>
+                <button class="btn btn-pictureSearch btn-default btn-info" type="button" id="set-details-editcard-btn-pic-back-seach" data-i18n="searchpicture"></button>
                 </span>
               </div>
             </td>
           </tr>
           <tr>
             <td colspan="2">
-              <a style="width:150px" class="btn btn-danger btn-large btn-card-delete pull-left">Karte löschen</a>
+              <a style="width:150px" class="btn btn-danger btn-large btn-card-delete pull-left" data-i18n="deletecard"></a>
               <div class="pull-right">
-                <button style="width:150px" class="btn btn-default btn-large cancel">Abbrechen</button>
-                <button style="width:150px" class="btn btn-primary btn-large save" data-loading-text="Speichere Karte...">Karte speichern</button>
+                <button style="width:150px" class="btn btn-default btn-large cancel" data-i18n="declinecard"></button>
+                <button style="width:150px" class="btn btn-primary btn-large save" data-loading-text="Speichere Karte..." data-i18n="savecard"></button>
               </div
             </td>
           </tr>
@@ -411,7 +411,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Bild einfügen</h4>
+              <h4 class="modal-title" data-i18n="insertpicture2"></h4>
             </div>
             <div class="modal-body" id="editcard-pictureSearchModal-body">
 
@@ -424,57 +424,60 @@
 
     </script>
 
-    <script type="text/template" id="set-details-sideBar"> 
+    <script type="text/template" id="set-details-sideBar">
       <h4 style="margin:0"><%= name %></h4>
       <hr />
       <span style="font-family:'Georgia'; font-style:italic"><%= description %></span>
       <hr />
-      <span class="nav-header" style="padding-left:0">Erstellt von</span>
-      <span style="font-family:'Georgia'"><a href="/#profile/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
+      <span class="nav-header" style="padding-left:0" data-i18n="sidebar-nav.created"></span>
+      <span style="font-family:'Georgia'">
+        <a href="/#profile/<%=owner%>"><%= owner %></a>
+        <span data-i18n="sidebar-nav.at"></span>
+        <%= moment("/Date(" + created + ")/").format("LLL") %></span>
       <hr />
-      <span class="nav-header" style="padding-left:0; margin-bottom:3px">Ansicht wechseln</span>
+      <span class="nav-header" style="padding-left:0; margin-bottom:3px" data-i18n="sidebar-nav.view"></span>
       <div class="btn-group btn-group-xs btn-group-justified">
-        <a id="btnToCardLayout" class="btn btn-default btn-cardLayout">Karte</a>
-        <a id="btnToListLayout" class="btn btn-default btn-listLayout">Liste</a>
+        <a id="btnToCardLayout" class="btn btn-default btn-cardLayout" data-i18n="sidebar-nav.viewmap"></a>
+        <a id="btnToListLayout" class="btn btn-default btn-listLayout" data-i18n="sidebar-nav.viewlist"></a>
       </div>
       <hr />
     </script>
 
     <script type="text/template" id="set-details-rating">
-      <span class="nav-header" style="padding-left:0;">Bewertung</span>
+      <span class="nav-header" style="padding-left:0;" data-i18n="valuation"></span>
       <div  style="text-align:center">
         <span id="raty" data-score="<%= avgValutation %>" style="display:inline-block"></span>
-        <span style="display:inline-block;font-size:11px" class="text-muted">Ø <%= _.str.numberFormat(avgValutation, 1, ',', '.') %> Sterne bei <a href="#set/rating/<%= setId %>" class="show-rating"><%= _.str.numberFormat(totalValutations, 0, ',', '.') %> Bewertungen</a></span>
+        <span style="display:inline-block;font-size:11px" class="text-muted">Ø <%= _.str.numberFormat(avgValutation, 1, ',', '.') %><span data-i18n="valuationtext"></span><a href="#set/rating/<%= setId %>" class="show-rating"><%= _.str.numberFormat(totalValutations, 0, ',', '.') %><span data-i18n="valuationtext2"></span></a></span>
       </div>
 
-      <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog">
+      <div class="modal fade rating-field" id="ratingModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">"<span class="rating-title">Kartensatz</span>" bewerten</h4>
+              <h4 class="modal-title">"<span class="rating-title">Kartensatz</span>"<span data-i18n="rating-field.title"></span></h4>
             </div>
             <div class="modal-body">
               <div class="form-horizontal">
                 <div class="form-group setdetails name">
-                  <label class="col-md-3 control-label">Sterne</label>
+                  <label class="col-md-3 control-label" data-i18n="rating-field.stars"></label>
                   <div class="col-md-9">
                     <div id="ratingStars"></div>
-                  </div>                  
+                  </div>
                 </div>
                 <div class="form-group rateset description">
-                  <label class="col-md-3 control-label" for="setRatingComment">Bewertung</label>
+                  <label class="col-md-3 control-label" for="setRatingComment" data-i18n="rating-field.rating"></label>
                   <div class="col-md-9">
-                    <textarea class="form-control" rows="3" id="setRatingComment" placeholder="Mindestens 60 Zeichen"></textarea>
+                    <textarea class="form-control" rows="3" id="setRatingComment" placeholder="" data-i18n="[placeholder]rating-field.minchars"></textarea>
                     <span class="help-block description"></span>
-                    <small class="text-muted pull-right" style="margin-left:3px">Zeichen</small> <small class="text-muted pull-right char-cnt">0</small><small class="pull-left text-muted">mindestens 60 Zeichen</small>
-                  </div>                  
+                    <small class="text-muted pull-right" style="margin-left:3px" data-i18n="rating-field.chars"></small> <small class="text-muted pull-right char-cnt">0</small><small class="pull-left text-muted" data-i18n="rating-field.minchars2"></small>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-              <button type="button" class="btn btn-primary" disabled="disabled">Kartensatz bewerten</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="rating-field.cancel"></button>
+              <button type="button" class="btn btn-primary" disabled="disabled" data-i18n="rating-field.edit"></button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -485,61 +488,61 @@
     </script>
 
     <script type="text/template" id="set-details-controls">
-      <button class="btn btn-primary newCard" id="set-details-controls-btn-newCard" style="width:100%">Neue Karte erstellen</button>
-      <button class="btn btn-default editSet" style="width:100%; margin-top:10px">Kartensatz editieren</button>
+      <button class="btn btn-primary newCard" id="set-details-controls-btn-newCard" style="width:100%" data-i18n="sidebar-nav.createcard"></button>
+      <button class="btn btn-default editSet" style="width:100%; margin-top:10px" data-i18n="sidebar-nav.editcard"></button>
 
       <div class="modal fade" id="editSetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Kartensatz editieren</h4>
+              <h4 class="modal-title" data-i18n="modal-dialog.editcard"></h4>
             </div>
             <div class="modal-body">
               <div class="form-horizontal">
                 <div class="form-group setdetails name">
-                  <label class="col-md-3 control-label" for="editSetName">Name</label>
+                  <label class="col-md-3 control-label" for="editSetName" data-i18n="modal-dialog.name"></label>
                   <div class="col-md-9">
                     <input class="form-control" type="text" id="editSetName">
                     <span class="help-block name"></span>
                   </div>
                 </div>
                 <div class="form-group setdetails description">
-                  <label class="col-md-3 control-label" for="editSetDescription">Beschreibung</label>
+                  <label class="col-md-3 control-label" for="editSetDescription" data-i18n="modal-dialog.description"></label>
                   <div class="col-md-9">
                     <textarea class="form-control" rows="3" id="editSetDescription"></textarea>
                     <span class="help-block description"></span>
-                  </div>                 
+                  </div>
                 </div>
                 <div class="form-group setdetails category">
-                  <label class="col-md-3 control-label" for="editSetCategory">Kategorie</label>
+                  <label class="col-md-3 control-label" for="editSetCategory" data-i18n="modal-dialog.category"></label>
                   <div class="col-md-9">
                     <input class="form-control" type="text" id="editSetCategory">
                     <span class="help-block category"></span>
-                  </div>                  
+                  </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-md-3 control-label" for="editSetDescription">Sichtbar für</label>
+                  <label class="col-md-3 control-label" for="editSetDescription" data-i18n="modal-dialog.visibility"></label>
                   <div class="controls col-md-9">
                     <div class="btn-group" data-toggle="buttons">
-                      <label class="btn private btn-default active" style="width:100px">
-                        <input type="radio" name="options" value="private" id="edit_visibility_private"> mich
+                      <label class="btn private btn-default active" style="width:100px" >
+                        <input type="radio" name="options" value="private" id="edit_visibility_private"><span data-i18n="modal-dialog.visibilityoption1"></span>
                       </label>
                       <label class="btn public btn-default" style="width:100px">
-                        <input type="radio" name="options" value="public" id="edit_visibility_public"> alle
+                        <input type="radio" name="options" value="public" id="edit_visibility_public"> <span data-i18n="modal-dialog.visibilityoption2"></span>
                       </label>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-md-3 control-label" for="newSetDescription">Bewertungen</label>
+                  <label class="col-md-3 control-label" for="newSetDescription" data-i18n="modal-dialog.rating"></label>
                   <div class="controls col-md-9">
                     <div class="btn-group btn-group-rating" data-toggle="buttons">
                       <label class="btn rating-true btn-default active" style="width:100px">
-                        <input type="radio" name="rating" value="true" id="rating_true"> erlauben
+                        <input type="radio" name="rating" value="true" id="rating_true"><span data-i18n="modal-dialog.ratingoption1"></span>
                       </label>
                       <label class="btn rating-false btn-default" style="width:100px">
-                        <input type="radio" name="rating" value="false" id="rating_false"> abschalten
+                        <input type="radio" name="rating" value="false" id="rating_false"><span data-i18n="modal-dialog.ratingoption2"></span>
                       </label>
                     </div>
                   </div>
@@ -547,9 +550,9 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
-              <button class="btn btn-danger pull-left btn-setDelete" style="width:150px" data-loading-text="Lösche Deck...">Kartensatz löschen</button>
-              <button class="btn btn-primary" data-loading-text="Speichere Deck...">Kartensatz speichern</button>
+              <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" data-i18n="modal-dialog.cancel"></button>
+              <button class="btn btn-danger pull-left btn-setDelete" style="width:150px" data-loading-text="Lösche Deck..." data-i18n="modal-dialog.delete"></button>
+              <button class="btn btn-primary" data-loading-text="Speichere Deck..." data-i18n="modal-dialog.save"></button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -558,7 +561,7 @@
 
     <script type="text/template" id="set-list-sideBar">
       <div class="input-group">
-        <input class="form-control" type="text" id="new-set-input" placeholder="Neuer Kartensatz" />
+        <input class="form-control" type="text" id="new-set-input" placeholder="" data-i18n="[placeholder]input-group.newcarddeck"/>
         <span class="input-group-btn">
           <button class="btn btn-primary saveSet" type="button"><i class="glyphicon glyphicon-plus"></i></button>
         </span>
@@ -566,62 +569,62 @@
 
       <hr />
       <ul class="nav nav-list">
-        <li class="nav-header">Kategorie</li>
-        <li class="active"><a href="#set/list/created" name="set-created">Erstellt</a></li>
-        <li><a href="#set/list/created" name="set-learned">Gelernt</a></li>
+        <li class="nav-header" data-i18n="nav-list.category"></li>
+        <li class="active"><a href="#set/list/created" name="set-created" data-i18n="nav-list.created"></a></li>
+        <li><a href="#set/list/created" name="set-learned" data-i18n="nav-list.learned"></a></li>
       </ul>
       <div class="modal fade" id="newSetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Neuen Kartensatz anlegen</h4>
+              <h4 class="modal-title" data-i18n="modal-dialog.newcarddeck"></h4>
             </div>
             <div class="modal-body">
               <div class="form-horizontal">
                 <div class="form-group setdetails name">
-                  <label class="col-md-3 control-label" for="newSetName">Name</label>
+                  <label class="col-md-3 control-label" for="newSetName" data-i18n="modal-dialog.name"></label>
                   <div class="col-md-9">
-                    <input class="form-control" type="text" id="newSetName" placeholder="Name">
+                    <input class="form-control" type="text" id="newSetName" placeholder="" data-i18n="[placeholder]modal-dialog.nameplaceholder">
                     <span class="help-block name"></span>
-                  </div>                  
+                  </div>
                 </div>
                 <div class="form-group setdetails description">
-                  <label class="col-md-3 control-label" for="newSetDescription">Beschreibung</label>
+                  <label class="col-md-3 control-label" for="newSetDescription" data-i18n="modal-dialog.description"></label>
                   <div class="col-md-9">
-                    <textarea class="form-control" rows="3" id="newSetDescription" placeholder="Beschreibung"></textarea>
+                    <textarea class="form-control" rows="3" id="newSetDescription" placeholder="" data-i18n="[placeholder]modal-dialog.descriptionplaceholder"></textarea>
                     <span class="help-block description"></span>
-                  </div>                  
+                  </div>
                 </div>
                 <div class="form-group setdetails category">
-                  <label class="col-md-3 control-label" for="newSetCategory">Kategorie</label>
+                  <label class="col-md-3 control-label" for="newSetCategory" data-i18n="modal-dialog.category"></label>
                   <div class="col-md-9">
-                    <input class="form-control" type="text" id="newSetCategory" placeholder="Informatik, Jura, Wirtschaft, ...">
+                    <input class="form-control" type="text" id="newSetCategory" placeholder="" data-i18n="[placeholder]modal-dialog.categoryplaceholder">
                     <span class="help-block category"></span>
-                  </div>                 
+                  </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-md-3 control-label" for="newSetDescription">Sichtbar für</label>
+                  <label class="col-md-3 control-label" for="newSetDescription" data-i18n="modal-dialog.visibility"></label>
                   <div class="controls col-md-9">
                     <div class="btn-group" data-toggle="buttons">
                       <label class="btn btn-default active" style="width:100px">
-                        <input type="radio" name="options" value="private" id="visibility_private"> mich
+                        <input type="radio" name="options" value="private" id="visibility_private"><div data-i18n="modal-dialog.visibilityoption1"></div>
                       </label>
                       <label class="btn btn-default" style="width:100px">
-                        <input type="radio" name="options" value="public" id="visibility_public"> alle
+                        <input type="radio" name="options" value="public" id="visibility_public"><div data-i18n="modal-dialog.visibilityoption2"></div>
                       </label>
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-md-3 control-label" for="newSetDescription">Bewertungen</label>
+                  <label class="col-md-3 control-label" for="newSetDescription" data-i18n="modal-dialog.rating"></label>
                   <div class="controls col-md-9">
                     <div class="btn-group btn-group-rating" data-toggle="buttons">
                       <label class="btn btn-default active" style="width:100px">
-                        <input type="radio" name="rating" value="true" id="rating_true"> erlauben
+                        <input type="radio" name="rating" value="true" id="rating_true"><div data-i18n="modal-dialog.ratingoption1"></div>
                       </label>
                       <label class="btn btn-default" style="width:100px">
-                        <input type="radio" name="rating" value="false" id="rating_false"> abschalten
+                        <input type="radio" name="rating" value="false" id="rating_false"><div data-i18n="modal-dialog.ratingoption2"></div>
                       </label>
                     </div>
                   </div>
@@ -629,8 +632,8 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Abbrechen</button>
-              <button class="btn btn-primary" data-loading-text="Speichere Deck...">Kartensatz anlegen</button>
+              <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" data-i18n="modal-dialog.cancel"></button>
+              <button class="btn btn-primary" data-loading-text="Speichere Deck..." data-i18n="modal-dialog.createcarddeck"></button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -639,39 +642,39 @@
     </script>
 
     <script type="text/template" id="set-list">
-      <thead>
+      <thead class="set-list">
         <tr>
-          <th>Name</th>
-          <th width="25%">Kategorie</th>
-          <th width="40%">Beschreibung</th>
+          <th data-i18n="set-list.name"></th>
+          <th width="25%" data-i18n="set-list.category"></th>
+          <th width="40%" data-i18n="set-list.description"></th>
         </tr>
       </thead>
       <tbody></tbody>
     </script>
 
     <script type="text/template" id="set-list-empty">
-          <td class="emptyCellList" colspan="3" align="center" height="60">
-            <span class="emptyTextList">Du hast noch keinen Kartensatz angelegt</span>
+          <td class="emptyCellList set-list-empty" colspan="3" align="center" height="60">
+            <span class="emptyTextList" data-i18n="set-list-empty.emptytextlist"></span>
             <br />
             <a class="btn-newSet btn btn-primary btn-s">
-              <span>Kartensatz anlegen</span>
+              <span data-i18n="set-list-empty.newset"></span>
             </a>
           </td>
-    </script> 
+    </script>
 
     <script type="text/template" id="set-list-learned-empty">
-          <td class="emptyCellList" colspan="3" align="center" height="60">
-            <span class="emptyTextList">Du hast noch keinen Kartensatz gelernt</span>
+          <td class="emptyCellList set-list-learned-empty" colspan="3" align="center" height="60">
+            <span class="emptyTextList" data-i18n="set-list-learned-empty.emptytextlist"></span>
             <br /><br />
           </td>
-    </script> 
+    </script>
 
     <script type="text/template" id="set-rating-list">
-      <thead>
+      <thead class="rating-table">
         <tr>
-          <th width="30%">Name</th>
-          <th width="10%">Bewertung</th>
-          <th width="60%">Kommentar</th>
+          <th width="30%" data-i18n="rating-table.name"></th>
+          <th width="10%" data-i18n="rating-table.rating"></th>
+          <th width="60%" data-i18n="rating-table.comment"></th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -682,19 +685,19 @@
     </script>
 
     <script type="text/template" id="set-rating-item-empty">
-      <td colspan="3" align="center"><p class="text-muted" style="margin-top:8px"><em>Keine Bewertungen vorhanden</em></p></td>
+      <td colspan="3" align="center"><p class="text-muted" style="margin-top:8px"><em data-i18n="norating"></em></p></td>
     </script>
 
-    <script type="text/template" id="set-rating-sideBar"> 
+    <script type="text/template" id="set-rating-sideBar">
       <h4 style="margin:0"><%= name %></h4>
       <hr />
       <span style="font-family:'Georgia'; font-style:italic"><%= description %></span>
       <hr />
-      <span class="nav-header" style="padding-left:0">Erstellt von</span>
-      <span style="font-family:'Georgia'"><a href="/#profile/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
+      <span class="nav-header" style="padding-left:0" data-i18n="createdof"></span>
+      <span style="font-family:'Georgia'"><a href="/#profile/<%=owner%>"><%= owner %></a> am <%= moment("/Date(" + created + ")/").format("LLL") %></span>
       <hr />
-      <a href="#" class="back-to-set btn btn-default btn-block btn-primary">Zurück zum Kartensatz</a>  
-    </script>    
+      <a href="#" class="back-to-set btn btn-default btn-block btn-primary" data-i18n="backcarddecks"></a>
+    </script>
 
     <script type="text/template" id="game-meteor-layout">
       <div class="row">
@@ -720,19 +723,19 @@
         <div id="meteor-countdown">
           <div id="meteor-countdown-welcome">
             <div class="meteor-countdown-back">&nbsp;</div>
-            <div class="meteor-welcome-front">  
+            <div class="meteor-welcome-front">
               <span>Meteor</span>
-              <div class="meteor-welcome-description">Zerstöre die Meteoriten bevor sie die Erde erreichen! Jeder Meteorit ist mit einer Seite deiner Lernkarten beschriftet - zerstöre ihn durch korrekte Eingabe der Rückseite!</div>
-              <div><a href="#" class="btn btn-primary btn-lg">Start</a></div>
+              <div class="meteor-welcome-description" data-i18n="meteorgame.description"></div>
+              <div><a href="#" class="btn btn-primary btn-lg" data-i18n="meteorgame.start"></a></div>
               <br /><br />
-              <p><p class="label label-warning">Bitte beachten! Meteor funktioniert am Besten mit Lernkarten, die kurze Stichwörter und prägnante Sätze beinhalten.</p></p>
+              <p><p class="label label-warning" data-i18n="meteorgame.warning"></p></p>
             </div>
           </div>
           <span id="meteor-countdown-counter" style="padding-top:150px; display:block"></span>
         </div>
         <div id="meteor-statistics" style="display:none">
           <div id="meteor-lifes"><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span><span class="glyphicon glyphicon-heart"></span></div>
-          <div id="meteor-level">Level <span id="meteor-level-cnt">1</span></div>
+          <div id="meteor-level"><span data-i18n="meteorgame.level"></span><span id="meteor-level-cnt">1</span></div>
           <div id="meteor-points">0</div>
         </div>
       </div>
@@ -740,9 +743,9 @@
         <div class="row">
          <div class="col-lg-12">
           <div class="input-group">
-            <input type="input" class="form-control meteor-answer" disabled="disabled" placeholder="Lösung eingeben" />
+            <input type="input" class="form-control meteor-answer" disabled="disabled" placeholder="" data-i18n="[placeholder]meteorgame.answer"/>
             <span class="input-group-btn">
-              <button class="btn btn-default btn-danger" type="button">Spiel beenden</button>
+              <button class="btn btn-default btn-danger" type="button" data-i18n="meteorgame.quit"></button>
             </span>
           </div><!-- /input-group -->
         </div>
@@ -753,27 +756,27 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Lösung eingeben</h4>
+              <h4 class="modal-title" data-i18n="meteorgame.answer2"></h4>
             </div>
             <div class="modal-body">
               <div class="panel panel-info">
-                <div class="panel-heading">Frage</div>
+                <div class="panel-heading" data-i18n="meteorgame.question"></div>
                 <div class="panel-body">
                   <p id="meteor-answer-modal-front"></p>
                 </div>
               </div>
 
               <div class="panel panel-success">
-                <div class="panel-heading">Korrekte Antwort</div>
+                <div class="panel-heading" data-i18n="meteorgame.correctanswer"></div>
                 <div class="panel-body">
                   <p id="meteor-answer-modal-back"></p>
                 </div>
               </div>
-              <input type="text" placeholder="Korrekte Antwort eingeben" class="form-control" id="meteor-answer-modal-input" />
+              <input type="text" placeholder="" data-i18n="[placeholder]meteorgame.insertanswer" class="form-control" id="meteor-answer-modal-input" />
             </div>
             <div class="modal-footer">
-              
-              <button type="button" class="btn btn-success" disabled="disabled">Lösen</button>
+
+              <button type="button" class="btn btn-success" disabled="disabled" data-i18n="meteorgame.answer3"></button>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -784,18 +787,18 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Game Over</h4>
+              <h4 class="modal-title" data-i18n="meteorgame-gameover.gameover"></h4>
             </div>
             <div class="modal-body">
-              <div class="alert alert-info" style="text-align:center">Du hast <strong>400</strong> <strong>Punkte</strong> erzielt!</div>
+              <div class="alert alert-info" style="text-align:center"><span data-i18n="meteorgame-gameover.text1"></span><strong>400</strong> <strong data-i18n="meteorgame-gameover.text2"></strong><span data-i18n="meteorgame-gameover.text3"></span></div>
 
               <div class="panel panel-success" style="display:none">
 
-                <div class="panel-heading">Highscores</div>
+                <div class="panel-heading" data-i18n="meteorgame-gameover.highscores"></div>
 
                 <table class="table">
                   <thead>
-                    <th>Spieler</th><th>Punkte</th>
+                    <th data-i18n="meteorgame-gameover.player"></th><th data-i18n="meteorgame-gameover.points"></th>
                   </thead>
                   <tbody>
                   </tbody>
@@ -803,13 +806,13 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default back">Zurück</button>
-              <button type="button" class="btn btn-success newGame">Neues Spiel</button>
+              <button type="button" class="btn btn-default back" data-i18n="meteorgame-gameover.back"></button>
+              <button type="button" class="btn btn-success newGame" data-i18n="meteorgame-gameover.newgame"></button>
 
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->      
+      </div><!-- /.modal -->
 
 
     </script>
@@ -831,34 +834,34 @@
       </div>
     </script>
 
-    <script type="text/template" id="set-learn-sideBar"> 
+    <script type="text/template" id="set-learn-sideBar">
       <h4 style="margin:0"><%= name %></h4>
       <hr />
       <span style="font-family:'Georgia'; font-style:italic"><%= description %></span>
       <hr />
-      <span class="nav-header" style="padding-left:0">Erstellt von</span>
-      <span style="font-family:'Georgia'"><a href="/#user/<%=owner%>"><%= owner %></a> am <%= new Date(created).format('d.m.y') %></span>
+      <span class="nav-header" style="padding-left:0" data-i18n="createdof2"></span>
+      <span style="font-family:'Georgia'"><a href="/#user/<%=owner%>"><%= owner %></a> am <%= moment("/Date(" + created + ")/").format("LLL") %></span>
     </script>
 
     <script type="text/template" id="set-learn-controls">
       <button class="btn btn-default learn-box" title="1" style="width:100%;">
-        <span class="pull-left">Fach 1</span>
+        <span class="pull-left" data-i18n="subject1"></span>
         <span class="badge pull-right box-indicator one" title="1">0</span>
       </button>
       <button class="btn btn-default learn-box" title="2" style="width:100%; margin-top:10px">
-        <span class="pull-left">Fach 2</span>
+        <span class="pull-left" data-i18n="subject2"></span>
         <span class="badge pull-right box-indicator two" title="2">0</span>
       </button>
       <button class="btn btn-default learn-box" title="3" style="width:100%; margin-top:10px">
-        <span class="pull-left">Fach 3</span>
+        <span class="pull-left" data-i18n="subject3"></span>
         <span class="badge pull-right box-indicator three" title="3">0</span>
       </button>
       <button class="btn btn-default learn-box" title="4" style="width:100%; margin-top:10px">
-        <span class="pull-left">Fach 4</span>
+        <span class="pull-left" data-i18n="subject4"></span>
         <span class="badge pull-right box-indicator four" title="4">0</span>
       </button>
       <button class="btn btn-default learn-box" title="5" style="width:100%; margin-top:10px">
-        <span class="pull-left">Fach 5</span>
+        <span class="pull-left" data-i18n="subject5"></span>
         <span class="badge pull-right box-indicator five" title="5">0</span>
       </button>
     </script>
@@ -873,20 +876,20 @@
       </div>
 
       <div id="learn-navigation">
-            <button class="btn btn-primary answer card-success" title="success" style="width:100%; margin-top:10px; display:none">Gewusst</button>
-            <button class="btn btn-default answer card-fail" title="failed" style="width:100%; margin-top:10px; display:none">Nicht gewusst</button>
+            <button class="btn btn-primary answer card-success" title="success" style="width:100%; margin-top:10px; display:none" data-i18n="know"></button>
+            <button class="btn btn-default answer card-fail" title="failed" style="width:100%; margin-top:10px; display:none" data-i18n="notknow"></button>
       </div>
 
       <div class="box learn-endscreen" style="display:none">
         <div class="block">
-          <div class="centered front learnbox-success">
-                Lerneinheit erfolgreich beendet
+          <div class="centered front learnbox-success" data-i18n="learn-endscreen.success">
+
           </div>
-          <div class="centered front learnbox-choose-message">
-                Wähle ein weiteres Fach oder gehe zurück zum Kartensatz</div>
+          <div class="centered front learnbox-choose-message" data-i18n="learn-endscreen.back">
+                </div>
           <br />
           <a class="btn-back btn btn-default btn-s learn-back" onclick="history.go(-1)">
-            <span>Zurück zum Kartensatz</span>
+            <span data-i18n="learn-endscreen.back2"></span>
           </a>
           </div>
         </div>
@@ -894,14 +897,14 @@
 
       <div class="box learn-startscreen">
         <div class="block">
-          <div class="centered front" style="font-size:1.8em">
-                Wähle ein Fach auf der linken Seite
+          <div class="centered front" style="font-size:1.8em" data-i18n="choosesubject">
+
           </div>
         </div>
       </div>
 
       <div class="learn-cardHelptext" style="display:none">
-            <span>Klicke auf die Karte um Sie zu drehen</span>
+            <span data-i18n="clickcart"></span>
       </div>
 
       <div class="modal fade" id="pictureModalLearn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -932,9 +935,9 @@
 
     <script type="text/template" id="set-learn-item-empty">
       <div class="box">
-        <div class="block"><div class="centered front" style="font-size:2em">Keine Karten vorhanden</div>
+        <div class="block"><div class="centered front" style="font-size:2em" data-i18n="nocards"></div>
       </div>
-    </script> 
+    </script>
 
     <!--Memo -->
     <script type="text/template" id="set-memo-layout">
@@ -947,23 +950,23 @@
 
 
     <script type="text/template" id="set-memo-collection">
-      <div id="cardCarousel" class="carousel slide">
+      <div id="cardCarousel" class="carousel slide cardmemo">
         <ol class="carousel-indicators"></ol>
-        <div class="carousel-inner"></div>     
-        <button class="btn btn-primary answer show-answer" title="success">Zeige Antwort</button>
+        <div class="carousel-inner"></div>
+        <button class="btn btn-primary answer show-answer" title="success" data-i18n="cardmemo.showanswer"></button>
         <div class="rating-controls" style="display:none">
           <div class="btn-toolbar memo-toolbar">
             <div class="memo-cardHelptext">
-              <span>Bewerte deine Antwort</span>
+              <span data-i18n="cardmemo.rateanswer"></span>
             </div>
             <div class="btn-group memo-rating">
-              <button class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="0" title="Blackout">0</button>
-              <button class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="1" title="Falsche Antwort, aber an die Richtige erinnert">1</button>
-              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="2" title="Falsche Antwort, aber leicht an die Richtige erinnert">2</button>
-              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="3" title="Richtige Antwort nach längerem Überlegen">3</button>
-              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="4" title="Richtige Antwort nach kurzem Zögern">4</button>
-              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="5" title="Perfekte Antwort">5</button>
-              <a class="btn btn-default btn-info memo-helptext" data-placement="bottom" title="Memo" data-content="Vergleiche die obige Antwort mit der aus deiner Erinnerung und bewerte sie mit Hilfe der Skala. Anhand der Bewertung wird der Zeitpunkt für die nächste Wiederholung deiner Lernkarte berechnet.">
+              <button class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="0" data-i18n="[title]cardmemo.rate0" title="">0</button>
+              <button class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="1" data-i18n="[title]cardmemo.rate1" title="">1</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="2" data-i18n="[title]cardmemo.rate3" title="">2</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="3" data-i18n="[title]cardmemo.rate4" title="">3</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="4" title="">4</button>
+              <button class="btn btn-default rate-answer" data-placement="bottom" data-id="5" data-i18n="[title]cardmemo.rate5" title="">5</button>
+              <a class="btn btn-default btn-info memo-helptext" data-placement="bottom" title="Memo" data-i18n="[data-content]cardmemo.memotext" data-content="">
                 <i class="glyphicon glyphicon-question-sign"></i>
               </a>
             </div>
@@ -975,10 +978,10 @@
         <div class="row twosided">
           <div class="col-md-6">
             <div class="box">
-              <div class="block memocontent-block"><div class="double">Lerneinheit erfolgreich beendet</div>
+              <div class="block memocontent-block"><div class="double" data-i18n="memo-endscreen.text"></div>
                 <br />
                 <a class="btn-back btn btn-default btn-s" onclick="history.go(-1)">
-                  <span>Zurück zum Kartensatz</span>
+                  <span data-i18n="memo-endscreen.back"></span>
                 </a>
               </div>
             </div>
@@ -1012,7 +1015,7 @@
       <div class="col-md-6">
         <div class="box">
           <div class="memo-setname"><span class="setname"></span></div>
-          <span class="clicktoflip">Vorderseite</span>
+          <span class="clicktoflip" data-i18n="foreside"></span>
           <img class="cardside cardfront-symbol" src="/img/icon_front.png" />
           <a class="cardcontent-front btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
             <i class="glyphicon glyphicon-picture"></i>
@@ -1023,7 +1026,7 @@
       </div>
       <div class="col-md-6">
         <div class="box">
-          <span class="clicktoflip">Rückseite</span>
+          <span class="clicktoflip" data-i18n="backside"></span>
           <img class="cardside cardback-symbol memoback" src="/img/icon_back.png" />
           <a class="cardcontent-back btn-showPictureModal btn btn-default btn-xs" href="#showPictureModalMemo" style="display:none">
             <i class="glyphicon glyphicon-picture"></i>
@@ -1037,13 +1040,13 @@
 
 
     <script type="text/template" id="set-memo-item-empty">
-        <div class="row twosided">
+        <div class="row twosided memo-empty">
           <div class="col-md-6">
             <div class="box">
-              <div class="block memocontent-block"><div class="double">Aktuell keine nach Lernplan zu lernenden Karten</div>
+              <div class="block memocontent-block"><div class="double" data-i18n="memo-empty.text"></div>
                 <br />
                 <a class="btn-back btn btn-default btn-s" onclick="history.go(-1)">
-                  <span>Zurück zum Kartensatz</span>
+                  <span data-i18n="memo-empty.back"></span>
                 </a>
               </div>
             </div>
@@ -1055,12 +1058,12 @@
             </div>
           </div>
         </div>
-    </script> 
+    </script>
 
     <script type="text/template" id="profile-layout">
-      <div class="row">
+      <div class="row profil-header">
         <div class="col-md-12">
-          <h3 style="margin-bottom:20px">Profil von <span id="profileName"></span></h3>
+          <h3 style="margin-bottom:20px"><span data-i18n="profil-header.name"></span><span id="profileName"></span></h3>
         </div>
       </div>
       <div class="row">
@@ -1086,45 +1089,45 @@
 
     <script type="text/template" id="profile-private-item">
       <div class="well" style="width:50%; margin:20px auto; text-align:center;">
-        <h4>Dieses Profil ist nicht öffentlich.</h4>
+        <h4 data-i18n="well.error"></h4>
       </div>
     </script>
 
-    <script type="text/template" id="profile-xp-item">
-      <div class="panel-heading">
-        <h3 class="panel-title">Erfahrungspunkte (XP)</h3>
+        <script type="text/template" id="profile-xp-item">
+      <div class="panel-heading panel-heading-experience">
+        <h3 class="panel-title" data-i18n="panel-heading-experience.experience"></h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body panel-body-experience">
         <div class="row" style="margin-bottom:15px">
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
               <div class="row"><span style="display:inline-block; height:50px; font-size:40px"><%= _.str.numberFormat(totalXPoints, 0, ',', '.') %></span></div>
-              <div class="row"><span class="text-muted" style="font-size:12px">Total</span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px" data-i18n="panel-body-experience.total"></span></div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
               <div class="row" style="height:50px;"><span style="display:inline-block; font-size:30px; margin-top:12px"><%= _.str.numberFormat(todayXPoints, 0, ',', '.') %></span></div>
-              <div class="row"><span class="text-muted" style="font-size:12px">Heute</span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px" data-i18n="panel-body-experience.today"></span></div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
               <div class="row" style="height:50px;"><span style="display:inline-block; font-size:25px; margin-top:17px; height:25px;"><%= _.str.numberFormat(yesterdayXPoints, 0, ',', '.') %></span></div>
-              <div class="row"><span class="text-muted" style="font-size:12px">Gestern</span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px" data-i18n="panel-body-experience.yesterday"></span></div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="well well-sm" style="margin:0; text-align:center">
               <div class="row" style="height:50px;"><span style="display:inline-block; font-size:20px; margin-top:22px; height:20px"><%= _.str.numberFormat(lastSevenDaysXPoints, 0, ',', '.') %></span></div>
-              <div class="row"><span class="text-muted" style="font-size:12px">7 Tage</span></div>
+              <div class="row"><span class="text-muted" style="font-size:12px" data-i18n="panel-body-experience.days"></span></div>
             </div>
           </div>
         </div>
         <% if(lastRedeem) { %>
         <div class="row" style="margin-bottom:15px">
           <div class="col-md-12">
-            <span class="text-muted">Zuletzt für: </span> <span class="pull-right text-muted"><%= lastRedeem.name %> (+<%= lastRedeem.value %>)</span>
+            <span class="text-muted" data-i18n="panel-body-experience.lastredeem"></span> <span class="pull-right text-muted"><%= lastRedeem.name %> (+<%= lastRedeem.value %>)</span>
           </div>
         </div>
         <hr />
@@ -1139,50 +1142,50 @@
                 <span class="sr-only"><%= pointsLevel-pointsRemaining %>0% Complete</span>
               </div>
             </div>
-            <small class="text-muted">Noch <em><%= _.str.numberFormat(pointsRemaining, 0, ',', '.') %> Punkte</em> bis zum nächsten Level</small>
+            <small class="text-muted"><span data-i18n="pointslvl1"></span> <em><%= _.str.numberFormat(pointsRemaining, 0, ',', '.') %> <span data-i18n="pointslvl2"></span></em><span data-i18n="pointslvl3"></span></small>
           </div>
           <div class="col-md-2" style="text-align:center;">
             <div style=" width:36px; height:36px; background-image:url('/img/trophy_36x36_gray.png')"><span style="font-weight:bold; color: #fff; font-size:13px; padding-top:5px; display:inline-block"><%= currentLevel+1 %></span></div>
           </div>
         </div>
-      </div>    
-      
+      </div>
+
     </script>
 
     <script type="text/template" id="profile-info-item">
       <div class="panel-heading">
-        <h3 class="panel-title">Hallo!</h3>
+        <h3 class="panel-title" data-i18n="panel-heading.hallo"></h3>
       </div>
       <div class="panel-body">
         <form class="form-horizontal" role="form">
           <div class="form-group">
-            <label class="col-md-4 control-label">Benutzername</label>
+            <label class="col-md-4 control-label" data-i18n="panel-body.name"></label>
             <div class="col-md-8">
               <p class="form-control-static"><%= username %></p>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-4 control-label">Angemeldet via</label>
+            <label class="col-md-4 control-label" data-i18n="panel-body.login"></label>
             <div class="col-md-8">
               <p class="form-control-static"><%= _.str.capitalize(provider) %></p>
             </div>
           </div>
           <% if(JSON.parse($.cookie('usr')).username == username) { %>
           <div class="form-group">
-            <label for="inputEmail3" class="col-md-4 control-label">Email</label>
+            <label for="inputEmail3" class="col-md-4 control-label" data-i18n="panel-body.email"></label>
             <div class="col-md-7">
               <input type="email" class="form-control" id="inputEmail3" placeholder="Email" value="<%= email %>">
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-4 control-label">Profil öffentlich</label>
+            <label class="col-md-4 control-label" data-i18n="panel-body.profilepublic"></label>
             <div class="col-md-8">
               <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default profile-public <% if(profile == 'public') { %>active<% } %>" style="width:117px">
-                  <input type="radio" name="options" value="private"> Ja
+                  <input type="radio" name="options" value="private"><div data-i18n="panel-body.profilepublicoption1"></div>
                 </label>
                 <label class="btn btn-default profile-private <% if(profile == 'private') { %>active<% } %>" style="width:118px">
-                  <input type="radio" name="options" value="public"> Nein
+                  <input type="radio" name="options" value="public"> <div data-i18n="panel-body.profilepublicoption2"></div>
                 </label>
               </div>
             </div>
@@ -1193,34 +1196,34 @@
     </script>
 
     <script type="text/template" id="profile-score-item">
-      <div class="panel-heading">
-        <h3 class="panel-title">Meteor Statistiken</h3>
+      <div class="panel-heading panel-heading-meteor">
+        <h3 class="panel-title" data-i18n="panel-heading-meteor.meteor"></h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body panel-body-meteor">
         <form class="form-horizontal" role="form">
           <div class="form-group">
-            <label class="col-md-6 control-label">Gesamtpunktzahl</label>
+            <label class="col-md-6 control-label" data-i18n="panel-body-meteor.points"></label>
             <div class="col-md-6">
               <p class="form-control-static"><%= _.str.numberFormat(score, 0, ',', '.') %></p>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-6 control-label">Gespielt</label>
+            <label class="col-md-6 control-label" data-i18n="panel-body-meteor.played"></label>
             <div class="col-md-6">
-              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt != 1) { %>Spiele<%} else {%>Spiel<%} %> <small class="text-muted">(Ø ~<%= _.str.numberFormat(score/gameCnt, 0, ',', '.') %>)</small></p>
+              <p class="form-control-static"><%= gameCnt %> <% if(gameCnt != 1) { %><span data-i18n="panel-body-meteor.games"></span><%} else {%><span data-i18n="panel-body-meteor.game"><%} %> <small class="text-muted">(Ø ~<%= _.str.numberFormat(score/gameCnt, 0, ',', '.') %>)</small></p>
             </div>
           </div>
         </form>
       </div>
-      <table class="table table-hover table-striped">
+      <table class="table table-hover table-striped table-meteor">
         <thead>
-          <th>Kartensatz</th>
-          <th>Dein Highscore</th>
-          <th>Pos.</th>
-          <th>Highscore</th>
+          <th data-i18n="table-meteor.carddeck"></th>
+          <th data-i18n="table-meteor.yourhighscore"></th>
+          <th data-i18n="table-meteor.position"></th>
+          <th data-i18n="table-meteor.highscore"></th>
         </thead>
         <tbody>
-          <% 
+          <%
             if(games.length > 0) {
               _.each(games, function(game){
           %>
@@ -1229,19 +1232,20 @@
               })
             } else {
           %>
-                <tr><td colspan="4" align="center"><p class="text-muted" style="margin-top:10px; font-style:italic">Du hast bisher noch kein Spiel gespielt</p></td>
+                <tr><td colspan="4" align="center"><p class="text-muted" style="margin-top:10px; font-style:italic" data-i18n="meteortext"></p></td>
           <%  } %>
         </tbody>
       </table>
     </script>
 
+
     <script type="text/template" id="profile-badge-list">
-      <div class="panel-heading">
-        <h3 class="panel-title">Badges</h3>
+      <div class="panel-heading panel-heading-badges">
+        <h3 class="panel-title" data-i18n="panel-heading-badges.badges"></h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body pangel-body-badges">
       <a href="http://openbadges.org" target="_blank"><img alt="We Issue OpenBadges" src="/img/OpenBadges_Insignia_WeIssue.png" style="position:absolute; top:19px; right:30px"></a>
-      <p>Du hast die Möglichkeit, deine gesammelten Badges mit dem Mozilla Badge Backpack zu syncronisieren.<br />Um deine Badges der <a href="http://openbadges.org/" target="_blank">OpenBadges Plattform</a> hinzuzufügen, klicke auf den folgenden Button:</p><p class="" style="text-align:center; margin-top:15px" ><a class="btn btn-success issueBadge">Jetzt syncronisieren</a></p>
+      <p><span data-i18n="panel-body-badges.text1"></span><br /><span data-i18n="panel-body-badges.text2"></span><a href="http://openbadges.org/" target="_blank" data-i18n="panel-body-badges.text3"></a><span data-i18n="panel-body-badges.text4"> </span></p><p class="" style="text-align:center; margin-top:15px" ><a class="btn btn-success issueBadge" data-i18n="panel-body-badges.button"></a></p>
       </div>
         <table class="table">
           <tbody></tbody>
@@ -1254,7 +1258,7 @@
       <img src="/badges/<%= _id %>_1.png" width="60" />
       </td-->
       <td><p style="margin:5px 0 15px 0">
-        
+
 
       <table class="table table-bordered" style="margin-bottom:0; position:relative; bottom:5px; float:left;width:100%">
         <tbody>
@@ -1263,11 +1267,11 @@
       <%
         if(typeof(user) != "undefined") {
       %>
-        
+
         <img src="/badges/<%= _id %>_<%= user.rank %><% if(user.issuedOn == 0 || _.isUndefined(user.issuedOn)) { %>_gray<% } %>.png" alt="<%= name %>" width="75" height="75" />
-        
+
         <p>
-          <strong><%= name %> 
+          <strong><%= name %>
           <% if(user.rank == 3) { %> (Bronze) <% } %>
           <% if(user.rank == 2) { %> (Silber) <% } %>
           <% if(user.rank == 1) { %> (Gold) <% } %>
@@ -1279,9 +1283,9 @@
             <% if(user.rank == 3 && user.progress == 0) { %>
               Beginne zu Lernen!
             <% } else { %>
-              Lerne und erhalte diesen Badge!  
+              Lerne und erhalte diesen Badge!
             <% } %>
-            
+
           <% } %>
         </p>
 
@@ -1294,11 +1298,11 @@
       %></td>
           </tr>
           <tr>
-            <td align="center"><img src="/badges/<%= _id %>_1.png" height="60" /><br /><strong>Gold</strong></td>
-            <td align="center"><img src="/badges/<%= _id %>_2.png" height="60" /><br /><strong>Silber</strong></td>
-            <td align="center"><img src="/badges/<%= _id %>_3.png" height="60" /><br /><strong>Bronze</strong></td>
+            <td align="center"><img src="/badges/<%= _id %>_1.png" height="60" /><br /><strong data-i18n="gold"></strong></td>
+            <td align="center"><img src="/badges/<%= _id %>_2.png" height="60" /><br /><strong data-i18n="silver"></strong></td>
+            <td align="center"><img src="/badges/<%= _id %>_3.png" height="60" /><br /><strong data-i18n="bronze"></strong></td>
             <td rowspan="2" width="40%"><%= description %></p></td>
-            
+
           </tr>
           <tr>
             <td class="active" align="center"><%= rank["1"] %> <%= unit %></td>
@@ -1312,14 +1316,14 @@
 
     <script type="text/template" id="profile-set-list">
       <div class="panel-heading">
-        <h3 class="panel-title">Kartensätze</h3>
-      </div> 
-        <table class="table table-striped table-bordered table-hover">
+        <h3 class="panel-title" data-i18n="carddecks"></h3>
+      </div>
+        <table class="table table-striped table-bordered table-hover carddeck-table">
           <thead>
             <tr>
-              <th width="300">Name</th>
-              <th width="150">Kategorie</th>
-              <th>Beschreibung</th>
+              <th width="300" data-i18n="carddeck-table.name"></th>
+              <th width="150" data-i18n="carddeck-table.category"></th>
+              <th data-i18n="carddeck-table.description"></th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -1333,7 +1337,7 @@
     </script>
 
     <script type="text/javascript" src="/javascripts/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="/javascripts/lib/underscore-min.js"></script>    
+    <script type="text/javascript" src="/javascripts/lib/underscore-min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/underscore.string.min.js"></script>
     <script type="text/javascript"> _.mixin(_.str.exports()) </script>
     <script type="text/javascript" src="/javascripts/lib/backbone-min.js"></script>
@@ -1347,7 +1351,7 @@
     <script type="text/javascript" src="/javascripts/lib/typeahead.min.js"></script>
 
     <script type="text/javascript" src="/javascripts/Cards.js"></script>
-    
+
     <script type="text/javascript" src="/javascripts/entities/Set.js"></script>
     <script type="text/javascript" src="/javascripts/entities/Card.js"></script>
     <script type="text/javascript" src="/javascripts/entities/User.js"></script>
@@ -1413,6 +1417,10 @@
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
+    <script type="text/javascript" src="/javascripts/lib/i18next-1.7.3.min.js"></script>
+    <script type="text/javascript" src="/javascripts/lib/moment-with-langs.min.js"></script>
+    <script type="text/javascript" src="/javascripts/translation.js"></script>
+
     <script type="text/javascript">
       $(function(){
         Cards.start();
@@ -1442,17 +1450,17 @@
         });
       });
     </script>
-    <script type="text/javascript"> 
-      var $buoop = {vs:{i:10,f:20,o:15,s:5.1,n:9}}; 
-      $buoop.ol = window.onload; 
-      window.onload=function(){ 
-        try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
-        var e = document.createElement("script"); 
-        e.setAttribute("type", "text/javascript"); 
-        e.setAttribute("src", "//browser-update.org/update.js"); 
-        document.body.appendChild(e); 
-      } 
-    </script> 
+    <script type="text/javascript">
+      var $buoop = {vs:{i:10,f:20,o:15,s:5.1,n:9}};
+      $buoop.ol = window.onload;
+      window.onload=function(){
+        try {if ($buoop.ol) $buoop.ol();}catch (e) {}
+        var e = document.createElement("script");
+        e.setAttribute("type", "text/javascript");
+        e.setAttribute("src", "//browser-update.org/update.js");
+        document.body.appendChild(e);
+      }
+    </script>
 
     <div id="notificationContainer" style="padding:10px 15px 15px; position: absolute; display:none; width:350px; right: 10px; top: 10px; z-index: 10000; opacity: 0.9; border:1px solid #777; background-color:#fff; border-radius:5px">
       <button type="button" class="close" aria-hidden="true" style="float:right">&times;</button>
@@ -1460,8 +1468,8 @@
         <img src="/badges/badge/stammgast_3.png" alt="<%= name %>" width="75" height="75" style="margin-top:5px; display:inline-block" />
       </div>
       <div>
-          <h4>Neuer Badge</h4>
-          Du hast den Badge <strong class="badgeTitle">Stammgast</strong> <strong>(<span class="rank"></span>)</strong> erhalten
+          <h4 data-i18n="newbadge"></h4>
+          <span data-i18n="badgetext1"></span><strong class="badgeTitle" data-i18n="badgetext2"></strong> <strong>(<span class="rank"></span>)</strong><span data-i18n="badgetext3"></span>
       </div>
     </div>
   </body>

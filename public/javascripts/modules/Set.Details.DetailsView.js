@@ -20,18 +20,24 @@ Cards.module('Set.Details', function(Details, App) {
 				this.$el.find("div.cardContent.back").toggleClass('active');
 				this.$el.find("div.cardContent.front").toggleClass('active');
 				frontSymbol.toggle();
-				backSymbol.toggle();				
+				backSymbol.toggle();
 			}
 		},
 		linkClicked: function(ev) {
 			ev.preventDefault();
+		},
+		onRender: function(){
+			i18ninit();
 		}
-	});	
+	});
 
 	Details.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item-empty",
-		className: "empty-item"
-	});	
+		className: "empty-item",
+		onRender: function(){
+			i18ninit();
+		}
+	});
 
 	Details.DetailsView = Backbone.Marionette.CompositeView.extend({
 		emptyView: Details.EmptyView,
@@ -110,7 +116,7 @@ Cards.module('Set.Details', function(Details, App) {
 				frontSymbol.toggle();
 				backSymbol.toggle();
 
-			}		
+			}
 		},
 		checkForPicture: function(ev) {
 			if(this.collection.length !== 0) {
@@ -130,7 +136,7 @@ Cards.module('Set.Details', function(Details, App) {
 					} else if(!actualCard.get('back').picture){
 						button.hide();
 					}
-				}		
+				}
 			}
 		},
 		showPictureModal: function() {
@@ -161,10 +167,11 @@ Cards.module('Set.Details', function(Details, App) {
 			App.trigger("set:memo", this.model.get("_id"));
 		},
 		onRender: function() {
+			i18ninit();
 			var that = this;
 			var cardCarousel = this.$el.find('div#cardCarousel');
 
-			
+
 			if(this.collection.length == 0) {
 				this.$el.find("button.play-meteor").prop('disabled', true);
 				this.$el.find("button.learn").prop('disabled', true);
@@ -174,7 +181,7 @@ Cards.module('Set.Details', function(Details, App) {
 			if(this.collection.length <= 1) {
 				this.$el.find("a.carousel-control").hide();
 			}
-			
+
 			this.$el.find("div.item").first().addClass("active");
 
 			var cardCount = this.$('.item').length;
@@ -185,7 +192,7 @@ Cards.module('Set.Details', function(Details, App) {
 			cardCarousel.on('slid.bs.carousel', function (ev) {
 				ev.stopPropagation();
 				if($(ev.target).hasClass( "carousel" )) {
-					that.checkForPicture(); 
+					that.checkForPicture();
 					currentIndex = that.$('div.item.active').index() + 1;
 					that.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
 				}
@@ -195,7 +202,7 @@ Cards.module('Set.Details', function(Details, App) {
 			$.get("/score/"+usr.username+"/"+this.model.get("_id"), function( data ) {
 				$("#meteor-set-points").text(data.score);
 			}).fail(function(){
-				
+
 			});
 
 			$('#btnToListLayout').removeClass("active");
@@ -208,8 +215,8 @@ Cards.module('Set.Details', function(Details, App) {
 
 				if(actualCard.get('front').picture){
 					this.$el.find("a.btn-showPictureModal").show();
-				}	
-				this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);	
+				}
+				this.$el.find("small.card-indicator").html(currentIndex+'/'+cardCount);
 
 				if(JSON.parse($.cookie('usr')).username == setOwner) {
 					this.$el.find("a.btn-editCard").show();
@@ -226,14 +233,20 @@ Cards.module('Set.Details', function(Details, App) {
 
 	Details.ListItem = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
-	    template: "#set-details-listitem"
+	    template: "#set-details-listitem",
+		onRender: function(){
+			i18ninit();
+		}
 	});
 
 	Details.ListEmptyView = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
 		template: "#set-details-listitem-empty",
-		className: "empty-listitem"
-	});	
+		className: "empty-listitem",
+		onRender: function(){
+			i18ninit();
+		}
+	});
 
 	Details.DetailsListView = Backbone.Marionette.CompositeView.extend({
 		emptyView: Details.ListEmptyView,
@@ -298,6 +311,7 @@ Cards.module('Set.Details', function(Details, App) {
 			this.ui.modalView.modal('show');
 		},
 		onRender: function(ev) {
+			i18ninit();
 			$('#btnToListLayout').addClass("active");
 			$('#btnToCardLayout').removeClass("active");
 

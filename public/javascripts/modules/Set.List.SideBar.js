@@ -3,7 +3,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		template: "#set-list-sideBar",
 		className: "well well-sm sidebar-nav",
 		ui: {
-			btnAdd: "a.saveSet", 
+			btnAdd: "a.saveSet",
 			inputSetName: "input[type=text]",
 			modalView: "#newSetModal",
 			modalBtnSave: "#newSetModal button.btn-primary",
@@ -53,7 +53,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			var newSetName = this.ui.inputSetName.val().trim();
 			this.ui.inputSetName.val('');
 			var newSet = new Cards.Entities.Set({ name: newSetName, created: new Date().getTime(), count: Math.round(Math.random()*50) });
-			
+
 			this.ui.modalView.on('show.bs.modal', function () {
     			that.ui.modalInputName.val(newSetName);
 			});
@@ -84,8 +84,8 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			var visibility = _.escape($("#newSetModal .btn-group > label.active > input").val());
 			var rating = _.escape($("#newSetModal .btn-group-rating > label.active > input").val());
 
-			var newSet = new Cards.Entities.Set({ 
-								name: name, 
+			var newSet = new Cards.Entities.Set({
+								name: name,
 								description: description,
 								visibility: visibility,
 								category: category,
@@ -95,7 +95,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 
 			if(newSet.isValid()) {
 				this.collection.create(newSet, {
-				    wait : true, 
+				    wait : true,
 				    success : function(resp){
 				        that.ui.modalView.modal('hide');
 				    },
@@ -118,7 +118,7 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 		        helptext.text(error.message);
 		    }, this);
 		},
- 
+
 		hideErrors: function () {
 			this.$('.help-block').text('');
 			this.$('.setdetails').removeClass('has-error');
@@ -133,12 +133,15 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 				remote:  '/typeahead/set/category?q=%QUERY',
 				prefetch: '/typeahead/set/category'/*,
 				footer: "<hr />",
-				template: [                                           
-				  '<p class="typeahead-name"><%= value %> <span>Kategorie</span></p>',                                      
-				  '<p class="typeahead-description"><%= count %> <% if(count > 1) { %> Kartensätze <% } else { %>Kartensatz<% } %></p>'                         
-				].join(''),                                                                 
+				template: [
+				  '<p class="typeahead-name"><%= value %> <span>Kategorie</span></p>',
+				  '<p class="typeahead-description"><%= count %> <% if(count > 1) { %> Kartensätze <% } else { %>Kartensatz<% } %></p>'
+				].join(''),
 				engine: engine */
 			});
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });

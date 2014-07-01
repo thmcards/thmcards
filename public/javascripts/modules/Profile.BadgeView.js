@@ -7,7 +7,10 @@ Cards.module('Profile', function(Profile, App) {
 		},
 		linkClicked: function(ev){
 			ev.preventDefault();
-		
+
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 
@@ -31,7 +34,7 @@ Cards.module('Profile', function(Profile, App) {
 				OpenBadges.issue(assertions, function(errors, successes){
 					console.log("badge errors", errors);
 					console.log("badge successes", successes);
-					});	
+					});
 				})
 				.fail(function() {
 				    alert( "Fehler bei der Synchronisation mit OpenBadges. Bitte später erneut versuchen." );
@@ -41,7 +44,10 @@ Cards.module('Profile', function(Profile, App) {
 				$(window).scrollTop(0);
 				$("#inputEmail3").focus();
 			}
-			
+
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });

@@ -6,7 +6,10 @@ Cards.module('Profile', function(Profile, App) {
 		},
 		linkClicked: function(ev){
 			ev.preventDefault();
-		
+
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });
