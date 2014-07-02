@@ -7,6 +7,6 @@
 [submodule "puppet/modules/motd"]
 	path = puppet/modules/motd
 	url = https://github.com/saz/puppet-motd.git
-[submodule "https://github.com/puppetlabs/puppetlabs-apt"]
+[submodule "puppet/modules/apt"]
 	path = puppet/modules/apt
 	url = https://github.com/puppetlabs/puppetlabs-apt
