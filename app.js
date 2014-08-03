@@ -59,9 +59,9 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
   app.use(helmet.xframe());
-  app.use(helmet.iexss());
-  app.use(helmet.contentTypeOptions());
-  app.use(helmet.hsts());
+  app.use(helmet.xssFilter());
+  app.use(helmet.nosniff());
+  app.use(helmet.hsts({ maxAge: 7776000000 }));
   app.use(helmet.hidePoweredBy());
   app.use(cookieParser);
   app.use(express.json());
