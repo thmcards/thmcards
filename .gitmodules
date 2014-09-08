@@ -11,3 +11,9 @@
 [submodule "puppet/modules/motd"]
 	path = puppet/modules/motd
 	url = https://github.com/saz/puppet-motd.git
+[submodule "puppet/modules/jenkins"]
+	path = puppet/modules/jenkins
+	url = https://github.com/jenkinsci/puppet-jenkins.git
+[submodule "puppet/modules/java"]
+	path = puppet/modules/java
+	url = https://github.com/puppetlabs/puppetlabs-java.git

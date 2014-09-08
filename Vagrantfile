@@ -29,6 +29,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
  # config.vm.network "forwarded_port", guest: 8080, host: 10080
   config.vm.network "forwarded_port", guest: 3000, host: 3000 #running Port for THMcards
   config.vm.network "forwarded_port", guest: 5984, host: 5984
+  # Jenkins
+  config.vm.network "forwarded_port", guest: 9090, host: 9090
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
