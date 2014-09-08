@@ -3,4 +3,4 @@
 echo -e "Starting THMCards."
 
 eval "cd /vagrant"
-eval "node app.js"
+eval "NODE_ENV=development GOOGLE_CALLBACK=http://localhost:3000/auth/google/callback GOOGLE_REALM=http://localhost:3000/ node app.js"

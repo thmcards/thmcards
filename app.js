@@ -356,8 +356,8 @@ function(token, tokenSecret, profile, done) {
 }));
 
 passport.use(new GoogleStrategy({
-    returnURL: nconf.get("google_callback"),
-    realm: nconf.get("google_realm")
+    returnURL: process.env.GOOGLE_CALLBACK ,
+    realm: process.env.GOOGLE_REALM
   },
   function(identifier, profile, done) {
     profile.openID = identifier;
