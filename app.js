@@ -20,7 +20,7 @@ var express = require('express')
   , passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
-  , GoogleStrategy = require('passport-google').Strategy
+  , GoogleStrategy = require('mybeat-passport-google-oauth').OAuth2Strategy
   , app = express()
   ;
 
@@ -356,14 +356,15 @@ function(token, tokenSecret, profile, done) {
 }));
 
 passport.use(new GoogleStrategy({
-    returnURL: process.env.GOOGLE_CALLBACK ,
-    realm: process.env.GOOGLE_REALM
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK
   },
-  function(identifier, profile, done) {
-    profile.openID = identifier;
-    profile.provider = "google";
-    profile.username = profile.emails[0].value;
-    return User.findOrCreate(profile, done);
+  function(token, tokenSecret, profile, done) {
+      profile.openID = profile.id;
+      profile.provider = "google";
+      profile.username = profile.emails[0].value;
+      return User.findOrCreate(profile, done);
   }
 ));
 
@@ -412,7 +413,7 @@ app.get('/auth/facebook/callback',
   }
 );
 
-app.get('/auth/google', passport.authenticate('google'));
+app.get('/auth/google', passport.authenticate('google',  { scope: 'email' }));
 
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
