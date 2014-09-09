@@ -29,16 +29,46 @@
       }
     },
     {
-      "type": "verifyTextPresent",
-      "text": "Bitte Namen angeben."
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": "span.help-block.name"
+      }
     },
     {
-      "type": "verifyTextPresent",
-      "text": "Bitte Beschreibung angeben."
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": "span.help-block.description"
+      }
     },
     {
-      "type": "verifyTextPresent",
-      "text": "Bitte Kategorie angeben."
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": "span.help-block.category"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "button.btn.btn-default"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a"
+      }
     }
   ],
   "data": {

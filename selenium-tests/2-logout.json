@@ -17,13 +17,16 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "link text",
-        "value": "Logout"
+        "type": "xpath",
+        "value": "//ul[@class='dropdown-menu']//a[.='Logout']"
       }
     },
     {
-      "type": "verifyTextPresent",
-      "text": "Wähle deinen Login:"
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@class='login']/div/a[3]/img"
+      }
     }
   ],
   "data": {
