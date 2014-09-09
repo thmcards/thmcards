@@ -5,7 +5,7 @@ services:
 - couchdb
 install:
 - python createviews.py
-- iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
+- sudo iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
 - npm install -g se-interpreter
 - npm -g install forever
 - forever start app.js
