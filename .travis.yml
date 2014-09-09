@@ -3,9 +3,6 @@ node_js:
 - '0.10'
 services:
 - couchdb
-before_install:
-  - sudo apt-get install selenium-webdriver
-  - sudo curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 install:
 - python createviews.py
 - npm install -g se-interpreter
@@ -26,5 +23,4 @@ env:
 addons:
   sauce_connect: true
 script:
-  #- se-interpreter selenium/interpreter_config.json
-  - ruby selenium-tests/tmp.rb
+  - se-interpreter selenium/interpreter_config.json
