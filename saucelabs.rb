@@ -35,7 +35,12 @@ driver.navigate.to "http://localhost:3000"
 passed = true
 
 # Perform role selection and log in
-driver.wait_for_element(:class, "btn-about").click
+driver.wait_for_element(:class, "text-muted").click
+
+if not driver.wait_for_element(:tag, "h2").text.include? "Impressum"
+    print "verifyTextPresent failed"
+    passed = false
+end
 
 driver.quit
 

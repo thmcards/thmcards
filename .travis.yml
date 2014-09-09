@@ -8,7 +8,7 @@ env:
     - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
   matrix:
     - "BROWSER='firefox::Windows 7'"
-    - "BROWSER='chrome::Windows 7'"
+    #- "BROWSER='chrome::Windows 7'"
 services:
   - couchdb
 before_install:
