@@ -1,0 +1,61 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-profile"
+      }
+    },
+    {
+      "type": "waitForTextPresent",
+      "text": "Erfahrungspunkte (XP)"
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Erfahrungspunkte (XP)"
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Badges"
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Meteor Statistiken"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Logout"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

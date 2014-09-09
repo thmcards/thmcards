@@ -8,14 +8,6 @@
       "url": "http://localhost:3000/"
     },
     {
-      "type": "setElementText",
-      "locator": {
-        "type": "id",
-        "value": "new-set-input"
-      },
-      "text": "Use Case 3"
-    },
-    {
       "type": "clickElement",
       "locator": {
         "type": "xpath",
@@ -35,7 +27,7 @@
         "type": "id",
         "value": "newSetDescription"
       },
-      "text": "Beschreibung"
+      "text": "Use Case 3 2a"
     },
     {
       "type": "setElementText",
@@ -53,42 +45,72 @@
       }
     },
     {
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div/div[2]/div/div/div[2]/div/div[1]/div/span"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Use Case 3 2a"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Use Case 3 2a"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
       "type": "verifyTextPresent",
-      "text": "Use Case 3"
+      "text": "Use Case 3 2a"
     },
     {
       "type": "clickElement",
       "locator": {
         "type": "link text",
-        "value": "Use Case 3"
+        "value": "Use Case 3 2a"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-default.editSet"
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
       }
     },
     {
       "type": "waitForElementPresent",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.pull-left.btn-setDelete.btn-warning"
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
       }
     },
     {

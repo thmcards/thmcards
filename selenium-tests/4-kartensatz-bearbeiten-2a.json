@@ -8,14 +8,6 @@
       "url": "http://localhost:3000/"
     },
     {
-      "type": "setElementText",
-      "locator": {
-        "type": "id",
-        "value": "new-set-input"
-      },
-      "text": "Use Case 3"
-    },
-    {
       "type": "clickElement",
       "locator": {
         "type": "xpath",
@@ -26,8 +18,16 @@
       "type": "waitForElementPresent",
       "locator": {
         "type": "id",
-        "value": "newSetDescription"
+        "value": "newSetName"
       }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "User Case 4 2a"
     },
     {
       "type": "setElementText",
@@ -35,7 +35,7 @@
         "type": "id",
         "value": "newSetDescription"
       },
-      "text": "Beschreibung"
+      "text": "User Case 4 2a"
     },
     {
       "type": "setElementText",
@@ -53,42 +53,70 @@
       }
     },
     {
-      "type": "verifyTextPresent",
-      "text": "Use Case 3"
-    },
-    {
       "type": "clickElement",
       "locator": {
         "type": "link text",
-        "value": "Use Case 3"
+        "value": "User Case 4 2a"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-default.editSet"
+        "type": "xpath",
+        "value": "//div[@id='set-details-controls-region']//button[.='Kartensatz editieren']"
       }
     },
     {
       "type": "waitForElementPresent",
       "locator": {
         "type": "css selector",
-        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+        "value": "#editSetModal > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-primary"
       }
     },
     {
       "type": "clickElement",
       "locator": {
         "type": "css selector",
-        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+        "value": "#editSetModal > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "User Case 4 2a"
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
       }
     },
     {
       "type": "clickElement",
       "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
         "type": "css selector",
-        "value": ".btn.pull-left.btn-setDelete.btn-warning"
+        "value": "#editSetModal > div.modal-dialog > div.modal-content > div.modal-header > h4.modal-title"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
       }
     },
     {

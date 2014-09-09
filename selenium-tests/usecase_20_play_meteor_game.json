@@ -1,0 +1,74 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Testkartensatz"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[2]/div/button"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[2]/div/button"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div[1]/div/div[2]/div[2]/a"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div[1]/div/div[2]/div[2]/a"
+      }
+    },
+    {
+      "type": "pause",
+      "waitTime": "18000"
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Korrekte Antwort"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Logout"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

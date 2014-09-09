@@ -1,14 +1,29 @@
 language: node_js
 node_js:
-- '0.10'
+- "0.10"
+env:
+  global:
+    # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
+    - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
+    - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+  matrix:
+    - "BROWSER='firefox::Windows 7'"
+    #- "BROWSER='chrome::Windows 7'"
 services:
-- couchdb
-install:
-- python createviews.py
-- sudo iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
-- npm install -g se-interpreter
-- npm -g install forever
-- forever start app.js
+  - couchdb
+before_install:
+  # Install tools required for GUI testing
+  - "gem install selenium-webdriver"
+  - "curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash"
+  # Setup CouchDB
+  - "python createviews.py"
+before_script:
+  # Download dependencies, install packages, run server
+  - "npm -g install forever"
+  - "forever start app.js"
+script:
+  # Run tests
+  - "ruby saucelabs.rb"
 deploy:
   provider: cloudcontrol
   email: trautrims@gmail.com
@@ -17,12 +32,5 @@ deploy:
   deployment: cards/default
   on:
     repo: prinzmajus/thmcards
-env:
-  global:
-  - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
-  - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
 addons:
   sauce_connect: true
-script:
-  - se-interpreter selenium/interpreter_config.json
-   - "ruby selenium-tests/tmp.rb"
