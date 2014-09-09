@@ -24,5 +24,5 @@ env:
 addons:
   sauce_connect: true
 script:
-  - se-interpreter selenium/interpreter_config.json
-   - "ruby selenium-tests/tmp.rb"
+  #- se-interpreter selenium/interpreter_config.json
+  - ruby selenium-tests/tmp.rb
