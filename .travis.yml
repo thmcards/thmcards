@@ -26,6 +26,8 @@ install:
   - sudo apt-get install -q virtualbox --fix-missing # Everything falls apart here exactly.
   - sudo wget -nv https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.5_i686.deb
   - sudo dpkg -i vagrant_1.6.5_i686.deb
+  - wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb
+  - sudo dpkg -i puppetlabs-release-precise.deb
   #- sudo vagrant plugin install vagrant-plugin-bundler
 script:
   - sudo vagrant up # The error is only presented when executing vagrant up
