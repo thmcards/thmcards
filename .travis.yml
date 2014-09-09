@@ -5,20 +5,23 @@ services:
 - couchdb
 install:
 - python createviews.py
-before_script:
-- npm install
-- npm install -g se-interpreter
-script:
-- se-interpreter selenium/interpreter_config.json
-env:
-  global:
-  - SAUCE_USERNAME=prinzmajus
-  - secure: "HsaIFSPWKWh3dxxtRSsQEJi+3Dld+r0Vf4ypDTOsWwxQ88aAIj8d3Fs1bN9UXDgoo9ni1Hg7PT6X3cj6PWbc8ndml3dXqRGWEwhROQdAj2GvkzBNkMi2rAVCNSAYLqiApQBqt+f5XIoxpKTUAmvDDMB0zryh/AqyNmy1TfcK9Wg="
 deploy:
   provider: cloudcontrol
   email: trautrims@gmail.com
   password:
     secure: "aQKsrJqeSJId5+WDDAhio5b0r9np/pnRQ6HTIto0mZjOXdEKKOtuxMhgNF+cmUf48Q+xgGX8t7O1W44/UTArw9lG2U1QYjMDozgaje0rPFPawNZpPJj9S4TaoS5K9JKJ9Sxl4NSVOj0lCFByTK85fS181SITvp+LvH9Wg3Q4hGg="
-    deployment: cards/default
+  deployment: cards/default
   on:
     repo: prinzmajus/thmcards
+env:
+  global:
+  - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
+  - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+addons:
+  sauce_connect: true
+before_script:
+  - npm install -g se-interpreter
+  - npm -g install forever
+  - forever start app.js
+script:
+  - se-interpreter selenium/interpreter_config.json
