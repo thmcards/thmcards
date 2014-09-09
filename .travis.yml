@@ -3,9 +3,11 @@ node_js:
 - '0.10'
 services:
 - couchdb
+before_install:
+  - apt-get install selenium-webdriver
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 install:
 - python createviews.py
-- sudo iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
 - npm install -g se-interpreter
 - npm -g install forever
 - forever start app.js
