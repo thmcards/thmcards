@@ -4,8 +4,8 @@ node_js:
 services:
 - couchdb
 before_install:
-  - apt-get install selenium-webdriver
-  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
+  - sudo apt-get install selenium-webdriver
+  - sudo curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 install:
 - python createviews.py
 - npm install -g se-interpreter
