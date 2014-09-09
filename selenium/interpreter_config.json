@@ -14,7 +14,7 @@
       }
     }],
     "scripts": [
-      "selenium-tests/tmp.rb"
+      "selenium-tests/tmp.json"
     ]
   }]
 }
