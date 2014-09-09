@@ -21,6 +21,13 @@ addons:
   sauce_connect: true
 before_script:
 - npm install -g se-interpreter
-- node app.js
+install:
+  - sudo apt-get update -q
+  - sudo apt-get install -q virtualbox --fix-missing # Everything falls apart here exactly.
+  - sudo vagrant plugin install vagrant-plugin-bundler
 script:
-- se-interpreter selenium/interpreter_config.json
+  - sudo vagrant up # The error is only presented when executing vagrant up
+  - se-interpreter selenium/interpreter_config.json
+after-script:
+  - sudo vagrant halt
+  - sudo vagrant destroy
