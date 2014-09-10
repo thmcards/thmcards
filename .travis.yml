@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - "0.10"
+- "0.08"
+- "0.06"
 env:
   global:
     # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
