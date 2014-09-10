@@ -35,8 +35,8 @@ driver.navigate.to "http://localhost:3000"
 passed = true
 
 # Perform role selection and log in
-if driver.find_element(:link_text, "About THMcards").length == 0
-    print "verifyElementPresent failed"
+if not driver.find_element(:css, "span.login.btn").text.include? "About THMcards"
+    print "verifyTextPresent failed"
     passed = false
 end
 driver.find_element(:link_text, "About THMcards").click
