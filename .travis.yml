@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - "0.10"
+#- "0.8"
+#- "0.6"
 env:
   global:
     # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
@@ -8,7 +10,7 @@ env:
     - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
   matrix:
     - "BROWSER='firefox::Windows 7'"
-    #- "BROWSER='chrome::Windows 7'"
+    - "BROWSER='chrome::Windows 7'"
 services:
   - couchdb
 before_install:
@@ -26,9 +28,10 @@ script:
   - "ruby saucelabs.rb"
 deploy:
   provider: cloudcontrol
-  email: trautrims@gmail.com
+  email:
+    secure: "PMxOnzO4j+1kaREs7mdkSc7l/DR3pTV5M8sh9IwaR3IVRowb3mzdDc64vhu3hUytDZrZlTcHoGuU+Ttj0y91Nd14YY2G8kPys6MuL49kjPEG50WDgwMv/P9wxG47OanFUf8wMzV1hw4uCgo6PGaVyEi5YNKbb2pkiQl2YtoZ9Ro="
   password:
-    secure: "aQKsrJqeSJId5+WDDAhio5b0r9np/pnRQ6HTIto0mZjOXdEKKOtuxMhgNF+cmUf48Q+xgGX8t7O1W44/UTArw9lG2U1QYjMDozgaje0rPFPawNZpPJj9S4TaoS5K9JKJ9Sxl4NSVOj0lCFByTK85fS181SITvp+LvH9Wg3Q4hGg="
+    secure: "dxk5ZJc1v5nup91r694Sjv/ouLwhBFvuXN2BeUx7P/PMF0v2r7P4fjpFOh08GWbAHqN8qXUiV+bfhlfU0yb6l8l80Lr2hzh5Z4SyiWnHMhS0CNWy+WkDVD3H7BKKQg/rT4cabl/6L313DHEVEqkPQp2d2aadl+ESpGI2Zkwosxw="
   deployment: cards/default
   on:
     repo: prinzmajus/thmcards

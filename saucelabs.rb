@@ -12,7 +12,7 @@ if ENV['TRAVIS']
   caps.version = browser[1]
   caps.platform = browser[2]
   caps['tunnel-identifier'] = ENV['TRAVIS_JOB_NUMBER']
-  caps['name'] = "Travis ##{ENV['TRAVIS_JOB_NUMBER']}"
+  caps['name'] = "THMcards ##{ENV['TRAVIS_JOB_NUMBER']}"
 
   driver = Selenium::WebDriver.for(
     :remote,
@@ -35,12 +35,17 @@ driver.navigate.to "http://localhost:3000"
 passed = true
 
 # Perform role selection and log in
-driver.wait_for_element(:class, "text-muted").click
-
-if not driver.wait_for_element(:tag, "h2").text.include? "Impressum"
+driver.wait_for_element(:id, "about").click
+driver.wait_for_element(:id, "btn_right").click
+driver.wait_for_element(:id, "btn_left").click
+driver.wait_for_element(:id, "btn_close").click
+driver.wait_for_element(:id, "impressum").click
+if not driver.wait_for_element(:id, "goto_cards").text.include? "THMcards aufrufen"
     print "verifyTextPresent failed"
     passed = false
 end
+driver.navigate.back
+
 
 driver.quit
 

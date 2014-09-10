@@ -12,26 +12,26 @@ package { "curl":
   ensure => "installed"
 }
 
-package {"build-essential":
-  ensure => "installed",
-  provider => apt
+#package {"build-essential":
+#  ensure => "installed",
+#  provider => apt
+#}
+
+package{"maven":
+  ensure => "latest"
 }
 
 exec { "install-node":
   command => "/usr/bin/curl -sL https://deb.nodesource.com/setup | /bin/bash - && /usr/bin/apt-get -y install nodejs"
-} -> 
-exec { "npm_use_py2":
-  command => "npm config set python python2"
-} -> 
-exec { "install se-interpreter":
-  environment => ["HOME=/usr/bin"],
-  command => "npm install -g se-interpreter",
-  require => Package["build-essential"]
-} ->
-exec {"install phantomjs":
-  environment => ["HOME=/usr/bin"],
-  command => "npm install -g phantomjs"
-}
+}# -> 
+#exec { "npm_use_py2":
+#  command => "npm config set python python2"
+#} -> 
+#exec { "install se-interpreter":
+#  environment => ["HOME=/usr/bin"],
+#  command => "npm install -g se-interpreter",
+#  require => Package["build-essential"]
+#}
 
 #exec { "add-node-repo":
 #  command => "/usr/bin/curl -sL https://deb.nodesource.com/setup | /bin/bash -"

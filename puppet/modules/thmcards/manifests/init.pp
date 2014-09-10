@@ -25,6 +25,8 @@ class thmcards {
     template => "thmcards/motd.erb"
   }
 
+  class { 'sonarqube': }
+
   class { "jenkins":
       config_hash => {
         "HTTP_PORT" => { "value" => "9090" },
