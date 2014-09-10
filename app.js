@@ -13,7 +13,6 @@ var express = require('express')
   , date = require('date-utils')
   , helmet = require('helmet')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
-  , db = nano.use('thmcards')
   , _ = require('underscore')
   , sanitizer = require('sanitizer')
   , passport = require('passport')
@@ -31,6 +30,7 @@ if(process.env.CRED_FILE){
     nconf.set('couchdb', couchURL);
 }
 var nano = require('nano')(nconf.get('couchdb'))
+db = nano.use('thmcards')
 
 var secret = 'some secret';
 var sessionKey = 'express.sid';
