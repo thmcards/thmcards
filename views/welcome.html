@@ -17,7 +17,7 @@
       <div class="modal-dialog" style="width:700px">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <button id="btn_close" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title"><img src="/img/card_logo_welcome.png" height="45" /></h4>
           </div>
           <div class="modal-body">
@@ -65,10 +65,10 @@
               </div>
 
               <!-- Controls -->
-              <a class="left carousel-control" href="#carousel-generic" data-slide="prev" style="color:#000;background-image:none">
+              <a id="btn_left" class="left carousel-control" href="#carousel-generic" data-slide="prev" style="color:#000;background-image:none">
                 <span class="glyphicon glyphicon-chevron-left" style=""></span>
               </a>
-              <a class="right carousel-control" href="#carousel-generic" data-slide="next" style="color:#000;background-image:none">
+              <a id="btn_right" class="right carousel-control" href="#carousel-generic" data-slide="next" style="color:#000;background-image:none">
                 <span class="glyphicon glyphicon-chevron-right" style="background-image:none"></span>
               </a>
             </div>
@@ -85,15 +85,15 @@
 
     <div class="login">
       <hr />
-      <a class="btn btn-success btn-about" data-toggle="modal" data-target="#myModal" style="margin:18px 0 35px; display:inline-block" data-i18n="intro.about"></a>
+      <a id="about" class="btn btn-success btn-about" data-toggle="modal" data-target="#myModal" style="margin:18px 0 35px; display:inline-block" data-i18n="intro.about"></a>
       <div>
         <span class="text-muted" data-i18n="intro.choose"></span><br /><br />
-        <a href="/auth/facebook"><img src="img/social_facebook_box_white.png" /></a>
-        <a href="/auth/twitter" style="margin:0 30px"><img src="img/social_twitter_box_white.png"/></a>
-        <a href="/auth/google"><img src="img/social_google_box_white.png" /></a>
+        <a id="facebook" href="/auth/facebook"><img src="img/social_facebook_box_white.png" /></a>
+        <a id="twitter" href="/auth/twitter" style="margin:0 30px"><img src="img/social_twitter_box_white.png"/></a>
+        <a id="google" href="/auth/google"><img src="img/social_google_box_white.png" /></a>
       </div>
     </div>
-    <a href="/impressum" class="text-muted" style="margin-top:70px; display:inline-block" data-i18n="intro.impressum"></a>
+    <a id="impressum" href="/impressum" class="text-muted" style="margin-top:70px; display:inline-block" data-i18n="intro.impressum"></a>
     </div>
     <script type="text/javascript" src="/javascripts/lib/jquery.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/jquery-ui.min.js"></script>

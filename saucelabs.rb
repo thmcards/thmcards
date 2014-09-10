@@ -35,18 +35,18 @@ driver.navigate.to "http://localhost:3000"
 #passed = true
 
 # Perform role selection and log in
-#if not driver.wait_for_element(:xpath, "//div[2]/div/a").text.include? "About THMcards"
-#    print "verifyTextPresent failed"
-#    passed = false
-#end
-driver.find_element(:xpath, "//div[2]/div/a").click
-driver.find_element(:css, "span.glyphicon.glyphicon-chevron-right").click
-driver.find_element(:css, "span.glyphicon.glyphicon-chevron-right").click
-driver.find_element(:css, "button.close").click
-driver.find_element(:link_text, "Legal Notice").click
+driver.wait_for_element(:id, "about").click
+driver.wait_for_element(:id, "btn_right").click
+driver.wait_for_element(:id, "btn_left").click
+driver.wait_for_element(:id, "btn_close").click
+driver.wait_for_element(:id, "impressum").click
+if not driver.wait_for_element(:id, "goto_cards").text.include? "THMcards aufrufen"
+    print "verifyTextPresent failed"
+    passed = false
+end
 driver.navigate.back
 
 
 driver.quit
 
-#raise 'tests failed' unless passed
+raise 'tests failed' unless passed
