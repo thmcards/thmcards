@@ -13,7 +13,6 @@ var express = require('express')
   , date = require('date-utils')
   , helmet = require('helmet')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
-  , nano = require('nano')(nconf.get('couchdb'))
   , db = nano.use('thmcards')
   , _ = require('underscore')
   , sanitizer = require('sanitizer')
@@ -24,6 +23,14 @@ var express = require('express')
   , app = express()
   ;
 
+//Wenn auf CloudControl
+if(process.env.CRED_FILE){
+    nconf.file(process.env.CRED_FILE);
+    var couchURL = nconf.get('CLOUDANT_HOSTNAME') + ':' + nconf.get('CLOUDANT_PORT');
+    console.log('Using Database: ' + couchURL);
+    nconf.set('couchdb', couchURL);
+}
+var nano = require('nano')(nconf.get('couchdb'))
 
 var secret = 'some secret';
 var sessionKey = 'express.sid';
