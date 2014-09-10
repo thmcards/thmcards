@@ -12,7 +12,7 @@ if ENV['TRAVIS']
   caps.version = browser[1]
   caps.platform = browser[2]
   caps['tunnel-identifier'] = ENV['TRAVIS_JOB_NUMBER']
-  caps['name'] = "Travis ##{ENV['TRAVIS_JOB_NUMBER']}"
+  caps['name'] = "THMcards ##{ENV['TRAVIS_JOB_NUMBER']}"
 
   driver = Selenium::WebDriver.for(
     :remote,
