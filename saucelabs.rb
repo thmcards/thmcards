@@ -32,7 +32,7 @@ end
 
 driver.navigate.to "http://localhost:3000"
 
-#passed = true
+passed = true
 
 # Perform role selection and log in
 driver.wait_for_element(:id, "about").click
