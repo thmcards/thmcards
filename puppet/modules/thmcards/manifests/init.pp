@@ -25,28 +25,30 @@ class thmcards {
     template => "thmcards/motd.erb"
   }
 
+  class { 'java': }
+  class { 'maven::maven': } ->
+  class { 'sonarqube':
+    version => '3.7.4'
+  }
+
   class { "jenkins":
       config_hash => {
         "HTTP_PORT" => { "value" => "9090" },
         "AJP_PORT" => { "value" => "9009" }
       },
       plugin_hash => {
-        "selenium"=>{},
-        "javadoc"=>{},
-        "build-pipeline-plugin"=> {},
-        "jquery"=> {},
-        "parameterized-trigger"=> {},
-        "subversion"=> {},
-        "conditional-buildstep"=> {},
-        "promoted-builds"=> {},
-        "token-macro"=> {},
-        "run-condition"=> {},
-        "ssh-credentials"=> {},
-        "credentials"=> {},
-        "scm-api"=> {},
-        "mapdb-api"=> {},
-        "maven-plugin"=> {},
-        "mailer"=>{}
+        "sonar" => {},
+        "javadoc" => {},
+        "mailer" => {},
+        "token-macro" =>{},
+        "parameterized-trigger" => {},
+        "build-pipeline-plugin" => {},
+        "dashboard-view" => {},
+        "maven-plugin" => {},
+        "jquery"=>{},
+         "git-client" => {},
+        "scm-api" => {},
+        "git" => {}
       }
     }
 

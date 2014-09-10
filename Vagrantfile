@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   
   config.vm.network "forwarded_port", guest: 80, host: 8080
- # config.vm.network "forwarded_port", guest: 8080, host: 10080
+  config.vm.network "forwarded_port", guest: 4444, host: 4444
   config.vm.network "forwarded_port", guest: 3000, host: 3000 #running Port for THMcards
   config.vm.network "forwarded_port", guest: 5984, host: 5984
   # Jenkins
