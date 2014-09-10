@@ -1,6 +1,6 @@
 # ARSnova Flashcards
 
-ArsNova Flashcards is a digital recreation of a classic learning tool. The service offers students a modern and intuitive access to one of the most successful proven learning methods. THMcards is being developed as a modern Single Page Application.
+ARSnova Flashcards is a digital recreation of a classic learning tool. The service offers students a modern and intuitive access to one of the most successful proven learning methods. THMcards is being developed as a modern Single Page Application.
 
 ## Getting Started
 
@@ -11,7 +11,7 @@ Use your IDE on your host machine to make changes to ARSnova Flashcards, while t
 process is completely handled by the Vagrant box. You will not need to install
 any development tools.
 
-[arsnova-vagrant](https://github.com/thm-projects/arsnova-flashcards) sets up a
+[arsnova-flashcards](https://github.com/thm-projects/arsnova-flashcards) sets up a
 virtual machine for both development and production use. The basic usage is
 `vagrant up`, which will start the development environment. If you wish to start
 production as well, use `vagrant up production`.
@@ -25,7 +25,7 @@ ARSnova Flashcards from your host machine by opening http://localhost:3000.
 
 ### QA Private Build
 
-[arsnova-vagrant](https://github.com/thm-projects/arsnova-flashcards) also sets up
+[arsnova-flashcards](https://github.com/thm-projects/arsnova-flashcards) also sets up
 the build environment we use internally at THM, which consists of
 [Jenkins](http://jenkins-ci.org/) and [SonarQube](http://www.sonarqube.org/).
 The former provides a QA pipeline that builds, tests, analyzes, and finally
@@ -52,15 +52,6 @@ get an idea.
 Our official build status provided by Travis CI:
 
 - [![Build Status](https://travis-ci.org/thm-projects/arsnova-flashcards.svg?branch=master)](https://travis-ci.org/thm-projects/arsnova-flashcards) for ARSnova Flashcards
-
-
-Um THMcards dauerhaft zu betreiben, kann die Applikation mit forever als Daemon gestartet werden.
-`npm -g install forever`
-`forever start app.js`
-Umschalten zwischen Entwicklungs- und Produktivumgebung erfolgt über die Umgebungsvariable NODE_ENV (default ist development):
-`NODE_ENV=production forever start app.js`
-
-
 
 ## Credits
 
