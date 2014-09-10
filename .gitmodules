@@ -17,3 +17,9 @@
 [submodule "puppet/modules/java"]
 	path = puppet/modules/java
 	url = https://github.com/puppetlabs/puppetlabs-java.git
+[submodule "puppet/modules/sonarqube"]
+	path = puppet/modules/sonarqube
+	url = https://github.com/maestrodev/puppet-sonarqube.git
+[submodule "puppet/modules/wget"]
+	path = puppet/modules/wget
+	url = https://github.com/maestrodev/puppet-wget.git
