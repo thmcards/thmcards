@@ -17,12 +17,6 @@ package {"build-essential":
   provider => apt
 }
 
-package { "firefox": ensure => "latest" }
-package { "chromium-browser": ensure => "latest" }
-exec {"install Google Chrome":
-  command => "sudo apt-get install libxss1 libappindicator1 libindicator7 && wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb && sudo dpkg -i google-chrome*.deb"
-}
-
 exec { "install-node":
   command => "/usr/bin/curl -sL https://deb.nodesource.com/setup | /bin/bash - && /usr/bin/apt-get -y install nodejs"
 } -> 
