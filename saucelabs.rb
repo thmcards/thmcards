@@ -39,8 +39,8 @@ driver.navigate.to "http://localhost:3000"
 #    print "verifyTextPresent failed"
 #    passed = false
 #end
-driver.wait_for_element(:xpath, "//div[2]/div/a").click
-driver.wait_for_element(:css, "span.glyphicon.glyphicon-chevron-right").click
+driver.find_element(:xpath, "//div[2]/div/a").click
+driver.find_element(:css, "span.glyphicon.glyphicon-chevron-right").click
 driver.find_element(:css, "span.glyphicon.glyphicon-chevron-right").click
 driver.find_element(:css, "button.close").click
 driver.find_element(:link_text, "Legal Notice").click
