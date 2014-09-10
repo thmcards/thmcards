@@ -35,12 +35,17 @@ driver.navigate.to "http://localhost:3000"
 passed = true
 
 # Perform role selection and log in
-driver.wait_for_element(:class, "text-muted").click
-
-if not driver.wait_for_element(:tag, "h2").text.include? "Impressum"
-    print "verifyTextPresent failed"
+if driver.find_element(:link_text, "About THMcards").length == 0
+    print "verifyElementPresent failed"
     passed = false
 end
+driver.find_element(:link_text, "About THMcards").click
+driver.find_element(:css, "span.glyphicon.glyphicon-chevron-right").click
+driver.find_element(:css, "span.glyphicon.glyphicon-chevron-right").click
+driver.find_element(:css, "button.close").click
+driver.find_element(:link_text, "Legal Notice").click
+driver.navigate.back
+
 
 driver.quit
 
