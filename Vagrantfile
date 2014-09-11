@@ -26,9 +26,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   
   config.vm.network "forwarded_port", guest: 80, host: 8080
- # config.vm.network "forwarded_port", guest: 8080, host: 10080
+  # config.vm.network "forwarded_port", guest: 8080, host: 10080
   config.vm.network "forwarded_port", guest: 3000, host: 3000 #running Port for THMcards
   config.vm.network "forwarded_port", guest: 5984, host: 5984
+  # SonarQube
+  config.vm.network "forwarded_port", guest: 9000, host: 9000
   # Jenkins
   config.vm.network "forwarded_port", guest: 9090, host: 9090
 
@@ -50,18 +52,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-
+  config.vm.synced_folder "./puppet/files", "/etc/puppet/files"
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
+  #
+  config.vm.provider "virtualbox" do |vb|
   #   # Don't boot with headless mode
   #   vb.gui = true
   #
   #   # Use VBoxManage to customize the VM. For example to change memory:
-  #   vb.customize ["modifyvm", :id, "--memory", "1024"]
-  # end
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
   #
   # View the documentation for the provider you're using for more
   # information on available options.
