@@ -23,3 +23,6 @@
 [submodule "puppet/modules/wget"]
 	path = puppet/modules/wget
 	url = https://github.com/maestrodev/puppet-wget.git
+[submodule "puppet/modules/git"]
+	path = puppet/modules/git
+	url = https://github.com/nesi/puppet-git
