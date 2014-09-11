@@ -115,10 +115,11 @@ class thmcards {
         "dashboard-view" => {},
         "maven-plugin" => {},
         "jquery"=>{},
-         "git-client" => {},
+        "git-client" => {},
         "scm-api" => {},
         "git" => {},
-        "xvfb"=>{}
+        "xvfb"=>{},
+        "clone-workspace-scm"=>{}
       }
   }
 
@@ -131,9 +132,35 @@ class thmcards {
     default => fail("Unsupported OS family: ${::osfamily}")
   }
 
-  jenkins::job { "thmcards-build-job":
+  jenkins::job { "thmcards-job":
     name => "THMcards",
     config_file => "/etc/puppet/files/jenkins/thmcards.config.xml"
+  }
+
+  jenkins::job { "thmcards-selenium-job":
+    name => "THMcards.selenium",
+    config_file => "/etc/puppet/files/jenkins/thmcards.selenium.config.xml"
+  }
+
+  jenkins::job { "thmcards-jmeter-job":
+    name => "THMcards.jmeter",
+    config_file => "/etc/puppet/files/jenkins/thmcards.jmeter.config.xml"
+  }
+
+  jenkins::job { "thmcards-sonar-job":
+    name => "THMcards.sonar",
+    config_file => "/etc/puppet/files/jenkins/thmcards.sonar.config.xml"
+  }
+
+  jenkins::job { "thmcards-deploy-job":
+    name => "THMcards.deploy",
+    config_file => "/etc/puppet/files/jenkins/thmcards.deploy.config.xml"
+  }
+
+  file { "${jenkins_home}/config.xml":
+    require => Class["jenkins::package"],
+    source => "/etc/puppet/files/jenkins/jenkins.config.xml",
+    notify => Service["jenkins"]
   }
 
   file { "${jenkins_home}/hudson.plugins.sonar.SonarPublisher.xml":
