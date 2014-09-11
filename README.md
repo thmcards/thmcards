@@ -1,4 +1,5 @@
 # ARSnova Flashcards
+[![Build Status](https://travis-ci.org/thm-projects/arsnova-flashcards.svg?branch=master)](https://travis-ci.org/thm-projects/arsnova-flashcards)
 
 ARSnova Flashcards is a digital recreation of a classic learning tool. The service offers students a modern and intuitive access to one of the most successful proven learning methods. THMcards is being developed as a modern Single Page Application.
 
@@ -49,9 +50,7 @@ features of ARSnova work across browsers and platforms. See
 [this example](https://saucelabs.com/tests/4beecf8c754f418da0b75259c039c077) to
 get an idea.
 
-Our official build status provided by Travis CI:
-
-- [![Build Status](https://travis-ci.org/thm-projects/arsnova-flashcards.svg?branch=master)](https://travis-ci.org/thm-projects/arsnova-flashcards) for ARSnova Flashcards
+Our official build status provided by Travis CI: [![Build Status](https://travis-ci.org/thm-projects/arsnova-flashcards.svg?branch=master)](https://travis-ci.org/thm-projects/arsnova-flashcards)
 
 ## Credits
 

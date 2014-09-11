@@ -19,7 +19,7 @@ if ENV['TRAVIS']
     :url => "http://#{ENV['SAUCE_USERNAME']}:#{ENV['SAUCE_ACCESS_KEY']}@localhost:4445/wd/hub",
     :desired_capabilities => caps)
 else
-  driver = Selenium::WebDriver.for :chrome
+  driver = Selenium::WebDriver.for :chrome, :switches => %w[--ignore-certificate-errors --disable-popup-blocking --disable-translate]
 end
 
 def driver.wait_for_element(*args)
@@ -46,6 +46,14 @@ if not driver.wait_for_element(:id, "goto_cards").text.include? "THMcards aufruf
 end
 driver.navigate.back
 driver.wait_for_element(:id, "google").click
+driver.wait_for_element(:id, "Email").send_keys "arsnovaflashcards"
+driver.wait_for_element(:id, "Passwd").send_keys "cardsARS!"
+driver.wait_for_element(:id, "signIn").click
+w = Selenium::WebDriver::Wait.new(:timeout => 4) # seconds
+w.until { driver.find_element(:id, "submit_approve_access").enabled? }
+driver.wait_for_element(:id, "submit_approve_access").click
+driver.wait_for_element(:id, "usr-name").click
+driver.wait_for_element(:id, "logout").click
 
 
 driver.quit
