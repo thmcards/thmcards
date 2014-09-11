@@ -17,6 +17,32 @@ package { "curl":
 #  provider => apt
 #}
 
+package{"Xvfb":
+  ensure =>"installed"
+}->
+package{"xfonts-scalable":
+  ensure =>"installed"
+}->
+package{"xfonts-cyrillic":
+  ensure =>"installed"
+}->
+package{"xfonts-100dpi":
+  ensure =>"installed"
+}->
+package{"xfonts-75dpi":
+  ensure =>"installed"
+}->
+package{"culmus":
+  ensure =>"installed"
+}->
+package{"imagemagick":
+  ensure =>"installed"
+}
+package { "firefox": ensure => "latest" }
+exec {"install Google Chrome":
+  command => "sudo apt-get install libxss1 libappindicator1 libindicator7 && wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb && sudo dpkg -i google-chrome*.deb"
+}
+
 package{"maven":
   ensure => "latest"
 }
