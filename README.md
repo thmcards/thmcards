@@ -6,7 +6,7 @@ ARSnova Flashcards is a digital recreation of a classic learning tool. The servi
 
 The most convenient way to get started developing ARSnova Flashcards is by using
 our [Vagrant](http://www.vagrantup.com/) environment, found at
-[thm-projects/arsnova-vagrant](https://github.com/thm-projects/arsnova-flashcards).
+[thm-projects/arsnova-flashcards](https://github.com/thm-projects/arsnova-flashcards).
 Use your IDE on your host machine to make changes to ARSnova Flashcards, while the build
 process is completely handled by the Vagrant box. You will not need to install
 any development tools.
