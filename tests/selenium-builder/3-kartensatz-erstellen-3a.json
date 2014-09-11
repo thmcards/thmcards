@@ -10,8 +10,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//span[@class='input-group-btn']/button"
+        "type": "css selector",
+        "value": ".btn.saveSet"
       }
     },
     {
@@ -32,21 +32,21 @@
       "type": "verifyElementPresent",
       "locator": {
         "type": "css selector",
-        "value": "span.help-block.name"
+        "value": ".help-block.name"
       }
     },
     {
       "type": "verifyElementPresent",
       "locator": {
         "type": "css selector",
-        "value": "span.help-block.description"
+        "value": ".help-block.description"
       }
     },
     {
       "type": "verifyElementPresent",
       "locator": {
         "type": "css selector",
-        "value": "span.help-block.category"
+        "value": ".help-block.category"
       }
     },
     {
