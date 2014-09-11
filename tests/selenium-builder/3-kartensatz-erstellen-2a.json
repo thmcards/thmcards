@@ -47,8 +47,8 @@
     {
       "type": "verifyElementPresent",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div/div[2]/div/div/div[2]/div/div[1]/div/span"
+        "type": "css selector",
+        "value": ".help-block.name"
       }
     },
     {
@@ -88,29 +88,29 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
+        "type": "css selector",
+        "value": ".btn.btn-default.editSet"
       }
     },
     {
       "type": "waitForElementPresent",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
+        "type": "css selector",
+        "value": ".btn.btn-danger.pull-left.btn-setDelete"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
+        "type": "css selector",
+        "value": ".btn.btn-danger.pull-left.btn-setDelete"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
+        "type": "css selector",
+        "value": ".btn.pull-left.btn-setDelete.btn-warning"
       }
     },
     {
