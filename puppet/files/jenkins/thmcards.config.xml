@@ -4,34 +4,22 @@
     <description></description>
     <keepDependencies>false</keepDependencies>
     <properties/>
-    <scm class="hudson.plugins.git.GitSCM" plugin="git@2.2.5">
-        <configVersion>2</configVersion>
-        <userRemoteConfigs>
-            <hudson.plugins.git.UserRemoteConfig>
-                <url>/vagrant</url>
-            </hudson.plugins.git.UserRemoteConfig>
-        </userRemoteConfigs>
-        <branches>
-            <hudson.plugins.git.BranchSpec>
-                <name>*/master</name>
-            </hudson.plugins.git.BranchSpec>
-        </branches>
-        <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
-        <submoduleCfg class="list"/>
-        <extensions/>
-    </scm>
+    <scm class="hudson.scm.NullSCM"/>
     <canRoam>true</canRoam>
     <disabled>false</disabled>
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
     <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-    <triggers>
-        <hudson.triggers.SCMTrigger>
-            <spec></spec>
-            <ignorePostCommitHooks>false</ignorePostCommitHooks>
-        </hudson.triggers.SCMTrigger>
-    </triggers>
+    <triggers/>
     <concurrentBuild>false</concurrentBuild>
-    <builders/>
+    <builders>
+        <hudson.tasks.Shell>
+            <command>eval &quot;cp -r /vagrant/* $WORKSPACE&quot;
+                eval &quot;cd $WORKSPACE&quot;
+                eval &quot;npm install&quot;
+                #eval &quot;NODE_ENV=development GOOGLE_CLIENT_ID=891227854588-0o5gbqe447a4uvlu9kdp3jdv0ed6mhha.apps.googleusercontent.com GOOGLE_CLIENT_SECRET=fDPPZ5ALm-7n5CgwqJyER6hs GOOG
+                LE_CALLBACK=http://localhost:3000/auth/google/callback node app.js&quot;</command>
+        </hudson.tasks.Shell>
+    </builders>
     <publishers/>
     <buildWrappers/>
 </project>
