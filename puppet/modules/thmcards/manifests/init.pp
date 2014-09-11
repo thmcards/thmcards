@@ -19,7 +19,13 @@ class thmcards {
   exec { "install-node":
     command => "/usr/bin/curl -sL https://deb.nodesource.com/setup | /bin/bash - && /usr/bin/apt-get -y install nodejs",
     require => Package["curl"]
-  }# -> 
+  }->
+  exec{"install selenium-webdriver":
+    environment => ["HOME=/usr/bin"],
+    command => "npm install -g selenium-webdriver"
+  }
+  
+  # -> 
   #exec { "npm_use_py2":
   #  command => "npm config set python python2"
   #} -> 
