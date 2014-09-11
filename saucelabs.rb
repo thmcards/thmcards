@@ -18,11 +18,6 @@ if ENV['TRAVIS']
     :remote,
     :url => "http://#{ENV['SAUCE_USERNAME']}:#{ENV['SAUCE_ACCESS_KEY']}@localhost:4445/wd/hub",
     :desired_capabilities => caps)
-
-  profile = Selenium::WebDriver::Firefox::Profile.new
-  profile.assume_untrusted_ceritificate_issuer = false
-  driver = Selenium::WebDriver.for :firefox, :profile => profile
-
 else
   driver = Selenium::WebDriver.for :chrome, :switches => %w[--ignore-certificate-errors --disable-popup-blocking --disable-translate]
 end
