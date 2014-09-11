@@ -18,8 +18,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//span[@class='input-group-btn']/button"
+        "type": "css selector",
+        "value": ".btn.saveSet"
       }
     },
     {
@@ -70,8 +70,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
+        "type": "css selector",
+        "value": ".btn.editSet"
       }
     },
     {
@@ -95,7 +95,7 @@
         "type": "id",
         "value": "editSetCategory"
       },
-      "text": "\\9"
+      "text": "Test"
     },
     {
       "type": "setElementText",
@@ -109,14 +109,7 @@
       "type": "clickElement",
       "locator": {
         "type": "css selector",
-        "value": "#editSetModal > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-primary"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "css selector",
-        "value": "h4"
+        "value": "#editSetModal .btn.btn-primary"
       }
     },
     {
@@ -126,36 +119,36 @@
     {
       "type": "waitForElementPresent",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
+        "type": "css selector",
+        "value": ".btn.editSet"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/button[2]"
+        "type": "css selector",
+        "value": ".btn.editSet"
       }
     },
     {
       "type": "waitForElementPresent",
       "locator": {
+        "type": "id",
+        "value": "editSetName"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
         "type": "css selector",
-        "value": "#editSetModal > div.modal-dialog > div.modal-content > div.modal-header > h4.modal-title"
+        "value": ".btn.btn-setDelete"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[2]/div/div/div[1]/div[3]/div/div/div/div/div[3]/button[2]"
+        "type": "css selector",
+        "value": ".btn.btn-setDelete"
       }
     },
     {
