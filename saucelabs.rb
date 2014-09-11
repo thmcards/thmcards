@@ -45,6 +45,7 @@ if not driver.wait_for_element(:id, "goto_cards").text.include? "THMcards aufruf
     passed = false
 end
 driver.navigate.back
+driver.wait_for_element(:id, "google").click
 
 
 driver.quit
