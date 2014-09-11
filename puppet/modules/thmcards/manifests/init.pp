@@ -47,18 +47,23 @@ class thmcards {
         "git" => {},
         "xvfb"=>{}
       }
-    }
+  }
 
-    # Jenkins might be installed to different paths depending on OS
-    $jenkins_home = $::osfamily ? {
-      "Debian" => "/var/lib/jenkins",
-      "Ubuntu" => "/var/lib/jenkins",
-      default => fail("Unsupported OS family: ${::osfamily}")
-    }
+  jenkins::job { "thmcards-build-job":
+    name => "THMcards",
+    config_file => "/etc/puppet/files/jenkins/thmcards.config.xml"
+  }
 
-    #file { "${jenkins_home}/hudson.tasks.Maven.xml":
-    #  require => Class["jenkins::package"],
-    #  source => "/etc/puppet/files/jenkins/hudson.tasks.Maven.xml",
-    #  notify => Service["jenkins"]
-    #}
+# Jenkins might be installed to different paths depending on OS
+  $jenkins_home = $::osfamily ? {
+    "Debian" => "/var/lib/jenkins",
+    "Ubuntu" => "/var/lib/jenkins",
+    default => fail("Unsupported OS family: ${::osfamily}")
+  }
+
+  #file { "${jenkins_home}/hudson.tasks.Maven.xml":
+  #  require => Class["jenkins::package"],
+  #  source => "/etc/puppet/files/jenkins/hudson.tasks.Maven.xml",
+  #  notify => Service["jenkins"]
+  #}
 }
