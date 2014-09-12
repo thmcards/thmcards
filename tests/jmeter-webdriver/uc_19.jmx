@@ -51,6 +51,11 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/login&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/auth/google&apos;)
 
+
+//vorgehende Schritte:
+//Login
+
+
 var userButton = WDS.browser.findElement(pkg.By.id(&apos;usr-name&apos;))
 userButton.click()
 
@@ -59,7 +64,8 @@ profileButton.click()
 
 WDS.sampleResult.sampleEnd()
 
-var result = WDS.browser.findElement(pkg.By.xpath(&apos;/html/body/div[2]/div[1]/div[2]/div/div[1]&apos;))
+//wird die Profilüberschrift angezeigt?                                                                                                                                                                                                         
+var result = WDS.browser.findElement(pkg.By.xpath(&apos;/html/body/div[2]/div[1]/div[2]/div/div[1]/div/h3/span[1]&apos;))
 if(result.empty) {
     WDS.sampleResult.successful = false
     WDS.sampleResult.responseMessage = &apos;There were no result returned&apos;
