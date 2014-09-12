@@ -68,10 +68,11 @@ var acceptButton = WDS.browser.findElement(pkg.By.id(&apos;submit_approve_access
 acceptButton.click()
 //login end
 
-var addSetButton = WDS.browser.findElement(pkg.By.id(&apos;newCardSet&apos;))
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;)))
+var addSetButton = WDS.browser.findElement(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;))
 addSetButton.click()
 
-wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;newSetName&apos;)))
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;newSetName&apos;)))
 var newSetName = WDS.browser.findElement(pkg.By.id(&apos;newSetName&apos;))
 newSetName.sendKeys([&apos;Use Case 3 1a&apos;])
 

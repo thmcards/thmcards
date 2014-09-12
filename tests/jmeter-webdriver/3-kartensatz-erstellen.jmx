@@ -71,7 +71,8 @@ acceptButton.click()
 var newSetTitle = WDS.browser.findElement(pkg.By.id(&apos;new-set-input&apos;))
 newSetTitle.sendKeys([&apos;Use Case 3&apos;])
 
-var setAddButton = WDS.browser.findElement(pkg.By.id(&quot;newCardSet&quot;))
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;)))
+var setAddButton = WDS.browser.findElement(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;))
 setAddButton.click()
 
 wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;newSetDescription&apos;)))
@@ -93,6 +94,7 @@ if(result.empty) {
 } else {
     result.click()
     
+    wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;)))
     var editSetButton = WDS.browser.findElement(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;))
     editSetButton.click()
     

@@ -68,10 +68,11 @@ var acceptButton = WDS.browser.findElement(pkg.By.id(&apos;submit_approve_access
 acceptButton.click()
 //login end
 
-var addSetButton = WDS.browser.findElement(pkg.By.id(&apos;newCardSet&apos;))
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;)))
+var addSetButton = WDS.browser.findElement(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;))
 addSetButton.click()
 
-wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;newSetDescription&apos;)))
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;newSetDescription&apos;)))
 var newSetDescription = WDS.browser.findElement(pkg.By.id(&apos;newSetDescription&apos;))
 newSetDescription.sendKeys([&apos;Use Case 3 2a&apos;])
 
@@ -84,14 +85,17 @@ addSetButton.click()
 WDS.sampleResult.sampleEnd()
 
 var result = WDS.browser.findElement(pkg.By.cssSelector(&apos;.help-block.name&apos;))
+
 if(result.empty) {
     WDS.sampleResult.successful = false
     WDS.sampleResult.responseMessage = &apos;There were no result returned&apos;
-} else {
+} 
+
+else {
     newSetDescription.sendKeys([&apos;Use Case 3 2a&apos;])
     
     var newSetName = WDS.browser.findElement(pkg.By.id(&apos;newSetName&apos;))
-    newSetName([&apos;Use Case 3 2a&apos;])
+    newSetName.sendKeys([&apos;Use Case 3 2a&apos;])
     
     addSetButton.click()
     
@@ -99,9 +103,12 @@ if(result.empty) {
     if(resultTwo.empty) {
         WDS.sampleResult.successful = false
         WDS.sampleResult.responseMessage = &apos;There were no result returned&apos; 
-    } else {
+    } 
+    
+    else {
         resultTwo.click()
         
+        wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;)))
         var editSetButton = WDS.browser.findElement(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;))
         editSetButton.click()
         
@@ -109,14 +116,17 @@ if(result.empty) {
         var deleteSetButton = WDS.browser.findElement(pkg.By.id(&apos;cardSetDelete&apos;))
         deleteSetButton.click()
         deleteSetButton.click()
+        
     }
+    
 }
 
 var emailButton = WDS.browser.findElement(pkg.By.id(&apos;usr-name&apos;))
 emailButton.click()
 
 var logoutButton = WDS.browser.findElement(pkg.By.id(&quot;logout&quot;))
-logoutButton.click()</stringProp>
+logoutButton.click()
+</stringProp>
           <stringProp name="WebDriverSampler.parameters"></stringProp>
         </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
         <hashTree/>
