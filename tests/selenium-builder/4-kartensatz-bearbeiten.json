@@ -18,8 +18,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.saveSet"
+        "type": "id",
+        "value": "newCardSet"
       }
     },
     {
@@ -56,8 +56,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": "div.modal-footer > button.btn.btn-primary"
+        "type": "id",
+        "value": "createCardSet"
       }
     },
     {
@@ -70,8 +70,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.editSet"
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
       }
     },
     {
@@ -108,8 +108,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": "#editSetModal .btn.btn-primary"
+        "type": "id",
+        "value": "cardSetSave"
       }
     },
     {
@@ -117,17 +117,10 @@
       "text": "Use Case 4 Kartensatz bearbeiten"
     },
     {
-      "type": "waitForElementPresent",
-      "locator": {
-        "type": "css selector",
-        "value": ".btn.editSet"
-      }
-    },
-    {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.editSet"
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
       }
     },
     {
@@ -140,16 +133,20 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-setDelete"
+        "type": "id",
+        "value": "cardSetDelete"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-setDelete"
+        "type": "id",
+        "value": "cardSetDelete"
       }
+    },
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
     },
     {
       "type": "clickElement",
@@ -161,8 +158,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a"
+        "type": "id",
+        "value": "logout"
       }
     }
   ],
