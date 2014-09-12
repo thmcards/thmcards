@@ -17,8 +17,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//ul[@class='dropdown-menu']//a[.='Logout']"
+        "type": "id",
+        "value": "logout"
       }
     },
     {

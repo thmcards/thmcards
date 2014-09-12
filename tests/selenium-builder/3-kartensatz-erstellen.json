@@ -18,15 +18,15 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//span[@class='input-group-btn']/button"
+        "type": "id",
+        "value": "newCardSet"
       }
     },
     {
       "type": "waitForElementPresent",
       "locator": {
         "type": "id",
-        "value": "newSetDescription"
+        "value": "newSetModal"
       }
     },
     {
@@ -48,8 +48,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": "div.modal-footer > button.btn.btn-primary"
+        "type": "id",
+        "value": "createCardSet"
       }
     },
     {
@@ -66,30 +66,34 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-default.editSet"
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
       }
     },
     {
       "type": "waitForElementPresent",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+        "type": "id",
+        "value": "editSetModal"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+        "type": "id",
+        "value": "cardSetDelete"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": ".btn.pull-left.btn-setDelete.btn-warning"
+        "type": "id",
+        "value": "cardSetDelete"
       }
+    },
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
     },
     {
       "type": "clickElement",
@@ -101,8 +105,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a"
+        "type": "id",
+        "value": "logout"
       }
     }
   ],

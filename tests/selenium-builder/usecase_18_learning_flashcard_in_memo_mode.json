@@ -10,58 +10,157 @@
     {
       "type": "clickElement",
       "locator": {
+        "type": "id",
+        "value": "setListEmpty"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "newSetModal"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Testkartensatz"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Use Case 18"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Use Case 18"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetCategory"
+      },
+      "text": "Test"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "createCardSet"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
         "type": "link text",
-        "value": "Testkartensatz"
-      }
-    },
-    {
-      "type": "verifyElementPresent",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[1]/div/button[2]"
+        "value": "Use Case 18"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[1]/div/button[2]"
-      }
-    },
-    {
-      "type": "verifyElementPresent",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div/div/div/div[1]/button"
+        "type": "id",
+        "value": "set-details-controls-btn-newCard"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div/div/div/div[1]/button"
-      }
-    },
-    {
-      "type": "verifyElementPresent",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div[2]"
+        "type": "id",
+        "value": "cardNewCard2"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@class='rating-controls']//button[.='4']"
+        "type": "id",
+        "value": "set-details-controls-btn-newCard"
       }
     },
     {
-      "type": "verifyElementPresent",
+      "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div/div/div/div[2]/div/div[1]/div/div/a"
+        "type": "id",
+        "value": "cardNewCard2"
       }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "memo"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "memoShowAnswer"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "memoRate3"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardsets"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Use Case 18"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "editSetModal"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardSetDelete"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardSetDelete"
+      }
+    },
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
     },
     {
       "type": "clickElement",
@@ -73,8 +172,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "link text",
-        "value": "Logout"
+        "type": "id",
+        "value": "logout"
       }
     }
   ],
