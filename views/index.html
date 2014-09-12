@@ -36,8 +36,8 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul id="navbar" class="nav navbar-nav">
-            <li id="navbar-ownsets"><a href="#set/list" data-i18n="navbar-collapse.carddecks"></a></li>
-            <li id="navbar-pool"><a href="#pool" data-i18n="navbar-collapse.pool"></a></li>
+            <li id="navbar-ownsets"><a href="#set/list" id="cardsets" data-i18n="navbar-collapse.carddecks"></a></li>
+            <li id="navbar-pool"><a href="#pool" id="pool" data-i18n="navbar-collapse.pool"></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><input type="text" class="form-control" placeholder="" id="input-search" data-i18n="[placeholder]navbar-collapse.search"/></li>
@@ -338,7 +338,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2"><div style="margin:20px auto; width:412px"><button class="btn btn-default btn-large cancel" style="width:200px" data-i18n="declinecard"></button>&nbsp;&nbsp;&nbsp;<button style="width:200px" class="btn btn-success btn-large save" data-loading-text="Speichere Karte..." data-i18n="savecard"></button></div></td>
+            <td colspan="2"><div style="margin:20px auto; width:412px"><button id="cardCancel2" class="btn btn-default btn-large cancel" style="width:200px" data-i18n="declinecard"></button>&nbsp;&nbsp;&nbsp;<button style="width:200px" id="cardNewCard2" class="btn btn-success btn-large save" data-loading-text="Speichere Karte..." data-i18n="savecard"></button></div></td>
           </tr>
         </tbody>
       </table>
@@ -504,21 +504,21 @@
                   <label class="col-md-3 control-label" for="editSetName" data-i18n="modal-dialog.name"></label>
                   <div class="col-md-9">
                     <input class="form-control" type="text" id="editSetName">
-                    <span class="help-block name"></span>
+                    <span id="helpEditSetName" class="help-block name"></span>
                   </div>
                 </div>
                 <div class="form-group setdetails description">
                   <label class="col-md-3 control-label" for="editSetDescription" data-i18n="modal-dialog.description"></label>
                   <div class="col-md-9">
                     <textarea class="form-control" rows="3" id="editSetDescription"></textarea>
-                    <span class="help-block description"></span>
+                    <span id="helpEditSetDescription" class="help-block description"></span>
                   </div>
                 </div>
                 <div class="form-group setdetails category">
                   <label class="col-md-3 control-label" for="editSetCategory" data-i18n="modal-dialog.category"></label>
                   <div class="col-md-9">
                     <input class="form-control" type="text" id="editSetCategory">
-                    <span class="help-block category"></span>
+                    <span id="helpEditSetCategory" class="help-block category"></span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -562,8 +562,8 @@
     <script type="text/template" id="set-list-sideBar">
       <div class="input-group">
         <input class="form-control" type="text" id="new-set-input" placeholder="" data-i18n="[placeholder]input-group.newcarddeck"/>
-        <span id="newCardSet" class="input-group-btn">
-          <button class="btn btn-primary saveSet" type="button"><i class="glyphicon glyphicon-plus"></i></button>
+        <span class="input-group-btn">
+          <button id="newCardSet" class="btn btn-primary saveSet" type="button"><i class="glyphicon glyphicon-plus"></i></button>
         </span>
       </div>
 
@@ -586,21 +586,21 @@
                   <label class="col-md-3 control-label" for="newSetName" data-i18n="modal-dialog.name"></label>
                   <div class="col-md-9">
                     <input class="form-control" type="text" id="newSetName" placeholder="" data-i18n="[placeholder]modal-dialog.nameplaceholder">
-                    <span class="help-block name"></span>
+                    <span id="helpNewSetName" class="help-block name"></span>
                   </div>
                 </div>
                 <div class="form-group setdetails description">
                   <label class="col-md-3 control-label" for="newSetDescription" data-i18n="modal-dialog.description"></label>
                   <div class="col-md-9">
                     <textarea class="form-control" rows="3" id="newSetDescription" placeholder="" data-i18n="[placeholder]modal-dialog.descriptionplaceholder"></textarea>
-                    <span class="help-block description"></span>
+                    <span id="helpNewSetDescription" class="help-block description"></span>
                   </div>
                 </div>
                 <div class="form-group setdetails category">
                   <label class="col-md-3 control-label" for="newSetCategory" data-i18n="modal-dialog.category"></label>
                   <div class="col-md-9">
                     <input class="form-control" type="text" id="newSetCategory" placeholder="" data-i18n="[placeholder]modal-dialog.categoryplaceholder">
-                    <span class="help-block category"></span>
+                    <span id="helpNewSetCategory" class="help-block category"></span>
                   </div>
                 </div>
                 <div class="form-group">

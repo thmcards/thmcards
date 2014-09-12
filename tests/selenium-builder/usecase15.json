@@ -10,15 +10,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@class='login']/div/a[3]/img"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "link text",
-        "value": "Kartensatz anlegen"
+        "type": "id",
+        "value": "setListEmpty"
       }
     },
     {
@@ -34,7 +27,7 @@
         "type": "id",
         "value": "newSetName"
       },
-      "text": "Autos"
+      "text": "Use Case 15"
     },
     {
       "type": "setElementText",
@@ -42,7 +35,7 @@
         "type": "id",
         "value": "newSetDescription"
       },
-      "text": "Hier sind Autos"
+      "text": "Use Case 15"
     },
     {
       "type": "setElementText",
@@ -50,20 +43,20 @@
         "type": "id",
         "value": "newSetCategory"
       },
-      "text": "Autos"
+      "text": "Test"
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "css selector",
-        "value": "div.modal-footer > button.btn.btn-primary"
+        "type": "id",
+        "value": "createCardSet"
       }
     },
     {
       "type": "clickElement",
       "locator": {
         "type": "link text",
-        "value": "Autos"
+        "value": "Use Case 15"
       }
     },
     {
@@ -76,82 +69,36 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='set-newcard-region']//button[.='Karte speichern']"
+        "type": "id",
+        "value": "cardNewCard2"
       }
     },
     {
       "type": "clickElement",
       "locator": {
         "type": "id",
-        "value": "set-details-controls-btn-newCard"
+        "value": "learnfile"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='set-newcard-region']//button[.='Karte speichern']"
+        "type": "id",
+        "value": "cardsets"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='set-details-region']//button[.='Lernkartei']"
+        "type": "link text",
+        "value": "Use Case 15"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='set-learn-controls-region']/div/button[1]"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "css selector",
-        "value": "span.clicktoflip"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "xpath",
-        "value": "//div[@id='learn-navigation']/button[1]"
-      }
-    },
-    {
-      "type": "pause",
-      "waitTime": "1000"
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "css selector",
-        "value": "span.clicktoflip"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "css selector",
-        "value": "button.btn.btn-primary.answer.card-success"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "css selector",
-        "value": "a.btn-back.btn.btn-default.btn-s.learn-back"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "xpath",
-        "value": "//div[@id='set-details-controls-region']//button[.='Kartensatz editieren']"
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
       }
     },
     {
@@ -164,15 +111,15 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='editSetModal']//button[.='Kartensatz löschen']"
+        "type": "id",
+        "value": "cardSetDelete"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='editSetModal']//button[.='Sicher?']"
+        "type": "id",
+        "value": "cardSetDelete"
       }
     },
     {
@@ -189,8 +136,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "link text",
-        "value": "Logout"
+        "type": "id",
+        "value": "logout"
       }
     }
   ],

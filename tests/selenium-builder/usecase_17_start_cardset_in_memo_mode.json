@@ -10,31 +10,129 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "link text",
-        "value": "Testkartensatz"
+        "type": "id",
+        "value": "setListEmpty"
       }
     },
     {
-      "type": "verifyElementPresent",
+      "type": "waitForElementPresent",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[1]/div/button[2]"
+        "type": "id",
+        "value": "newSetModal"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Testkartensatz"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Use Case 17"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Use Case 17"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetCategory"
+      },
+      "text": "Test"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "createCardSet"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[1]/div/button[2]"
+        "type": "link text",
+        "value": "Use Case 17"
       }
     },
     {
-      "type": "verifyText",
+      "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div/div/div/div[1]/button"
-      },
-      "text": "Zeige Antwort"
+        "type": "id",
+        "value": "set-details-controls-btn-newCard"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardNewCard2"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "memo"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardsets"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Use Case 17"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "editSetModal"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardSetDelete"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardSetDelete"
+      }
+    },
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
     },
     {
       "type": "clickElement",
@@ -46,8 +144,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "link text",
-        "value": "Logout"
+        "type": "id",
+        "value": "logout"
       }
     }
   ],

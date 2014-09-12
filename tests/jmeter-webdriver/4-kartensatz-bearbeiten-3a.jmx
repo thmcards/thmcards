@@ -68,10 +68,11 @@ var acceptButton = WDS.browser.findElement(pkg.By.id(&apos;submit_approve_access
 acceptButton.click()
 //login end
 
-var newCardSet = WDS.browser.findElement(pkg.By.id(&apos;newCardSet&apos;))
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;)))
+var newCardSet = WDS.browser.findElement(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;))
 newCardSet.click()
 
-wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;newSetName&apos;)))
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;newSetName&apos;)))
 var newSetName = WDS.browser.findElement(pkg.By.id(&apos;newSetName&apos;))
 newSetName.sendKeys([&apos;Use Case 4 3a&apos;])
 
@@ -84,27 +85,30 @@ newSetDescription.sendKeys([&apos;Test&apos;])
 var createCardSet = WDS.browser.findElement(pkg.By.id(&apos;createCardSet&apos;))
 createCardSet.click()
 
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.linkText(&apos;Use Case 4 3a&apos;)))
 var useCaseFour = WDS.browser.findElement(pkg.By.linkText(&apos;Use Case 4 3a&apos;))
 useCaseFour.click()
 
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;)))
 var btnEditCard = WDS.browser.findElement(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;))
 btnEditCard.click()
 
-wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;cardSetCancel&apos;)))
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;cardSetCancel&apos;)))
 var cardSetSave = WDS.browser.findElement(pkg.By.id(&apos;cardSetCancel&apos;))
 cardSetSave.click()
 
 WDS.sampleResult.sampleEnd()
 
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.cssSelector(&apos;#set-details-sideBar-region h4&apos;)))
 var titleOfSet = WDS.browser.findElement(pkg.By.cssSelector(&apos;#set-details-sideBar-region h4&apos;))
 
 if(titleOfSet.getText().contains(&quot;Use Case 4 3a&quot;)) {
-    wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;)))
+    wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;)))
     var editButton = WDS.browser.findElement(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;))
     editButton.click()
     
-    wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;editSetName&apos;)))
-    var deleteButton = WDS.browser.findElement(pkg.By.id(&apos;cardSetDelete&apos;)
+    wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;editSetName&apos;)))
+    var deleteButton = WDS.browser.findElement(pkg.By.id(&apos;cardSetDelete&apos;))
     deleteButton.click()
     deleteButton.click()
 } else {
