@@ -97,6 +97,14 @@ class thmcards {
     command=>"wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb && dpkg -i google-chrome-stable_current_i386.deb"
   }
 
+  exec{"install chrome webdriver":
+    command=>"wget http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux32.zip -O /tmp/chromedriver_linux32.zip && unzip -u /tmp/chromedriver_linux32.zip -d /usr/bin"
+  }
+
+  exec{"download selenium standalone":
+    command=>"wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.0.jar -O /var/lib/selenium-server-standalone-2.43.0.jar"
+  }
+
   file { "/home/vagrant/thmcards-start.sh":
     owner => "vagrant",
     group => "vagrant",
