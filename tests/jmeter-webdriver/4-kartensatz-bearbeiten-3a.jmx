@@ -50,6 +50,24 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 var pkg = JavaImporter(org.openqa.selenium, org.openqa.selenium.support.ui)
 var wait = new pkg.WebDriverWait(WDS.browser, 10, 1000)
 
+//login start
+var googleLoginButton = WDS.browser.findElement(pkg.By.id(&apos;google&apos;))
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;google&apos;)))
+googleLoginButton.click()
+                                    
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;Email&apos;)))
+var emailInput = WDS.browser.findElement(pkg.By.id(&apos;Email&apos;)) 
+emailInput.sendKeys([&apos;arsnovaflashcards&apos;])
+var passwordInput = WDS.browser.findElement(pkg.By.id(&apos;Passwd&apos;))
+passwordInput.sendKeys([&apos;cardsARS!&apos;])
+var loginButton = WDS.browser.findElement(pkg.By.id(&apos;signIn&apos;))
+loginButton.click()
+                  
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.id(&apos;submit_approve_access&apos;)))
+var acceptButton = WDS.browser.findElement(pkg.By.id(&apos;submit_approve_access&apos;))
+acceptButton.click()
+//login end
+
 var newCardSet = WDS.browser.findElement(pkg.By.id(&apos;newCardSet&apos;))
 newCardSet.click()
 
