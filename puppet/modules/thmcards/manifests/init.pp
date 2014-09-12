@@ -77,8 +77,24 @@ class thmcards {
     ensure => "latest" 
   }
 
-  package { "chromium": 
+  package { "chromium-browser": 
     ensure => "latest" 
+  }
+
+  package{"libpango1.0-0":
+    ensure =>"installed"
+  }->
+  package{"libxss1":
+    ensure =>"installed"
+  }->
+  package{"libappindicator1":
+    ensure =>"installed"
+  }->
+  package{"xdg-utils":
+    ensure =>"installed"
+  }->
+  exec{"install google chrome":
+    command=>"wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb && dpkg -i google-chrome-stable_current_i386.deb"
   }
 
   file { "/home/vagrant/thmcards-start.sh":
