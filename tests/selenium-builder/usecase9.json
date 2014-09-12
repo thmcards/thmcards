@@ -1,0 +1,150 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/login"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@class='login']/div/a[3]/img"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Kartensatz anlegen"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "newSetModal"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Autos"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Hier sind Autos"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetCategory"
+      },
+      "text": "Autos"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Autos"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "set-details-controls-btn-newCard"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='set-newcard-region']//button[.='Karte speichern']"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "btnToListLayout"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "i.glyphicon.glyphicon-ban-circle"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='set-details-controls-region']//button[.='Kartensatz editieren']"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "editSetModal"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='editSetModal']//button[.='Kartensatz löschen']"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='editSetModal']//button[.='Sicher?']"
+      }
+    },
+    {
+      "type": "get",
+      "url": "http://localhost:3000/login"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Logout"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

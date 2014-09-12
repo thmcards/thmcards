@@ -187,6 +187,15 @@ Cards.module('Set.Details', function(Details, App) {
 
 				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
 				$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
+
+				$(".wysihtml5-sandbox").each(function(index){
+					if (index == 0) {
+						this.name = 'iframeTextArea_front';
+					}
+					if (index == 1) {
+						this.name = 'iframeTextArea_back';
+					}
+				});
 			}, 50);
 			$("#back-textarea").wysihtml5(editorConfig);
 

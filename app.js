@@ -13,17 +13,24 @@ var express = require('express')
   , date = require('date-utils')
   , helmet = require('helmet')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
-  , nano = require('nano')(nconf.get('couchdb'))
-  , db = nano.use('thmcards')
   , _ = require('underscore')
   , sanitizer = require('sanitizer')
   , passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
-  , GoogleStrategy = require('passport-google').Strategy
+  , GoogleStrategy = require('mybeat-passport-google-oauth').OAuth2Strategy
   , app = express()
   ;
 
+//Wenn auf CloudControl
+if(process.env.CRED_FILE){
+    nconf.file(process.env.CRED_FILE);
+    var couchURL = nconf.get('CLOUDANT_HOSTNAME') + ':' + nconf.get('CLOUDANT_PORT');
+    console.log('Using Database: ' + couchURL);
+    nconf.set('couchdb', couchURL);
+}
+var nano = require('nano')(nconf.get('couchdb'))
+db = nano.use('thmcards')
 
 var secret = 'some secret';
 var sessionKey = 'express.sid';
@@ -356,14 +363,15 @@ function(token, tokenSecret, profile, done) {
 }));
 
 passport.use(new GoogleStrategy({
-    returnURL: nconf.get("google_callback"),
-    realm: nconf.get("google_realm")
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK
   },
-  function(identifier, profile, done) {
-    profile.openID = identifier;
-    profile.provider = "google";
-    profile.username = profile.emails[0].value;
-    return User.findOrCreate(profile, done);
+  function(token, tokenSecret, profile, done) {
+      profile.openID = profile.id;
+      profile.provider = "google";
+      profile.username = profile.emails[0].value;
+      return User.findOrCreate(profile, done);
   }
 ));
 
@@ -412,7 +420,7 @@ app.get('/auth/facebook/callback',
   }
 );
 
-app.get('/auth/google', passport.authenticate('google'));
+app.get('/auth/google', passport.authenticate('google',  { scope: 'email' }));
 
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),

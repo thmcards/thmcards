@@ -1,0 +1,175 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "new-set-input"
+      },
+      "text": "Use Case 4"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.saveSet"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Use Case 4"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Use Case 4"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetCategory"
+      },
+      "text": "Test"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Use Case 4"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.editSet"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "editSetName"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "editSetName"
+      },
+      "text": "Use Case 4 Kartensatz bearbeiten"
+    },
+    {
+      "type": "sendKeysToElement",
+      "locator": {
+        "type": "id",
+        "value": "editSetCategory"
+      },
+      "text": "Test"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "editSetDescription"
+      },
+      "text": "Use Case 4 Kartensatz bearbeiten"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "#editSetModal .btn.btn-primary"
+      }
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Use Case 4 Kartensatz bearbeiten"
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.editSet"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.editSet"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "editSetName"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.btn-setDelete"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.btn-setDelete"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

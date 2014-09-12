@@ -1,0 +1,108 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Testkartensatz"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Testkartensatz"
+      }
+    },
+    {
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[1]/div/button[1]"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='set-details-region']//button[.='Lernkartei']"
+      }
+    },
+    {
+      "type": "verifyText",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]/span[2]"
+      },
+      "text": "1"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='learn-navigation']/button[2]"
+      }
+    },
+    {
+      "type": "verifyText",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]/span[2]"
+      },
+      "text": "1"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[@id='learn-navigation']/button[1]"
+      }
+    },
+    {
+      "type": "verifyText",
+      "locator": {
+        "type": "xpath",
+        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]/span[2]"
+      },
+      "text": "0"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Logout"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

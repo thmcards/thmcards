@@ -1,0 +1,80 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.saveSet"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": "div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": ".help-block.name"
+      }
+    },
+    {
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": ".help-block.description"
+      }
+    },
+    {
+      "type": "verifyElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": ".help-block.category"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "button.btn.btn-default"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}

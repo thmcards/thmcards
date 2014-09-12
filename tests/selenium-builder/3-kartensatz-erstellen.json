@@ -1,0 +1,115 @@
+{
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "new-set-input"
+      },
+      "text": "Use Case 3"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//span[@class='input-group-btn']/button"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Beschreibung"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetCategory"
+      },
+      "text": "Test"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": "div.modal-footer > button.btn.btn-primary"
+      }
+    },
+    {
+      "type": "verifyTextPresent",
+      "text": "Use Case 3"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "link text",
+        "value": "Use Case 3"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.btn-default.editSet"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.btn-danger.pull-left.btn-setDelete"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "css selector",
+        "value": ".btn.pull-left.btn-setDelete.btn-warning"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "usr-name"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "xpath",
+        "value": "//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}
