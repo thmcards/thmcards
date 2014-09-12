@@ -11,6 +11,10 @@ class thmcards {
     ensure => "installed"
   }
 
+  class { 'jmeter':
+    jmeter_plugins_install    => True
+  }
+
   #package {"build-essential":
   #  ensure => "installed",
   #  provider => apt
@@ -73,6 +77,10 @@ class thmcards {
     ensure => "latest" 
   }
 
+  package { "chromium": 
+    ensure => "latest" 
+  }
+
   file { "/home/vagrant/thmcards-start.sh":
     owner => "vagrant",
     group => "vagrant",
@@ -119,7 +127,8 @@ class thmcards {
         "scm-api" => {},
         "git" => {},
         "xvfb"=>{},
-        "clone-workspace-scm"=>{}
+        "clone-workspace-scm"=>{},
+        "performance"=>{}
       }
   }
 

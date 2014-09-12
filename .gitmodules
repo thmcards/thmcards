@@ -26,3 +26,6 @@
 [submodule "puppet/modules/git"]
 	path = puppet/modules/git
 	url = https://github.com/nesi/puppet-git
+[submodule "puppet/modules/jmeter"]
+	path = puppet/modules/jmeter
+	url = https://github.com/dduvnjak/puppet-jmeter.git
