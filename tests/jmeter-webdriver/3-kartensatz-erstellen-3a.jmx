@@ -50,11 +50,11 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 var pkg = JavaImporter(org.openqa.selenium, org.openqa.selenium.support.ui)
 var wait = new pkg.WebDriverWait(WDS.browser, 10, 1000)
 
-var addSetButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;.btn.saveSet&apos;))
+var addSetButton = WDS.browser.findElement(pkg.By.id(&apos;newCardSet&apos;))
 addSetButton.click()
 
-wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.cssSelector(&apos;div.modal-footer &gt; button.btn.btn-primary&apos;)))
-var applySetButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;div.modal-footer &gt; button.btn.btn-primary&apos;))
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;createCardSet&apos;)))
+var applySetButton = WDS.browser.findElement(pkg.By.id(&apos;createCardSet&apos;))
 applySetButton.click()
 
 WDS.sampleResult.sampleEnd()
@@ -66,14 +66,14 @@ if(errorName.empty &amp;&amp; errorDescription.empty &amp;&amp; errorCategory.em
     WDS.sampleResult.successful = false
     WDS.sampleResult.responseMessage = &apos;There were no result returned&apos;
 } else {
-    var cancelButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;button.btn.btn-default&apos;))
+    var cancelButton = WDS.browser.findElement(pkg.By.id(&apos;newCardSetCancel&apos;))
     cancelButton.click()
 }
 
 var emailButton = WDS.browser.findElement(pkg.By.id(&apos;usr-name&apos;))
 emailButton.click()
 
-var logoutButton = WDS.browser.findElement(pkg.By.xpath(&quot;//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a&quot;))
+var logoutButton = WDS.browser.findElement(pkg.By.id(&quot;logout&quot;))
 logoutButton.click()</stringProp>
           <stringProp name="WebDriverSampler.parameters"></stringProp>
         </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
