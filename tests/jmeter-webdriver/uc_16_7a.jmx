@@ -51,6 +51,15 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/login&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/auth/google&apos;)
 
+
+//vorgehende Schritte:
+//Login
+//Kartensatz anlegen
+//Karte anlegen
+//Kartensatz aufrufen
+//Lernkartei aufrufen
+
+
 var subject1 = WDS.browser.findElement(pkg.By.id(&apos;subject1&apos;))
 subject1.click()
 
