@@ -105,6 +105,16 @@ class thmcards {
     command=>"wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.0.jar -O /var/lib/selenium-server-standalone-2.43.0.jar"
   }
 
+  exec{"install python setup tools":
+    command=>"wget https://bootstrap.pypa.io/ez_setup.py -O - | python"
+  }->
+  exec{"install pip":
+    command=>"sudo easy_install pip"
+  }->
+  exec{"install cctrlapp":
+    command=>"sudo pip install -U cctrl"
+  }
+
   file { "/home/vagrant/thmcards-start.sh":
     owner => "vagrant",
     group => "vagrant",
@@ -152,7 +162,8 @@ class thmcards {
         "git" => {},
         "xvfb"=>{},
         "clone-workspace-scm"=>{},
-        "performance"=>{}
+        "performance"=>{},
+        "envinject"=>{}
       }
   }
 
