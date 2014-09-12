@@ -98,11 +98,11 @@ class thmcards {
   }
 
   exec{"install chrome webdriver":
-    command=>"wget http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux32.zip -O /tmp/chromedriver_linux32.zip && unzip -u /tmp/chromedriver_linux32.zip -d /usr/bin"
+    command=>"wget http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux32.zip -O /tmp/chromedriver_linux32.zip && unzip -u /tmp/chromedriver_linux32.zip -d /usr/bin && chmod 777 /usr/bin/chromedriver"
   }
 
   exec{"download selenium standalone":
-    command=>"wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.0.jar -O /var/lib/selenium-server-standalone-2.43.0.jar"
+    command=>"wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.0.jar -O /var/lib/selenium-server-standalone-2.43.0.jar && chmod 777 /var/lib/selenium-server-standalone-2.43.0.jar"
   }
 
   file { "/home/vagrant/thmcards-start.sh":
@@ -138,6 +138,7 @@ class thmcards {
         "AJP_PORT" => { "value" => "9009" }
       },
       plugin_hash => {
+        "greenballs" => {},
         "sonar" => {},
         "javadoc" => {},
         "mailer" => {},
