@@ -23,19 +23,16 @@ var express = require('express')
   ;
 
 //Wenn auf CloudControl
-if(process.env.CRED_FILE){
-    nconf.file(process.env.CRED_FILE);
-    var couchURL = nconf.get('CLOUDANT_HOSTNAME') + ':' + nconf.get('CLOUDANT_PORT');
-    console.log('Using Database: ' + couchURL);
-    nconf.set('couchdb', couchURL);
+if(process.env.COUCH_URL){
+    nconf.set('couchdb', process.env.COUCH_URL);
 }
-var nano = require('nano')(nconf.get('couchdb'))
-db = nano.use('thmcards')
+var nano = require('nano')(nconf.get('couchdb'));
+db = nano.use('thmcards');
 
 var secret = 'some secret';
 var sessionKey = 'express.sid';
 var cookieParser = express.cookieParser(secret);
-var sessionStore = new express.session.MemoryStore()
+var sessionStore = new express.session.MemoryStore();
 var https_server, http_server, io;
 
 if(process.env.NODE_ENV === 'production') {
