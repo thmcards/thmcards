@@ -77,10 +77,6 @@ class thmcards {
     ensure => "latest" 
   }
 
-  package { "chromium-browser": 
-    ensure => "latest" 
-  }
-
   package{"libpango1.0-0":
     ensure =>"installed"
   }->
