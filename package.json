@@ -1,27 +1,31 @@
 {
-  "name": "thmcards",
-  "version": "1.0.0-24",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "express": "3.4.0",
-    "nconf": "0.6.*",
-    "nano": "4.2.1",
-    "underscore": "1.5.2",
-    "passport": "*",
-    "passport-facebook": "1.0.*",
-    "passport-twitter": "1.0.*",
-    "mybeat-passport-google-oauth": "*",
-    "jws": "0.2.*",
-    "socket.io": "0.9.16",
-    "date-utils": "1.2.15",
-    "helmet": "*",
-    "sanitizer": "0.1.*"
-  },
-  "subdomain": "thmcards",
-  "engines": {
-    "node": "0.10.x"
-  }
+	"name": "thmcards",
+	"version": "1.0.0-24",
+	"private": true,
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"express": "3.4.0",
+		"nconf": "0.6.*",
+		"nano": "4.2.1",
+		"underscore": "1.5.2",
+		"passport": "*",
+		"passport-facebook": "1.0.*",
+		"passport-twitter": "1.0.*",
+		"mybeat-passport-google-oauth": "*",
+		"jws": "0.2.*",
+		"socket.io": "0.9.16",
+		"date-utils": "1.2.15",
+		"helmet": "*",
+		"sanitizer": "0.1.*",
+		"mocha": "~1.10.0",
+		"selenium-webdriver": "~2",
+		"wd": "~0.3",
+		"uuid-js": "~0.7"
+	},
+	"subdomain": "thmcards",
+	"engines": {
+		"node": "0.10.x"
+	}
 }
