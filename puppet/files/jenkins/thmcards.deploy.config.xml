@@ -28,19 +28,35 @@
   <builders>
     <EnvInjectBuilder plugin="envinject@1.89">
       <info>
-        <propertiesContent>CCTRL_EMAIL=&quot;your-mail@example.com&quot;
-CCTRL_PASSWORD=&quot;your-awesome-pw&quot;
-CCTRL_APP=&quot;your-awesome-appname&quot;
-CCTRL_DEPLOYMENT=&quot;your-awesome-deploymentname&quot;</propertiesContent>
+        <propertiesContent>CCTRL_EMAIL=&quot;your@mail.address&quot;
+CCTRL_PASSWORD=&quot;your-pw&quot;
+CCTRL_APP=&quot;your-appname&quot;
+CCTRL_DEPLOYMENT=&quot;default&quot;</propertiesContent>
       </info>
     </EnvInjectBuilder>
     <hudson.tasks.Shell>
-      <command>eval &quot;rm ~/.ssh/cckey&quot;;
-eval &quot;rm ~/.ssh/cckey.pub&quot;;
-eval &quot;ssh-keygen -t rsa -C &quot;your_email@example.com&quot; -N &quot;asdasd&quot; -f ~/.ssh/cckey&quot;
-eval &quot;CCTRL_EMAIL=$CCTRL_EMAIL CCTRL_PASSWORD=$CCTRL_PASSWORD cctrluser key.add ~/.ssh/cckey.pub&quot;
-eval &quot;cd /vagrant&quot;
-eval &quot;CCTRL_EMAIL=$CCTRL_EMAIL CCTRL_PASSWORD=$CCTRL_PASSWORD cctrlapp $CCTRL_APP/$CCTRL_DEPLOYMENT push&quot;;
+      <command>git config --global user.email &quot;you@example.com&quot;;
+git config --global user.name &quot;Your Name&quot;;
+
+eval &quot;echo $HOME&quot;;
+
+echo &quot;Host *
+    StrictHostKeyChecking no&quot; &gt; ~/.ssh/config;
+
+[ -f ~/.ssh/id_rsa ] &amp;&amp; rm ~/.ssh/id_rsa;
+[ -f ~/.ssh/id_rsa.pub ] &amp;&amp; rm ~/.ssh/id_rsa.pub;
+
+ssh-keygen -q -t rsa -N &quot;&quot; -f ~/.ssh/id_rsa;
+eval &quot;eval `ssh-agent -s`&quot;;
+eval &quot;ssh-add ~/.ssh/id_rsa&quot;;
+eval &quot;CCTRL_EMAIL=$CCTRL_EMAIL CCTRL_PASSWORD=$CCTRL_PASSWORD cctrluser key.add ~/.ssh/id_rsa.pub&quot;;
+
+eval &quot;cd $WORKSPACE&quot;;
+eval &quot;git init&quot;;
+eval &quot;git add *&quot;;
+eval &quot;git remote add cctrl ssh://$CCTRL_APP@cloudcontrolled.com/repository.git&quot;;
+eval &quot;git commit -m \&quot;commit\&quot;&quot;;
+eval &quot;git push -f cctrl HEAD:$CCTRL_DEPLOYMENT&quot;;
 eval &quot;CCTRL_EMAIL=$CCTRL_EMAIL CCTRL_PASSWORD=$CCTRL_PASSWORD cctrlapp $CCTRL_APP/$CCTRL_DEPLOYMENT deploy&quot;;</command>
     </hudson.tasks.Shell>
   </builders>
