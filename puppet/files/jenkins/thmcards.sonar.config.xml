@@ -1,1 +1,45 @@
-<?xml version='1.0' encoding='UTF-8'?><project>  <actions/>  <description></description>  <keepDependencies>false</keepDependencies>  <properties/>  <scm class="hudson.plugins.cloneworkspace.CloneWorkspaceSCM" plugin="clone-workspace-scm@0.6">    <parentJobName>THMcards</parentJobName>    <criteria>Any</criteria>  </scm>  <canRoam>true</canRoam>  <disabled>false</disabled>  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>  <jdk>(Inherit From Job)</jdk>  <triggers>    <jenkins.triggers.ReverseBuildTrigger>      <spec></spec>      <upstreamProjects>THMcards, </upstreamProjects>      <threshold>        <name>SUCCESS</name>        <ordinal>0</ordinal>        <color>BLUE</color>        <completeBuild>true</completeBuild>      </threshold>    </jenkins.triggers.ReverseBuildTrigger>  </triggers>  <concurrentBuild>false</concurrentBuild>  <builders/>  <publishers>    <hudson.plugins.sonar.SonarPublisher plugin="sonar@2.1">      <jdk>(Inherit From Job)</jdk>      <branch></branch>      <language>nodejs</language>      <mavenOpts></mavenOpts>      <jobAdditionalProperties></jobAdditionalProperties>      <mavenInstallationName>maven3</mavenInstallationName>      <rootPom></rootPom>      <settings class="jenkins.mvn.DefaultSettingsProvider"/>      <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>      <usePrivateRepository>false</usePrivateRepository>    </hudson.plugins.sonar.SonarPublisher>  </publishers>  <buildWrappers/></project>
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.cloneworkspace.CloneWorkspaceSCM" plugin="clone-workspace-scm@0.6">
+    <parentJobName>THMcards</parentJobName>
+    <criteria>Any</criteria>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>true</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>(Inherit From Job)</jdk>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec></spec>
+      <upstreamProjects>THMcards, </upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders/>
+  <publishers>
+    <hudson.plugins.sonar.SonarPublisher plugin="sonar@2.1">
+      <jdk>(Inherit From Job)</jdk>
+      <branch></branch>
+      <language>nodejs</language>
+      <mavenOpts></mavenOpts>
+      <jobAdditionalProperties></jobAdditionalProperties>
+      <mavenInstallationName>maven3</mavenInstallationName>
+      <rootPom></rootPom>
+      <settings class="jenkins.mvn.DefaultSettingsProvider"/>
+      <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
+      <usePrivateRepository>false</usePrivateRepository>
+    </hudson.plugins.sonar.SonarPublisher>
+  </publishers>
+  <buildWrappers/>
+</project>
