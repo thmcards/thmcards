@@ -28,7 +28,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>eval &quot;echo \&quot;start selenium tests\&quot;&quot;
-eval &quot;node test.js&quot;</command>
+eval &quot;java -jar /var/lib/selenium-server-standalone-2.43.0.jar -role hub &amp;&quot;
+eval &quot;node tests/selenium-node/login-logout.js&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
