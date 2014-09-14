@@ -15,7 +15,7 @@
   <triggers>
     <jenkins.triggers.ReverseBuildTrigger>
       <spec></spec>
-      <upstreamProjects>THMcards.selenium, </upstreamProjects>
+      <upstreamProjects>THMcards, </upstreamProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>
