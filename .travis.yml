@@ -31,7 +31,7 @@ deploy:
   email:
     secure: "aRwCuVKj1N1zkXizOeoq9b4nntOYYgcuwf/TOMFejhLcoFJvWDO4J8ynkSe/Ue5bw/oXeULV7h0JG35Xs+d5yqdMrdf4cnxHgtf+V0c4/rQbOPSbv3eKeoRdi6JVrGzPOGyTagLfrfSMhrkAne87hD1uG1oGuL94Q9qamldW8h8="
   password:
-    secure: "BeV2B6BVYx9mSzqQugBd1Br1frYtinFkUQgqbdrt1j+xNW7Cqb0zDhMuqG4E6hjzccFnDOJS+t0Uf/xHOYWI74EylQZV2q4EeY6cUA8m9sV3fCnN40X6yiONBGoLV9u0oI5Ma+dFAJvYoZsS2d+RVuOis6mdjGaHe1HZrEgBZEQ="
+    secure: "XrMZNbRhGo2VUwOZ0rHyW1OzFaSmcIjUns5dDnQU4NR5FrHPfo3COIpQfYk77795P9VoFgSo2qxenni6IN6nW3dOsbkGnvikr6O1l+C3BRDww2tCsowXZS7M19E2UyUGiMJDdWGDozRHvf2uoxkLqNNnkxH35+YGwleYdhb0sZQ="
     deployment: swthmcards/default
   on:
     repo: sewi22/thmcards
