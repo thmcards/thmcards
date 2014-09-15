@@ -15,8 +15,7 @@
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="/stylesheets/non-responsive.css" rel="stylesheet" />
-    <link href="/stylesheets/bootstrap-wysihtml5.css" rel="stylesheet" />
-    <link href="/css/bootstrap3-wysihtml5-color.css" rel="stylesheet" />
+    <link href="/css/bootstrap-markdown.min.css" rel="stylesheet" />
     <link href="/stylesheets/overrides.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
@@ -308,11 +307,13 @@
         <tbody>
           <tr>
             <td class="cardtext fronttext">
+              <div id="fronttext-content-holder" class="hide"></div>
               <input class="form-control fronttext" id="front-textarea" placeholder="" style="width:440px; height:200px; margin:10px auto 0" data-i18n="[placeholder]foreside">
               </input>
               <span class="help-block fronttext"></span>
             </td>
             <td class="cardtext backtext">
+              <div id="backtext-content-holder" class="hide"></div>
               <input class="form-control backtext" id="back-textarea" placeholder="" style="width:440px; height:200px; margin:10px auto 0" data-i18n="[placeholder]backside">
               </input>
               <span class="help-block backtext"></span>
@@ -365,11 +366,13 @@
         <tbody>
           <tr>
             <td class="cardtext fronttext">
+              <div id="editfronttext-content-holder" class="hide"></div>
               <input class="form-control fronttext" id="editcard-front-textarea" placeholder="" type="text" style="width:440px; height:200px; margin:10px auto 0" data-i18n="[placeholder]foreside">
               </input>
               <span class="help-block fronttext"></span>
             </td>
             <td class="cardtext backtext">
+              <div id="editbacktext-content-holder" class="hide"></div>
               <input class="form-control backtext" id="editcard-back-textarea" placeholder="" type="text" style="width:440px; height:200px; margin:10px auto 0;" data-i18n="[placeholder]backside">
               </input>
               <span class="help-block backtext"></span>
@@ -1348,6 +1351,10 @@
 
     <script type="text/javascript" src="/javascripts/lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/javascripts/lib/markdown.js"></script>
+    <script type="text/javascript" src="/javascripts/lib/bootstrap-markdown.js"></script>
+
     <script type="text/javascript" src="/javascripts/lib/typeahead.min.js"></script>
 
     <script type="text/javascript" src="/javascripts/Cards.js"></script>
@@ -1404,8 +1411,6 @@
     <script type="text/javascript" src="/javascripts/lib/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/Date.format.min.js"></script>
 
-    <script type="text/javascript" src="/javascripts/lib/wysihtml5-0.3.0.min.js"></script>
-    <script type="text/javascript" src="/javascripts/lib/bootstrap-wysihtml5.js"></script>
     <script type="text/javascript" src="/javascripts/lib/jquery.raty.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/jquery.clickout.js"></script>
 

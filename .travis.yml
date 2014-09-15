@@ -6,8 +6,8 @@ node_js:
 env:
   global:
     # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
-    - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
-    - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+    - SAUCE_USERNAME=Kadrei
+    - secure: ajMos61m3dePhYaNTzy5Dfgpd2gH560PAlSV53k9/lKLSx7yg0kTCAlIlAWrZPFVF37O4GNQR2nPP9HuB6Lixo6K84UpYI97+JKZ5p3VfiFMsHIz9A9ADcewlCAmFh8PgsmX0gZPo2ZTtNBxqTbwRfU1RUXNWstR4Qc6Z0IGMIg=
   matrix:
     #- "BROWSER='firefox::Windows 7'"
     - "BROWSER='chrome::Windows 7'"
@@ -28,12 +28,11 @@ script:
   - "ruby saucelabs.rb"
 deploy:
   provider: cloudcontrol
-  email:
-    secure: "PMxOnzO4j+1kaREs7mdkSc7l/DR3pTV5M8sh9IwaR3IVRowb3mzdDc64vhu3hUytDZrZlTcHoGuU+Ttj0y91Nd14YY2G8kPys6MuL49kjPEG50WDgwMv/P9wxG47OanFUf8wMzV1hw4uCgo6PGaVyEi5YNKbb2pkiQl2YtoZ9Ro="
+  email: benedikt.kusemann@freenet.de
   password:
-    secure: "dxk5ZJc1v5nup91r694Sjv/ouLwhBFvuXN2BeUx7P/PMF0v2r7P4fjpFOh08GWbAHqN8qXUiV+bfhlfU0yb6l8l80Lr2hzh5Z4SyiWnHMhS0CNWy+WkDVD3H7BKKQg/rT4cabl/6L313DHEVEqkPQp2d2aadl+ESpGI2Zkwosxw="
+    secure: "EvevztK2IaWS9iu92IIsV3r1egc0ebqc9i/a/s6bgLnurcPrQtGdXuabXjL6lC/VJFAQGVjg+ZbcuYAwcY7ALx4Nl0HoAn4mIeapLIlarZGH5by/pIMasE2C0JABUSdpTbW3SNu28QK90SlXoqgph/v5yTuiJ+wrc6IZf5/2DIw="
   deployment: cards/default
   on:
-    repo: prinzmajus/thmcards
+    repo: thmcardsk3/default
 addons:
   sauce_connect: true
