@@ -32,7 +32,7 @@ deploy:
     secure: "GyJ267ssSt63QQ8F3gxN7rma0t4SN+po1vJRPYTSi6t7OSBR1OU8iYr54mM6ATV6YGviF1YBzNHYE0LHhMebtd8JOfAAc9nDMe/Vgoe9edRqaG7PmX9oRETJoBUtwYgKpcOYrH5ly3X9Z1U0sv70OHL0R/7R4ZhlYdaWKF2x++E="
   password:
     secure: "arbW0odUAhKHPKLuhFdSBNIe0/Opf61k/wlCohS4WQZaEaKerAbW59eoZNqpdtO7HYlj59+QKt+M19xKyqhQvSrcPS610f3hdwyTjeQyC58ZaArbbWnhFo0URqdA1vHN94rXye9rYqGRPiCBnZmmk9t+OU8oqrYnnACEkU/J0Zg="
-  deployment: thmcardssw/default
+  deployment: swthmcards/default
   on:
     repo: sewi22/thmcards
 addons:
