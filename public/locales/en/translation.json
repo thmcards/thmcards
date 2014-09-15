@@ -144,7 +144,8 @@
     "viewmap": "Card",
     "viewlist": "List",
     "createcard": "Create a new card",
-    "editcard": "Edit deck of cards"
+    "editcard": "Edit deck of cards",
+    "exportSet": "Export deck"
   },
 
   "pool": {

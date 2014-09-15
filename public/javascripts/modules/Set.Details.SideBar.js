@@ -114,6 +114,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		className: "well well-sm sidebar-nav",
 		ui: {
 			btnAdd: "a.saveSet",
+            btnExport: "a.exportSet",
 			inputSetName: "input[type=text]",
 			modalView: "#editSetModal",
 			modalBtnSave: "#editSetModal button.btn-primary",
@@ -121,10 +122,10 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			modalInputName: "#editSetName",
 			modalInputDescription: "#editSetDescription",
 			modalInputCategory: "#editSetCategory"
-
 		},
 		events: {
 			"click .newCard": "newCardClicked",
+            "click .exportSet": "exportSetClicked",
 			"click .editSet": "showEditSetModal",
 			"click #editSetModal button.btn-primary": "updateSet",
 			"click #editSetModal button.btn-danger": "deleteClicked",
@@ -134,6 +135,11 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		newCardClicked: function(ev) {
 			App.trigger("set:details:new", this.model.get("_id"));
 		},
+        exportSetClicked:function(ev) {
+            $.get('/export/'+this.model.get("id"), function(res){
+                console.log(res);
+            });
+        },
 		showEditSetModal: function() {
 			var that = this;
 

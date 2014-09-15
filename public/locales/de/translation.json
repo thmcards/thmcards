@@ -144,7 +144,8 @@
     "viewmap": "Karte",
     "viewlist": "Liste",
     "createcard": "Neue Karte erstellen",
-    "editcard": "Kartensatz editieren"
+    "editcard": "Kartensatz editieren",
+    "exportSet": "Kartensatz exportieren"
   },
 
   "pool": {

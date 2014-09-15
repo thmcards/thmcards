@@ -680,6 +680,60 @@ app.get('/set/:id', forceSSL, function(req, res){
   });
 });
 
+app.get('/export/:setId', ensureAuthenticated, function(req, res){
+    var result = {};
+    var setId = req.params.setId;
+
+    db.view('sets', 'by_id', { key: new Array(setId) }, function(err, body) {
+        if (!err) {
+            var docs = _.map(body.rows, function(doc) {
+                doc.value._id = sanitizer.sanitize(doc.value._id);
+                doc.value._rev = sanitizer.sanitize(doc.value._rev);
+                doc.value.name = sanitizer.sanitize(doc.value.name);
+                doc.value.description = sanitizer.sanitize(doc.value.description);
+                doc.value.visibility =  sanitizer.sanitize(doc.value.visibility);
+                doc.value.category = sanitizer.sanitize(doc.value.category);
+                doc.value.owner =  sanitizer.sanitize(doc.value.owner);
+                doc.value.type = 'set';
+                return doc.value;
+            });
+            result.info = docs[0];
+
+            db.view('cards', 'by_set', { key: new Array(setId) }, function(err, body) {
+                if (!err) {
+                    var docs = _.map(body.rows, function(doc) {
+                        doc.value._id = sanitizer.sanitize(doc.value._id);
+                        doc.value._rev = sanitizer.sanitize(doc.value._rev);
+                        doc.value.created = sanitizer.sanitize(doc.value.created);
+                        doc.value.owner = sanitizer.sanitize(doc.value.owner);
+                        doc.value.setId = sanitizer.sanitize(doc.value.setId);
+                        doc.value.front.text = sanitizer.sanitize(doc.value.front.text);
+                        doc.value.front.text_plain = sanitizer.sanitize(doc.value.front.text_plain);
+                        doc.value.front.picture = (doc.value.front.picture) ? sanitizer.sanitize(doc.value.front.picture) : '';
+                        doc.value.front.video = sanitizer.sanitize(doc.value.front.video);
+                        doc.value.back.text = sanitizer.sanitize(doc.value.back.text);
+                        doc.value.back.text_plain = sanitizer.sanitize(doc.value.back.text_plain);
+                        doc.value.back.picture = (doc.value.back.picture) ? sanitizer.sanitize(doc.value.back.picture) : '';
+                        doc.value.back.video = sanitizer.sanitize(doc.value.back.video);
+                        doc.value.type = "card";
+                        return doc.value;
+                    });
+                    result.cards = docs;
+
+                    res.json(result);
+                } else {
+                    console.log("[db.cards/by_set]", err.message);
+                    res.send(404);
+                }
+            });
+
+        } else {
+            console.log("[db.sets/by_id]", err.message);
+            res.send(404);
+        }
+    });
+});
+
 app.get('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
   db.view('users', 'by_username', { key: req.params.username }, function(err, body) {
     if(!_.isUndefined(body.rows) && _.size(body.rows) > 0) {
