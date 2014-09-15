@@ -1,13 +1,13 @@
 language: node_js
 node_js:
 - "0.10"
-- "0.8"
-- "0.6"
+#- "0.8"
+#- "0.6"
 env:
   global:
     # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
-    - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
-    - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+    - secure: "WXSTGMER67I1xl6/1ADnyopO5bu2DPd27eYie7sfA+PvWfEhKUGHGGswLGxX/vjXQA0TX6d8A6xOjztz6oGx/AqsRhedWMYhUySJxo9T/tCPSVQcCAAvaUmIL8PZGH+uH5qIb355FFmHQbs/li89Yy2cJY/Omc+IlCBEgb6Ko8A="
+    - secure: "R09cHwGbgpuwqpm83+h0pUZpp+b6v/g9QK39n+wOAENhzFCE7Wmd50lFAGmD1e1YzHlGiJntO/eSBBDiCjZJyOeZDY1Yt8VA8mP7sjqw/2skDDX/tWBlNcZxHHoO2Mq47OZM3ePK/ehRcR4YKGEWCqEHxOj/NFMLdhFmLCjjEac="
   matrix:
     #- "BROWSER='firefox::Windows 7'"
     - "BROWSER='chrome::Windows 7'"
@@ -29,11 +29,11 @@ script:
 deploy:
   provider: cloudcontrol
   email:
-    secure: "TESTPMxOnzO4j+1kaREs7mdkSc7l/DR3pTV5M8sh9IwaR3IVRowb3mzdDc64vhu3hUytDZrZlTcHoGuU+Ttj0y91Nd14YY2G8kPys6MuL49kjPEG50WDgwMv/P9wxG47OanFUf8wMzV1hw4uCgo6PGaVyEi5YNKbb2pkiQl2YtoZ9Ro="
+    secure: "MxJKt6tBspWQH/+LEzy11k+qBey65ziidvy4YxG4EUfiLhcFrSmNcpYsfyCyOn5MakFSCo4sHCoLr2XFVUgBPPzHWGS2hziwzFYOMw/VZZzlmmDTSJ0cewlWd+hwYX1U9hNi6HHvoLsBfruEJjfWRIDjAeANfSvXZzgmfrtGV2s="
   password:
-    secure: "dxk5ZJc1v5nup91r694Sjv/ouLwhBFvuXN2BeUx7P/PMF0v2r7P4fjpFOh08GWbAHqN8qXUiV+bfhlfU0yb6l8l80Lr2hzh5Z4SyiWnHMhS0CNWy+WkDVD3H7BKKQg/rT4cabl/6L313DHEVEqkPQp2d2aadl+ESpGI2Zkwosxw="
-  deployment: cards/default
+    secure: "W4At/hxfUvjd+z/0iMZKgXpA81+mLkwFkHPzVEC3YxoFC5tYoPa9uWoA3HZxH+gimDXyizlYP/m9MJ5IqWQ5lFHntWPRb1FnemHOtQOy9CzNE9TcmaN3Wi9EST4jRt0/nofad6amZjDUdexVFycUEc9U+sZoJUhVxA1smiAND3k=" 
+    deployment: cards/default
   on:
-    repo: prinzmajus/thmcards
+    repo: sewi22/thmcards
 addons:
   sauce_connect: true
