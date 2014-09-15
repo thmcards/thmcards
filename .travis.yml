@@ -37,4 +37,3 @@ deploy:
     repo: sewi22/thmcards
 addons:
   sauce_connect: true
-
