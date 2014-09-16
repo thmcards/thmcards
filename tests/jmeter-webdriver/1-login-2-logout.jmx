@@ -42,22 +42,43 @@
           <boolProp name="WebDriverConfig.reset_per_iteration">false</boolProp>
         </com.googlecode.jmeter.plugins.webdriver.config.FirefoxDriverConfig>
         <hashTree/>
-        <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="Use Case 2" enabled="true">
+        <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="Use Case 1-2" enabled="true">
           <stringProp name="WebDriverSampler.script">WDS.sampleResult.sampleStart()
 
 WDS.browser.get(&apos;http://localhost:3000/&apos;)
 
 var pkg = JavaImporter(org.openqa.selenium, org.openqa.selenium.support.ui)
+var wait = new pkg.WebDriverWait(WDS.browser, 10, 1000)
 
+//login start
+var googleLoginButton = WDS.browser.findElement(pkg.By.id(&apos;google&apos;))
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;google&apos;)))
+googleLoginButton.click()
+                                    
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;Email&apos;)))
+var emailInput = WDS.browser.findElement(pkg.By.id(&apos;Email&apos;)) 
+emailInput.sendKeys([&apos;arsnovaflashcards&apos;])
+var passwordInput = WDS.browser.findElement(pkg.By.id(&apos;Passwd&apos;))
+passwordInput.sendKeys([&apos;cardsARS!&apos;])
+var loginButton = WDS.browser.findElement(pkg.By.id(&apos;signIn&apos;))
+loginButton.click()
+                  
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.id(&apos;submit_approve_access&apos;)))
+var acceptButton = WDS.browser.findElement(pkg.By.id(&apos;submit_approve_access&apos;))
+acceptButton.click()
+//login end
+
+//logout start
 var emailButton = WDS.browser.findElement(pkg.By.id(&apos;usr-name&apos;))
 emailButton.click()
 
-var logoutButton = WDS.browser.findElement(pkg.By.xpath(&apos;//ul[@class=&apos;dropdown-menu&apos;]//a[.=&apos;Logout&apos;]&apos;))
+var logoutButton = WDS.browser.findElement(pkg.By.id(&apos;logout&apos;))
 logoutButton.click()
+//logout end
 
 WDS.sampleResult.sampleEnd()
 
-var results = WDS.browser.findElements(pkg.By.xpath(&apos;//div[@class=&apos;login&apos;]/div/a[3]/img&apos;))
+var results = WDS.browser.findElements(pkg.By.id(&apos;google&apos;))
 if(results.empty) {
     WDS.sampleResult.successful = false
     WDS.sampleResult.responseMessage = &apos;There were no results returned&apos;

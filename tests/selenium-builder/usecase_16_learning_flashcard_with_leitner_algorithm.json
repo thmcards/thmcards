@@ -8,81 +8,131 @@
       "url": "http://localhost:3000/"
     },
     {
-      "type": "verifyTextPresent",
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "setListEmpty"
+      }
+    },
+    {
+      "type": "waitForElementPresent",
+      "locator": {
+        "type": "id",
+        "value": "newSetModal"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
       "text": "Testkartensatz"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetName"
+      },
+      "text": "Use Case 16"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetDescription"
+      },
+      "text": "Use Case 16"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "id",
+        "value": "newSetCategory"
+      },
+      "text": "Test"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "createCardSet"
+      }
     },
     {
       "type": "clickElement",
       "locator": {
         "type": "link text",
-        "value": "Testkartensatz"
-      }
-    },
-    {
-      "type": "verifyElementPresent",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div[4]/div[1]/div/button[1]"
+        "value": "Use Case 16"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='set-details-region']//button[.='Lernkartei']"
-      }
-    },
-    {
-      "type": "verifyText",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]/span[2]"
-      },
-      "text": "1"
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]"
+        "type": "id",
+        "value": "set-details-controls-btn-newCard"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[2]/div/div/div[1]/div[2]/div/div"
+        "type": "id",
+        "value": "cardNewCard2"
       }
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='learn-navigation']/button[2]"
+        "type": "id",
+        "value": "learnfile"
       }
-    },
-    {
-      "type": "verifyText",
-      "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]/span[2]"
-      },
-      "text": "1"
     },
     {
       "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "//div[@id='learn-navigation']/button[1]"
+        "type": "id",
+        "value": "subject1"
       }
     },
     {
-      "type": "verifyText",
+      "type": "clickElement",
       "locator": {
-        "type": "xpath",
-        "value": "/html/body/div[2]/div[1]/div[2]/div/div/div[1]/div[2]/div/button[1]/span[2]"
-      },
-      "text": "0"
+        "type": "id",
+        "value": "clicktoflip2"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "know"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "endscreenBack"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "set-details-controls-btn-editCard"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "id",
+        "value": "cardSetDelete"
+      }
+    },
+    {
+      "type": "get",
+      "url": "http://localhost:3000/"
     },
     {
       "type": "clickElement",
@@ -94,8 +144,8 @@
     {
       "type": "clickElement",
       "locator": {
-        "type": "link text",
-        "value": "Logout"
+        "type": "id",
+        "value": "logout"
       }
     }
   ],

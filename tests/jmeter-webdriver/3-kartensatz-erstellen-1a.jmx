@@ -50,10 +50,29 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 var pkg = JavaImporter(org.openqa.selenium, org.openqa.selenium.support.ui)
 var wait = new pkg.WebDriverWait(WDS.browser, 10, 1000)
 
-var addSetButton = WDS.browser.findElement(pkg.By.xpath(&apos;//span[@class=&apos;input-group-btn&apos;]/button&apos;))
+//login start
+var googleLoginButton = WDS.browser.findElement(pkg.By.id(&apos;google&apos;))
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;google&apos;)))
+googleLoginButton.click()
+                                    
+wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;Email&apos;)))
+var emailInput = WDS.browser.findElement(pkg.By.id(&apos;Email&apos;)) 
+emailInput.sendKeys([&apos;arsnovaflashcards&apos;])
+var passwordInput = WDS.browser.findElement(pkg.By.id(&apos;Passwd&apos;))
+passwordInput.sendKeys([&apos;cardsARS!&apos;])
+var loginButton = WDS.browser.findElement(pkg.By.id(&apos;signIn&apos;))
+loginButton.click()
+                  
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.id(&apos;submit_approve_access&apos;)))
+var acceptButton = WDS.browser.findElement(pkg.By.id(&apos;submit_approve_access&apos;))
+acceptButton.click()
+//login end
+
+wait.until(pkg.ExpectedConditions.elementToBeClickable(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;)))
+var addSetButton = WDS.browser.findElement(pkg.By.xpath(&quot;//span[@id=&apos;newCardSet&apos;]/button&quot;))
 addSetButton.click()
 
-wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;newSetName&apos;)))
+wait.until(pkg.ExpectedConditions.visibilityOfElementLocated(pkg.By.id(&apos;newSetName&apos;)))
 var newSetName = WDS.browser.findElement(pkg.By.id(&apos;newSetName&apos;))
 newSetName.sendKeys([&apos;Use Case 3 1a&apos;])
 
@@ -63,7 +82,7 @@ newSetDescription.sendKeys([&apos;Use Case 3 1a&apos;])
 var newSetCategory = WDS.browser.findElement(pkg.By.id(&apos;newSetCategory&apos;))
 newSetCategory.sendKeys([&apos;Test&apos;])
 
-var addSetButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;div.modal-footer &gt; button.btn.btn-primary&apos;))
+var addSetButton = WDS.browser.findElement(pkg.By.id(&apos;createCardSet&apos;))
 addSetButton.click()
 
 WDS.sampleResult.sampleEnd()
@@ -75,21 +94,19 @@ if(result.empty) {
 } else {
     result.click()
     
-    var editSetButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;.btn.btn-default.editSet&apos;))
+    var editSetButton = WDS.browser.findElement(pkg.By.id(&apos;set-details-controls-btn-editCard&apos;))
     editSetButton.click()
     
-    wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.cssSelector(&apos;.btn.btn-danger.pull-left.btn-setDelete&apos;)))
-    var deleteSetButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;.btn.btn-danger.pull-left.btn-setDelete&apos;))
+    wait.until(pkg.ExpectedConditions.presenceOfElementLocated(pkg.By.id(&apos;cardSetDelete&apos;)))
+    var deleteSetButton = WDS.browser.findElement(pkg.By.id(&apos;cardSetDelete&apos;))
     deleteSetButton.click()
-    
-    var deleteSetWarningButton = WDS.browser.findElement(pkg.By.cssSelector(&apos;.btn.pull-left.btn-setDelete.btn-warning&apos;))
-    deleteSetWarningButton.click()
+    deleteSetButton.click()
 }
 
 var emailButton = WDS.browser.findElement(pkg.By.id(&apos;usr-name&apos;))
 emailButton.click()
 
-var logoutButton = WDS.browser.findElement(pkg.By.xpath(&quot;//div[2]/div[1]/div[1]/div/div[2]/ul[2]/li[2]/ul/li[3]/a&quot;))
+var logoutButton = WDS.browser.findElement(pkg.By.id(&quot;logout&quot;))
 logoutButton.click()</stringProp>
           <stringProp name="WebDriverSampler.parameters"></stringProp>
         </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>

@@ -51,6 +51,14 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/login&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/auth/google&apos;)
 
+
+//vorgehende Schritte:
+//Login
+//Kartensatz anlegen
+//Karte anlegen
+//Kartensatz aufrufen
+
+
 var testkartensatz = WDS.browser.findElement(pkg.By.linkText(&apos;Testkartensatz&apos;))
 testkartensatz.click()
 
@@ -68,6 +76,7 @@ WDS.browsers.switchTo().alert().accept()
 
 WDS.sampleResult.sampleEnd()
 
+//nach dem Schließen wird wieder der Kartensatz angezeigt. Der Spielen Button sollte wieder vorhanden sein
 var result = WDS.browser.findElement(pkg.By.id(&apos;play&apos;))
 if(result.empty) {
     WDS.sampleResult.successful = false

@@ -51,6 +51,14 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/login&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/auth/google&apos;)
 
+
+//vorgehende Schritte:
+//Login
+//Kartensatz anlegen
+//Karte anlegen
+//Kartensatz aufrufen
+
+
 var testkartensatz = WDS.browser.findElement(pkg.By.linkText(&apos;Testkartensatz&apos;))
 testkartensatz.click()
 
@@ -59,7 +67,7 @@ memo.click()
 
 WDS.sampleResult.sampleEnd()
 
-// Lernkartenfach ist leer
+// wird der Button &quot;Zeige Antwort&quot; angezeigt?
 var result = WDS.browser.findElement(pkg.By.id(&apos;memoShowAnswer&apos;)
 if(result.empty) {
     WDS.sampleResult.successful = false

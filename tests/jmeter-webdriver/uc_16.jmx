@@ -51,6 +51,15 @@ WDS.browser.get(&apos;http://localhost:3000/&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/login&apos;)
 //WDS.browser.get(&apos;http://localhost:3000/auth/google&apos;)
 
+
+//vorgehende Schritte:
+//Login
+//Kartensatz anlegen
+//Karte anlegen
+//Kartensatz aufrufen
+//Lernkartei aufrufen
+
+
 var subject1 = WDS.browser.findElement(pkg.By.id(&apos;subject1&apos;))
 subject1.click()
 
@@ -60,11 +69,12 @@ card.click()
 var know = WDS.browser.findElement(pkg.By.id(&apos;know&apos;))
 var notknow = WDS.browser.findElement(pkg.By.id(&apos;notknow&apos;))
 notknow.click()
+card.click())
 know.click()
 
 WDS.sampleResult.sampleEnd()
 
-// Lernkartenfach ist leer
+// wird eine weitere Lernkarte angezeigt?
 var result = WDS.browser.findElement(pkg.By.id(&apos;endscreenBack&apos;)
 if(result.empty) {
     WDS.sampleResult.successful = true

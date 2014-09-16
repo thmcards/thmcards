@@ -77,8 +77,38 @@ class thmcards {
     ensure => "latest" 
   }
 
-  package { "chromium": 
-    ensure => "latest" 
+  package{"libpango1.0-0":
+    ensure =>"installed"
+  }->
+  package{"libxss1":
+    ensure =>"installed"
+  }->
+  package{"libappindicator1":
+    ensure =>"installed"
+  }->
+  package{"xdg-utils":
+    ensure =>"installed"
+  }->
+  exec{"install google chrome":
+    command=>"wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb && dpkg -i google-chrome-stable_current_i386.deb"
+  }
+
+  exec{"install chrome webdriver":
+    command=>"wget http://chromedriver.storage.googleapis.com/2.10/chromedriver_linux32.zip -O /tmp/chromedriver_linux32.zip && unzip -u /tmp/chromedriver_linux32.zip -d /usr/bin && chmod 777 /usr/bin/chromedriver"
+  }
+
+  exec{"download selenium standalone":
+    command=>"wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.0.jar -O /var/lib/selenium-server-standalone-2.43.0.jar && chmod 777 /var/lib/selenium-server-standalone-2.43.0.jar"
+  }
+
+  exec{"install python setup tools":
+    command=>"wget https://bootstrap.pypa.io/ez_setup.py -O - | python"
+  }->
+  exec{"install pip":
+    command=>"sudo easy_install pip"
+  }->
+  exec{"install cctrlapp":
+    command=>"sudo pip install -U cctrl"
   }
 
   file { "/home/vagrant/thmcards-start.sh":
@@ -114,6 +144,7 @@ class thmcards {
         "AJP_PORT" => { "value" => "9009" }
       },
       plugin_hash => {
+        "greenballs" => {},
         "sonar" => {},
         "javadoc" => {},
         "mailer" => {},
@@ -128,7 +159,8 @@ class thmcards {
         "git" => {},
         "xvfb"=>{},
         "clone-workspace-scm"=>{},
-        "performance"=>{}
+        "performance"=>{},
+        "envinject"=>{}
       }
   }
 
