@@ -2,8 +2,7 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.ItemView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item",
 		className: "item",
-		initialize: function() {
-            _.bindAll(this);
+		initialize: function() {            
             $(document).on('keyup', this.keyHandlerItem);
 		},
 		events: {
@@ -12,7 +11,7 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		keyHandlerItem: function(ev){
             switch (ev.keyCode) {
-                case 38 :
+                case 13 :
                     $('div.box').click();
                 break;
             }
@@ -58,8 +57,7 @@ Cards.module('Set.Details', function(Details, App) {
 		ui: {
 			modalView: "#pictureModal"
 		},
-		initialize: function() {
-            _.bindAll(this);
+		initialize: function() {            
             $(document).on('keyup', this.keyHandler);
 		},
 		events: {
@@ -75,7 +73,7 @@ Cards.module('Set.Details', function(Details, App) {
 		keyHandler: function(ev){
             switch (ev.keyCode) {
                 case 37 :
-                    $('#leftCarouselControl').click();
+                    $('#leftCarouselControl').click();                    
                 break;
                 case 39 :                    
                     $('#rightCarouselControl').click();

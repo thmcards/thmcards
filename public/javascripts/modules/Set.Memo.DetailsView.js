@@ -31,11 +31,40 @@ Cards.module('Set.Memo', function(Memo, App) {
 		ui: {
 			modalView: "#pictureModalMemo"
 		},
+		initialize: function() {		      
+            $(document).on('keyup', this.keyHandlerMemo);
+		},
 		events: {
 			"click button.show-answer": "showAnswer",
 			"click button.rate-answer": "rateAnswer",
 			"click a.btn-showPictureModal": "showModal",
 		},
+		keyHandlerMemo: function(ev){
+            switch (ev.keyCode) {
+                case 13 :
+                    $('button.show-answer').click();
+                break;
+                //Bewertungen im Memo Modus (0-5)
+                case 48 :
+                    $('button#memoRate0').click();
+                break;
+                case 49 :
+                    $('button#memoRate1').click();
+                break;
+                case 50 :
+                    $('button#memoRate2').click();
+                break;
+                case 51 :
+                    $('button#memoRate3').click();
+                break;
+                case 52 :
+                    $('button#memoRate4').click();
+                break;
+                case 53 :
+                    $('button#memoRate5').click();
+                break;
+            }
+        },
 		cycleCarousel: function(ev) {
 		this.collection.fetch();
 		ev.preventDefault();
@@ -198,9 +227,9 @@ Cards.module('Set.Memo', function(Memo, App) {
 				}
 			}
 		},
-		initialize: function() {
+		/*initialize: function() {
 
-		},
+		},*/
 		onRender: function() {
 			i18ninit();
 

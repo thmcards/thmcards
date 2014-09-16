@@ -2,10 +2,26 @@ Cards.module('Set.Learn', function(Learn, App) {
 	Learn.ItemView = Backbone.Marionette.ItemView.extend({
 		template: "#set-learn-item",
 		className: "item",
+		initialize: function() {
+            $(document).on('keyup', this.keyHandlerLearn);
+		},
 		events: {
 			"click a": "linkClicked",
 			"click div.box": "cardClicked"
 		},
+		keyHandlerLearn: function(ev){
+            switch (ev.keyCode) {
+                case 13 :
+                    $('div.box').click();
+                break;
+                case 49 :
+                    $('button#know').click();
+                break;
+                case 50 :
+                    $('button#notknow').click();
+                break;
+            }
+        },
 		cardClicked: function(ev) {
 			ev.preventDefault();
 
