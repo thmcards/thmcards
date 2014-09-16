@@ -35,6 +35,10 @@
   	"newcarddeck": "Neuer Kartensatz"
   },
 
+  "upload-form":{
+      "submit": "Hochladen"
+  },
+
   "nav-list": {
   	"category": "Kategorie",
   	"created": "Erstellt",

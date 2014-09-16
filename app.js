@@ -734,6 +734,133 @@ app.get('/export/:setId', ensureAuthenticated, function(req, res){
     });
 });
 
+app.post('/import', forceSSL, ensureAuthenticated, function(req, res){
+    var body = '';
+    var header = '';
+    var content_type = req.headers['content-type'];
+    var boundary = content_type.split('; ')[1].split('=')[1];
+    var content_length = parseInt(req.headers['content-length']);
+    var headerFlag = true;
+    var filename = 'dummy.bin';
+    var filenameRegexp = /filename="(.*)"/m;
+    console.log('content-type: ' + content_type);
+    console.log('boundary: ' + boundary);
+    console.log('content-length: ' + content_length);
+
+    req.on('data', function(raw) {
+        console.log('received data length: ' + raw.length);
+        var i = 0;
+        while (i < raw.length)
+            if (headerFlag) {
+                var chars = raw.slice(i, i+4).toString();
+                if (chars === '\r\n\r\n') {
+                    headerFlag = false;
+                    header = raw.slice(0, i+4).toString();
+                    console.log('header length: ' + header.length);
+                    console.log('header: ');
+                    console.log(header);
+                    i = i + 4;
+                    // get the filename
+                    var result = filenameRegexp.exec(header);
+                    if (result[1]) {
+                        filename = result[1];
+                    }
+                    console.log('filename: ' + filename);
+                    console.log('header done');
+                }
+                else {
+                    i += 1;
+                }
+            }
+            else {
+                // parsing body including footer
+                body += raw.toString('binary', i, raw.length);
+                i = raw.length;
+                console.log('actual file size: ' + body.length);
+            }
+    });
+
+    req.on('end', function() {
+        // removing footer '\r\n'--boundary--\r\n' = (boundary.length + 8)
+        body = body.slice(0, body.length - (boundary.length + 8));
+        console.log('final file size: ' + body.length);
+
+        var importJson = JSON.parse(body);
+
+        //Add Set to Database
+        var user = req.session.passport.user;
+        if(_.isArray(user)) user = _.first(req.session.passport.user);
+
+        var time = new Date().getTime();
+
+        var data = {};
+        data.owner = user.username;
+        data.name = sanitizer.sanitize(importJson.info.name);
+        data.description = sanitizer.sanitize(importJson.info.description);
+        data.visibility = sanitizer.sanitize(importJson.info.visibility);
+        data.category = sanitizer.sanitize(importJson.info.category);
+        data.cardCnt = parseInt(sanitizer.sanitize(importJson.info.cardCnt));
+        data.rating = (importJson.info.rating === 'true');
+        data.type = "set";
+        data.created = sanitizer.sanitize(time);
+
+        db.insert(
+            data,
+            function(err, body, header){
+                if(err) {
+                    console.log('[db.insert] ', err.message);
+                    return;
+                }
+                db.get(body.id, { revs_info: false }, function(err, body) {
+                    if (!err){
+                        var setId = body._id;
+
+                        //Add Cards to set
+                        var owner = user.username;
+                        for(var i = 0; i < importJson.cards.length; i++){
+
+                            var card = importJson.cards[i];
+                            if(!(card.front.text && card.back.text)) res.send(400);
+
+                            var newCard = {};
+                            newCard.created = time;
+                            newCard.owner = owner;
+                            newCard.setId = setId;
+                            newCard.front = {};
+                            newCard.front.text = sanitizer.sanitize(card.front.text);
+                            newCard.front.text_plain = sanitizer.sanitize(card.front.text_plain);
+                            newCard.front.picture = (card.front.picture) ? sanitizer.sanitize(card.front.picture) : '';
+                            newCard.front.video = sanitizer.sanitize(card.front.video);
+                            newCard.back = {};
+                            newCard.back.text = sanitizer.sanitize(card.back.text);
+                            newCard.back.text_plain = sanitizer.sanitize(card.back.text_plain);
+                            newCard.back.picture = (card.back.picture) ? sanitizer.sanitize(card.back.picture) : '';
+                            newCard.back.video = sanitizer.sanitize(card.back.video);
+                            newCard.type = "card";
+                            console.log(newCard);
+                            db.insert(
+                                newCard,
+                                function(err, body, header){
+                                    if(err) {
+                                        console.log('[db.insert] ', err.message);
+                                        return;
+                                    }
+                                    db.get(body.id, { revs_info: false }, function(err, body) {
+                                        if (!err) {
+
+                                        }
+                                    });
+                                }
+                            );
+                        }
+                        res.redirect('/#set/details/'+setId);
+                    }
+                });
+            }
+        );
+    })
+});
+
 app.get('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
   db.view('users', 'by_username', { key: req.params.username }, function(err, body) {
     if(!_.isUndefined(body.rows) && _.size(body.rows) > 0) {

@@ -35,6 +35,10 @@
   	"newcarddeck": "New deck of cards"
   },
 
+  "upload-form":{
+      "submit": "Submit"
+  },
+
   "nav-list": {
   	"category": "Category",
   	"created": "Created",
