@@ -2,10 +2,21 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.ItemView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item",
 		className: "item",
+		initialize: function() {
+            _.bindAll(this);
+            $(document).on('keyup', this.keyHandlerItem);
+		},
 		events: {
 			"click a": "linkClicked",
 			"click div.box": "cardClicked"
 		},
+		keyHandlerItem: function(ev){
+            switch (ev.keyCode) {
+                case 38 :
+                    $('div.box').click();
+                break;
+            }
+        },
 		cardClicked: function(ev) {
 			ev.preventDefault();
 
@@ -47,6 +58,10 @@ Cards.module('Set.Details', function(Details, App) {
 		ui: {
 			modalView: "#pictureModal"
 		},
+		initialize: function() {
+            _.bindAll(this);
+            $(document).on('keyup', this.keyHandler);
+		},
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
@@ -55,8 +70,18 @@ Cards.module('Set.Details', function(Details, App) {
 			"click a.btn-editCard": "editClicked",
 			"click a.btn-showPictureModal": "showModal",
 			"click a.btn-deleteCard": "deleteClicked",
-			"click div.box": "checkForPicture"
+    		"click div.box": "checkForPicture"
 		},
+		keyHandler: function(ev){
+            switch (ev.keyCode) {
+                case 37 :
+                    $('#leftCarouselControl').click();
+                break;
+                case 39 :                    
+                    $('#rightCarouselControl').click();
+                break;
+            }
+        },
 		playMeteor: function(ev) {
 			App.trigger("play:meteor", this.model.get("id"));
 		},
@@ -90,16 +115,15 @@ Cards.module('Set.Details', function(Details, App) {
 			});
 		},
 		cycleCarousel: function(ev) {
-			ev.preventDefault();
+        	ev.preventDefault();
 			this.turnCardtoFront(ev);
-
 			if($(ev.currentTarget).hasClass("left")) {
 				this.$el.find(":first-child").carousel("prev");
 			} else if($(ev.currentTarget).hasClass("right")) {
 				this.$el.find(":first-child").carousel("next");
 			}
 		},
-
+        
 		turnCardtoFront: function(ev) {
 			ev.preventDefault();
 
