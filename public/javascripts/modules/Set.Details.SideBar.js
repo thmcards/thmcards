@@ -137,7 +137,9 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		},
         exportSetClicked:function(ev) {
             $.get('/export/'+this.model.get("id"), function(res){
-                console.log(res);
+                var exportString = JSON.stringify(res);
+                var blob = new Blob([exportString], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, res.info.name +".json");
             });
         },
 		showEditSetModal: function() {
