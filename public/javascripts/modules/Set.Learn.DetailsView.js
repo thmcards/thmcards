@@ -312,6 +312,8 @@ Cards.module('Set.Learn', function(Learn, App) {
 			}
 		},
 		onRender: function() {
+		    i18ninit();
+		            
 			var that = this;
 			var cardIndicator = this.$el.find("small.card-indicator");
 
