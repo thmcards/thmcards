@@ -84,7 +84,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 			this.showPictureModal();
 		},
 		answeredCard: function(ev) {
-			if (ev.target.title === "success") {
+			if (ev.target.id === "know") {
 				var failed = false;
 			} else {
 				var failed = true;
