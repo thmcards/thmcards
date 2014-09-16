@@ -160,10 +160,10 @@
         </a>
         <div class="block">
           <div class="cardContent centered front active">
-            <%= front.text.replace(/(<br>\s*)+$/,'') %>
+            <%= markdown.toHTML(front.text.replace(/(<br>\s*)+$/,'')) %>
           </div>
           <div class="cardContent centered back" style="display:none">
-            <%= back.text.replace(/(<br>\s*)+$/,'') %>
+            <%= markdown.toHTML(back.text.replace(/(<br>\s*)+$/,'')) %>
           </div>
       </div>
     </script>
@@ -198,7 +198,7 @@
 
     <script type="text/template" id="set-details-listitem">
         <td>
-          <span style="font-family:'Georgia'"><cardcode><%= front.text %></cardcode></span>
+          <span style="font-family:'Georgia'"><cardcode><%= markdown.toHTML(front.text) %></cardcode></span>
           <% if(front.picture) { %>
             <a class="card-front btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
               <i class="glyphicon glyphicon-picture"></i>
@@ -206,7 +206,7 @@
           <% } %>
         </td>
         <td>
-          <span style="font-family:'Georgia'"><cardcode><%= back.text %></cardcode></span>
+          <span style="font-family:'Georgia'"><cardcode><%= markdown.toHTML(back.text) %></cardcode></span>
           <% if(back.picture) { %>
             <a class="card-back btn-showPictureModalList" data-id="<%= _id %>" href="#showPictureModalList" >
               <i class="glyphicon glyphicon-picture"></i>
@@ -821,7 +821,7 @@
     </script>
 
     <script type="text/template" id="game-meteor-playcard">
-      <span data-answer="<%= back.text_plain.toLowerCase() %>" data-cardid="<%= _id %>"><%= front.text_plain %></span>
+      <span data-answer="<%= markdown.toHTML(back.text_plain.toLowerCase()) %>" data-cardid="<%= _id %>"><%= markdown.toHTML(front.text_plain) %></span>
     </script>
 
     <!--Learn -->
@@ -932,7 +932,7 @@
           <i class="glyphicon glyphicon-picture"></i>
           <small>Bild anzeigen</small>
         </a>
-        <div class="block"><div class="cardContent centered front active"><%= front.text %></div><div class="cardContent centered back" style="display:none"><%= back.text %></div>
+        <div class="block"><div class="cardContent centered front active"><%= markdown.toHTML(front.text) %></div><div class="cardContent centered back" style="display:none"><%= markdown.toHTML(back.text) %></div>
       </div>
     </script>
 
@@ -1024,7 +1024,7 @@
             <i class="glyphicon glyphicon-picture"></i>
             <small>Bild anzeigen</small>
           </a>
-          <div class="block memocontent-block"><div class="double cardcontent-front"><%= front.text %></div></div>
+          <div class="block memocontent-block"><div class="double cardcontent-front"><%= markdown.toHTML(front.text) %></div></div>
         </div>
       </div>
       <div class="col-md-6">
@@ -1035,7 +1035,7 @@
             <i class="glyphicon glyphicon-picture"></i>
             <small>Bild anzeigen</small>
           </a>
-          <div class="block memocontent-block"><div class="double cardcontent-back" style="display:none"><%= back.text %></div></div>
+          <div class="block memocontent-block"><div class="double cardcontent-back" style="display:none"><%= markdown.toHTML(back.text) %></div></div>
         </div>
       </div>
     </div>

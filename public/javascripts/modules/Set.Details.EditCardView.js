@@ -208,7 +208,6 @@ Cards.module('Set.Details', function(Details, App) {
 					savable:false,
 					fullscreen:false,
 					onChange: function(e){
-						console.log(e.getContent());
 						$("#editfronttext-content-holder").html(e.getContent());
 					},
 					onShow: function(e){
