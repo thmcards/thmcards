@@ -45,6 +45,7 @@ Cards.module('Set.Details', function(Details, App) {
 						that.hideErrors();
 						console.log("card saved");
 						history.back();
+						Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = model.id;
 					},
 					error: function(model, error) {
 						console.log(error);

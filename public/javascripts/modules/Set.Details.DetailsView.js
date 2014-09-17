@@ -182,7 +182,12 @@ Cards.module('Set.Details', function(Details, App) {
 				this.$el.find("a.carousel-control").hide();
 			}
 
-			this.$el.find("div.item").first().addClass("active");
+			if (Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID === undefined) {
+				this.$el.find("div.item").first().addClass("active");
+			} else {
+				this.$el.find('div.item div[data-id="' + Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID + '"]').parent().addClass("active");
+				Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = undefined;
+			}
 
 			var cardCount = this.$('.item').length;
 			var currentIndex = this.$('div.item.active').index() + 1;
