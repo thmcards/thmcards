@@ -36,7 +36,8 @@
   },
 
   "upload-form":{
-      "submit": "Submit"
+      "submit": "Submit",
+      "import": "Import deck"
   },
 
   "nav-list": {

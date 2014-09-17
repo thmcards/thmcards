@@ -36,7 +36,8 @@
   },
 
   "upload-form":{
-      "submit": "Hochladen"
+      "submit": "Hochladen",
+      "import": "Lade Kartensatz"
   },
 
   "nav-list": {

@@ -569,11 +569,18 @@
       </div>
 
       <hr />
-      <div class="form-group">
-        <form method="post" action="/import" enctype="multipart/form-data">
-          <input type="file" name="test" /><button type="submit" class="btn btn-primary" data-i18n="upload-form.submit"></button>
-        </form>
+
+      <form method="post" action="/import" enctype="multipart/form-data">
+      <div class="input-group">
+        <span style="position:relative;">
+          <input id="file" style="position:absolute; width: 153px;" class="form-control" placeholder="" data-i18n="[placeholder]upload-form.import" readonly/>
+          <input id="fileInput" type="file" name="file" style="opacity:0; z-index:1; width: 153px; height: 34px; cursor: pointer;" />
+        </span>
+        <span class="input-group-btn">
+          <button id="fileSubmit" type="submit" class="btn btn-primary disabled"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+        </span>
       </div>
+      </form>
 
       <hr />
       <ul class="nav nav-list">
