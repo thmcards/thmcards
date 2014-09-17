@@ -785,6 +785,13 @@ app.post('/import', forceSSL, ensureAuthenticated, function(req, res){
         body = body.slice(0, body.length - (boundary.length + 8));
         console.log('final file size: ' + body.length);
 
+        var suffix = '.json';
+        if(filename.substr(filename.length - suffix.length, suffix.length) !== suffix){
+            console.log('wrong filetype: ' + filename );
+            res.redirect('/');
+            return;
+        }
+
         var importJson = JSON.parse(body);
 
         //Add Set to Database
