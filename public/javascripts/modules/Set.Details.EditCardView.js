@@ -79,16 +79,16 @@ Cards.module('Set.Details', function(Details, App) {
 			this.ui.deleteBtn.button('loading');
 
 			this.model.destroy({
-			    success : function(resp){
-			    	console.log("gelöscht");
+				success : function(resp){
+					console.log("gelöscht");
 					history.back();
-			    },
-			    error : function(err) {
-			    	that.ui.deleteBtn.button('reset');
-			        console.log('error callback');
-			        // this error message for dev only
-			        alert('There was an error. See console for details');
-			        console.log(err);
+				},
+				error : function(err) {
+					that.ui.deleteBtn.button('reset');
+					console.log('error callback');
+					// this error message for dev only
+					alert('There was an error. See console for details');
+					console.log(err);
 				}
 			});
 
@@ -96,12 +96,12 @@ Cards.module('Set.Details', function(Details, App) {
 		showErrors: function(errors) {
 			this.$('.help-block').text('');
 			this.$('.cardtext').removeClass('has-error');
-		    _.each(errors, function (error) {
-		        var cardside = this.$('td.' + error.name);
-		        cardside.addClass('has-error');
-		        var helptext = this.$('span.' + error.name);
-		        helptext.text(error.message);
-		    }, this);
+			_.each(errors, function (error) {
+				var cardside = this.$('td.' + error.name);
+				cardside.addClass('has-error');
+				var helptext = this.$('span.' + error.name);
+				helptext.text(error.message);
+			}, this);
 		},
 
 		hideErrors: function () {
@@ -170,11 +170,11 @@ Cards.module('Set.Details', function(Details, App) {
 							alert("Es wurden keine passenden Ergebnisse gefunden");
 							this.ui.pictureSearchModal.modal('hide');
 						}
-			        }, null);
+					}, null);
 
-			        imageSearch.execute(searchString);
-			        $("#editcard-pictureSearchModal-footer").empty();
-			        $("#editcard-pictureSearchModal-footer").append(google.search.Search.getBranding());
+					imageSearch.execute(searchString);
+					$("#editcard-pictureSearchModal-footer").empty();
+					$("#editcard-pictureSearchModal-footer").append(google.search.Search.getBranding());
 
 				}, 100);
 
@@ -187,12 +187,12 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		keyupInput: function(ev) {
 			var value = $(ev.target).val();
-		    var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
-    		if (urlregex.test(value)) {
-        		$(ev.target).next().attr('disabled', 'disabled');
-    		} else {
-    			$(ev.target).next().removeAttr('disabled');
-    		}
+			var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+			if (urlregex.test(value)) {
+				$(ev.target).next().attr('disabled', 'disabled');
+			} else {
+				$(ev.target).next().removeAttr('disabled');
+			}
 		},
 		focusInput: function(ev) {
 			var loadSearch = function() {
@@ -207,6 +207,28 @@ Cards.module('Set.Details', function(Details, App) {
 					autofocus:false,
 					savable:false,
 					fullscreen:false,
+					hiddenButtons:["cmdImage"],
+					additionalButtons: [
+						[{
+							name: "groupMisc",
+							data: [{
+								name: "cmdTex",
+								toggle: true, // this param only take effect if you load bootstrap.js
+								title: "Tex",
+								icon: "glyphicon glyphicon-usd",
+								callback: function(e){
+									var chunk, cursor,
+									selected = e.getSelection(),
+									content = e.getContent();
+									// transform selection and set the cursor into chunked text
+									e.replaceSelection("$ "+content+" $");
+									cursor = selected.start
+									// Set the cursor
+									e.setSelection(cursor,cursor+content.length+4)
+									}
+								}]
+						}]
+					],
 					onChange: function(e){
 						$("#editfronttext-content-holder").html(e.getContent());
 					},

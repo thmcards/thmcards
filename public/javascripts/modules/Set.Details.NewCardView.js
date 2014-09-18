@@ -173,6 +173,28 @@ Cards.module('Set.Details', function(Details, App) {
 					autofocus:false,
 					savable:false,
 					fullscreen:false,
+					hiddenButtons:["cmdImage"],
+					additionalButtons: [
+						[{
+							name: "groupMisc",
+							data: [{
+								name: "cmdTex",
+								toggle: true, // this param only take effect if you load bootstrap.js
+								title: "Tex",
+								icon: "glyphicon glyphicon-usd",
+								callback: function(e){
+									var chunk, cursor,
+									selected = e.getSelection(),
+									content = e.getContent();
+									// transform selection and set the cursor into chunked text
+									e.replaceSelection("$ "+content+" $");
+									cursor = selected.start
+									// Set the cursor
+									e.setSelection(cursor,cursor+content.length+4)
+									}
+								}]
+						}]
+					],
 					onChange: function(e){
 						$("#fronttext-content-holder").html(e.getContent());
 					}
