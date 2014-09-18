@@ -35,12 +35,13 @@
   	"newcarddeck": "Neuer Kartensatz"
   },
 
-  "upload-form":{
+  "upload-form": {
       "submit": "Hochladen",
-      "import": "Lade Kartensatz"
+      "import": "Import",
+      "popover-content": "<div> Hier kannst du bestehende Kartensets zu THMCards hochladen. Unterstützt werden die Formate Json und CSV.<br /> Folgende Templates zeigen die nötige Struktur auf: </div> <a role='button' target='_blank' class='btn btn-default' href='/static/example.json'>Json</a> <a role='button' target='_blank' class='btn btn-default' href='/static/example.csv'>CSV</a>"
   },
 
-  "nav-list": {
+"nav-list": {
   	"category": "Kategorie",
   	"created": "Erstellt",
   	"learned": "Gelernt"

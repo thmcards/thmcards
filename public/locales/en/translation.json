@@ -37,7 +37,8 @@
 
   "upload-form":{
       "submit": "Submit",
-      "import": "Import deck"
+      "import": "Import",
+      "popover-content": "<div> Here you can upload your own decks of cards to THMCards. Currently we support Json- and CSV-Format.<br /> Please have a look at these templates: </div> <a role='button' target='_blank' class='btn btn-default' href='/static/example.json'>Json</a> <a role='button' target='_blank' class='btn btn-default' href='/static/example.csv'>CSV</a>"
   },
 
   "nav-list": {

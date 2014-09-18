@@ -570,17 +570,25 @@
 
       <hr />
 
-      <form method="post" action="/import" enctype="multipart/form-data">
       <div class="input-group">
-        <span style="position:relative;">
-          <input id="file" style="position:absolute; width: 153px;" class="form-control" placeholder="" data-i18n="[placeholder]upload-form.import"/>
-          <input id="fileInput" type="file" name="file" style="opacity:0; z-index:1; width: 153px; height: 34px; cursor: pointer;" />
+      <form style="width: 143px; float: left;" method="post" action="/import" enctype="multipart/form-data">
+      <span class="input-group" style="width: 143px;">
+        <span style="position:relative; width: 103px;">
+          <input id="file" style="position:absolute; width: 103px;" class="form-control" placeholder="" data-i18n="[placeholder]upload-form.import"/>
+          <input id="fileInput" type="file" name="file" style="opacity:0; z-index:1; width: 103px; height: 34px; cursor: pointer;"/>
         </span>
         <span class="input-group-btn">
           <button id="fileSubmit" type="submit" class="btn btn-primary disabled"><i class="glyphicon glyphicon-cloud-upload"></i></button>
         </span>
-      </div>
+      </span>
       </form>
+      <div style="float: right; margin-left: 9px;">
+          <button type="button" id="fileHelp" class="btn btn-default" data-toggle="popover" data-html="true" data-trigger="click" data-container="body" data-content=" " data-placement="right"
+                  data-i18n="[data-content]upload-form.popover-content">
+              <i class="glyphicon glyphicon-question-sign"></i>
+          </button>
+      </div>
+      </div>
 
       <hr />
       <ul class="nav nav-list">

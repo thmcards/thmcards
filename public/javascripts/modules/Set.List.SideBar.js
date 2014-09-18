@@ -146,7 +146,9 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			});
 		},
 		onRender: function(){
-			i18ninit();
-		}
+            i18ninit();
+
+            this.$("#fileHelp").popover();
+        }
 	});
 });
