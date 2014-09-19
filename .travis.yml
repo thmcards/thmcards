@@ -5,9 +5,12 @@ node_js:
 #- "0.6"
 env:
   global:
-    # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
-    - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
-    - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+    # Sauce Labs: (RafaelKa/arsnova-flashcards)  
+    ## User
+    - secure: VMN65kmbQplleR+rOPev82PATLT3csO3gcNyBhQp9XNFx/t9892sef42bZbisahW/LjZl4sLcAV+IJEQEDwhci8gLC1TJ9ps6caMcgOlPx5pic8GoS8SAFszfP6IHhN2fSrh9UzjvqV6DxQdbJnBK5UnboWFE2J01sYx5p2nd5c=
+    ## Access-Key
+    - secure: XJrcF7KTyWZ1Kd7peMRleTklvNbRkqS05EgV8HxmHVWeCLC2L3RVS18WrLPkbs88CS42OSWWXpB+oZJQul81z3RQHQQo7M0zqw43rYnyv0m20WS0Ys5+ldsRg9CK56oEnvDK2Gjc9eu5uCb72/5hG026JyO80f3ywCYSTVRqni4=
+
   matrix:
     #- "BROWSER='firefox::Windows 7'"
     - "BROWSER='chrome::Windows 7'"
