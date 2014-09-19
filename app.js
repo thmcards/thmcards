@@ -802,43 +802,48 @@ app.post('/import', forceSSL, ensureAuthenticated, function(req, res){
                     if (err){
                         //err handle
                         console.log('csvConverter error: ' + err);
-                        return;
+                        res.redirect('/');
                     }
 
                     console.log('csvConverter finished: ');
                     console.log(resultJson);
 
-                    var importJson = {};
+                    if(resultJson[0].info && resultJson[0].cards){
+                        var importJson = {};
 
-                    importJson.info = {};
-                    importJson.info.name = resultJson[0].info.name;
-                    importJson.info.description = resultJson[0].info.description;
-                    importJson.info.visibility = resultJson[0].info.visibility;
-                    importJson.info.category = resultJson[0].info.category;
-                    importJson.info.cardCnt = resultJson[0].info.cardCnt;
-                    importJson.info.rating = resultJson[0].info.rating;
+                        importJson.info = {};
+                        importJson.info.name = resultJson[0].info.name;
+                        importJson.info.description = resultJson[0].info.description;
+                        importJson.info.visibility = resultJson[0].info.visibility;
+                        importJson.info.category = resultJson[0].info.category;
+                        importJson.info.cardCnt = resultJson[0].info.cardCnt;
+                        importJson.info.rating = resultJson[0].info.rating;
 
-                    importJson.cards = [];
-                    for(var i=0; i<resultJson.length; i++){
-                        var newCard = {};
-                        newCard.front = {};
-                        newCard.front.text = resultJson[i].cards.front.text;
-                        newCard.front.text_plain = resultJson[i].cards.front.text_plain;
-                        newCard.front.picture = resultJson[i].cards.front.picture;
-                        newCard.front.video = resultJson[i].cards.front.video;
-                        newCard.back = {};
-                        newCard.back.text = resultJson[i].cards.back.text;
-                        newCard.back.text_plain = resultJson[i].cards.back.text_plain;
-                        newCard.back.picture = resultJson[i].cards.back.picture;
-                        newCard.back.video = resultJson[i].cards.back.video;
-                        importJson.cards.push(newCard);
-                    }
-
-                    addSetToDatabase(user, importJson, function(err, setId){
-                        if(!err){
-                            res.redirect('/#set/details/'+setId);
+                        importJson.cards = [];
+                        for(var i=0; i<resultJson.length; i++){
+                            var newCard = {};
+                            newCard.front = {};
+                            newCard.front.text = resultJson[i].cards.front.text;
+                            newCard.front.text_plain = resultJson[i].cards.front.text_plain;
+                            newCard.front.picture = resultJson[i].cards.front.picture;
+                            newCard.front.video = resultJson[i].cards.front.video;
+                            newCard.back = {};
+                            newCard.back.text = resultJson[i].cards.back.text;
+                            newCard.back.text_plain = resultJson[i].cards.back.text_plain;
+                            newCard.back.picture = resultJson[i].cards.back.picture;
+                            newCard.back.video = resultJson[i].cards.back.video;
+                            importJson.cards.push(newCard);
                         }
-                    });
+
+                        addSetToDatabase(user, importJson, function(err, setId){
+                            if(!err){
+                                res.redirect('/#set/details/'+setId);
+                            }
+                        });
+                    }else{
+                        console.log('csvConverter error: wrong filestructure');
+                        res.redirect('/');
+                    }
                 });
                 break;
 
