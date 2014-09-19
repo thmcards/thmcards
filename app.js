@@ -10,6 +10,8 @@ var express = require('express')
   , https = require('https')
   , path = require('path')
   , fs = require('fs')
+  , Converter=require("csvtojson").core.Converter
+  , parserMgr=require("csvtojson").core.parserMgr
   , date = require('date-utils')
   , helmet = require('helmet')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
@@ -785,88 +787,149 @@ app.post('/import', forceSSL, ensureAuthenticated, function(req, res){
         body = body.slice(0, body.length - (boundary.length + 8));
         console.log('final file size: ' + body.length);
 
-        var suffix = '.json';
-        if(filename.substr(filename.length - suffix.length, suffix.length) !== suffix){
-            console.log('wrong filetype: ' + filename );
-            res.redirect('/');
-            return;
-        }
+        var fileNameParts = filename.split('.');
+        var fileNameSuffix = fileNameParts[fileNameParts.length-1];
+        console.log('fileNameSuffix: ' + fileNameSuffix);
 
-        var importJson = JSON.parse(body);
-
-        //Add Set to Database
         var user = req.session.passport.user;
         if(_.isArray(user)) user = _.first(req.session.passport.user);
 
-        var time = new Date().getTime();
+        switch (fileNameSuffix) {
+            case 'csv':
+                var csvConverter=new Converter();
 
-        var data = {};
-        data.owner = user.username;
-        data.name = sanitizer.sanitize(importJson.info.name);
-        data.description = sanitizer.sanitize(importJson.info.description);
-        data.visibility = sanitizer.sanitize(importJson.info.visibility);
-        data.category = sanitizer.sanitize(importJson.info.category);
-        data.cardCnt = parseInt(sanitizer.sanitize(importJson.info.cardCnt));
-        data.rating = (importJson.info.rating === 'true');
-        data.type = "set";
-        data.created = sanitizer.sanitize(time);
+                csvConverter.fromString(body,function(err,resultJson){
+                    if (err){
+                        //err handle
+                        console.log('csvConverter error: ' + err);
+                        return;
+                    }
 
-        db.insert(
-            data,
-            function(err, body, header){
-                if(err) {
-                    console.log('[db.insert] ', err.message);
-                    return;
-                }
-                db.get(body.id, { revs_info: false }, function(err, body) {
-                    if (!err){
-                        var setId = body._id;
+                    console.log('csvConverter finished: ');
+                    console.log(resultJson);
 
-                        //Add Cards to set
-                        var owner = user.username;
-                        for(var i = 0; i < importJson.cards.length; i++){
+                    var importJson = {};
 
-                            var card = importJson.cards[i];
-                            if(!(card.front.text && card.back.text)) res.send(400);
+                    importJson.info = {};
+                    importJson.info.name = resultJson[0].info.name;
+                    importJson.info.description = resultJson[0].info.description;
+                    importJson.info.visibility = resultJson[0].info.visibility;
+                    importJson.info.category = resultJson[0].info.category;
+                    importJson.info.cardCnt = resultJson[0].info.cardCnt;
+                    importJson.info.rating = resultJson[0].info.rating;
 
-                            var newCard = {};
-                            newCard.created = time;
-                            newCard.owner = owner;
-                            newCard.setId = setId;
-                            newCard.front = {};
-                            newCard.front.text = sanitizer.sanitize(card.front.text);
-                            newCard.front.text_plain = sanitizer.sanitize(card.front.text_plain);
-                            newCard.front.picture = (card.front.picture) ? sanitizer.sanitize(card.front.picture) : '';
-                            newCard.front.video = sanitizer.sanitize(card.front.video);
-                            newCard.back = {};
-                            newCard.back.text = sanitizer.sanitize(card.back.text);
-                            newCard.back.text_plain = sanitizer.sanitize(card.back.text_plain);
-                            newCard.back.picture = (card.back.picture) ? sanitizer.sanitize(card.back.picture) : '';
-                            newCard.back.video = sanitizer.sanitize(card.back.video);
-                            newCard.type = "card";
-                            console.log(newCard);
-                            db.insert(
-                                newCard,
-                                function(err, body, header){
-                                    if(err) {
-                                        console.log('[db.insert] ', err.message);
-                                        return;
-                                    }
-                                    db.get(body.id, { revs_info: false }, function(err, body) {
-                                        if (!err) {
+                    importJson.cards = [];
+                    for(var i=0; i<resultJson.length; i++){
+                        var newCard = {};
+                        newCard.front = {};
+                        newCard.front.text = resultJson[i].cards.front.text;
+                        newCard.front.text_plain = resultJson[i].cards.front.text_plain;
+                        newCard.front.picture = resultJson[i].cards.front.picture;
+                        newCard.front.video = resultJson[i].cards.front.video;
+                        newCard.back = {};
+                        newCard.back.text = resultJson[i].cards.back.text;
+                        newCard.back.text_plain = resultJson[i].cards.back.text_plain;
+                        newCard.back.picture = resultJson[i].cards.back.picture;
+                        newCard.back.video = resultJson[i].cards.back.video;
+                        importJson.cards.push(newCard);
+                    }
 
-                                        }
-                                    });
-                                }
-                            );
+                    addSetToDatabase(user, importJson, function(err, setId){
+                        if(!err){
+                            res.redirect('/#set/details/'+setId);
                         }
+                    });
+                });
+                break;
+
+            case 'json':
+                var importJson = JSON.parse(body);
+                console.log('parsed Json: ' + importJson);
+
+                addSetToDatabase(user, importJson, function(err, setId){
+                    if(!err){
                         res.redirect('/#set/details/'+setId);
                     }
                 });
-            }
-        );
+
+                break;
+
+            default:
+                console.log('wrong filetype: ' + fileNameSuffix );
+                res.redirect('/');
+                return;
+        }
     })
 });
+
+var addSetToDatabase = function(user, importJson, callback){
+    var time = new Date().getTime();
+    var data = {};
+    data.owner = user.username;
+    data.type = "set";
+    data.created = sanitizer.sanitize(time);
+    data.name = sanitizer.sanitize(importJson.info.name);
+    data.description = sanitizer.sanitize(importJson.info.description);
+    data.visibility = sanitizer.sanitize(importJson.info.visibility);
+    data.category = sanitizer.sanitize(importJson.info.category);
+    data.cardCnt = parseInt(sanitizer.sanitize(importJson.info.cardCnt));
+    data.rating = (importJson.info.rating === 'true');
+
+    db.insert(
+        data,
+        function(err, body, header){
+            if(err) {
+                console.log('[db.insert] ', err.message);
+                return;
+            }
+            db.get(body.id, { revs_info: false }, function(err, body) {
+                if (!err){
+                    var setId = body._id;
+
+                    //Add Cards to set
+                    var owner = user.username;
+                    for(var i = 0; i < importJson.cards.length; i++){
+
+                        var card = importJson.cards[i];
+                        if(!(card.front.text && card.back.text)) res.send(400);
+
+                        var newCard = {};
+                        newCard.created = time;
+                        newCard.owner = owner;
+                        newCard.setId = setId;
+                        newCard.front = {};
+                        newCard.front.text = sanitizer.sanitize(card.front.text);
+                        newCard.front.text_plain = sanitizer.sanitize(card.front.text_plain);
+                        newCard.front.picture = (card.front.picture) ? sanitizer.sanitize(card.front.picture) : '';
+                        newCard.front.video = sanitizer.sanitize(card.front.video);
+                        newCard.back = {};
+                        newCard.back.text = sanitizer.sanitize(card.back.text);
+                        newCard.back.text_plain = sanitizer.sanitize(card.back.text_plain);
+                        newCard.back.picture = (card.back.picture) ? sanitizer.sanitize(card.back.picture) : '';
+                        newCard.back.video = sanitizer.sanitize(card.back.video);
+                        newCard.type = "card";
+                        console.log(newCard);
+                        db.insert(
+                            newCard,
+                            function(err, body, header){
+                                if(err) {
+                                    console.log('[db.insert] ', err.message);
+                                    return;
+                                }
+                                db.get(body.id, { revs_info: false }, function(err, body) {
+                                    if (!err) {
+
+                                    }
+                                });
+                            }
+                        );
+                    }
+                    callback(null, setId);
+                }
+            });
+        }
+    );
+};
 
 app.get('/user/:username', forceSSL, ensureAuthenticated, function(req, res){
   db.view('users', 'by_username', { key: req.params.username }, function(err, body) {

@@ -22,7 +22,8 @@
 		"mocha": "~1.10.0",
 		"selenium-webdriver": "~2",
 		"wd": "~0.3",
-		"uuid-js": "~0.7"
+		"uuid-js": "~0.7",
+        "csvtojson": "*"
 	},
 	"subdomain": "thmcards",
 	"engines": {
