@@ -16,7 +16,7 @@ Cards.module('Set.List', function(List, App) {
 		events: {
 			"click a": "linkClicked"
 		},
-		initialize: function() {
+		initialize: function() {      		  
 			this.collection.fetch();
 		},
 		linkClicked: function(ev){

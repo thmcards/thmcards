@@ -3,11 +3,13 @@ Cards.module('Set', function(Set, App){
 		showListLayout: function(){
 			var setLayout = new Cards.Set.List.Layout();
 			Cards.mainRegion.show(setLayout);
-
+            
 			var sets = new Cards.Entities.SetCollection();
-			var listView = new Cards.Set.List.ListView({ collection: sets });
+            sets.sort();
+                    
+			var listView = new Cards.Set.List.ListView({ collection: sets });			
 			setLayout.listRegion.show(listView);
-
+                        
 			var sideBarView = new Cards.Set.List.SideBar.SideBarView({ collection: sets });
 			setLayout.sideBarRegion.show(sideBarView);
 		},
@@ -226,7 +228,6 @@ Cards.module('Set', function(Set, App){
 
 function FilteredCollection(collection, options){
     var filtered = new collection.constructor(collection.models, options);
-
     filtered.filter = function(criteria){
         var items;
         if (criteria){
@@ -261,6 +262,6 @@ function FilteredCollection(collection, options){
     collection.on("reset", function(){
         filtered.reset(collection.models);
     });
-
+    console.log(filtered);
     return filtered;
 }

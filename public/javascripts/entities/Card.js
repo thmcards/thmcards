@@ -20,7 +20,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 		url: function() {
 			return "/set/" + this.setId + "/card";
 		},
-		constructor: function(models, options){
+		constructor: function(models, options){		  
 			this.setId = options.setId;
 			Backbone.Collection.apply(this, arguments);
 		}

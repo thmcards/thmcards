@@ -2,14 +2,13 @@ Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Set = Backbone.Model.extend({
 		url: function() { 
-			if(this.get("id")) {
+			if(this.get("id")) {			    
 				return "/set/" + this.get("id")
-			} else {
+			} else {			    
 				return "/set";
 			}
 		},
 		validate: function (attrs) {
-			console.log(attrs);
 			var errors = [];
 	        if (!attrs.name) {
 	            errors.push({name: 'name', message: 'Bitte Namen angeben.'});
@@ -22,15 +21,36 @@ Cards.module('Entities', function(Entities, App, Backbone){
 	        }
 	        return errors.length > 0 ? errors : false;
 	    },
-		idAttribute: "_id"
+		idAttribute: "_id"		
 	});
 
-	Entities.SetCollection = Backbone.Collection.extend({
+	Entities.SetCollection = Backbone.Collection.extend({	   
 		model: Entities.Set,
-		url: "/set",
-		comparator: function(set) {
-			return set.get("name");
-		}
+		url: "/set",		
+        initialize: function() {                        
+            //console.log("initialize");                    
+            //this._orderByDescription = this.comparator;                                   
+        },
+        comparator: function(set) {                        
+            //console.log("comparator");
+            			
+			//return set.get("name");
+            return set.get("description");            	
+		},
+		orderByCategory: function() {
+		    this.comparator = this._orderByCategory;
+		    this.sort();            
+        },
+        _orderByCategory: function(set) {
+            return set.get("category");
+        },
+        orderByDescription: function() {
+            this.comparator = this._orderByDescription;
+            this.sort();                        
+        },
+        _orderByDescription: function(set) {          
+            return set.get("description");            
+        }
 	});
 
 	Entities.SetLearnedCollection = Backbone.Collection.extend({

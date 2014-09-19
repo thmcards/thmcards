@@ -5,7 +5,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 	Entities.CategoryCollection = Backbone.Collection.extend({
 		model: Entities.Category,
 		url: "/set/category",
-		comparator: function(set) {
+		comparator: function(set) {		
 			return set.get("name");
 		}
 	});

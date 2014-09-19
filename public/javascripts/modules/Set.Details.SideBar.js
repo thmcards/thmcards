@@ -255,7 +255,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			App.trigger('set:rating', this.model.get("id"));
 		},
 		onClose: function(){
-			console.log("asd");
+			//console.log("asd");
 			$(".btn-setDelete").off('clickout');
 		},
 		onRender: function(){

@@ -271,4 +271,3 @@ function FilteredCollection(collection, options){
         
     return filtered;
 }
-
