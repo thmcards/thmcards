@@ -25,6 +25,7 @@ var express = require('express')
 //Wenn auf CloudControl
 if(process.env.COUCH_URL){
     nconf.set('couchdb', process.env.COUCH_URL);
+    nconf.set('cas_callback', process.env.CAS_CALLBACK_URL);
 }
 var nano = require('nano')(nconf.get('couchdb'));
 db = nano.use('thmcards');
