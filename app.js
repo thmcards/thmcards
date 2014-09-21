@@ -373,6 +373,16 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+passport.use(new (require('passport-cas').Strategy)({
+    ssoBaseURL: 'https://cas.thm.de/cas',
+    serverBaseURL: nconf.get('cas_callback'),
+    serviceURL: '/auth/cas'
+}, function(login, done) {
+    var profile = {provider:"cas", username:login};
+    return User.findOrCreate(profile, done);
+}));
+
+
 app.get('/login', forceSSL, function(req, res) {
   if(req.isAuthenticated()) res.redirect('/'); 
 
@@ -431,6 +441,36 @@ app.get('/auth/google/callback',
     }
     res.redirect('/');
   }
+);
+
+app.get('/auth/cas',
+    function(req, res, next) {
+        passport.authenticate('cas', function (err, user, info) {
+            if (err) {
+                return next(err);
+            }
+
+            if (!user) {
+                req.session.messages = info.message;
+                return res.redirect('/login');
+            }
+
+            req.logIn(user, function (err) {
+                if (err) {
+                    return next(err);
+                }
+
+                req.session.messages = '';
+                if(_.has(res.req, "user")) {
+                    var user = res.req.user;
+                    if(_.isArray(user)) user = _.first(user);
+                    redeemLoginXPoints(user.username);
+                    checkBadgeStammgast(user.username, res.sessionID);
+                }
+                return res.redirect('/');
+            });
+        })(req, res, next);
+    }
 );
 
 app.get('/logout', forceSSL, function(req, res){
