@@ -30,11 +30,19 @@ Cards.module('Entities', function(Entities, App, Backbone){
         initialize: function() {                                                                         
         },
         sort_key: 'name',
-        comparator: function(set) {                                                           
-            return set.get(this.sort_key).toLowerCase();                 	
+        direction: 'down',
+        comparator: function(set) {
+            if(this.direction == "up"){                
+                return String.fromCharCode.apply(String, _.map(set.get(this.sort_key).toLowerCase().split(""), function (c) {
+                    return 0xffff - c.charCodeAt();
+                }));    
+            } else {                
+                return set.get(this.sort_key).toLowerCase();    
+            }                         	
 		},
-		sortByField: function(fieldname){
+		sortByField: function(fieldname, direction){
             this.sort_key = fieldname;
+            this.direction = direction;
             this.sort();
         }
 	});

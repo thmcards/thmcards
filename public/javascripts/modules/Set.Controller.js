@@ -9,12 +9,8 @@ Cards.module('Set', function(Set, App){
             if(!fieldname){
                 fieldname = "name";   
             }
-            sets.sortByField(fieldname);
-            
-            if(direction == "up"){
-                //change Reihenfolge von sets                
-            }
-                    
+            sets.sortByField(fieldname, direction);
+                                                               
 			var listView = new Cards.Set.List.ListView({ collection: sets });			
             setLayout.listRegion.show(listView);
 			listView.render();
