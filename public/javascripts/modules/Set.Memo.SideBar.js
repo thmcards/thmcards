@@ -24,7 +24,7 @@ Cards.module("Set.Memo.SideBar", function(SideBar, App) {
 			console.log(this.model);
 		},
 		onRender: function() {
-
+			i18ninit();
 		}
 	});
 });

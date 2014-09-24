@@ -2,12 +2,18 @@ Cards.module('Set.List', function(List, App) {
 	List.SetEmptyView = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
 		template: "#set-list-empty",
-		className: "empty-list"
+		className: "empty-list",
+		onRender: function(){
+			i18ninit();
+		}
 	});
 	List.SetLearnedEmptyView = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
 		template: "#set-list-learned-empty",
-		className: "empty-list"
+		className: "empty-list",
+		onRender: function(){
+			i18ninit();
+		}
 	});
 	List.SetItemView = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
@@ -19,7 +25,7 @@ Cards.module('Set.List', function(List, App) {
 			ev.preventDefault();
 			ev.stopPropagation();
 			console.log("link");
-			
+
 			App.trigger("set:details", this.model.get("_id"));
 		}
 	});
@@ -42,7 +48,7 @@ Cards.module('Set.List', function(List, App) {
 				} else {
 					that.emptyView = List.SetEmptyView;
 				}
-			});			
+			});
 			this.collection.fetch();
 		},
 		newSet: function() {

@@ -9,7 +9,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		switchToCardLayout: function(ev) {
 			if (!$('#btnToCardLayout').hasClass("active")) {
 				App.trigger("set:details", this.model.get("_id"));
-			}		
+			}
 		},
 		switchToListLayout: function(ev) {
 			if (!$('#btnToListLayout').hasClass("active")) {
@@ -19,17 +19,21 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		initialize: function () {
     		_.bindAll(this);
     		this.model.on('change', this.render);
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	}),
 	SideBar.RatingsView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-rating",
 		className: "well well-sm sidebar-nav",
 		onRender: function() {
+			i18ninit();
 			var that = this;
 
 			$.get('/rating/permission/'+this.model.get('setId'), function(res){
 				console.log("perm", res.permission);
-				that.$("#raty").raty({ 
+				that.$("#raty").raty({
 					score: function() {
 				      return $(this).attr('data-score');
 				    },
@@ -70,8 +74,8 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 							var lgth = $.trim($('#ratingModal').find('textarea').val()).length;
 							if(lgth >= 60) {
 								$('#ratingModal').find('button.btn-primary').button('loading');
-								var ratingObj = { 	
-													value: rating, 
+								var ratingObj = {
+													value: rating,
 													comment: $('#ratingModal').find('textarea').val()
 											 	};
 
@@ -109,7 +113,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		template: "#set-details-controls",
 		className: "well well-sm sidebar-nav",
 		ui: {
-			btnAdd: "a.saveSet", 
+			btnAdd: "a.saveSet",
 			inputSetName: "input[type=text]",
 			modalView: "#editSetModal",
 			modalBtnSave: "#editSetModal button.btn-primary",
@@ -136,12 +140,12 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			this.ui.modalInputName.val(_.unescape(this.model.get("name")));
 			this.ui.modalInputDescription.val(_.unescape(this.model.get("description")));
 			this.ui.modalInputCategory.val(_.unescape(this.model.get("category")));
-			
+
 			if (this.model.get("visibility") === "public") {
 					$("#editSetModal .btn-group > label.private").removeClass("active");
 					$("#editSetModal .btn-group > label.public").addClass("active");
 			}
-			
+
 			if (this.model.get("rating") === false) {
 				console.log("RATING");
 					$("#editSetModal .btn-group-rating > label.rating-true").removeClass("active");
@@ -171,7 +175,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 			var rating = _.escape($("#editSetModal .btn-group-rating > label.active > input").val());
 
 			this.model.set({
-					name: name, 
+					name: name,
 					description: description,
 					visibility: visibility,
 					category: category,
@@ -208,7 +212,7 @@ Cards.module("Set.Details.SideBar", function(SideBar, App) {
 		        var helptext = this.$('span.' + error.name);
 		        helptext.text(error.message);
 		    }, this);
-		}, 
+		},
 		hideErrors: function () {
 			console.log("hideerrors");
 			this.$('.help-block').text('');

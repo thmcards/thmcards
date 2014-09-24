@@ -1,0 +1,38 @@
+language: node_js
+node_js:
+- "0.10"
+#- "0.8"
+#- "0.6"
+env:
+  global:
+    # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
+    - SAUCE_USERNAME=Kadrei
+    - secure: ajMos61m3dePhYaNTzy5Dfgpd2gH560PAlSV53k9/lKLSx7yg0kTCAlIlAWrZPFVF37O4GNQR2nPP9HuB6Lixo6K84UpYI97+JKZ5p3VfiFMsHIz9A9ADcewlCAmFh8PgsmX0gZPo2ZTtNBxqTbwRfU1RUXNWstR4Qc6Z0IGMIg=
+  matrix:
+    #- "BROWSER='firefox::Windows 7'"
+    - "BROWSER='chrome::Windows 7'"
+services:
+  - couchdb
+before_install:
+  # Install tools required for GUI testing
+  - "gem install selenium-webdriver"
+  - "curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash"
+  # Setup CouchDB
+  - "python createviews.py"
+before_script:
+  # Download dependencies, install packages, run server
+  - "npm -g install forever"
+  - "forever start app.js"
+script:
+  # Run tests
+  - "ruby saucelabs.rb"
+deploy:
+  provider: cloudcontrol
+  email: benedikt.kusemann@freenet.de
+  password:
+    secure: "EvevztK2IaWS9iu92IIsV3r1egc0ebqc9i/a/s6bgLnurcPrQtGdXuabXjL6lC/VJFAQGVjg+ZbcuYAwcY7ALx4Nl0HoAn4mIeapLIlarZGH5by/pIMasE2C0JABUSdpTbW3SNu28QK90SlXoqgph/v5yTuiJ+wrc6IZf5/2DIw="
+  deployment: cards/default
+  on:
+    repo: thmcardsk3/default
+addons:
+  sauce_connect: true

@@ -8,13 +8,19 @@ Cards.module('Set.Memo', function(Memo, App) {
 		linkClicked: function(ev) {
 			ev.preventDefault();
 			console.log("link");
-			
+
 			//App.trigger("set:details", this.model.get("name").replace(/[^a-zA-Z0-9-_]/g, '_'), this.model.get("id"));
+		},
+		onRender: function(){
+			i18ninit();
 		}
-	});	
+	});
 	Memo.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-memo-item-empty",
-		className: "empty-item"
+		className: "empty-item",
+		onRender: function(){
+			i18ninit();
+		}
 	});
 
 	Memo.DetailsView = Backbone.Marionette.CompositeView.extend({
@@ -47,7 +53,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			this.showPictureModal(ev);
 		},
 		showAnswer: function(ev) {
-			
+
 			ev.preventDefault();
 			this.$el.find("div.cardcontent-back").show();
 			this.$el.find("div.rating-controls").show();
@@ -62,7 +68,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 						this.$el.find("a.cardcontent-back").show();
 					}
 				}
-			}	
+			}
 		},
 		rateAnswer: function(ev) {
 			var rating = _.escape($(ev.currentTarget).attr("data-id"));
@@ -73,7 +79,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			var that = this;
 
 			var lastActiveItem = this.$el.find("div.item").index(this.$el.find("div.item.active"));
-			App.on("cardModel:saved", function(val){				
+			App.on("cardModel:saved", function(val){
 				that.$el.find("div.item").removeClass("active");
 				var activeCard = that.$el.find("div.item").get(lastActiveItem);
 				$(activeCard).addClass("active");
@@ -84,13 +90,13 @@ Cards.module('Set.Memo', function(Memo, App) {
 			var persCard;
 			var type;
 
-			if(!_.isEmpty(model.get("persCard"))) {	
+			if(!_.isEmpty(model.get("persCard"))) {
 				if(_.isArray(model.get("persCard"))) {
 					persCard = _.first(model.get("persCard"));
 				} else {
 					persCard = model.get("persCard");
 				}
-				persCard.value.last_rated = rating;				
+				persCard.value.last_rated = rating;
 				model['persCard'] = persCard;
 				model.set({persCard: persCard});
 				type = 'put';
@@ -112,7 +118,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				type: type,
 				success: function(){
 					console.log("success" + cardId);
-				
+
 					that.$el.find("div.cardcontent-back").hide();
 					that.$el.find("div.rating-controls").hide();
 					that.$el.find("button.show-answer").removeClass("disabled");
@@ -124,7 +130,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 							that.collection.remove(that.collection.get(cardId));
 						} else {
 							App.trigger("cardModel:saved");
-							that.$el.find(":first-child").carousel("next");									
+							that.$el.find(":first-child").carousel("next");
 						}
 					} else {
 						App.trigger("cardModel:saved");
@@ -155,7 +161,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 			});
 		},
 		showPictureModal: function(ev) {
-			var cardId = $("div.item.active").children(".twosided").attr("data-id");	
+			var cardId = $("div.item.active").children(".twosided").attr("data-id");
 			var actualCard = this.collection.get(cardId);
 			var cardContent = null;
 
@@ -189,13 +195,15 @@ Cards.module('Set.Memo', function(Memo, App) {
 					} else {
 						this.$el.find("a.cardcontent-front").hide();
 					}
-				}	
+				}
 			}
 		},
 		initialize: function() {
-			
+
 		},
-		onRender: function() {	
+		onRender: function() {
+			i18ninit();
+
 			var that = this;
 
 			$("div.learn-startscreen").hide();
@@ -227,7 +235,7 @@ Cards.module('Set.Memo', function(Memo, App) {
 				var actualCard = this.collection.get(cardId);
 				if(actualCard.get('front').picture){
 					this.$el.find("a.cardcontent-front").show();
-				}		
+				}
 			}
 			card.find("div span.setname").text(this.model.get("name"));
 		},

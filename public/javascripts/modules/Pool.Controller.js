@@ -6,7 +6,7 @@ Cards.module('Pool', function(Pool, App){
 
 			var categories = new Cards.Entities.CategoryCollection();
 			var categoryView = new Cards.Pool.CategoryView({ collection: categories });
-			
+
 			poolLayout.categoryRegion.show(categoryView);
 		},
 		showPoolCategoryLayout: function(name){
@@ -15,9 +15,11 @@ Cards.module('Pool', function(Pool, App){
 
 			var categorySetCollection = new Cards.Entities.CategorySetCollection([], {category: name});
 			var categorySetView = new Cards.Pool.CategorySetView({ collection: categorySetCollection });
-			
+
 			poolLayout.categoryRegion.show(categorySetView);
 		},
+		onRender: function(){
+			i18ninit();
+		}
 	}
 });
-

@@ -8,6 +8,8 @@ Cards.module('Set.List', function(List, App) {
 		onRender: function(){
 			$("#navbar").children().removeClass("active");
 			$("#navbar-ownsets").addClass("active");
+
+			i18ninit();
 		}
 	});
 

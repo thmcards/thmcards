@@ -13,6 +13,9 @@ Cards.module('Profile', function(Profile, App) {
 			var setName = $(ev.currentTarget).text();
 
 			App.trigger("set:details", setName, setId);
+		},
+		onRender: function(){
+			i18ninit();
 		}
 
 	});
