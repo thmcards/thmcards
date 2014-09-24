@@ -644,9 +644,9 @@
     <script type="text/template" id="set-list">
       <thead class="set-list">
         <tr>
-          <th data-i18n="set-list.name"></th> 
-          <th width="25%" data-i18n="set-list.category"></th>
-          <th width="40%" data-i18n="set-list.description"></th>
+          <th><span data-i18n="set-list.name"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('name');">&dArr;</a></th> 
+          <th width="25%"><span data-i18n="set-list.category"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('category');">&dArr;</a></th>
+          <th width="40%"><span data-i18n="set-list.description"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('description');">&dArr;</a></th>
         </tr>
       </thead>
       <tbody id="cardSetView"></tbody>

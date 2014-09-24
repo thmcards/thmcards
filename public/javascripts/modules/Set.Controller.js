@@ -1,15 +1,17 @@
 Cards.module('Set', function(Set, App){
 	Set.Controller = {
-		showListLayout: function(){
+		showListLayout: function(fieldname){
+		  
 			var setLayout = new Cards.Set.List.Layout();
 			Cards.mainRegion.show(setLayout);
-            
-			var sets = new Cards.Entities.SetCollection();
-            sets.sort();
+                                         
+            var sets = new Cards.Entities.SetCollection();
+            sets.sortByField(fieldname);
                     
 			var listView = new Cards.Set.List.ListView({ collection: sets });			
-			setLayout.listRegion.show(listView);
-                        
+            setLayout.listRegion.show(listView);
+			listView.render();
+                       
 			var sideBarView = new Cards.Set.List.SideBar.SideBarView({ collection: sets });
 			setLayout.sideBarRegion.show(sideBarView);
 		},
@@ -262,6 +264,5 @@ function FilteredCollection(collection, options){
     collection.on("reset", function(){
         filtered.reset(collection.models);
     });
-    console.log(filtered);
     return filtered;
 }

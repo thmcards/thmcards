@@ -167,6 +167,7 @@ Cards.on("initialize:after", function() {
 	console.log("THMcards has started!");
 });
 
+
 /* ROUTING EVENTS */
 Cards.on("pool", function(){
 	Cards.navigate("pool");

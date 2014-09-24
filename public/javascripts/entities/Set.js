@@ -2,7 +2,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.Set = Backbone.Model.extend({
 		url: function() { 
-			if(this.get("id")) {			    
+			if(this.get("id")) {                	    
 				return "/set/" + this.get("id")
 			} else {			    
 				return "/set";
@@ -26,30 +26,16 @@ Cards.module('Entities', function(Entities, App, Backbone){
 
 	Entities.SetCollection = Backbone.Collection.extend({	   
 		model: Entities.Set,
-		url: "/set",		
-        initialize: function() {                        
-            //console.log("initialize");                    
-            //this._orderByDescription = this.comparator;                                   
+		url: "/set",        		
+        initialize: function() {                                                                         
         },
-        comparator: function(set) {                        
-            //console.log("comparator");
-            			
-			//return set.get("name");
-            return set.get("description");            	
+        sort_key: 'name',
+        comparator: function(set) {                                   
+            return set.get(this.sort_key);                 	
 		},
-		orderByCategory: function() {
-		    this.comparator = this._orderByCategory;
-		    this.sort();            
-        },
-        _orderByCategory: function(set) {
-            return set.get("category");
-        },
-        orderByDescription: function() {
-            this.comparator = this._orderByDescription;
-            this.sort();                        
-        },
-        _orderByDescription: function(set) {          
-            return set.get("description");            
+		sortByField: function(fieldname){
+            this.sort_key = fieldname;
+            this.sort();
         }
 	});
 
