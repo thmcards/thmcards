@@ -30,8 +30,8 @@ Cards.module('Entities', function(Entities, App, Backbone){
         initialize: function() {                                                                         
         },
         sort_key: 'name',
-        comparator: function(set) {                                   
-            return set.get(this.sort_key);                 	
+        comparator: function(set) {                                                           
+            return set.get(this.sort_key).toLowerCase();                 	
 		},
 		sortByField: function(fieldname){
             this.sort_key = fieldname;
