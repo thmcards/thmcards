@@ -18,6 +18,7 @@ before_install:
 before_script:
   # Download dependencies, install packages, run server
   - "npm -g install forever se-interpreter"
+  - "npm install"
   - "node app.js"
 #  - "forever start app.js"
 script:
