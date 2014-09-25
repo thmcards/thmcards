@@ -1,0 +1,59 @@
+{
+	"type": "script",
+	"seleniumVersion": "2",
+	"formatVersion": 2,
+	"steps": [
+		{
+			"type": "verifyTextPresent",
+			"text": "Cardset for Tests"
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "link text",
+				"value": "Cardset for Tests"
+			}
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "set-details-controls-btn-editCard"
+			}
+		},
+		{
+			"type": "verifyElementPresent",
+			"locator": {
+				"type": "id",
+				"value": "cardSetDelete"
+			}
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "cardSetDelete"
+			}
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "cardSetDelete"
+			}
+		},
+		{
+			"type": "verifyElementPresent",
+			"locator": {
+				"type": "id",
+				"value": "setListEmpty"
+			}
+		}
+	],
+	"data": {
+		"configs": {},
+		"source": "none"
+	},
+	"inputs": [],
+	"timeoutSeconds": 10
+}

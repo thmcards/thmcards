@@ -1,0 +1,83 @@
+{
+	"type": "script",
+	"seleniumVersion": "2",
+	"formatVersion": 2,
+	"steps": [
+		{
+			"type": "get",
+			"url": "http://localhost:3000/"
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "link text",
+				"value": "Cardset for Tests"
+			}
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "set-details-controls-btn-newCard"
+			}
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "css selector",
+				"value": ".fronttext .md-editor .md-input"
+			}
+		},
+		{
+			"type": "sendKeysToElement",
+			"locator": {
+				"type": "css selector",
+				"value": ".fronttext .md-editor .md-input"
+			},
+			"text": "This is the text from new card, which must be visible after saving!!!"
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "css selector",
+				"value": ".backtext .md-editor .md-input"
+			}
+		},
+		{
+			"type": "sendKeysToElement",
+			"locator": {
+				"type": "css selector",
+				"value": ".backtext .md-editor .md-input"
+			},
+			"text": "Not important for this test."
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "cardNewCard2"
+			}
+		},
+		{
+			"type": "waitForElementPresent",
+			"locator": {
+				"type": "css selector",
+				"value": ".item.active"
+			}
+		},
+		{
+			"type": "verifyText",
+			"locator": {
+				"type": "css selector",
+				"value": ".item.active .box .block .cardContent.centered.front.active p"
+			},
+			"text": "This is the text from new card, which must be visible after saving!!!"
+		}
+	],
+	"data": {
+		"configs": {},
+		"source": "none"
+	},
+	"inputs": [],
+	"timeoutSeconds": 10
+}
