@@ -25,7 +25,8 @@ Cards.module('Pool', function(Pool, App) {
 		template: "#pool-category-set-list",
 		itemView: Pool.CategorySetItemView,
 		itemViewContainer: "tbody",
-		initialize: function() {
+		initialize: function() {		  
+            this.collection.on('sort', this.render, this);
 			this.collection.fetch();
 		},
 		onRender: function(){

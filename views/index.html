@@ -90,9 +90,9 @@
     <script type="text/template" id="pool-category-set-list" class="pool">
       <thead>
         <tr>
-          <th data-i18n="pool.name"></th>
-          <th data-i18n="pool.description"></th>
-          <th data-i18n="pool.created"></th>
+          <th><span data-i18n="pool.name"></span> <a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('name', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('name', 'up');">&uArr;</a></th>
+          <th><span data-i18n="pool.description"></span> <a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('description', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('description', 'up');">&uArr;</a></th>
+          <th><span data-i18n="pool.created"></span> <a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('created', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('created', 'up');">&uArr;</a></th>
         </tr>
       </thead>
       <tbody id="cardSetsPool"></tbody>
@@ -173,8 +173,8 @@
         <div class="listhead">
           <thead>
             <tr>
-              <th width="45%" data-i18n="foreside"></th>
-              <th width="45%" data-i18n="backside"></th>
+              <th width="45%"><span data-i18n="foreside"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('front', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('front', 'up');">&uArr;</a></th>
+              <th width="45%"><span data-i18n="backside"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('back',  'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('back',  'up');">&uArr;</a></th>
               <th width="10%" data-i18n="options"></th>
             </tr>
           </thead>
