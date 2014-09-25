@@ -10,33 +10,26 @@ env:
     - secure: VMN65kmbQplleR+rOPev82PATLT3csO3gcNyBhQp9XNFx/t9892sef42bZbisahW/LjZl4sLcAV+IJEQEDwhci8gLC1TJ9ps6caMcgOlPx5pic8GoS8SAFszfP6IHhN2fSrh9UzjvqV6DxQdbJnBK5UnboWFE2J01sYx5p2nd5c=
     ## Access-Key
     - secure: XJrcF7KTyWZ1Kd7peMRleTklvNbRkqS05EgV8HxmHVWeCLC2L3RVS18WrLPkbs88CS42OSWWXpB+oZJQul81z3RQHQQo7M0zqw43rYnyv0m20WS0Ys5+ldsRg9CK56oEnvDK2Gjc9eu5uCb72/5hG026JyO80f3ywCYSTVRqni4=
-
-  matrix:
-    #- "BROWSER='firefox::Windows 7'"
-    - "BROWSER='chrome::Windows 7'"
 services:
   - couchdb
 before_install:
-  # Install tools required for GUI testing
-  - "gem install selenium-webdriver"
-  - "curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash"
   # Setup CouchDB
   - "python createviews.py"
 before_script:
   # Download dependencies, install packages, run server
-  - "npm -g install forever"
-  - "forever start app.js"
+  - "npm -g install forever se-interpreter"
+  - "node app.js"
 script:
   # Run tests
-  - "ruby saucelabs.rb"
+  - "se-interpreter tests/selenium-builder/se-interpreter-config.json"
 #deploy:
 #  provider: cloudcontrol
 #  email:
-#    secure: "PMxOnzO4j+1kaREs7mdkSc7l/DR3pTV5M8sh9IwaR3IVRowb3mzdDc64vhu3hUytDZrZlTcHoGuU+Ttj0y91Nd14YY2G8kPys6MuL49kjPEG50WDgwMv/P9wxG47OanFUf8wMzV1hw4uCgo6PGaVyEi5YNKbb2pkiQl2YtoZ9Ro="
+#    secure: "ToDo"
 #  password:
-#    secure: "dxk5ZJc1v5nup91r694Sjv/ouLwhBFvuXN2BeUx7P/PMF0v2r7P4fjpFOh08GWbAHqN8qXUiV+bfhlfU0yb6l8l80Lr2hzh5Z4SyiWnHMhS0CNWy+WkDVD3H7BKKQg/rT4cabl/6L313DHEVEqkPQp2d2aadl+ESpGI2Zkwosxw="
-#  deployment: cards/default
+#    secure: "ToDo"
+#  deployment: flashcards4rafaelka/default
 #  on:
-#    repo: prinzmajus/thmcards
-addons:
-  sauce_connect: true
+#    repo: RafaelKa/arsnova-flashcards
+#addons:
+#  sauce_connect: true
