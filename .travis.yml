@@ -18,9 +18,7 @@ before_install:
 before_script:
   # Download dependencies, install packages, run server
   - "npm -g install forever se-interpreter"
-  - "npm install"
-  - "node app.js"
-#  - "forever start app.js"
+  - "forever start app.js"
 script:
   # Run tests
   - "se-interpreter tests/selenium-builder/se-interpreter-config.json"
