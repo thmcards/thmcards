@@ -80,6 +80,7 @@ Cards.module('Set.Details', function(Details, App) {
 
 			this.model.destroy({
 				success : function(resp){
+					Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = undefined;
 					console.log("gelöscht");
 					history.back();
 				},
