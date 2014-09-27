@@ -1,30 +1,13 @@
 Cards.module('Set.Learn', function(Learn, App) {
 	Learn.ItemView = Backbone.Marionette.ItemView.extend({
 		template: "#set-learn-item",
-		className: "item",
-		initialize: function() {
-            $(document).on('keyup', this.keyHandlerLearn);
-		},
+		className: "item",		
 		events: {
 			"click a": "linkClicked",
-			"click div.box": "cardClicked"
-		},
-		keyHandlerLearn: function(ev){
-            switch (ev.keyCode) {
-                case 13 :
-                    $('div.box').click();
-                break;
-                case 49 :
-                    $('button#know').click();
-                break;
-                case 50 :
-                    $('button#notknow').click();
-                break;
-            }
-        },
+			"click div.box": "cardClicked",
+		},		
 		cardClicked: function(ev) {
-			ev.preventDefault();
-
+			ev.preventDefault();            
 			var front = $(ev.currentTarget).find('div.front');
 			var back = $(ev.currentTarget).find('div.back');
 			var answerButtons = $("button.answer");
@@ -62,6 +45,19 @@ Cards.module('Set.Learn', function(Learn, App) {
 		ui: {
 			modalView: "#pictureModalLearn"
 		},
+		initialize: function() {
+			$(document).on('keyup', this.keyHandlerLearn);
+            var that = this;
+			App.on('filter:box', function(boxId) {
+				that.filterBox(boxId);
+			})
+			App.on('update:cardcount', function() {
+				that.updateCardcount();
+			})
+		},
+		remove: function(){
+            $(document).off('keyup', this.keyHandlerLearn);
+        },
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.card-success": "answeredCard",
@@ -69,6 +65,28 @@ Cards.module('Set.Learn', function(Learn, App) {
 			"click a.btn-showPictureModal": "showModal",
 			"click div.box": "checkForPicture"
 		},
+		keyHandlerLearn: function(ev){
+		    if(window.location.hash.indexOf("learn") != -1){    		    
+                switch (ev.keyCode) {
+                    //Turn card with ctrl key
+                    case 17 :                        
+                        $('div.active>div.box').click();                        
+                    break;
+                    //Mark card as known with arrow up
+                    case 38 :
+                        if($('#know').is(':visible')){                        
+                            $('#know').click();    
+                        }                        
+                    break;
+                    //Mark card as unknown with arrow down
+                    case 40 :
+                        if($('#notknow').is(':visible')){
+                            $('#notknow').click();
+                        }                        
+                    break;
+                }
+            }
+        },
 		cycleCarousel: function(ev) {
 			ev.preventDefault();
 
@@ -233,15 +251,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 				}
 			});
 		},
-		initialize: function() {
-			var that = this;
-			App.on('filter:box', function(boxId) {
-				that.filterBox(boxId);
-			})
-			App.on('update:cardcount', function() {
-				that.updateCardcount();
-			})
-		},
+		
 		filterBox: function(boxId) {
 			if(boxId != null) {
 				this.collection.filter(boxId);
@@ -291,7 +301,7 @@ Cards.module('Set.Learn', function(Learn, App) {
 
 			this.ui.modalView.modal('show');
 		},
-		checkForPicture: function(ev) {
+		checkForPicture: function(ev) {		
 			if(this.collection.length !== 0) {
 				var cardId = $("div.item.active").children(".box").attr("data-id");
 				var actualCard = this.collection.get(cardId);

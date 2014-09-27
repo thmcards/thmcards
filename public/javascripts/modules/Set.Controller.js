@@ -1,15 +1,19 @@
 Cards.module('Set', function(Set, App){
 	Set.Controller = {
 		showListLayout: function(fieldname, direction){
-		  
+		    
 			var setLayout = new Cards.Set.List.Layout();
 			Cards.mainRegion.show(setLayout);
-                                         
-            var sets = new Cards.Entities.SetCollection();
+           
             if(!fieldname){
-                fieldname = "name";   
+                fieldname = "name";
             }
-            sets.sortByField(fieldname, direction);
+            if(!direction){
+                direction = "down";
+            }
+                                          
+            var sets = new Cards.Entities.SetCollection();            
+            sets.sortByField(fieldname, direction);            
                                                                
 			var listView = new Cards.Set.List.ListView({ collection: sets });			
             setLayout.listRegion.show(listView);			

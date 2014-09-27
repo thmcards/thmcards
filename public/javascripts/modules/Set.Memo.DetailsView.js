@@ -32,37 +32,43 @@ Cards.module('Set.Memo', function(Memo, App) {
 			modalView: "#pictureModalMemo"
 		},
 		initialize: function() {		      
-            $(document).on('keyup', this.keyHandlerMemo);
+            $(document).on('keyup', this.keyHandlerMemo);          
 		},
+		remove: function(){
+            $(document).off('keyup', this.keyHandlerMemo);
+        },
 		events: {
 			"click button.show-answer": "showAnswer",
 			"click button.rate-answer": "rateAnswer",
-			"click a.btn-showPictureModal": "showModal",
+			"click a.btn-showPictureModal": "showModal"			
 		},
 		keyHandlerMemo: function(ev){
-            switch (ev.keyCode) {
-                case 13 :
-                    $('button.show-answer').click();
-                break;
-                //Bewertungen im Memo Modus (0-5)
-                case 48 :
-                    $('button#memoRate0').click();
-                break;
-                case 49 :
-                    $('button#memoRate1').click();
-                break;
-                case 50 :
-                    $('button#memoRate2').click();
-                break;
-                case 51 :
-                    $('button#memoRate3').click();
-                break;
-                case 52 :
-                    $('button#memoRate4').click();
-                break;
-                case 53 :
-                    $('button#memoRate5').click();
-                break;
+            if(window.location.hash.indexOf("memo") != -1){            	
+                switch (ev.keyCode) {
+                    //Turn card with ctrl key
+                    case 17 :                        
+                        $('button.show-answer').click();
+                    break;
+                    //Rating in Memo Mode (0-5)
+                    case 48 :
+                        $('button#memoRate0').click();
+                    break;
+                    case 49 :
+                        $('button#memoRate1').click();
+                    break;
+                    case 50 :
+                        $('button#memoRate2').click();
+                    break;
+                    case 51 :
+                        $('button#memoRate3').click();
+                    break;
+                    case 52 :
+                        $('button#memoRate4').click();
+                    break;
+                    case 53 :
+                        $('button#memoRate5').click();
+                    break;
+                }
             }
         },
 		cycleCarousel: function(ev) {

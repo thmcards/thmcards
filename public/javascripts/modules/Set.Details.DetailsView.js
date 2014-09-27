@@ -2,20 +2,12 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.ItemView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item",
 		className: "item",
-		initialize: function() {            
-            $(document).on('keyup', this.keyHandlerItem);
+		initialize: function() {          
 		},
 		events: {
 			"click a": "linkClicked",
 			"click div.box": "cardClicked"
 		},
-		keyHandlerItem: function(ev){
-            switch (ev.keyCode) {
-                case 13 :
-                    $('div.box').click();
-                break;
-            }
-        },
 		cardClicked: function(ev) {
 			ev.preventDefault();
 
@@ -60,6 +52,9 @@ Cards.module('Set.Details', function(Details, App) {
 		initialize: function() {            
             $(document).on('keyup', this.keyHandler);
 		},
+		remove: function(){
+            $(document).off('keyup', this.keyHandler);
+        },
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
@@ -70,14 +65,22 @@ Cards.module('Set.Details', function(Details, App) {
 			"click a.btn-deleteCard": "deleteClicked",
     		"click div.box": "checkForPicture"
 		},
-		keyHandler: function(ev){
-            switch (ev.keyCode) {
-                case 37 :
-                    $('#leftCarouselControl').click();                    
-                break;
-                case 39 :                    
-                    $('#rightCarouselControl').click();
-                break;
+		keyHandler: function(ev){		  
+		    if(window.location.hash.indexOf("details") != -1){            			        
+                switch (ev.keyCode) {
+                    //Turn card with ctrl key
+                    case 17 :                        
+                        $('div.active>div.box').click();
+                    break;
+                    //Go to previous card with arrow left
+                    case 37 :
+                        $('#leftCarouselControl').click();                    
+                    break;
+                    //Go to next card with arrow right
+                    case 39 :                    
+                        $('#rightCarouselControl').click();
+                    break;                    
+                }                
             }
         },
 		playMeteor: function(ev) {

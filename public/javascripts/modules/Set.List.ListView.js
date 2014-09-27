@@ -42,10 +42,7 @@ Cards.module('Set.List', function(List, App) {
 		},
 		initialize: function() {
 			var that = this;
-			
-			//this.collection.on('reset', this.render, this);
-            this.collection.on('sort', this.render, this);
-			
+									
             this.collection.bind("reset", function(col, opt) {
 				if(!_.isUndefined(opt) && _.has(opt, "learned")) {
 					that.emptyView = List.SetLearnedEmptyView;
@@ -54,7 +51,8 @@ Cards.module('Set.List', function(List, App) {
 				}
 			});
                		 
-			this.collection.fetch();   
+			this.collection.fetch();
+            this.collection.on('sort', this.render, this);   
 		},
 		newSet: function() {
 			$("button.saveSet").click();
