@@ -5,7 +5,7 @@ Cards.module('Entities', function(Entities, App, Backbone){
 	Entities.CategoryCollection = Backbone.Collection.extend({
 		model: Entities.Category,
 		url: "/set/category",
-		comparator: function(set) {
+		comparator: function(set) {		
 			return set.get("name");
 		}
 	});
@@ -18,6 +18,22 @@ Cards.module('Entities', function(Entities, App, Backbone){
 		constructor: function(models, options){
 			this.category = options.category;
 			Backbone.Collection.apply(this, arguments);
-		}
+		},
+		sort_key: 'name',
+        direction: 'down',
+        comparator: function(set) {           
+            if(this.direction == "up"){                            
+                return String.fromCharCode.apply(String, _.map(set.get(this.sort_key).toLowerCase().split(""), function (c) {
+                    return 0xffff - c.charCodeAt();
+                }));
+            } else {
+                return set.get(this.sort_key).toLowerCase();
+            }
+		},
+		sortByField: function(fieldname, direction){		      
+            this.sort_key = fieldname;
+            this.direction = direction;            
+            this.sort();
+        }
 	});
 });

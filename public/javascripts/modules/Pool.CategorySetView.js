@@ -13,6 +13,9 @@ Cards.module('Pool', function(Pool, App) {
 		setOwnerClicked: function(ev) {
 			ev.preventDefault();
 			App.trigger("profile", this.model.get("owner"));
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 
@@ -22,10 +25,12 @@ Cards.module('Pool', function(Pool, App) {
 		template: "#pool-category-set-list",
 		itemView: Pool.CategorySetItemView,
 		itemViewContainer: "tbody",
-		initialize: function() {
+		initialize: function() {		  
 			this.collection.fetch();
+			this.collection.on('sort', this.render, this);
 		},
 		onRender: function(){
+			i18ninit();
 			$("#pool-category-layout-headline").text(this.collection.category);
 		}
 	});

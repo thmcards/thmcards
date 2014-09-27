@@ -8,6 +8,9 @@ Cards.module('Profile', function(Profile, App) {
 			setRegion: "#profile-set-region",
 			badgeRegion: "#profile-badge-region",
 			scoreRegion: "#profile-score-region"
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });

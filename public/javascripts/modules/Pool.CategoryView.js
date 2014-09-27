@@ -10,6 +10,9 @@ Cards.module('Pool', function(Pool, App) {
 		linkClicked: function(ev){
 			ev.preventDefault();
 			App.trigger("pool:details", this.model.get("name"));
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 
@@ -22,6 +25,7 @@ Cards.module('Pool', function(Pool, App) {
 			this.collection.fetch();
 		},
 		onRender: function(){
+			i18ninit();
 			$("#pool-category-layout-headline").text("Pool");
 		}
 	});

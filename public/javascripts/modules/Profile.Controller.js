@@ -51,7 +51,7 @@ Cards.module('Profile', function(Profile, App){
 								var setCollection = new Backbone.Collection(data, { model: App.Entities.Set });
 								var setView = new Cards.Profile.SetView({ collection: setCollection });
 								profileLayout.setRegion.show(setView);
-								
+
 							})
 						}
 					}
@@ -62,6 +62,9 @@ Cards.module('Profile', function(Profile, App){
 			});
 
 
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	}
 });

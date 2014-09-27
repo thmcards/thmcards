@@ -3,8 +3,11 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		template: "#game-meteor-playcard",
 		className: "meteor-playcard",
 		events: {
+		},
+		onRender: function(){
+			i18ninit();
 		}
-	});	
+	});
 
 	Pitch.PitchView = Backbone.Marionette.CompositeView.extend({
 		itemView: Pitch.ItemView,
@@ -45,7 +48,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			this.cardsQueue = new Array();
 			this.pitch = '#meteor-pitch';
 			this.runGame = true;
-			
+
 			timer = {
 			    timers:{},
 			    inc: 0,
@@ -91,7 +94,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 			$("a.btn-danger").click();
 
-			if(this.lifes > 1) { 
+			if(this.lifes > 1) {
 				this.removeLife();
 
 				$('#meteor-answer-modal').on('show.bs.modal', function () {
@@ -138,7 +141,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		},
 		checkResult: function(answer) {
 			var answeredCard = _.find(this.cardsQueue, function(card){
-				
+
 				if(( (card.back.text_plain.toLowerCase() === answer.toLowerCase()) || (card.back.text_plain === answer) ) && card.onPitch == true) {
 					return true;
 				}
@@ -150,11 +153,11 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 				console.log(answeredCard.div.css('top').slice(0, -2), $(this.pitch).height() / 2);
 
 				if(answeredCard.div.css('top').slice(0, -2) <= ($(this.pitch).height() / 2)) {
-					this.addPoints(5);	
+					this.addPoints(5);
 				} else {
 					this.addPoints(3);
 				}
-				
+
 
 				this.addLife();
 
@@ -166,7 +169,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 						$(answeredCard.div).removeAttr("style");
 						answeredCard.onPitch = false;
 						answeredCard.div.hide();
-					}	
+					}
 				});
 			}
 
@@ -184,11 +187,11 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			var that = this;
 
 			var card = this.collection.get(cardId);
-			
+
 			var cardClone = card.pick('_id', 'front', 'back');
 			cardClone.identifier = cardClone._id+"_"+new Date().getTime();
 			cardClone.onPitch = false;
-			
+
 			var c = $("<div>").attr("data-id", cardClone._id).attr("data-identifier", cardClone.identifier).text(cardClone.front.text_plain)
 			c.addClass('meteor-playcard');
 			c.css("display", "none");
@@ -199,13 +202,13 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		},
 		run: function() {
 			var playcards = this.$el.find("div.playcardcontainer").find("span");
-			
+
 			var lastRandom = -1;
 			if(_.size(this.cardsQueue) < 10) {
 				var i = 0;
 				while(_.size(this.cardsQueue) < playcards.length) {
 					var random = Math.floor((Math.random()*this.collection.length));
-				
+
 					while(random == lastRandom) random = Math.floor((Math.random()*this.collection.length));
 
 					var cardId = this.collection.models[i].get("_id");
@@ -213,8 +216,8 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 					this.fillQueue(cardId);
 
 					console.log("size", _.size(this.cardsQueue));
-					lastRandom = random;	
-					i++;			
+					lastRandom = random;
+					i++;
 				}
 			}
 			console.log(this.cardsQueue.length);
@@ -224,7 +227,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			this.gameLoop = setInterval(function(){
 
 				if(that.runGame) {
-					
+
 					if(_.where(that.cardsQueue, {onPitch: true}).length < that.itemcnt) {
 
 						that.cardsQueue = _.shuffle(that.cardsQueue);
@@ -313,7 +316,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			ev.preventDefault();
 
 			var cards = _.where(this.cardsQueue, {onPitch: true});
-			
+
 			_.each(cards, function(card){
 				card.div.css("backgroundColor", "#ff0000");
 				card.div.resume();
@@ -343,7 +346,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 		},
 		removeLife: function(){
 			var lifes = $("#meteor-lifes").children().length;
-			
+
 			if(lifes > 0) {
 				$("#meteor-lifes").children().last().remove();
 				this.lifes--;
@@ -423,7 +426,7 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 
 
 			$('#meteor-gameover-modal').on('show.bs.modal', function () {
-				
+
 			});
 
 			$('#meteor-gameover-modal').on('shown.bs.modal', function () {
@@ -435,6 +438,9 @@ Cards.module("Game.Meteor.Pitch", function(Pitch, App) {
 			})
 
 
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 

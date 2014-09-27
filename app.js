@@ -13,22 +13,26 @@ var express = require('express')
   , date = require('date-utils')
   , helmet = require('helmet')
   , nconf = require('nconf').file(process.env.NODE_ENV+'_settings.json')
-  , nano = require('nano')(nconf.get('couchdb'))
-  , db = nano.use('thmcards')
   , _ = require('underscore')
   , sanitizer = require('sanitizer')
   , passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
   , TwitterStrategy = require('passport-twitter').Strategy
-  , GoogleStrategy = require('passport-google').Strategy
+  , GoogleStrategy = require('mybeat-passport-google-oauth').OAuth2Strategy
   , app = express()
   ;
 
+//Wenn auf CloudControl
+if(process.env.COUCH_URL){
+    nconf.set('couchdb', process.env.COUCH_URL);
+}
+var nano = require('nano')(nconf.get('couchdb'));
+db = nano.use('thmcards');
 
 var secret = 'some secret';
 var sessionKey = 'express.sid';
 var cookieParser = express.cookieParser(secret);
-var sessionStore = new express.session.MemoryStore()
+var sessionStore = new express.session.MemoryStore();
 var https_server, http_server, io;
 
 if(process.env.NODE_ENV === 'production') {
@@ -59,9 +63,9 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
   app.use(helmet.xframe());
-  app.use(helmet.iexss());
-  app.use(helmet.contentTypeOptions());
-  app.use(helmet.hsts());
+  app.use(helmet.xssFilter());
+  app.use(helmet.nosniff());
+  app.use(helmet.hsts({ maxAge: 7776000000 }));
   app.use(helmet.hidePoweredBy());
   app.use(cookieParser);
   app.use(express.json());
@@ -356,14 +360,15 @@ function(token, tokenSecret, profile, done) {
 }));
 
 passport.use(new GoogleStrategy({
-    returnURL: nconf.get("google_callback"),
-    realm: nconf.get("google_realm")
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK
   },
-  function(identifier, profile, done) {
-    profile.openID = identifier;
-    profile.provider = "google";
-    profile.username = profile.emails[0].value;
-    return User.findOrCreate(profile, done);
+  function(token, tokenSecret, profile, done) {
+      profile.openID = profile.id;
+      profile.provider = "google";
+      profile.username = profile.emails[0].value;
+      return User.findOrCreate(profile, done);
   }
 ));
 
@@ -412,7 +417,7 @@ app.get('/auth/facebook/callback',
   }
 );
 
-app.get('/auth/google', passport.authenticate('google'));
+app.get('/auth/google', passport.authenticate('google',  { scope: 'email' }));
 
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
@@ -799,7 +804,7 @@ app.get('/set', forceSSL, ensureAuthenticated, function(req, res){
       return set;
     });
 
-    res.json(_.sortBy(sets, function(set){ return set.name }));
+    res.json(_.sortBy(sets, function(set){ return set.name })); 
   });
 });
 
