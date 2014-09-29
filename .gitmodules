@@ -1,3 +1,31 @@
 [submodule "public/MathJax"]
 	path = public/MathJax
 	url = git://github.com/mathjax/MathJax.git
+
+[submodule "puppet/modules/apt"]
+	path = puppet/modules/apt
+	url = https://github.com/puppetlabs/puppetlabs-apt.git
+[submodule "puppet/modules/stdlib"]
+	path = puppet/modules/stdlib
+	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
+[submodule "puppet/modules/motd"]
+	path = puppet/modules/motd
+	url = https://github.com/saz/puppet-motd.git
+[submodule "puppet/modules/jenkins"]
+	path = puppet/modules/jenkins
+	url = https://github.com/jenkinsci/puppet-jenkins.git
+[submodule "puppet/modules/java"]
+	path = puppet/modules/java
+	url = https://github.com/puppetlabs/puppetlabs-java.git
+[submodule "puppet/modules/sonarqube"]
+	path = puppet/modules/sonarqube
+	url = https://github.com/maestrodev/puppet-sonarqube.git
+[submodule "puppet/modules/wget"]
+	path = puppet/modules/wget
+	url = https://github.com/maestrodev/puppet-wget.git
+[submodule "puppet/modules/git"]
+	path = puppet/modules/git
+	url = https://github.com/nesi/puppet-git
+[submodule "puppet/modules/jmeter"]
+	path = puppet/modules/jmeter
+	url = https://github.com/dduvnjak/puppet-jmeter.git

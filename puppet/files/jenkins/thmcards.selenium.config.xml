@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.plugins.cloneworkspace.CloneWorkspaceSCM" plugin="clone-workspace-scm@0.6">
+    <parentJobName>THMcards</parentJobName>
+    <criteria>Any</criteria>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <jenkins.triggers.ReverseBuildTrigger>
+      <spec></spec>
+      <upstreamProjects>THMcards, </upstreamProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </jenkins.triggers.ReverseBuildTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>eval &quot;#NODE_ENV=development GOOGLE_CLIENT_ID=891227854588-0o5gbqe447a4uvlu9kdp3jdv0ed6mhha.apps.googleusercontent.com GOOGLE_CLIENT_SECRET=fDPPZ5ALm-7n5CgwqJyER6hs GOOGLE_CALLBACK=http://localhost:3000/auth/google/callback node app.js &amp;&quot;
+eval &quot;sleep 30s&quot;
+eval &quot;echo \&quot;start selenium tests\&quot;&quot;
+eval &quot;java -jar /var/lib/selenium-server-standalone-2.43.0.jar -role hub &amp;&quot;
+eval &quot;node tests/selenium-node/login-logout.js&quot;
+eval &quot;killall node&quot;</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers>
+    <org.jenkinsci.plugins.xvfb.XvfbBuildWrapper plugin="xvfb@1.0.12">
+      <installationName>Xvfb</installationName>
+      <screen>1024x768x24</screen>
+      <debug>true</debug>
+      <timeout>0</timeout>
+      <displayNameOffset>1</displayNameOffset>
+      <additionalOptions></additionalOptions>
+      <shutdownWithBuild>true</shutdownWithBuild>
+      <autoDisplayName>true</autoDisplayName>
+    </org.jenkinsci.plugins.xvfb.XvfbBuildWrapper>
+  </buildWrappers>
+</project>

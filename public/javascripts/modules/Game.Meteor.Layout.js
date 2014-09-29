@@ -4,6 +4,9 @@ Cards.module('Game.Meteor', function(Meteor, App) {
 		regions: {
 			sideBarRegion: "#game-meteor-sideBar-region",
 			pitchRegion: "#game-meteor-pitch-region"
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });

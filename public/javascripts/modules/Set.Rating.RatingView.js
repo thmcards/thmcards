@@ -11,7 +11,8 @@ Cards.module('Set.Rating', function(Rating, App) {
 			console.log("link");
 		},
 		onRender: function() {
-			this.$("div.rating").raty({ 
+			i18ninit();
+			this.$("div.rating").raty({
 				score: function() {
 			      return $(this).attr('data-score');
 			    },
@@ -21,12 +22,15 @@ Cards.module('Set.Rating', function(Rating, App) {
 				starHalf: '/img/star-half.png'
 			});
 		}
-	});	
+	});
 
 	Rating.EmptyView = Backbone.Marionette.ItemView.extend({
 		template: "#set-rating-item-empty",
-		tagName: "tr"
-	});	
+		tagName: "tr",
+		onRender: function(){
+			i18ninit();
+		}
+	});
 
 	Rating.RatingView = Backbone.Marionette.CompositeView.extend({
 		emptyView: Rating.EmptyView,
@@ -41,6 +45,9 @@ Cards.module('Set.Rating', function(Rating, App) {
 		profileLink: function(ev) {
 			ev.preventDefault();
 			App.trigger("profile", $(ev.currentTarget).text());
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 
@@ -53,6 +60,9 @@ Cards.module('Set.Rating', function(Rating, App) {
 		backToSet: function(ev) {
 			ev.preventDefault();
 			history.back();
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	})
 });

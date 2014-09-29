@@ -1,7 +1,10 @@
 Cards.module('Set.List', function(List, App) {
 	List.SetItemView = Backbone.Marionette.ItemView.extend({
 		tagName: "tr",
-		template: "#set-list-item"
+		template: "#set-list-item",
+		onRender: function(){
+			i18ninit();
+		}
 	});
 
 	List.ListView = Backbone.Marionette.CompositeView.extend({
@@ -14,13 +17,19 @@ Cards.module('Set.List', function(List, App) {
 			"click a": "linkClicked"
 		},
 		initialize: function() {
+            this.collection.on('reset', this.render, this);
+            this.collection.on('sort', this.render, this);
+              		  
 			this.collection.fetch();
 		},
 		linkClicked: function(ev){
 			ev.preventDefault();
-			
+
 			App.navigate($(ev.target).attr('href'));
 			App.Set.Controller.showDetailsLayout();
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });

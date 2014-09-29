@@ -3,6 +3,9 @@ Cards.module('Set.Memo', function(Memo, App) {
 		template: "#set-memo-layout",
 		regions: {
 			detailsRegion: "#set-memo-region"
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });
