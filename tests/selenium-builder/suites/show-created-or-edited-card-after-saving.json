@@ -1,0 +1,20 @@
+{
+	"type": "suite",
+	"seleniumVersion": "2",
+	"formatVersion": 1,
+	"scripts": [
+		{
+			"where": "local",
+			"path": "../scripts/login.json"
+		},
+		{
+			"where": "local",
+			"path": "../scripts/create-a-card-set.json"
+		},
+		{
+			"where": "local",
+			"path": "../scripts/schow-created-card-after-saving.json"
+		}
+	],
+	"shareState": false
+}

@@ -1,0 +1,35 @@
+{
+	"type": "script",
+	"seleniumVersion": "2",
+	"formatVersion": 2,
+	"steps": [
+		{
+			"type": "deleteCookie",
+			"name": "express.sid"
+		},
+		{
+			"type": "get",
+			"url": "http://localhost:3000/login"
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "css selector",
+				"value": "#google > img"
+			}
+		},
+		{
+			"type": "waitForElementPresent",
+			"locator": {
+				"type": "id",
+				"value": "navbar-ownsets"
+			}
+		}
+	],
+	"data": {
+		"configs": {},
+		"source": "none"
+	},
+	"inputs": [],
+	"timeoutSeconds": 10
+}

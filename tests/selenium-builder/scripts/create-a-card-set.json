@@ -1,0 +1,62 @@
+{
+	"type": "script",
+	"seleniumVersion": "2",
+	"formatVersion": 2,
+	"steps": [
+		{
+			"type": "setElementText",
+			"locator": {
+				"type": "id",
+				"value": "new-set-input"
+			},
+			"text": "Cardset for Tests"
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "newCardSet"
+			}
+		},
+		{
+			"type": "waitForElementPresent",
+			"locator": {
+				"type": "id",
+				"value": "newSetDescription"
+			}
+		},
+		{
+			"type": "setElementText",
+			"locator": {
+				"type": "id",
+				"value": "newSetDescription"
+			},
+			"text": "This card set is for selenium tests."
+		},
+		{
+			"type": "setElementText",
+			"locator": {
+				"type": "id",
+				"value": "newSetCategory"
+			},
+			"text": "selenium, tests"
+		},
+		{
+			"type": "clickElement",
+			"locator": {
+				"type": "id",
+				"value": "createCardSet"
+			}
+		},
+		{
+			"type": "verifyTextPresent",
+			"text": "Cardset for Tests"
+		}
+	],
+	"data": {
+		"configs": {},
+		"source": "none"
+	},
+	"inputs": [],
+	"timeoutSeconds": 10
+}
