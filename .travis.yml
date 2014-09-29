@@ -6,8 +6,8 @@ node_js:
 env:
   global:
     # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
-    - secure: "BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI="
-    - secure: "JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+    - secure: BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI=
+    - secure: JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
   matrix:
     #- "BROWSER='firefox::Windows 7'"
     - "BROWSER='chrome::Windows 7'"
@@ -30,7 +30,7 @@ deploy:
   provider: cloudcontrol
   email: trautrims@gmail.com
   password:
-    secure: "dxk5ZJc1v5nup91r694Sjv/ouLwhBFvuXN2BeUx7P/PMF0v2r7P4fjpFOh08GWbAHqN8qXUiV+bfhlfU0yb6l8l80Lr2hzh5Z4SyiWnHMhS0CNWy+WkDVD3H7BKKQg/rT4cabl/6L313DHEVEqkPQp2d2aadl+ESpGI2Zkwosxw="
+    secure: Too1S+DCxYZxFT0Co+6svPngyII0ZM4LUnnMm5kHgIAQDC0YsIBn9iaMpSmOFaQU7yID6cQ82/hQLpo1p9p2Xf+NyKpW13jmpW+7mSTtT0V+3IQgVnZGOI1Z3dYVH2tsOYFx/9oZXFUzMS5c3rrU9bjfPhDCHmMg5jpIaXkvQeU=
   deployment: arscards/default
   on:
     branch: master
