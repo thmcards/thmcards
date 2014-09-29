@@ -28,12 +28,11 @@ script:
   - "ruby saucelabs.rb"
 deploy:
   provider: cloudcontrol
-  email:
-    secure: "PMxOnzO4j+1kaREs7mdkSc7l/DR3pTV5M8sh9IwaR3IVRowb3mzdDc64vhu3hUytDZrZlTcHoGuU+Ttj0y91Nd14YY2G8kPys6MuL49kjPEG50WDgwMv/P9wxG47OanFUf8wMzV1hw4uCgo6PGaVyEi5YNKbb2pkiQl2YtoZ9Ro="
+  email: trautrims@gmail.com
   password:
     secure: "dxk5ZJc1v5nup91r694Sjv/ouLwhBFvuXN2BeUx7P/PMF0v2r7P4fjpFOh08GWbAHqN8qXUiV+bfhlfU0yb6l8l80Lr2hzh5Z4SyiWnHMhS0CNWy+WkDVD3H7BKKQg/rT4cabl/6L313DHEVEqkPQp2d2aadl+ESpGI2Zkwosxw="
   deployment: arscards/default
   on:
-    repo: thm-projects/arsnova-flashcards
+    branch: master
 addons:
   sauce_connect: true
