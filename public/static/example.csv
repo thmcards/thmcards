@@ -1,0 +1,3 @@
+info.name,info.description,info.visibility,info.category,info.cardCnt,info.rating,info.type,cards.front.text,cards.front.text_plain,cards.front.picture,cards.front.video,cards.back.text,cards.back.text_plain,cards.back.picture,cards.back.video
+Testsatz,Ein Testkartensatz,public,Testkategorie,0,true,set,asd,asd,,null,sdg,sdg,,null
+,,,,,,,afgds,afgds,,null,sdghdgf,sdghdgf,,null

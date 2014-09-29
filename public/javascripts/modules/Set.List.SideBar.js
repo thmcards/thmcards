@@ -12,12 +12,17 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			modalInputCategory: "#newSetCategory"
 		},
 		events: {
+            "change #fileInput": "enableImportButton",
 			"click a.saveSet": "showSetModal",
 			"click #newSetModal button.btn-primary": "saveSet",
 			"click ul.nav-list a": "categoryClicked",
 			"click button.saveSet": "showModal",
 			"keyup input[type=text]": "onKeypress"
 		},
+        enableImportButton: function(ev){
+            this.$('#file').val(this.$('#fileInput').val());
+            this.$('#fileSubmit').removeClass('disabled');
+        },
 		onKeypress: function(ev) {
 			var ENTER_KEY = 13;
 
@@ -141,7 +146,9 @@ Cards.module("Set.List.SideBar", function(SideBar, App) {
 			});
 		},
 		onRender: function(){
-			i18ninit();
-		}
+            i18ninit();
+
+            this.$("#fileHelp").popover();
+        }
 	});
 });

@@ -490,6 +490,7 @@
     <script type="text/template" id="set-details-controls">
       <button class="btn btn-primary newCard" id="set-details-controls-btn-newCard" style="width:100%" data-i18n="sidebar-nav.createcard"></button>
       <button class="btn btn-default editSet" id="set-details-controls-btn-editCard" style="width:100%; margin-top:10px" data-i18n="sidebar-nav.editcard"></button>
+      <button class="btn btn-default exportSet" id="set-details-controls-btn-exportSet" style="width:100%; margin-top:10px" data-i18n="sidebar-nav.exportSet"></button>
 
       <div class="modal fade" id="editSetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -565,6 +566,28 @@
         <span class="input-group-btn">
           <button id="newCardSet" class="btn btn-primary saveSet" type="button"><i class="glyphicon glyphicon-plus"></i></button>
         </span>
+      </div>
+
+      <hr />
+
+      <div class="input-group">
+      <form style="width: 143px; float: left;" method="post" action="/import" enctype="multipart/form-data">
+      <span class="input-group" style="width: 143px;">
+        <span style="position:relative; width: 103px;">
+          <input id="file" style="position:absolute; width: 103px;" class="form-control" placeholder="" data-i18n="[placeholder]upload-form.import"/>
+          <input id="fileInput" type="file" name="file" style="opacity:0; z-index:1; width: 103px; height: 34px; cursor: pointer;"/>
+        </span>
+        <span class="input-group-btn">
+          <button id="fileSubmit" type="submit" class="btn btn-primary disabled"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+        </span>
+      </span>
+      </form>
+      <div style="float: right; margin-left: 9px;">
+          <button type="button" id="fileHelp" class="btn btn-default" data-toggle="popover" data-html="true" data-trigger="click" data-container="body" data-content=" " data-placement="right"
+                  data-i18n="[data-content]upload-form.popover-content">
+              <i class="glyphicon glyphicon-question-sign"></i>
+          </button>
+      </div>
       </div>
 
       <hr />
@@ -1349,6 +1372,7 @@
     <script type="text/javascript" src="/javascripts/lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/bootstrap.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/typeahead.min.js"></script>
+    <script type="text/javascript" src="javascripts/lib/fileSaver.min.js"></script>
 
     <script type="text/javascript" src="/javascripts/Cards.js"></script>
 
