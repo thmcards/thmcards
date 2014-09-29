@@ -17,6 +17,9 @@ Cards.module('Set.List', function(List, App) {
 			"click a": "linkClicked"
 		},
 		initialize: function() {
+            this.collection.on('reset', this.render, this);
+            this.collection.on('sort', this.render, this);
+              		  
 			this.collection.fetch();
 		},
 		linkClicked: function(ev){

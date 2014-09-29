@@ -42,14 +42,17 @@ Cards.module('Set.List', function(List, App) {
 		},
 		initialize: function() {
 			var that = this;
-			this.collection.bind("reset", function(col, opt) {
+									
+            this.collection.bind("reset", function(col, opt) {
 				if(!_.isUndefined(opt) && _.has(opt, "learned")) {
 					that.emptyView = List.SetLearnedEmptyView;
 				} else {
 					that.emptyView = List.SetEmptyView;
 				}
 			});
+               		 
 			this.collection.fetch();
+            this.collection.on('sort', this.render, this);   
 		},
 		newSet: function() {
 			$("button.saveSet").click();

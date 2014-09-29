@@ -2,6 +2,8 @@ Cards.module('Set.Details', function(Details, App) {
 	Details.ItemView = Backbone.Marionette.ItemView.extend({
 		template: "#set-details-item",
 		className: "item",
+		initialize: function() {          
+		},
 		events: {
 			"click a": "linkClicked",
 			"click div.box": "cardClicked"
@@ -47,6 +49,12 @@ Cards.module('Set.Details', function(Details, App) {
 		ui: {
 			modalView: "#pictureModal"
 		},
+		initialize: function() {            
+            $(document).on('keyup', this.keyHandler);
+		},
+		remove: function(){
+            $(document).off('keyup', this.keyHandler);
+        },
 		events: {
 			"click a.carousel-control": "cycleCarousel",
 			"click button.learn": "learnClicked",
@@ -55,8 +63,26 @@ Cards.module('Set.Details', function(Details, App) {
 			"click a.btn-editCard": "editClicked",
 			"click a.btn-showPictureModal": "showModal",
 			"click a.btn-deleteCard": "deleteClicked",
-			"click div.box": "checkForPicture"
+    		"click div.box": "checkForPicture"
 		},
+		keyHandler: function(ev){		  
+		    if(window.location.hash.indexOf("details") != -1){            			        
+                switch (ev.keyCode) {
+                    //Turn card with ctrl key
+                    case 17 :                        
+                        $('div.active>div.box').click();
+                    break;
+                    //Go to previous card with arrow left
+                    case 37 :
+                        $('#leftCarouselControl').click();                    
+                    break;
+                    //Go to next card with arrow right
+                    case 39 :                    
+                        $('#rightCarouselControl').click();
+                    break;                    
+                }                
+            }
+        },
 		playMeteor: function(ev) {
 			App.trigger("play:meteor", this.model.get("id"));
 		},
@@ -90,16 +116,15 @@ Cards.module('Set.Details', function(Details, App) {
 			});
 		},
 		cycleCarousel: function(ev) {
-			ev.preventDefault();
+        	ev.preventDefault();
 			this.turnCardtoFront(ev);
-
 			if($(ev.currentTarget).hasClass("left")) {
 				this.$el.find(":first-child").carousel("prev");
 			} else if($(ev.currentTarget).hasClass("right")) {
 				this.$el.find(":first-child").carousel("next");
 			}
 		},
-
+        
 		turnCardtoFront: function(ev) {
 			ev.preventDefault();
 
