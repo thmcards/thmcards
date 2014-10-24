@@ -1,0 +1,22 @@
+{
+	"type": "interpreter-config",
+	"configurations": [
+		{
+			"settings": [
+				{
+					"browserOptions": {
+						"browserName": "firefox"
+					}
+				},
+				{
+					"browserOptions": {
+						"browserName": "chrome"
+					}
+				}
+			],
+			"scripts": [
+				"tests/selenium-builder/suites/*"
+			]
+		}
+	]
+}

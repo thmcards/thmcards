@@ -24,6 +24,10 @@ To connect to your development machine, type `vagrant ssh`. After that, you can
 start ARSnova Flashcards inside the machine by running `./start.sh`. You can then access
 ARSnova Flashcards from your host machine by opening http://localhost:3000.
 
+|NOTE:                                                                                     | 
+|------------------------------------------------------------------------------------------|
+| dont't forget to run `git submodule init && git submodule update` after cloning our repo |
+
 ### QA Private Build
 
 [arsnova-flashcards](https://github.com/thm-projects/arsnova-flashcards) also sets up

@@ -1,0 +1,41 @@
+{
+    "info":{
+        "name": "Testsatz",
+        "description" : "Ein Testkartensatz",
+        "visibility": "public",
+        "category": "Testkategorie",
+        "cardCnt": 0,
+        "rating": true,
+        "type": "set"
+    },
+    "cards": [
+        {
+            "front": {
+                "text": "asd",
+                "text_plain": "asd",
+                "picture": "",
+                "video": "null"
+            },
+            "back": {
+                "text": "sdg",
+                "text_plain": "sdg",
+                "picture": "",
+                "video": "null"
+            }
+        },
+        {
+            "front": {
+                "text": "afgds",
+                "text_plain": "afgds",
+                "picture": "",
+                "video": "null"
+            },
+            "back": {
+                "text": "sdghdgf",
+                "text_plain": "sdghdgf",
+                "picture": "",
+                "video": "null"
+            }
+        }
+    ]
+}

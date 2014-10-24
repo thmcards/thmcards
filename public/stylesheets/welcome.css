@@ -40,3 +40,9 @@ a.btn-about {
 	width:190px; 
 	background-color:#76b910;
 }
+.login div a {
+    margin-left: 20px;
+}
+.login div a#facebook {
+    margin-left: 0;
+}

@@ -35,6 +35,12 @@
   	"newcarddeck": "New deck of cards"
   },
 
+  "upload-form":{
+      "submit": "Submit",
+      "import": "Import",
+      "popover-content": "<div> Here you can upload your own decks of cards to THMCards. Currently we support the formats Json and CSV(Excel, comma-separated).<br /> Please have a look at these templates: </div> <a role='button' target='_blank' class='btn btn-default' href='/static/example.json'>Json</a> <a role='button' target='_blank' class='btn btn-default' href='/static/example.csv'>CSV</a>"
+  },
+
   "nav-list": {
   	"category": "Category",
   	"created": "Created",
@@ -144,7 +150,8 @@
     "viewmap": "Card",
     "viewlist": "List",
     "createcard": "Create a new card",
-    "editcard": "Edit deck of cards"
+    "editcard": "Edit deck of cards",
+    "exportSet": "Export deck"
   },
 
   "pool": {

@@ -27,14 +27,14 @@ Cards.module('Set.Details', function(Details, App) {
 
 
 			var	front = {
-					text: $("#editcard-front-textarea").val().replace(/(<br>\s*)+$/,''),
-					text_plain: $("#editcard-front-textarea").val().replace(/(<([^>]+)>)/ig,""),
+					text: $("#editfronttext-content-holder").html().replace(/(<br>\s*)+$/,''),
+					text_plain: $("#editfronttext-content-holder").html().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-front-search").val() || null,
 					video: null
 				};
 			var	back = {
-					text: $("#editcard-back-textarea").val().replace(/(<br>\s*)+$/,''),
-					text_plain: $("#editcard-back-textarea").val().replace(/(<([^>]+)>)/ig,""),
+					text: $("#editbacktext-content-holder").html().replace(/(<br>\s*)+$/,''),
+					text_plain: $("#editbacktext-content-holder").html().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-editcard-input-pic-back-search").val() || null,
 					video: null
 				};
@@ -79,16 +79,17 @@ Cards.module('Set.Details', function(Details, App) {
 			this.ui.deleteBtn.button('loading');
 
 			this.model.destroy({
-			    success : function(resp){
-			    	console.log("gelöscht");
+				success : function(resp){
+					Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = undefined;
+					console.log("gelöscht");
 					history.back();
-			    },
-			    error : function(err) {
-			    	that.ui.deleteBtn.button('reset');
-			        console.log('error callback');
-			        // this error message for dev only
-			        alert('There was an error. See console for details');
-			        console.log(err);
+				},
+				error : function(err) {
+					that.ui.deleteBtn.button('reset');
+					console.log('error callback');
+					// this error message for dev only
+					alert('There was an error. See console for details');
+					console.log(err);
 				}
 			});
 
@@ -96,12 +97,12 @@ Cards.module('Set.Details', function(Details, App) {
 		showErrors: function(errors) {
 			this.$('.help-block').text('');
 			this.$('.cardtext').removeClass('has-error');
-		    _.each(errors, function (error) {
-		        var cardside = this.$('td.' + error.name);
-		        cardside.addClass('has-error');
-		        var helptext = this.$('span.' + error.name);
-		        helptext.text(error.message);
-		    }, this);
+			_.each(errors, function (error) {
+				var cardside = this.$('td.' + error.name);
+				cardside.addClass('has-error');
+				var helptext = this.$('span.' + error.name);
+				helptext.text(error.message);
+			}, this);
 		},
 
 		hideErrors: function () {
@@ -170,11 +171,11 @@ Cards.module('Set.Details', function(Details, App) {
 							alert("Es wurden keine passenden Ergebnisse gefunden");
 							this.ui.pictureSearchModal.modal('hide');
 						}
-			        }, null);
+					}, null);
 
-			        imageSearch.execute(searchString);
-			        $("#editcard-pictureSearchModal-footer").empty();
-			        $("#editcard-pictureSearchModal-footer").append(google.search.Search.getBranding());
+					imageSearch.execute(searchString);
+					$("#editcard-pictureSearchModal-footer").empty();
+					$("#editcard-pictureSearchModal-footer").append(google.search.Search.getBranding());
 
 				}, 100);
 
@@ -187,12 +188,12 @@ Cards.module('Set.Details', function(Details, App) {
 		},
 		keyupInput: function(ev) {
 			var value = $(ev.target).val();
-		    var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
-    		if (urlregex.test(value)) {
-        		$(ev.target).next().attr('disabled', 'disabled');
-    		} else {
-    			$(ev.target).next().removeAttr('disabled');
-    		}
+			var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+			if (urlregex.test(value)) {
+				$(ev.target).next().attr('disabled', 'disabled');
+			} else {
+				$(ev.target).next().removeAttr('disabled');
+			}
 		},
 		focusInput: function(ev) {
 			var loadSearch = function() {
@@ -202,31 +203,54 @@ Cards.module('Set.Details', function(Details, App) {
 			google.load('search', '1', {callback: loadSearch });
 		},
 		onShow: function() {
-			var editorConfig = {
-				"font-styles": false,
-				"color": true,
-				"lists": true,
-				"image": false,
-				toolbar: { code:  function(locale, options) {
-				    return '<li><a class="btn btn-default btn-sm" title="Code" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
-				   }
+			var that=this;
+			var editorConfig={
+					autofocus:false,
+					savable:false,
+					fullscreen:false,
+					hiddenButtons:["cmdImage"],
+					additionalButtons: [
+						[{
+							name: "groupMisc",
+							data: [{
+								name: "cmdTex",
+								toggle: true, // this param only take effect if you load bootstrap.js
+								title: "Tex",
+								icon: "glyphicon glyphicon-usd",
+								callback: function(e){
+									var chunk, cursor,
+									selected = e.getSelection(),
+									content = e.getContent();
+									// transform selection and set the cursor into chunked text
+									e.replaceSelection("$ "+content+" $");
+									cursor = selected.start
+									// Set the cursor
+									e.setSelection(cursor,cursor+content.length+4)
+									}
+								}]
+						}]
+					],
+					onChange: function(e){
+						$("#editfronttext-content-holder").html(e.getContent());
+					},
+					onShow: function(e){
+						$("#editfronttext-content-holder").html(that.model.attributes.back.text);
+						e.setContent(that.model.attributes.front.text);
+					}
 				}
-			}
+				$("#editcard-front-textarea").markdown(editorConfig).focus();
+				editorConfig.onChange=function(e){
+					$("#editbacktext-content-holder").html(e.getContent());
+				}
+				editorConfig.onShow=function(e){
+					$("#editbacktext-content-holder").html(that.model.attributes.back.text);
+					e.setContent(that.model.attributes.back.text);
+				}
+				$("#editcard-back-textarea").markdown(editorConfig);
 
-			$("#editcard-front-textarea").wysihtml5(editorConfig);
-			$("#editcard-back-textarea").wysihtml5(editorConfig);
 
-			$("#editcard-front-textarea").val(this.model.attributes.front.text);
-			$("#editcard-back-textarea").val(this.model.attributes.back.text);
-
-			$("#set-details-editcard-input-pic-front-search").val(this.model.attributes.front.picture);
-			$("#set-details-editcard-input-pic-back-search").val(this.model.attributes.back.picture);
-
-			var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
-			var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];
-
-			$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
-			$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
+			$("#set-details-editcard-input-pic-front-search").val(that.model.attributes.front.picture);
+			$("#set-details-editcard-input-pic-back-search").val(that.model.attributes.back.picture);
 
 		},
 		onClose: function(){

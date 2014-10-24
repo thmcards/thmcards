@@ -189,6 +189,7 @@ Cards.module('Set', function(Set, App){
 			});
 		},
 		showDetailsEditCardLayout: function(id){
+			Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = id;
 			var card = new Cards.Entities.Card({_id: id});
 			console.log("cardid" + id);
 

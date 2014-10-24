@@ -14,6 +14,7 @@
 		"passport-facebook": "1.0.*",
 		"passport-twitter": "1.0.*",
 		"mybeat-passport-google-oauth": "*",
+        "passport-cas": "0.0.3",
 		"jws": "0.2.*",
 		"socket.io": "0.9.16",
 		"date-utils": "1.2.15",
@@ -21,8 +22,10 @@
 		"sanitizer": "0.1.*",
 		"mocha": "~1.10.0",
 		"selenium-webdriver": "~2",
+		"selenium-binaries": "*",
 		"wd": "~0.3",
-		"uuid-js": "~0.7"
+		"uuid-js": "~0.7",
+        "csvtojson": "*"
 	},
 	"subdomain": "thmcards",
 	"engines": {
