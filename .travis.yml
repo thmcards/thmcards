@@ -25,7 +25,7 @@ before_script:
   - "forever start app.js"
 script:
   # Run tests
-  - "ruby saucelabs.rb"
+  # - "ruby saucelabs.rb"
 deploy:
   provider: cloudcontrol
   email: trautrims@gmail.com
