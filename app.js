@@ -1101,7 +1101,7 @@ app.get('/set', forceSSL, ensureAuthenticated, function(req, res){
       return set;
     });
 
-    res.json(_.sortBy(sets, function(set){ return set.name }));
+    res.json(_.sortBy(sets, function(set){ return set.name })); 
   });
 });
 

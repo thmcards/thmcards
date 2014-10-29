@@ -89,9 +89,9 @@
     <script type="text/template" id="pool-category-set-list" class="pool">
       <thead>
         <tr>
-          <th data-i18n="pool.name"></th>
-          <th data-i18n="pool.description"></th>
-          <th data-i18n="pool.created"></th>
+          <th><span data-i18n="pool.name"></span> <a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('name', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('name', 'up');">&uArr;</a></th>
+          <th><span data-i18n="pool.description"></span> <a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('description', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('description', 'up');">&uArr;</a></th>
+          <th><span data-i18n="pool.created"></span> <a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('created', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Pool.Controller.sortPoolCategoryLayout('created', 'up');">&uArr;</a></th>
         </tr>
       </thead>
       <tbody id="cardSetsPool"></tbody>
@@ -172,8 +172,8 @@
         <div class="listhead">
           <thead>
             <tr>
-              <th width="45%" data-i18n="foreside"></th>
-              <th width="45%" data-i18n="backside"></th>
+              <th width="45%"><span data-i18n="foreside"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('front', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('front', 'up');">&uArr;</a></th>
+              <th width="45%"><span data-i18n="backside"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('back',  'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.sortSetDetailsLayout('back',  'up');">&uArr;</a></th>
               <th width="10%" data-i18n="options"></th>
             </tr>
           </thead>
@@ -670,9 +670,9 @@
     <script type="text/template" id="set-list">
       <thead class="set-list">
         <tr>
-          <th data-i18n="set-list.name"></th>
-          <th width="25%" data-i18n="set-list.category"></th>
-          <th width="40%" data-i18n="set-list.description"></th>
+          <th><span data-i18n="set-list.name"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('name', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('name', 'up');">&uArr;</a></th> 
+          <th width="25%"><span data-i18n="set-list.category"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('category', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('category', 'up');">&uArr;</a></th>
+          <th width="40%"><span data-i18n="set-list.description"></span> <a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('description', 'down');">&dArr;</a><a href="javascript:void(0)" onclick="Cards.Set.Controller.showListLayout('description', 'up');">&uArr;</a></th>
         </tr>
       </thead>
       <tbody id="cardSetView"></tbody>
@@ -902,8 +902,8 @@
       </div>
 
       <div id="learn-navigation">
-            <button id="know" class="btn btn-primary answer card-success" title="success" style="width:100%; margin-top:10px; display:none" data-i18n="know"></button>
-            <button id="notknow" class="btn btn-default answer card-fail" title="failed" style="width:100%; margin-top:10px; display:none" data-i18n="notknow"></button>
+            <button id="know" class="btn btn-primary answer card-success" style="width:100%; margin-top:10px; display:none" data-i18n="know"></button>
+            <button id="notknow" class="btn btn-default answer card-fail" style="width:100%; margin-top:10px; display:none" data-i18n="notknow"></button>
       </div>
 
       <div class="box learn-endscreen" style="display:none">
@@ -988,9 +988,9 @@
             <div class="btn-group memo-rating">
               <button id="memoRate0" class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="0" data-i18n="[title]cardmemo.rate0" title="">0</button>
               <button id="memoRate1" class="btn btn-default rate-answer wrong" data-placement="bottom" data-id="1" data-i18n="[title]cardmemo.rate1" title="">1</button>
-              <button id="memoRate2" class="btn btn-default rate-answer" data-placement="bottom" data-id="2" data-i18n="[title]cardmemo.rate3" title="">2</button>
-              <button id="memoRate3" class="btn btn-default rate-answer" data-placement="bottom" data-id="3" data-i18n="[title]cardmemo.rate4" title="">3</button>
-              <button id="memoRate4" class="btn btn-default rate-answer" data-placement="bottom" data-id="4" title="">4</button>
+              <button id="memoRate2" class="btn btn-default rate-answer" data-placement="bottom" data-id="2" data-i18n="[title]cardmemo.rate2" title="">2</button>
+              <button id="memoRate3" class="btn btn-default rate-answer" data-placement="bottom" data-id="3" data-i18n="[title]cardmemo.rate3" title="">3</button>
+              <button id="memoRate4" class="btn btn-default rate-answer" data-placement="bottom" data-id="4" data-i18n="[title]cardmemo.rate4" title="">4</button>
               <button id="memoRate5" class="btn btn-default rate-answer" data-placement="bottom" data-id="5" data-i18n="[title]cardmemo.rate5" title="">5</button>
               <a id="memetext" class="btn btn-default btn-info memo-helptext" data-placement="bottom" title="Memo" data-i18n="[data-content]cardmemo.memotext" data-content="">
                 <i class="glyphicon glyphicon-question-sign"></i>

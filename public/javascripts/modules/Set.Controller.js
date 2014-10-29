@@ -1,19 +1,28 @@
 Cards.module('Set', function(Set, App){
 	Set.Controller = {
-		showListLayout: function(){
+		showListLayout: function(fieldname, direction){
+		    
 			var setLayout = new Cards.Set.List.Layout();
 			Cards.mainRegion.show(setLayout);
-
-			var sets = new Cards.Entities.SetCollection();
-			var listView = new Cards.Set.List.ListView({ collection: sets });
-			setLayout.listRegion.show(listView);
-
+           
+            if(!fieldname){
+                fieldname = "name";
+            }
+            if(!direction){
+                direction = "down";
+            }
+                                          
+            var sets = new Cards.Entities.SetCollection();            
+            sets.sortByField(fieldname, direction);            
+                                                               
+			var listView = new Cards.Set.List.ListView({ collection: sets });			
+            setLayout.listRegion.show(listView);			
+                       
 			var sideBarView = new Cards.Set.List.SideBar.SideBarView({ collection: sets });
 			setLayout.sideBarRegion.show(sideBarView);
 		},
-		showDetailsLayout: function(id){
-
-			var set = new Cards.Entities.Set({id: id});
+		showDetailsLayout: function(id){            			
+            var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
 					var detailsLayout = new Cards.Set.Details.Layout();
@@ -51,16 +60,23 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
-		showDetailsListLayout: function(id){
-
+		showDetailsListLayout: function(id, side, direction){                        
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
 					var detailsLayout = new Cards.Set.Details.Layout();
 					Cards.mainRegion.show(detailsLayout);
 
-					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
+                    if(!side){
+                       side = "front";
+                    }
+                    if(!direction){
+                        direction = "down";
+                    }
 
+					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
+                    cardCollection.sortByField(side, direction);
+                    
 					cardCollection.fetch({
 						success: function(){
 							var detailsListView = new Cards.Set.Details.DetailsListView({ collection: cardCollection, model: set });
@@ -91,6 +107,9 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
+		sortSetDetailsLayout: function(side, direction){                        
+            this.showDetailsListLayout(window.location.hash.split("/").pop(), side, direction);
+        },
 		showLearnLayout: function(id){
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
@@ -227,7 +246,6 @@ Cards.module('Set', function(Set, App){
 
 function FilteredCollection(collection, options){
     var filtered = new collection.constructor(collection.models, options);
-
     filtered.filter = function(criteria){
         var items;
         if (criteria){
@@ -262,6 +280,5 @@ function FilteredCollection(collection, options){
     collection.on("reset", function(){
         filtered.reset(collection.models);
     });
-
     return filtered;
 }

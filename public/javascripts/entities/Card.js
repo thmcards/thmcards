@@ -20,10 +20,28 @@ Cards.module('Entities', function(Entities, App, Backbone){
 		url: function() {
 			return "/set/" + this.setId + "/card";
 		},
-		constructor: function(models, options){
+		constructor: function(models, options){		  
 			this.setId = options.setId;
 			Backbone.Collection.apply(this, arguments);
-		}
+		},
+		sort_key: 'front',
+        direction: 'down',
+		comparator: function(set) {		    		    
+            if(this.direction == "up"){                
+                var cardside = (this.sort_key == "front") ? set.attributes.front.text : set.attributes.back.text;                               
+                return String.fromCharCode.apply(String, _.map(cardside.toLowerCase().split(""), function (c) {
+                    return 0xffff - c.charCodeAt();
+                }));
+            } else {
+                var cardside = (this.sort_key == "front") ? set.attributes.front.text : set.attributes.back.text;                                                                                
+                return cardside.toLowerCase();
+            }
+		},
+		sortByField: function(side, direction){
+            this.sort_key = side;
+            this.direction = direction;
+            this.sort();
+        }
 	});
 
 	Entities.CardMemoCollection = Backbone.Collection.extend({

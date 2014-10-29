@@ -6,8 +6,8 @@ node_js:
 env:
   global:
     # Sauce Labs: (prinzmajus/thmcards) 1. User, 2. Access-Key
-    - secure: BxceQZMQnKlq3vyYGTmwHK8THaQinsumatiXhwIcA7fWS1NsNdw2ci5KPDqbDUh2trnVF1IADlOCZCAUiQ5HBUZOEZxkPWdCNzZDMsWB8XTlSIYFMfpWZZE8m89slIFmOUfm6+8KVlOfZcpHBx3ri8TPwr281IkgoMhbYJcjpwI=
-    - secure: JgtmzxUu55wJM1TL5hnldFv3E6xtmW4qMAqcujHkNM5YB/bX+KQfBqUGSSXGCsFd/0ELzkOt5gpbxSCLoj9zC/+DMw7IQsBJXrtrkg7yqodrGymTnC/hyV8QuBDkaG2524kxh2hvKAWvfGCJwgSeoHQ6k9IToBpELswbvaLKMII="
+    - secure: "WXSTGMER67I1xl6/1ADnyopO5bu2DPd27eYie7sfA+PvWfEhKUGHGGswLGxX/vjXQA0TX6d8A6xOjztz6oGx/AqsRhedWMYhUySJxo9T/tCPSVQcCAAvaUmIL8PZGH+uH5qIb355FFmHQbs/li89Yy2cJY/Omc+IlCBEgb6Ko8A="
+    - secure: "R09cHwGbgpuwqpm83+h0pUZpp+b6v/g9QK39n+wOAENhzFCE7Wmd50lFAGmD1e1YzHlGiJntO/eSBBDiCjZJyOeZDY1Yt8VA8mP7sjqw/2skDDX/tWBlNcZxHHoO2Mq47OZM3ePK/ehRcR4YKGEWCqEHxOj/NFMLdhFmLCjjEac="
   matrix:
     #- "BROWSER='firefox::Windows 7'"
     - "BROWSER='chrome::Windows 7'"
@@ -25,14 +25,15 @@ before_script:
   - "forever start app.js"
 script:
   # Run tests
-  - "ruby saucelabs.rb"
+  #- "ruby saucelabs.rb"
 deploy:
   provider: cloudcontrol
-  email: trautrims@gmail.com
+  email:
+    secure: "GyJ267ssSt63QQ8F3gxN7rma0t4SN+po1vJRPYTSi6t7OSBR1OU8iYr54mM6ATV6YGviF1YBzNHYE0LHhMebtd8JOfAAc9nDMe/Vgoe9edRqaG7PmX9oRETJoBUtwYgKpcOYrH5ly3X9Z1U0sv70OHL0R/7R4ZhlYdaWKF2x++E="
   password:
-    secure: Too1S+DCxYZxFT0Co+6svPngyII0ZM4LUnnMm5kHgIAQDC0YsIBn9iaMpSmOFaQU7yID6cQ82/hQLpo1p9p2Xf+NyKpW13jmpW+7mSTtT0V+3IQgVnZGOI1Z3dYVH2tsOYFx/9oZXFUzMS5c3rrU9bjfPhDCHmMg5jpIaXkvQeU=
-  deployment: arscards/default
+    secure: "arbW0odUAhKHPKLuhFdSBNIe0/Opf61k/wlCohS4WQZaEaKerAbW59eoZNqpdtO7HYlj59+QKt+M19xKyqhQvSrcPS610f3hdwyTjeQyC58ZaArbbWnhFo0URqdA1vHN94rXye9rYqGRPiCBnZmmk9t+OU8oqrYnnACEkU/J0Zg="
+  deployment: swthmcards/default
   on:
-    branch: master
+    repo: sewi22/thmcards
 addons:
   sauce_connect: true
