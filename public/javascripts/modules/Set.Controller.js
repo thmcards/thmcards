@@ -1,26 +1,35 @@
 Cards.module('Set', function(Set, App){
 	Set.Controller = {
-		showListLayout: function(){
+		showListLayout: function(fieldname, direction){
+		    
 			var setLayout = new Cards.Set.List.Layout();
 			Cards.mainRegion.show(setLayout);
-
-			var sets = new Cards.Entities.SetCollection();
-			var listView = new Cards.Set.List.ListView({ collection: sets });
-			setLayout.listRegion.show(listView);
-
+           
+            if(!fieldname){
+                fieldname = "name";
+            }
+            if(!direction){
+                direction = "down";
+            }
+                                          
+            var sets = new Cards.Entities.SetCollection();            
+            sets.sortByField(fieldname, direction);            
+                                                               
+			var listView = new Cards.Set.List.ListView({ collection: sets });			
+            setLayout.listRegion.show(listView);			
+                       
 			var sideBarView = new Cards.Set.List.SideBar.SideBarView({ collection: sets });
 			setLayout.sideBarRegion.show(sideBarView);
 		},
-		showDetailsLayout: function(id){
-
-			var set = new Cards.Entities.Set({id: id});
+		showDetailsLayout: function(id){            			
+            var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
 					var detailsLayout = new Cards.Set.Details.Layout();
 					Cards.mainRegion.show(detailsLayout);
 
 					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
-					
+
 					cardCollection.fetch({
 						success: function(){
 							var detailsView = new Cards.Set.Details.DetailsView({ collection: cardCollection, model: set });
@@ -31,7 +40,7 @@ Cards.module('Set', function(Set, App){
 									var rating = new Cards.Entities.Rating(data);
 									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
 									detailsLayout.ratingRegion.show(ratingsView);
-								});	
+								});
 							}
 						},
 						error: function(){
@@ -51,27 +60,34 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
-		showDetailsListLayout: function(id){
-
+		showDetailsListLayout: function(id, side, direction){                        
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
 				success: function(){
 					var detailsLayout = new Cards.Set.Details.Layout();
 					Cards.mainRegion.show(detailsLayout);
 
+                    if(!side){
+                       side = "front";
+                    }
+                    if(!direction){
+                        direction = "down";
+                    }
+
 					var cardCollection = new Cards.Entities.CardCollection([], { setId: set.get("id") });
-					
+                    cardCollection.sortByField(side, direction);
+                    
 					cardCollection.fetch({
 						success: function(){
 							var detailsListView = new Cards.Set.Details.DetailsListView({ collection: cardCollection, model: set });
 							detailsLayout.detailsRegion.show(detailsListView);
-							
+
 							if(set.get("rating") === true) {
 								$.get("/rating/avg/"+set.get("id"), function(data){
 									var rating = new Cards.Entities.Rating(data);
 									var ratingsView = new Cards.Set.Details.SideBar.RatingsView({ model: rating});
 									detailsLayout.ratingRegion.show(ratingsView);
-								});	
+								});
 							}
 						},
 						error: function(){
@@ -91,6 +107,9 @@ Cards.module('Set', function(Set, App){
 				}
 			});
 		},
+		sortSetDetailsLayout: function(side, direction){                        
+            this.showDetailsListLayout(window.location.hash.split("/").pop(), side, direction);
+        },
 		showLearnLayout: function(id){
 			var set = new Cards.Entities.Set({id: id});
 			set.fetch({
@@ -99,12 +118,12 @@ Cards.module('Set', function(Set, App){
 					Cards.mainRegion.show(learnLayout);
 
 					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id") });
-					
+
 					personalCollection.fetch({
 						success: function(){
 							// copy mit filterfunktion der original liste, die wird angezeigt
 							var filteredCollection = FilteredCollection(personalCollection, { setId: set.get("id") });
-							
+
 							var learnView = new Cards.Set.Learn.DetailsView({ collection: filteredCollection });
 							learnLayout.learnRegion.show(learnView);
 
@@ -133,10 +152,10 @@ Cards.module('Set', function(Set, App){
 					Cards.mainRegion.show(memoLayout);
 
 					var personalCollection = new Cards.Entities.PersonalCollection([], { setId: set.get("id"), url:"/set/" + set.get("id") + "/memo/card" });
-					
+
 					personalCollection.fetch({
 						success: function(){
-							
+
 							var memoView = new Cards.Set.Memo.DetailsView({collection: personalCollection , model: set});
 							memoLayout.detailsRegion.show(memoView);
 						},
@@ -170,6 +189,7 @@ Cards.module('Set', function(Set, App){
 			});
 		},
 		showDetailsEditCardLayout: function(id){
+			Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = id;
 			var card = new Cards.Entities.Card({_id: id});
 			console.log("cardid" + id);
 
@@ -209,7 +229,7 @@ Cards.module('Set', function(Set, App){
 
 					}
 				})
-						
+
 				var sideBarView = new Cards.Set.Rating.SideBarView({ model: set});
 				detailsLayout.sideBarRegion.show(sideBarView);
 				},
@@ -217,13 +237,15 @@ Cards.module('Set', function(Set, App){
 
 				}
 			});
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	}
 });
 
 function FilteredCollection(collection, options){
     var filtered = new collection.constructor(collection.models, options);
-        
     filtered.filter = function(criteria){
         var items;
         if (criteria){
@@ -231,7 +253,7 @@ function FilteredCollection(collection, options){
             	var persCard = model.get("persCard");
             	var pcard;
             	if(_.isArray(persCard)) {
-            		pcard = _.first(model.get("persCard"));	
+            		pcard = _.first(model.get("persCard"));
             	} else {
             		pcard = model.get("persCard");
             	}
@@ -241,9 +263,9 @@ function FilteredCollection(collection, options){
            		} else {
            			console.log("no card");
            		}
-           		if (_.isUndefined(pcard) && criteria == 1){           			
+           		if (_.isUndefined(pcard) && criteria == 1){
            			return true;
-           		} 
+           		}
            		else return false;
 
 			});
@@ -257,7 +279,6 @@ function FilteredCollection(collection, options){
     });
     collection.on("reset", function(){
         filtered.reset(collection.models);
-    });          
-        
+    });
     return filtered;
 }

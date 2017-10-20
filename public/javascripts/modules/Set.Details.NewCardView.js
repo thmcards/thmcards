@@ -26,14 +26,14 @@ Cards.module('Set.Details', function(Details, App) {
 
 			var card = new Cards.Entities.Card({
 				front: {
-					text: $("#front-textarea").val().replace(/(<br>\s*)+$/,''),
-					text_plain: $("#front-textarea").val().replace(/(<([^>]+)>)/ig,""),
+					text: $("#fronttext-content-holder").html().replace(/(<br>\s*)+$/,''),
+					text_plain: $("#fronttext-content-holder").html().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-newcard-input-pic-front-search").val() || null,
 					video: null
 				},
 				back: {
-					text: $("#back-textarea").val().replace(/(<br>\s*)+$/,''),
-					text_plain: $("#back-textarea").val().replace(/(<([^>]+)>)/ig,""),
+					text: $("#backtext-content-holder").html().replace(/(<br>\s*)+$/,''),
+					text_plain: $("#backtext-content-holder").html().replace(/(<([^>]+)>)/ig,""),
 					picture: $("#set-details-newcard-input-pic-back-search").val() || null,
 					video: null
 				},
@@ -45,6 +45,7 @@ Cards.module('Set.Details', function(Details, App) {
 						that.hideErrors();
 						console.log("card saved");
 						history.back();
+						Cards.LAST_VIEWED_OR_MODIFIED_CARD_ID = model.id;
 					},
 					error: function(model, error) {
 						console.log(error);
@@ -67,7 +68,7 @@ Cards.module('Set.Details', function(Details, App) {
 		        helptext.text(error.message);
 		    }, this);
 		},
- 
+
 		hideErrors: function () {
 			this.$('.help-block').text('');
 			this.$('.cardtext').removeClass('has-error');
@@ -144,7 +145,7 @@ Cards.module('Set.Details', function(Details, App) {
 			        $("#pictureSearchModal-footer").append(google.search.Search.getBranding());
 
 				}, 100);
-			        
+
 				$("#pictureSearchModal-body").scrollTop();
 				this.ui.pictureSearchModal.modal('show');
 			}
@@ -165,31 +166,45 @@ Cards.module('Set.Details', function(Details, App) {
 			var loadSearch = function() {
 				console.log("search loaded");
 			}
-			
+
 			google.load('search', '1', {callback: loadSearch });
 		},
 		onShow: function() {
-			var editorConfig = {
-				"font-styles": false,
-				"color": true,
-				"lists": true,
-				"image": false,
-				toolbar: { code:  function(locale, options) {
-				    return '<li><a class="btn btn-default btn-sm" title="Code" data-wysihtml5-command="formatInline" data-wysihtml5-command-value="code" href="javascript:;" unselectable="on"><i class="glyphicon glyphicon-copyright-mark"></i></li>'
-				   } 
+				var editorConfig={
+					autofocus:false,
+					savable:false,
+					fullscreen:false,
+					hiddenButtons:["cmdImage"],
+					additionalButtons: [
+						[{
+							name: "groupMisc",
+							data: [{
+								name: "cmdTex",
+								toggle: true, // this param only take effect if you load bootstrap.js
+								title: "Tex",
+								icon: "glyphicon glyphicon-usd",
+								callback: function(e){
+									var chunk, cursor,
+									selected = e.getSelection(),
+									content = e.getContent();
+									// transform selection and set the cursor into chunked text
+									e.replaceSelection("$ "+content+" $");
+									cursor = selected.start
+									// Set the cursor
+									e.setSelection(cursor,cursor+content.length+4)
+									}
+								}]
+						}]
+					],
+					onChange: function(e){
+						$("#fronttext-content-holder").html(e.getContent());
+					}
 				}
-			}
-			setTimeout(function(){
-				$("#front-textarea").wysihtml5(editorConfig).focus();
-
-				var wysiFontButtonListFront = this.$('ul.wysihtml5-toolbar')[0].childNodes[1];
-				$(wysiFontButtonListFront.firstChild.childNodes[1]).hide();
-
-				var wysiFontButtonListBack = this.$('ul.wysihtml5-toolbar')[1].childNodes[1];			
-				$(wysiFontButtonListBack.firstChild.childNodes[1]).hide();
-			}, 50);
-			$("#back-textarea").wysihtml5(editorConfig);
-
+				$("#front-textarea").markdown(editorConfig).focus();
+				editorConfig.onChange=function(e){
+					$("#backtext-content-holder").html(e.getContent());
+				}
+				$("#back-textarea").markdown(editorConfig);
 		}
 	});
 });

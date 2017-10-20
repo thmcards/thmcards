@@ -9,6 +9,9 @@ Cards.module('Profile', function(Profile, App) {
 			ev.preventDefault();
 			App.trigger("set:details", this.model.get("_id"));
 		},
+		onRender: function(){
+			i18ninit();
+		}
 	});
 
 	Profile.SetView = Backbone.Marionette.CompositeView.extend({
@@ -19,6 +22,9 @@ Cards.module('Profile', function(Profile, App) {
 		itemViewContainer: "tbody",
 		events: {
 
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	});
 });

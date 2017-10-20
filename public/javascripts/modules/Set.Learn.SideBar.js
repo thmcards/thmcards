@@ -4,6 +4,9 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 		className: "well well-sm sidebar-nav",
 		ui: {
 
+		},
+		onRender: function(){
+			i18ninit();
 		}
 	}),
 	SideBar.ControlsView = Backbone.Marionette.ItemView.extend({
@@ -34,9 +37,10 @@ Cards.module("Set.Learn.SideBar", function(SideBar, App) {
 			ev.preventDefault();
 		},
 		onRender: function() {
+			i18ninit();
 			var that = this;
 			App.on("filter:box", function(boxId){
-				
+
 				that.$el.children("button.learn-box").removeClass("btn-info");
 				$("button[title='" + boxId + "']").addClass("btn-info");
 			})
